@@ -35,16 +35,22 @@ export default function Portfolio() {
       <main className="py-16 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          {/* Item 1 */}
+          {/* Item 1 - YouTube Video */}
           <div className="group cursor-pointer">
-            <div className="relative w-full h-64 bg-gray-200 rounded-2xl overflow-hidden mb-4 shadow-sm border border-gray-100">
-              <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Cinematic Commercial" />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center"><Play className="text-[#00C2FF] w-5 h-5 ml-1" fill="currentColor"/></div>
-              </div>
+            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
+              <iframe 
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/DVM3o2Wqcys" 
+                title="Portfolio Video" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              ></iframe>
             </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00C2FF]/10 text-[10px] font-bold tracking-widest text-[#00C2FF] mb-2 uppercase">Commercial</div>
-            <h3 className="text-xl font-bold text-[#111827]">Tech Brand Anthem</h3>
+            <div className="mt-4">
+              <h3 className="text-xl font-bold text-[#111827]">My AI Creation</h3>
+              <p className="text-gray-500">Cinematic AI Video Pipeline</p>
+            </div>
           </div>
 
           {/* Item 2 */}
