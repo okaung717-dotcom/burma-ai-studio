@@ -39,9 +39,11 @@ export default function Home() {
             Get Started
           </a>
           <a href="/portfolio" className="inline-flex items-center justify-center bg-[#111827] text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-all gap-2">
+            <Play className="w-5 h-5" /> Watch Examples
+          </a>
           
-            
           </div>
+          <div className="flex -space-x-3"></div>
           <div className="flex items-center gap-4 pt-6 border-t border-gray-100 max-w-sm">
             <div className="flex -space-x-3">
               <div className="w-10 h-10 rounded-full bg-gray-200 border-2 border-white shadow-sm overflow-hidden"><img src="https://i.pravatar.cc/100?img=1" alt="User 1" /></div>
