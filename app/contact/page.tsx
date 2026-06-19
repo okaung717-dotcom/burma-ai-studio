@@ -1,5 +1,4 @@
-import { Video, Mail, Phone, Facebook, Send } from "lucide-react";
-
+import { Video, Mail, Phone, Globe, Send } from "lucide-react";
 export default function Contact() {
   return (
     <div className="min-h-screen bg-[#f9fafb] text-gray-900 font-sans selection:bg-[#00C2FF] selection:text-white">
@@ -62,8 +61,9 @@ export default function Contact() {
             </a>
 
             {/* Facebook Link */}
+            {/* Facebook Link */}
             <a href="https://www.facebook.com/BurmaAiaStudio/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer w-fit">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors"><Facebook className="w-5 h-5 text-[#00C2FF]" /></div>
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors"><Globe className="w-5 h-5 text-[#00C2FF]" /></div>
                 <div>
                     <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">Facebook</p>
                     <p className="font-bold text-[#111827]">Burma Ai Studio</p>
