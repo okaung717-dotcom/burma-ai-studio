@@ -48,8 +48,8 @@ export default function Portfolio() {
               ></iframe>
             </div>
             <div className="mt-4">
-              <h3 className="text-xl font-bold text-[#111827]">My AI Creation</h3>
-              <p className="text-gray-500">Cinematic AI Video Pipeline</p>
+              <h3 className="text-xl font-bold text-[#111827]">Cinematic Trailers Ai video</h3>
+              <p className="text-gray-500">TikTok,Youtube,Facebook-Ai videos</p>
             </div>
           </div>
 

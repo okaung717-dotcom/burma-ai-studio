@@ -84,7 +84,7 @@ export default function Services() {
             <p className="text-gray-500 mb-6 leading-relaxed">
               Fast-paced, highly engaging short-form content tailored for TikTok, Reels, and Shorts. Optimized to boost viewer retention and maximize organic reach.
             </p>
-            <a href="/portfolio" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
+            <a href="/portfolio#cinematic-trailers" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#00C2FF] hover:text-[#0089cc] transition-colors">
             Learn more <ArrowRight className="w-4 h-4" />
             </a>
           </div>
