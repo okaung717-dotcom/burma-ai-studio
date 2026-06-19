@@ -66,7 +66,7 @@ export default function Portfolio() {
               ></iframe>
             </div>
             <div className="mt-4">
-              <h3 className="text-xl font-bold text-[#111827]">AI Cinematic Creation</h3>
+              <h3 className="text-xl font-bold text-[#111827]">architecture ai videos</h3>
               <p className="text-gray-500">Advanced AI Video Production</p>
             </div>
           </div>
