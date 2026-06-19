@@ -107,7 +107,7 @@ export default function Portfolio() {
               <p className="text-gray-500">Advanced AI Virtual Presenter Production</p>
             </div>
           </div>
-        
+        </div>
       {/* Footer Section */}
       <footer className="bg-[#e5e7eb] py-16 px-6 md:px-16 lg:px-24 border-t border-gray-200">
         <div className="flex flex-col items-center justify-center space-y-4">
