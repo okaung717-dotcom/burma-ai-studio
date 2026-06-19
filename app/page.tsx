@@ -35,12 +35,13 @@ export default function Home() {
             High-quality, affordable promotional videos powered by advanced AI. We craft cinematic narratives that captivate your audience and elevate your brand identity without the traditional studio costs.
           </p>
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <button className="bg-[#00C2FF] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#00a8e0] transition-all shadow-lg shadow-[#00C2FF]/30">
-              Get Started
-            </button>
-            <button className="bg-[#111827] text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-all flex items-center gap-2">
-              <Play className="w-5 h-5" /> Watch Examples
-            </button>
+           <a href="/contact" className="inline-flex items-center justify-center bg-[#00C2FF] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#00a8e0] transition-all shadow-lg shadow-[#00C2FF]/30">
+            Get Started
+          </a>
+          <a href="/portfolio" className="inline-flex items-center justify-center bg-[#111827] text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-all gap-2">
+            <Play className="w-5 h-5" /> Watch Examples
+          </a>
+            
           </div>
           <div className="flex items-center gap-4 pt-6 border-t border-gray-100 max-w-sm">
             <div className="flex -space-x-3">
