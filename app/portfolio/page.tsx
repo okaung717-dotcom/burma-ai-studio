@@ -35,75 +35,42 @@ export default function Portfolio() {
       <main className="py-16 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          {/* Item 1 - YouTube Video */}
+          {/* Item 1 */}
           <div className="group cursor-pointer">
             <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
-              <iframe 
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/DVM3o2Wqcys" 
-                title="Portfolio Video" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-              ></iframe>
+              <iframe className="w-full h-full" src="https://www.youtube.com/embed/DVM3o2Wqcys" allowFullScreen></iframe>
             </div>
-            <div className="mt-4">
-              <h3 className="text-xl font-bold text-[#111827]">Cinematic Trailers Ai video</h3>
-              <p className="text-gray-500">TikTok,Youtube,Facebook-Ai videos</p>
-            </div>
+            <div className="mt-4"><h3 className="text-xl font-bold">Cinematic Trailers Ai video</h3><p className="text-gray-500">TikTok,Youtube,Facebook-Ai videos</p></div>
           </div>
 
-          {/* Item 2 - YouTube Video */}
-          <div className="group cursor-pointer">
-            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
-              <iframe 
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/IrukbYGHhQs" 
-                title="Portfolio Video 2" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-              ></iframe>
-            </div>
-            <div className="mt-4">
-              <h3 className="text-xl font-bold text-[#111827]">architecture ai videos</h3>
-              <p className="text-gray-500">Advanced AI Video Production</p>
-            </div>
-          </div>
-          {/* Item 3 - YouTube Video */}
-          <div className="group cursor-pointer">
-            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
-              <iframe 
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/T9p2lqcETCE" 
-                title="Cinematic Commercial Ai Video" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-              ></iframe>
-            </div>
-            <div className="mt-4">
-              <h3 className="text-xl font-bold text-[#111827]">Cinematic Commercial</h3>
-              <p className="text-gray-500">High-End AI Promotional Video</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Item 1 */}
-          <div className="group cursor-pointer">...</div> 
           {/* Item 2 */}
-          <div className="group cursor-pointer">...</div>
+          <div className="group cursor-pointer">
+            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
+              <iframe className="w-full h-full" src="https://www.youtube.com/embed/IrukbYGHhQs" allowFullScreen></iframe>
+            </div>
+            <div className="mt-4"><h3 className="text-xl font-bold">architecture ai videos</h3><p className="text-gray-500">Advanced AI Video Production</p></div>
+          </div>
+
           {/* Item 3 */}
-          <div className="group cursor-pointer">...</div>
+          <div className="group cursor-pointer">
+            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
+              <iframe className="w-full h-full" src="https://www.youtube.com/embed/T9p2lqcETCE" allowFullScreen></iframe>
+            </div>
+            <div className="mt-4"><h3 className="text-xl font-bold">Cinematic Commercial</h3><p className="text-gray-500">High-End AI Promotional Video</p></div>
+          </div>
+
           {/* Item 4 */}
           <div className="group cursor-pointer">
-             <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
-               <iframe className="w-full h-full" src="https://www.youtube.com/embed/wJjyMQ3bjt4" allowFullScreen></iframe>
-             </div>
-             <div className="mt-4">
-               <h3 className="text-xl font-bold">Virtual Presenter Campaign</h3>
-             </div>
+            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
+              <iframe className="w-full h-full" src="https://www.youtube.com/embed/wJjyMQ3bjt4" allowFullScreen></iframe>
+            </div>
+            <div className="mt-4"><h3 className="text-xl font-bold">Virtual Presenter Campaign</h3><p className="text-gray-500">Advanced AI Virtual Presenter Production</p></div>
           </div>
-        </div>
-          {/* Footer Section */}
+
+        </div> {/* Grid ပိတ် */}
+      </main> {/* Main ပိတ် */}
+
+      {/* Footer Section */}
       <footer className="bg-[#e5e7eb] py-16 px-6 md:px-16 lg:px-24 border-t border-gray-200">
         <div className="flex flex-col items-center justify-center space-y-4">
             <div className="flex items-center gap-2 font-bold text-xl text-[#111827]">
@@ -115,4 +82,5 @@ export default function Portfolio() {
       </footer>
     </div>
   );
+}
 }
