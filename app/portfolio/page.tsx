@@ -70,16 +70,22 @@ export default function Portfolio() {
               <p className="text-gray-500">Advanced AI Video Production</p>
             </div>
           </div>
-          {/* Item 3 */}
+          {/* Item 3 - YouTube Video */}
           <div className="group cursor-pointer">
-            <div className="relative w-full h-64 bg-gray-200 rounded-2xl overflow-hidden mb-4 shadow-sm border border-gray-100">
-              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Architecture" />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center"><Play className="text-[#00C2FF] w-5 h-5 ml-1" fill="currentColor"/></div>
-              </div>
+            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
+              <iframe 
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/T9p2lqcETCE" 
+                title="Cinematic Commercial Ai Video" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              ></iframe>
             </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-[10px] font-bold tracking-widest text-green-600 mb-2 uppercase">Architecture</div>
-            <h3 className="text-xl font-bold text-[#111827]">Luxury Condo Flythrough</h3>
+            <div className="mt-4">
+              <h3 className="text-xl font-bold text-[#111827]">Cinematic Commercial</h3>
+              <p className="text-gray-500">High-End AI Promotional Video</p>
+            </div>
           </div>
 
         </div>
