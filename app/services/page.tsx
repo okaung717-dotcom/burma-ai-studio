@@ -42,8 +42,8 @@ export default function Services() {
             <p className="text-gray-500 mb-6 leading-relaxed">
               High-end promotional videos with advanced visual storytelling. We act as your cinematic prompt directors to generate breathtaking visuals that command attention.
             </p>
-            <a href="#" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
-              Learn more <ArrowRight className="w-4 h-4" />
+            <a href="/portfolio" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
+            Learn more <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
@@ -56,8 +56,8 @@ export default function Services() {
             <p className="text-gray-500 mb-6 leading-relaxed">
               Engage your local audience with hyper-realistic AI avatars. We create customized Burmese presenter campaigns delivering localized scripts with authentic character performance.
             </p>
-            <a href="#" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
-              Learn more <ArrowRight className="w-4 h-4" />
+            <a href="/portfolio" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
+            Learn more <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
@@ -70,8 +70,8 @@ export default function Services() {
             <p className="text-gray-500 mb-6 leading-relaxed">
               Transform blueprints into stunning reality. Our AI-driven architectural process animations showcase real estate and construction projects in fluid, dynamic motion.
             </p>
-            <a href="#" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
-              Learn more <ArrowRight className="w-4 h-4" />
+            <a href="/portfolio" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
+            Learn more <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
@@ -84,8 +84,8 @@ export default function Services() {
             <p className="text-gray-500 mb-6 leading-relaxed">
               Fast-paced, highly engaging short-form content tailored for TikTok, Reels, and Shorts. Optimized to boost viewer retention and maximize organic reach.
             </p>
-            <a href="#" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
-              Learn more <ArrowRight className="w-4 h-4" />
+            <a href="/portfolio" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#111827] uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
+            Learn more <ArrowRight className="w-4 h-4" />
             </a>
           </div>
         </div>
