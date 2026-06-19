@@ -85,28 +85,24 @@ export default function Portfolio() {
             <div className="mt-4">
               <h3 className="text-xl font-bold text-[#111827]">Cinematic Commercial</h3>
               <p className="text-gray-500">High-End AI Promotional Video</p>
-          
           </div>
-          {/* Item 4 - Virtual Presenter */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Item 1 */}
+          <div className="group cursor-pointer">...</div> 
+          {/* Item 2 */}
+          <div className="group cursor-pointer">...</div>
+          {/* Item 3 */}
+          <div className="group cursor-pointer">...</div>
+          {/* Item 4 */}
           <div className="group cursor-pointer">
-            <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
-              <iframe 
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/wJjyMQ3bjt4" 
-                title="Virtual Presenter" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-              ></iframe>
-            </div>
-            <div className="mt-4">
-              <h3 className="text-xl font-bold text-[#111827]">Virtual Presenter Campaign</h3>
-              <p className="text-gray-500">Advanced AI Virtual Presenter Production</p>
-            </div>
+             <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-lg border border-gray-100">
+               <iframe className="w-full h-full" src="https://www.youtube.com/embed/wJjyMQ3bjt4" allowFullScreen></iframe>
+             </div>
+             <div className="mt-4">
+               <h3 className="text-xl font-bold">Virtual Presenter Campaign</h3>
+             </div>
           </div>
-        
         </div>
-         
           {/* Footer Section */}
       <footer className="bg-[#e5e7eb] py-16 px-6 md:px-16 lg:px-24 border-t border-gray-200">
         <div className="flex flex-col items-center justify-center space-y-4">
