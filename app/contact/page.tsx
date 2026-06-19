@@ -1,5 +1,4 @@
-// Contact Page Code
-import { Video, Mail, MapPin, Phone } from "lucide-react";
+import { Video, Mail, Phone, Facebook, Send } from "lucide-react";
 
 export default function Contact() {
   return (
@@ -16,9 +15,9 @@ export default function Contact() {
           <a href="/portfolio" className="hover:text-gray-900 transition-colors whitespace-nowrap">Portfolio</a>
           <a href="/contact" className="text-gray-900 border-b-2 border-[#00C2FF] pb-1 whitespace-nowrap">Contact</a>
         </div>
-        <button className="bg-[#00C2FF] text-white px-6 py-2.5 rounded-full font-semibold hover:bg-[#00a8e0] transition-colors shadow-md shadow-cyan-500/30 whitespace-nowrap shrink-0 ml-2 md:ml-4">
+        <a href="/contact" className="inline-flex items-center justify-center bg-[#00C2FF] text-white px-6 py-2.5 rounded-full font-semibold hover:bg-[#00a8e0] transition-colors shadow-md shadow-cyan-500/30 whitespace-nowrap shrink-0 ml-2 md:ml-4">
           Message Us
-        </button>
+        </a>
       </nav>
 
       {/* Contact Section */}
@@ -30,31 +29,47 @@ export default function Contact() {
             Let's <span className="text-[#00C2FF]">Create</span> <br/>Something Amazing
           </h1>
           <p className="text-gray-500 text-lg leading-relaxed">
-            Ready to elevate your brand with next-gen AI video production? Drop us a message, and our creative team will get back to you within 24 hours.
+            Ready to elevate your brand with next-gen AI video production? Reach out directly via any of the channels below, and we will get back to you immediately.
           </p>
           
           <div className="space-y-6 pt-4">
-            <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><Mail className="w-5 h-5 text-[#00C2FF]" /></div>
+            
+            {/* Email Link */}
+            <a href="mailto:okaung717@gmail.com" className="flex items-center gap-4 group cursor-pointer w-fit">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors"><Mail className="w-5 h-5 text-[#00C2FF]" /></div>
                 <div>
-                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Email Us</p>
-                    <p className="font-bold text-[#111827]">hello@burmaaistudio.com</p>
+                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">Email Us</p>
+                    <p className="font-bold text-[#111827]">okaung717@gmail.com</p>
                 </div>
-            </div>
-            <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><Phone className="w-5 h-5 text-[#00C2FF]" /></div>
+            </a>
+
+            {/* Phone Link */}
+            <a href="tel:09671010011" className="flex items-center gap-4 group cursor-pointer w-fit">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors"><Phone className="w-5 h-5 text-[#00C2FF]" /></div>
                 <div>
-                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Call Us</p>
-                    <p className="font-bold text-[#111827]">+95 9 123 456 789</p>
+                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">Call Us</p>
+                    <p className="font-bold text-[#111827]">09671010011</p>
                 </div>
-            </div>
-            <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><MapPin className="w-5 h-5 text-[#00C2FF]" /></div>
+            </a>
+
+            {/* Telegram Link */}
+            <a href="https://t.me/BurmaAiStudio" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer w-fit">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors"><Send className="w-5 h-5 text-[#00C2FF]" /></div>
                 <div>
-                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Location</p>
-                    <p className="font-bold text-[#111827]">Yangon, Myanmar</p>
+                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">Telegram</p>
+                    <p className="font-bold text-[#111827]">@BurmaAiStudio</p>
                 </div>
-            </div>
+            </a>
+
+            {/* Facebook Link */}
+            <a href="https://www.facebook.com/BurmaAiaStudio/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer w-fit">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors"><Facebook className="w-5 h-5 text-[#00C2FF]" /></div>
+                <div>
+                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">Facebook</p>
+                    <p className="font-bold text-[#111827]">Burma Ai Studio</p>
+                </div>
+            </a>
+
           </div>
         </div>
 
