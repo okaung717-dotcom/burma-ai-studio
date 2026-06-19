@@ -10,10 +10,10 @@ export default function Home() {
           Burma AI Studio
         </div>
         <div className="hidden md:flex gap-10 text-[13px] font-bold text-gray-500 uppercase tracking-wider">
-          <a href="#" className="text-gray-900 border-b-2 border-[#00C2FF] pb-1">Home</a>
-          <a href="#" className="hover:text-gray-900 transition-colors">Services</a>
-          <a href="#" className="hover:text-gray-900 transition-colors">Portfolio</a>
-          <a href="#" className="hover:text-gray-900 transition-colors">Contact</a>
+          <a href="/" className="text-gray-900 border-b-2 border-[#00C2FF] pb-1">Home</a>
+          <a href="/services" className="hover:text-gray-900 transition-colors">Services</a>
+          <a href="/portfolio" className="hover:text-gray-900 transition-colors">Portfolio</a>
+          <a href="/contact" className="hover:text-gray-900 transition-colors">Contact</a>
         </div>
         <button className="bg-[#00C2FF] text-white px-6 py-2.5 rounded-full font-semibold hover:bg-[#00a8e0] transition-colors shadow-md shadow-cyan-500/30">
           Message Us
@@ -119,12 +119,12 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col space-y-4">
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Home</a>
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Services</a>
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Portfolio</a>
+            <a href="/" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Home</a>
+            <a href="/services" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Services</a>
+            <a href="/portfolio" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Portfolio</a>
           </div>
           <div className="flex flex-col space-y-4">
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Contact</a>
+            <a href="/contact" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Contact</a>
             <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Privacy Policy</a>
             <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Terms of Service</a>
           </div>
