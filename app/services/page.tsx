@@ -31,8 +31,8 @@ export default function Services() {
       </header>
 
       {/* Services Grid */}
-      <main className="py-16 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <main className="py-16 px-4 md:px-16 lg:px-24 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Service 1 */}
           <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-[#00C2FF]/10 transition-all group">
             <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#00C2FF]/10 transition-colors">
