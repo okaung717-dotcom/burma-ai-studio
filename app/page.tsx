@@ -1,34 +1,50 @@
+"use client";
+import { useState } from "react";
 import { Play, TrendingUp, Palette, Video, Menu } from "lucide-react";
 
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-[#00C2FF] selection:text-white">
-      {/* Navigation Bar */}
-      <nav className="flex justify-between items-center py-6 px-6 md:px-16 lg:px-24">
-  
-  <div className="flex items-center gap-2 font-bold text-xl tracking-wide">
-    <Video className="text-[#00C2FF] w-6 h-6" />
-    Burma AI Studio
-  </div>
+    <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-[#00C2FF]">
+      
+      <nav className="relative py-6 px-6 md:px-16 lg:px-24">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2 font-bold text-xl tracking-wide">
+            <Video className="text-[#00C2FF] w-6 h-6" />
+            Burma AI Studio
+          </div>
 
-  <div className="hidden md:flex gap-10 text-[13px] font-bold text-gray-500 uppercase">
-    <a href="/" className="text-gray-900 border-b-2 border-[#00C2FF] pb-1">Home</a>
-    <a href="/services" className="hover:text-gray-900 transition-colors">Services</a>
-    <a href="/portfolio" className="hover:text-gray-900 transition-colors">Portfolio</a>
-    <a href="/contact" className="hover:text-gray-900 transition-colors">Contact</a>
-  </div>
+          <div className="hidden md:flex gap-10 text-[13px] font-bold text-gray-500 uppercase">
+            <a href="/" className="text-gray-900 border-b-2 border-[#00C2FF] pb-1">Home</a>
+            <a href="/services" className="hover:text-gray-900 transition-colors">Services</a>
+            <a href="/portfolio" className="hover:text-gray-900 transition-colors">Portfolio</a>
+            <a href="/contact" className="hover:text-gray-900 transition-colors">Contact</a>
+          </div>
 
-  <div className="flex items-center gap-4">
-    <a href="/contact" className="inline-flex items-center justify-center bg-[#00C2FF] text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-600 transition-colors">
-      Message Us
-    </a>
-    
-    <button className="md:hidden text-gray-900 p-1">
-      <Menu className="w-7 h-7" />
-    </button>
-  </div>
+          <div className="flex items-center gap-4">
+            <a href="/contact" className="inline-flex items-center justify-center bg-[#00C2FF] text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-600 transition-colors">
+              Message Us
+            </a>
+            
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden text-gray-900 p-1"
+            >
+              <Menu className="w-7 h-7" />
+            </button>
+          </div>
+        </div>
 
-</nav>
+        {isMobileMenuOpen && (
+          <div className="md:hidden flex flex-col gap-4 mt-6 pb-4 border-t border-gray-100 pt-4">
+            <a href="/" className="text-gray-900 font-bold text-lg">Home</a>
+            <a href="/services" className="text-gray-500 font-bold text-lg">Services</a>
+            <a href="/portfolio" className="text-gray-500 font-bold text-lg">Portfolio</a>
+            <a href="/contact" className="text-gray-500 font-bold text-lg">Contact</a>
+          </div>
+        )}
+      </nav>
 
       {/* Hero Section */}
       <main className="flex flex-col lg:flex-row items-center justify-between py-12 md:py-20 px-6 md:px-16 lg:px-24 gap-12 lg:gap-8">
