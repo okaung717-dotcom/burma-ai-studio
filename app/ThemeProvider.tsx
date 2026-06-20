@@ -6,6 +6,7 @@ const ThemeContext = createContext({ theme: "light", toggleTheme: () => {} });
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState("light");
 
+  // Page အသစ်ရောက်တိုင်း LocalStorage က Theme ကို အမြဲစစ်မယ်
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
