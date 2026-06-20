@@ -110,28 +110,32 @@ export default function Home() {
 
       {/* Footer Section */}
       <footer className="bg-[#e5e7eb] py-16 px-6 md:px-16 lg:px-24">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div className="col-span-1 md:col-span-2 space-y-4">
-            <div className="flex items-center gap-2 font-bold text-xl text-[#111827]">
-              <Video className="text-[#00C2FF] w-6 h-6" />
-              Burma AI Studio
-            </div>
-            <p className="text-sm text-gray-500">
-              © 2024 Burma AI Studio. All rights reserved.
-            </p>
-          </div>
-          <div className="flex flex-col space-y-4">
-            <a href="/" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Home</a>
-            <a href="/services" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Services</a>
-            <a href="/portfolio" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Portfolio</a>
-          </div>
-          <div className="flex flex-col space-y-4">
-            <a href="/contact" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Contact</a>
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Privacy Policy</a>
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Terms of Service</a>
-          </div>
-        </div>
-      </footer>
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+    
+    <div className="col-span-2 space-y-4">
+      <div className="flex items-center gap-2 font-bold text-xl text-[#111827]">
+        <Video className="text-[#00C2FF] w-6 h-6" />
+        Burma AI Studio
+      </div>
+      <p className="text-sm text-gray-500">
+        © 2024 Burma AI Studio. All rights reserved.
+      </p>
+    </div>
+
+    <div className="col-span-1 flex flex-col space-y-4">
+      <a href="/" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Home</a>
+      <a href="/services" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Services</a>
+      <a href="/portfolio" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Portfolio</a>
+    </div>
+
+    <div className="col-span-1 flex flex-col space-y-4">
+      <a href="/contact" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Contact</a>
+      <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Privacy Policy</a>
+      <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Terms of Service</a>
+    </div>
+
+  </div>
+</footer>
     </div>
   );
 }
