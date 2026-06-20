@@ -1,5 +1,5 @@
 "use client";
-import { Play, TrendingUp, Palette } from "lucide-react";
+import { Play, TrendingUp, Palette, Video } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
 export default function Home() {
@@ -31,51 +31,49 @@ export default function Home() {
   const t = translations[lang];
 
   return (
-    <main className="flex flex-col lg:flex-row items-center justify-between py-12 md:py-20 px-6 md:px-16 lg:px-24">
-      
-      <div className="lg:w-[50%] space-y-8">
+    <>
+      <main className="flex flex-col lg:flex-row items-center justify-between py-12 md:py-20 px-6 md:px-16 lg:px-24">
         
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-sm font-bold text-gray-600 dark:text-gray-300">
-          <div className="w-2 h-2 rounded-full bg-[#00C2FF]"></div>
-          {t.badge}
+        <div className="lg:w-[50%] space-y-8">
+          
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-sm font-bold text-gray-600 dark:text-gray-300">
+            <div className="w-2 h-2 rounded-full bg-[#00C2FF]"></div>
+            {t.badge}
+          </div>
+
+          <h1 className="text-5xl md:text-[64px] font-extrabold leading-[1.1] tracking-tight dark:text-white">
+            {t.title1} <br /> {t.title2} <br /> {t.title3} <span className="text-[#00C2FF]">{t.title4}</span>
+          </h1>
+
+          <p className="text-gray-500 dark:text-gray-400 text-lg md:text-xl max-w-lg leading-relaxed">
+            {t.desc}
+          </p>
+
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            <a href="/contact" className="inline-flex items-center justify-center bg-[#00C2FF] text-white px-8 py-3.5 rounded-full font-bold text-lg hover:bg-blue-600 transition-colors">
+              {t.btn1}
+            </a>
+            <a href="/portfolio" className="inline-flex items-center justify-center bg-white dark:bg-gray-800 text-[#111827] dark:text-white px-8 py-3.5 rounded-full font-bold text-lg border-2 border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 transition-colors gap-2">
+              <Play className="w-5 h-5" /> {t.btn2}
+            </a>
+          </div>
         </div>
-
-        <h1 className="text-5xl md:text-[64px] font-extrabold leading-[1.1] tracking-tight dark:text-white">
-          {t.title1} <br /> {t.title2} <br /> {t.title3} <span className="text-[#00C2FF]">{t.title4}</span>
-        </h1>
-
-        <p className="text-gray-500 dark:text-gray-400 text-lg md:text-xl max-w-lg leading-relaxed">
-          {t.desc}
-        </p>
-
-        <div className="flex flex-wrap items-center gap-4 pt-2">
-          <a href="/contact" className="inline-flex items-center justify-center bg-[#00C2FF] text-white px-8 py-3.5 rounded-full font-bold text-lg hover:bg-blue-600 transition-colors">
-            {t.btn1}
-          </a>
-          <a href="/portfolio" className="inline-flex items-center justify-center bg-white dark:bg-gray-800 text-[#111827] dark:text-white px-8 py-3.5 rounded-full font-bold text-lg border-2 border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 transition-colors gap-2">
-            <Play className="w-5 h-5" /> {t.btn2}
-          </a>
-        </div>
-      </div>
-        {/* Right Visual (Abstract 3D Video Graphic) */}
+        
         <div className="lg:w-[45%] w-full h-[450px] md:h-[600px] relative">
           <div className="w-full h-full rounded-[2.5rem] bg-[#111827] overflow-hidden relative shadow-2xl flex items-center justify-center">
-            {/* Cinematic Lighting Effect */}
+            
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#00C2FF]/20 via-transparent to-transparent blur-2xl"></div>
             
-            {/* Background pattern suggestion */}
             <div className="absolute inset-0 opacity-40 flex items-center justify-center flex-col gap-8 transform rotate-12 scale-150">
               <div className="w-64 h-16 border-4 border-[#00C2FF]/30 rounded-xl"></div>
               <div className="w-80 h-16 border-4 border-[#00C2FF]/20 rounded-xl"></div>
               <div className="w-72 h-16 border-4 border-[#00C2FF]/10 rounded-xl"></div>
             </div>
 
-            {/* Central Play Button */}
             <div className="relative w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(0,194,255,0.4)] z-10 cursor-pointer hover:scale-110 transition-transform duration-300">
               <Play className="text-[#00C2FF] w-8 h-8 ml-1" fill="currentColor" />
             </div>
 
-            {/* Floating Image Elements */}
             <div className="absolute left-6 md:left-10 top-1/4 w-28 h-36 bg-gray-800 rounded-xl border-4 border-white shadow-xl transform -rotate-12 hidden md:block overflow-hidden">
                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover opacity-80" alt="Video frame 1" />
             </div>
@@ -87,7 +85,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Stats Section */}
       <section className="bg-[#f9fafb] border-t border-b border-gray-100 py-16 px-6 md:px-16 lg:px-24">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-4 text-center md:divide-x divide-gray-200">
           <div className="flex flex-col items-center justify-center space-y-2">
@@ -111,34 +108,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer Section */}
       <footer className="bg-[#e5e7eb] py-16 px-6 md:px-16 lg:px-24">
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
-    
-    <div className="col-span-2 space-y-4">
-      <div className="flex items-center gap-2 font-bold text-xl text-[#111827]">
-        <Video className="text-[#00C2FF] w-6 h-6" />
-        Burma AI Studio
-      </div>
-      <p className="text-sm text-gray-500">
-        © 2024 Burma AI Studio. All rights reserved.
-      </p>
-    </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+          
+          <div className="col-span-2 space-y-4">
+            <div className="flex items-center gap-2 font-bold text-xl text-[#111827]">
+              <Video className="text-[#00C2FF] w-6 h-6" />
+              Burma AI Studio
+            </div>
+            <p className="text-sm text-gray-500">
+              © 2024 Burma AI Studio. All rights reserved.
+            </p>
+          </div>
 
-    <div className="col-span-1 flex flex-col space-y-4">
-      <a href="/" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Home</a>
-      <a href="/services" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Services</a>
-      <a href="/portfolio" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Portfolio</a>
-    </div>
+          <div className="col-span-1 flex flex-col space-y-4">
+            <a href="/" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Home</a>
+            <a href="/services" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Services</a>
+            <a href="/portfolio" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Portfolio</a>
+          </div>
 
-    <div className="col-span-1 flex flex-col space-y-4">
-      <a href="/contact" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Contact</a>
-      <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Privacy Policy</a>
-      <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Terms of Service</a>
-    </div>
+          <div className="col-span-1 flex flex-col space-y-4">
+            <a href="/contact" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Contact</a>
+            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Privacy Policy</a>
+            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Terms of Service</a>
+          </div>
 
-  </div>
-</footer>
-    </div>
+        </div>
+      </footer>
+    </>
   );
 }
