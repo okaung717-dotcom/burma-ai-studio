@@ -56,7 +56,7 @@ export default function Home() {
             <Play className="w-5 h-5" /> {t.btn2}
           </a>
         </div>
-
+      </div>
         {/* Right Visual (Abstract 3D Video Graphic) */}
         <div className="lg:w-[45%] w-full h-[450px] md:h-[600px] relative">
           <div className="w-full h-full rounded-[2.5rem] bg-[#111827] overflow-hidden relative shadow-2xl flex items-center justify-center">
