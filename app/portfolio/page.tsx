@@ -4,22 +4,7 @@ import { Video, Play } from "lucide-react";
 export default function Portfolio() {
   return (
     <div className="min-h-screen bg-[#f9fafb] text-gray-900 font-sans selection:bg-[#00C2FF] selection:text-white">
-      {/* Navigation Bar */}
-      <nav className="flex justify-between items-center py-6 px-6 md:px-12 lg:px-24 gap-4 bg-white border-b border-gray-100">
-        <div className="flex items-center gap-2 font-bold text-xl tracking-wide whitespace-nowrap shrink-0">
-          <Video className="text-[#00C2FF] w-6 h-6" />
-          Burma AI Studio
-        </div>
-        <div className="hidden md:flex gap-6 lg:gap-10 text-[13px] font-bold text-gray-500 uppercase tracking-wider">
-          <a href="/" className="hover:text-gray-900 transition-colors whitespace-nowrap">Home</a>
-          <a href="/services" className="hover:text-gray-900 transition-colors whitespace-nowrap">Services</a>
-          <a href="/portfolio" className="text-gray-900 border-b-2 border-[#00C2FF] pb-1 whitespace-nowrap">Portfolio</a>
-          <a href="/contact" className="hover:text-gray-900 transition-colors whitespace-nowrap">Contact</a>
-        </div>
-        <a href="/contact" className="inline-flex items-center justify-center bg-[#00C2FF] text-white px-6 py-2.5 rounded-full font-semibold hover:bg-[#00a8e0] transition-colors shadow-md shadow-cyan-500/30 whitespace-nowrap shrink-0 ml-2 md:ml-4">
-          Message Us
-        </a>
-      </nav>
+      
 
       {/* Header Section */}
       <header className="py-20 px-6 md:px-16 lg:px-24 bg-white text-center border-b border-gray-100">
