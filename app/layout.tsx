@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
+import { LanguageProvider } from "./LanguageContext"; // ဒါလေး အသစ်ဝင်လာတာပါ
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,16 +25,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col w-full overflow-x-hidden">
-      <Navbar />
-  <div className="w-full">
-    {children}
-  </div>
-</body>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} h-full antialiased min-h-full flex flex-col w-full overflow-x-hidden`}>
+        {/* ဒီနေရာမှာ LanguageProvider နဲ့ Website တစ်ခုလုံးကို အုပ်ပေးလိုက်တာပါ */}
+        <LanguageProvider>
+          <Navbar />
+          <div className="w-full">
+            {children}
+          </div>
+        </LanguageProvider>
+      </body>
     </html>
   );
 }
