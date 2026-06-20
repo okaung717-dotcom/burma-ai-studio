@@ -36,7 +36,7 @@ export default function Home() {
         
         <div className="lg:w-[50%] space-y-8">
           
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-sm font-bold text-gray-600 dark:text-gray-300">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 dark:border-gray-800 text-sm font-bold text-gray-600 dark:text-gray-300">
             <div className="w-2 h-2 rounded-full bg-[#00C2FF]"></div>
             {t.badge}
           </div>
@@ -85,52 +85,52 @@ export default function Home() {
         </div>
       </main>
 
-      <section className="bg-[#f9fafb] border-t border-b border-gray-100 py-16 px-6 md:px-16 lg:px-24">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-4 text-center md:divide-x divide-gray-200">
+      <section className="bg-[#f9fafb] dark:bg-gray-900 border-t border-b border-gray-100 dark:border-gray-800 py-16 px-6 md:px-16 lg:px-24 transition-colors duration-300">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-4 text-center md:divide-x divide-gray-200 dark:divide-gray-700">
           <div className="flex flex-col items-center justify-center space-y-2">
-            <h3 className="text-[40px] font-extrabold text-[#111827] leading-none">100+</h3>
-            <p className="text-[11px] font-bold tracking-widest text-gray-500 uppercase">Videos Created</p>
+            <h3 className="text-[40px] font-extrabold text-[#111827] dark:text-white leading-none">100+</h3>
+            <p className="text-[11px] font-bold tracking-widest text-gray-500 dark:text-gray-400 uppercase">Videos Created</p>
           </div>
           <div className="flex flex-col items-center justify-center space-y-2">
-            <h3 className="text-[40px] font-extrabold text-[#111827] leading-none flex items-baseline">
+            <h3 className="text-[40px] font-extrabold text-[#111827] dark:text-white leading-none flex items-baseline">
               48<span className="text-[#00C2FF] text-2xl ml-1 font-bold">hr</span>
             </h3>
-            <p className="text-[11px] font-bold tracking-widest text-gray-500 uppercase">Fast Delivery</p>
+            <p className="text-[11px] font-bold tracking-widest text-gray-500 dark:text-gray-400 uppercase">Fast Delivery</p>
           </div>
           <div className="flex flex-col items-center justify-center space-y-3">
             <TrendingUp className="text-[#00C2FF] w-8 h-8" />
-            <p className="text-[11px] font-bold tracking-widest text-gray-500 uppercase">Business-Focused</p>
+            <p className="text-[11px] font-bold tracking-widest text-gray-500 dark:text-gray-400 uppercase">Business-Focused</p>
           </div>
           <div className="flex flex-col items-center justify-center space-y-3">
             <Palette className="text-[#00C2FF] w-8 h-8" />
-            <p className="text-[11px] font-bold tracking-widest text-gray-500 uppercase">Custom Style</p>
+            <p className="text-[11px] font-bold tracking-widest text-gray-500 dark:text-gray-400 uppercase">Custom Style</p>
           </div>
         </div>
       </section>
 
-      <footer className="bg-[#e5e7eb] py-16 px-6 md:px-16 lg:px-24">
+      <footer className="bg-[#e5e7eb] dark:bg-black py-16 px-6 md:px-16 lg:px-24 transition-colors duration-300">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
           
           <div className="col-span-2 space-y-4">
-            <div className="flex items-center gap-2 font-bold text-xl text-[#111827]">
+            <div className="flex items-center gap-2 font-bold text-xl text-[#111827] dark:text-white">
               <Video className="text-[#00C2FF] w-6 h-6" />
               Burma AI Studio
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               © 2024 Burma AI Studio. All rights reserved.
             </p>
           </div>
 
           <div className="col-span-1 flex flex-col space-y-4">
-            <a href="/" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Home</a>
-            <a href="/services" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Services</a>
-            <a href="/portfolio" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Portfolio</a>
+            <a href="/" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Home</a>
+            <a href="/services" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Services</a>
+            <a href="/portfolio" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Portfolio</a>
           </div>
 
           <div className="col-span-1 flex flex-col space-y-4">
-            <a href="/contact" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Contact</a>
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Privacy Policy</a>
-            <a href="#" className="text-sm text-gray-600 hover:text-[#111827] transition-colors">Terms of Service</a>
+            <a href="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Contact</a>
+            <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Terms of Service</a>
           </div>
 
         </div>
