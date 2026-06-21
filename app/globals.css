@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,6 +51,7 @@
       radial-gradient(circle at top right, rgba(var(--brand-primary-rgb), 0.08), transparent 34rem),
       var(--background);
     color: var(--foreground);
+    font-family: "Noto Sans Myanmar", var(--font-geist-sans), "Myanmar Text", "Padauk", Arial, sans-serif;
   }
 
   ::selection {
