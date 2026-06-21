@@ -20,7 +20,7 @@ export async function withRedis<T>(callback: (client: ReturnType<typeof createCl
 }
 
 export function getAdminControlCode() {
-  return process.env.ADMIN_CONTROL || process.env.ADMIN_PIN || "";
+  return process.env.ADMIN_CONTROL || process.env["ADMIN_Control"] || process.env.ADMIN_PIN || "";
 }
 
 export function isAdminPin(pin: unknown) {
