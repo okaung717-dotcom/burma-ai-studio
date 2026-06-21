@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Sun, Moon, Globe } from "lucide-react";
+import { Menu, Sun, Moon, Globe, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { useLanguage } from "./LanguageContext";
 
@@ -19,37 +19,39 @@ export default function Navbar() {
   const t = translations[safeLang];
 
   return (
-    <nav className="relative py-6 px-4 md:px-12 lg:px-24 bg-white dark:bg-gray-950 z-50 transition-colors duration-300">
+    <nav className="relative py-6 px-4 md:px-12 lg:px-24 bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-900 z-50 transition-colors duration-300">
       <div className="flex justify-between items-center">
         
-        {/* Logo အတွက် SVG Code တစ်ခုလုံးကို ဒီနေရာမှာ ထည့်ပေးထားပါတယ် */}
+        {/* Logo အတွက် အစ်ကိုပေးထားတဲ့ SVG ကုဒ်အပြည့်အစုံ ( Paths ၄၉ ခုစလုံး ) */}
         <Link href="/" className="flex items-center">
           <svg 
             version="1.1" 
             xmlns="http://www.w3.org/2000/svg" 
             style={{ display: "block" }}
             viewBox="0 0 2048 2048" 
-            className="h-10 w-auto" 
-            preserveAspectRatio="none"
+            className="h-11 w-auto dark:brightness-[1.15]" 
+            preserveAspectRatio="xMidYMid meet"
           >
             <defs>
                 <linearGradient id="Gradient1" gradientUnits="userSpaceOnUse" x1="1127.68" y1="1015.71" x2="1119.45" y2="1005.66">
-                    <stop className="stop0" offset="0" stopOpacity="1" stopColor="rgb(144,21,30)"/>
-                    <stop className="stop1" offset="1" stopOpacity="1" stopColor="rgb(157,72,67)"/>
+                    <stop className="stop0" offset="0" stopOpacity={1} stopColor="rgb(144,21,30)"/>
+                    <stop className="stop1" offset="1" stopOpacity={1} stopColor="rgb(157,72,67)"/>
                 </linearGradient>
             </defs>
-            <path transform="translate(0,0)" fill="rgb(255,255,255)" d="M 0 0 L 2048 0 L 2048 2048 L 0 2048 L 0 0 z"/>
-            <path transform="translate(0,0)" fill="rgb(148,30,37)" d="M 1049.69 710.73 L 1050.61 709.134 C 1054.68 708.005 1059.9 707.62 1063.88 709.129 C 1067.54 726.748 1073.46 737.956 1079.78 754.597 C 1081.87 760.106 1078.95 769.075 1080.61 773.383 C 1083.25 774.116 1084.63 774.42 1087.33 774.87 C 1089.25 777.919 1082.34 793.612 1081.23 799.569 C 1083.79 806.213 1090.89 820.939 1092.07 826.065 C 1089.2 829.848 1088.45 830.63 1089.56 835.605 C 1095.21 860.909 1114.65 877.152 1127.08 898.475 C 1132.25 907.573 1134.43 931.858 1138.84 945.234 C 1151.35 936.156 1156.96 931.413 1167.35 920.02 C 1167.64 944.978 1170.34 973.48 1160.94 996.33 C 1188.67 996.33 L 1188.67 996.33 z"/>
+            {/* နောက်ခံ အဖြူရောင်ကွက်ကြီးကို ပျောက်သွားအောင် fill="none" ပြောင်းထားပေးပါသည် */}
+            <path transform="translate(0,0)" fill="none" d="M 0 0 L 2048 0 L 2048 2048 L 0 2048 L 0 0 z"/>
+            <path transform="translate(0,0)" fill="rgb(148,30,37)" d="M 1049.69 710.73 L 1050.61 709.134 C 1054.68 708.005 1059.9 707.62 1063.88 709.129 C 1067.54 726.748 1073.46 737.956 1079.78 754.597 C 1081.87 760.106 1078.95 769.075 1080.61 773.383 C 1083.25 774.116 1084.63 774.42 1087.33 774.87 C 1089.25 777.919 1082.34 793.612 1081.23 799.569 C 1083.79 806.213 1090.89 820.939 1092.07 826.065 C 1089.2 829.848 1088.45 830.63 1089.56 835.605 C 1095.21 860.909 1114.65 877.152 1127.08 898.475 C 1132.25 907.573 1134.43 931.858 1138.84 945.234 C 1151.35 936.156 1156.96 931.413 1167.35 920.02 C 1167.35 920.02 C 1167.35 920.02 1167.35 920.02 L 1167.35 920.02 z"/>
+            <path transform="translate(0,0)" fill="rgb(148,30,37)" d="M 1049.69 710.73 L 1050.61 709.134 C 1054.68 708.005 1059.9 707.62 1063.88 709.129 C 1067.54 726.748 1073.46 737.956 1079.78 754.597 C 1081.87 760.106 1078.95 769.075 1080.61 773.383 C 1083.25 774.116 1084.63 774.42 1087.33 774.87 C 1089.25 777.919 1082.34 793.612 1081.23 799.569 C 1083.79 806.213 1090.89 820.939 1092.07 826.065 C 1089.2 829.848 1088.45 830.63 1089.56 835.605 C 1095.21 860.909 1114.65 877.152 1127.08 898.475 C 1132.25 907.573 1134.43 931.858 1138.84 945.234 C 1151.35 936.156 1156.96 931.413 1167.35 920.02 C 1167.64 944.978 1170.34 973.48 1160.94 996.33 C 1188.67 984.142 1206.84 983.864 1234.66 996.786 C 1220.22 1001.63 1211.72 1007.56 1201.28 1018.7 C 1173.52 1048.32 1147.48 1048.59 1109.04 1046.7 C 1107.77 1043.9 1104.79 1036.76 1103.41 1034.43 C 1107.59 1032.33 1107.13 1031.7 1110.94 1032.17 C 1118.72 1031.76 1129.23 1024.95 1134.61 1019.64 C 1157.88 996.613 1157.05 974.313 1157.6 944.333 C 1141.9 956.487 1106.1 971.911 1102.86 990.152 C 1101.08 1000.14 1101.97 1008.41 1098.48 1022.23 C 1094.79 1011.91 1092.22 999.903 1088.51 990.166 C 1082.71 974.905 1067.6 957.861 1057.23 944.47 C 1034.48 972.898 1014.81 988.705 1026.41 1028.19 L 1019.04 1047.16 C 992.403 1046.78 974.904 1044.59 954.175 1063.91 C 966.951 1063.77 978.426 1067.42 991.144 1067.42 C 997.214 1067.42 1005.42 1062.69 1010.51 1066.04 C 1013.45 1082.98 963.29 1073.21 953.987 1073.39 C 946.7 1073.53 942.623 1074.34 935.522 1075.93 C 943.339 1061.6 948.256 1054.07 963.047 1046.12 C 912.718 1036.68 918.586 1010.49 879.268 996.777 C 905.976 984.648 925.823 983.843 952.664 996.015 C 944.114 969.98 947.1 946.89 946.936 919.535 C 955.737 930.033 964.185 937.063 975.114 945.164 C 979.803 930.686 981.374 909.855 988.122 897.029 C 994.786 884.362 1034.39 841.963 1022.3 827.179 L 1021.74 826.499 C 1023.02 821.724 1030.05 808.097 1032.75 801.06 C 1032.09 795.22 1025.85 776.813 1026.3 774.938 C 1028.82 774.341 1030.79 773.992 1033.33 773.561 C 1034.88 768.517 1031.47 761.891 1033.38 756.526 C 1039.85 738.347 1045.88 730.164 1049.69 710.73 z"/>
             <path transform="translate(0,0)" fill="rgb(255,255,255)" d="M 957.223 944.56 C 974.87 958.757 1011.21 972.176 1012.51 995.285 C 1013.54 1013.61 1013.22 1017.89 1022.38 1034.61 C 1002.31 1027.25 988.073 1014.24 977.112 996.282 C 974.873 991.094 972.837 986.096 970.016 981.181 C 976.226 1006.65 985.279 1019.72 1006.69 1034.24 C 962.456 1021.99 956.231 984.124 957.223 944.56 z"/>
             <path transform="translate(0,0)" fill="rgb(255,255,255)" d="M 1057.71 912.12 L 1061.09 917.564 C 1065.46 927.616 1078.28 943.652 1085.21 952.868 C 1090.93 943.467 1099.5 936.29 1106.96 927.667 C 1110.73 936.167 1118.98 948.319 1118.88 956.605 C 1117.2 959.64 1118.4 958.776 1115.45 959.662 C 1113.74 957.708 1107.99 944.604 1105.42 940.095 C 1097.49 946.415 1094.23 950.008 1088.67 958.347 C 1092.22 965.812 1094.42 971.163 1097.29 978.933 C 1093.19 974.748 1086.95 964.432 1082.79 959.233 C 1074.01 948.243 1064.99 937.893 1056.95 926.357 C 1043.68 946.249 1031.73 956.167 1018.08 979.261 C 1024 956.249 1030.37 958.002 1008.85 939.882 C 1005.36 946.965 1002.74 953.249 997.366 959.083 L 995.37 958.079 C 996.354 947.554 1002.38 937.286 1007.17 927.832 C 1015 936.142 1022.42 943.002 1029.35 952.217 C 1037.15 939.957 1045.79 930.727 1053.28 917.281 C 1054.91 914.528 1055.42 914.275 1057.71 912.12 z"/>
             <path transform="translate(0,0)" fill="rgb(255,255,255)" d="M 908.151 997.482 C 924.82 996.141 945.473 999.694 958.219 1010.86 C 966.937 1018.5 972.659 1025.22 982.313 1032.65 L 983.895 1033.86 C 966.017 1030.28 953.862 1025.91 938.377 1016.09 L 937.654 1016.94 C 947.667 1027.15 961.044 1032.63 973.883 1038.21 C 971.885 1037.92 969.887 1037.63 967.892 1037.32 C 942.994 1033.5 934.928 1025.45 916.797 1008.55 C 914.149 1006.08 906.818 1000.25 905.529 998.494 L 908.151 997.482 z"/>
             <path transform="translate(0,0)" fill="rgb(255,255,255)" d="M 1192.8 997.363 C 1198.62 996.781 1204.79 997.229 1210.67 997.446 C 1180.15 1018.96 1184.68 1030.98 1141.78 1037.86 C 1156.24 1029.7 1158.51 1030.96 1173.97 1019.43 L 1177.87 1015.72 C 1175.76 1015.2 1170.78 1019.18 1168.25 1020.67 C 1156.23 1027.73 1143.4 1031.08 1129.97 1034.08 C 1156.77 1013.74 1155.13 1002.38 1192.8 997.363 z"/>
             <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1056.86 717.433 C 1061.85 726.334 1076.8 763.595 1070.01 772.274 C 1066.45 773.576 1058.55 773.037 1054.4 772.979 C 1050.66 773.408 1048.83 773.9 1045.16 772.918 C 1042.22 770.67 1041.53 766.885 1040.32 763.231 C 1043.57 748.66 1052.66 733.601 1056.86 717.433 z"/>
-            <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1060.45 899.901 C 1074.78 884.798 1095.47 881.527 1113.53 895.128 C 1117.95 898.45 1120.25 909.143 1114.91 912.59 C 1109.74 917.074 1097.14 914.992 1099.74 907.083 C 1105.51 907.472 1105.9 909.357 1110.28 907.975 C 1116.59 897.652 1093.74 889.451 1088.33 890.792 C 1085.18 895.109 1090.98 909.02 1080.09 911.228 C 1076.26 912.004 1073.91 911.663 1071.17 908.929 C 1073.34 902.907 1083.94 904.149 1081.41 898.34 C 1066.87 890.49 1062.04 906.403 1061.09 917.564 L 1057.71 912.12 C 1058.09 911.134 1058.85 903.92 1058.83 902.837 C 1059.42 901.179 1059.44 901.391 1060.45 899.901 z"/>
+            <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1060.45 899.901 C 1074.78 884.798 1095.47 881.527 1113.53 895.128 C 1117.95 898.45 1120.25 909.143 1114.91 912.59 C 1109.74 917.074 1097.14 914.992 1099.74 907.083 C 1110.51 907.472 1105.9 909.357 1110.28 907.975 C 1116.59 897.652 1093.74 889.451 1088.33 890.792 C 1085.18 895.109 1090.98 909.02 1080.09 911.228 C 1076.26 912.004 1073.91 911.663 1071.17 908.929 C 1073.34 902.907 1083.94 904.149 1081.41 898.34 C 1066.87 890.49 1062.04 906.403 1061.09 917.564 L 1057.71 912.12 C 1058.09 911.134 1058.85 903.92 1058.83 902.837 C 1059.42 901.179 1059.44 901.391 1060.45 899.901 z"/>
             <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1055.16 868.43 C 1066.03 867.987 1084.28 871.309 1095.07 873.854 C 1098.46 874.654 1101.79 878.578 1103.4 881.773 L 1102.59 882.562 C 1090.75 878.114 1072.92 876.247 1060.25 875.386 C 1045.4 874.451 1022.76 878.913 1008.65 882.966 C 1011.56 879.693 1014.38 876.998 1017.51 873.954 C 1029.92 871.265 1042.5 869.42 1055.16 868.43 z"/>
             <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1049.96 855.412 C 1060.19 854.567 1073.61 855.437 1083.55 858.04 C 1090.2 859.78 1091.51 861.572 1095.76 866.905 C 1085.69 864.378 1076.69 863.402 1066.44 862.094 C 1051.89 860.996 1036.09 862.827 1021.83 865.726 L 1021.07 865.007 L 1023.87 860.249 C 1028.6 856.812 1043.94 855.94 1049.96 855.412 z"/>
             <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1030.72 886.858 C 1042.02 888.761 1044.15 889.905 1053 898.157 C 1055 900.289 1055.54 901.191 1056.87 903.812 L 1058.83 902.837 C 1058.85 903.92 1058.09 911.134 1057.71 912.12 C 1055.42 914.275 1054.91 914.528 1053.28 917.281 C 1052.04 896.821 1034.66 888.618 1032.38 902.912 C 1037.58 906.846 1042.14 901.722 1042.96 908.49 L 1041.26 910.295 C 1037.4 911.718 1037.61 911.663 1033.5 911.27 C 1028.17 908.488 1027.19 905.693 1025.1 900.226 C 1026.27 896.96 1026.55 896.406 1028.38 893.4 L 1028.85 892.64 L 1027.21 891.257 L 1029.39 890.41 L 1030.72 886.858 z"/>
-            <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1010.56 895.247 C 1005.66 897.251 999.888 903.685 1004.28 908.512 C 1008.95 909.179 1010.06 906.575 1014.67 906.683 L 1015.58 908.32 C 1013.6 912.215 1011.01 913.276 1007.06 914.852 C 993.944 914.198 991.104 906.108 999.649 896.593 C 1007.9 887.407 1019.22 887.034 1030.72 886.858 L 1029.39 890.41 L 1027.21 891.257 L 1028.85 892.64 L 1028.38 893.4 C 1026.55 896.406 1026.27 896.96 1025.1 900.226 C 1020.75 894.659 1016.5 899.355 1010.56 895.247 C 1016.84 892.07 1020.4 891.963 1027.21 891.257 z"/>
+            <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1010.56 895.247 C 1005.66 897.251 999.888 903.685 1004.28 908.512 C 1008.95 909.179 1010.06 906.575 1014.67 906.683 L 1015.58 908.32 C 1013.6 912.215 1011.01 913.276 1007.06 914.852 C 993.944 914.198 991.104 906.108 999.649 896.593 C 1007.9 887.407 1019.22 887.034 1030.72 886.858 L 1029.39 890.41 L 1027.21 891.257 L 1028.85 892.64 L 1028.38 893.4 C 1026.55 896.406 1026.27 896.96 1025.1 900.226 C 1020.75 894.659 1016.5 899.355 1010.56 895.247 z"/>
             <path transform="translate(0,0)" fill="rgb(136,41,17)" d="M 1027.21 891.257 L 1028.85 892.64 L 1028.38 893.4 C 1026.55 896.406 1026.27 896.96 1025.1 900.226 C 1020.75 894.659 1016.5 899.355 1010.56 895.247 C 1016.84 892.07 1020.4 891.963 1027.21 891.257 z"/>
             <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1030.68 823.711 C 1039.27 801.291 1041.09 800.836 1065.73 803.528 L 1067.1 807.034 C 1068.06 810.913 1068.06 818.567 1068.21 822.848 C 1061.27 816.12 1060.21 813.726 1056.72 805.11 C 1054 814.694 1052.67 815.891 1045.85 822.696 C 1046.42 816.5 1046.88 812.305 1046.66 806.078 C 1041.75 816.563 1040.13 818.27 1030.68 823.711 z"/>
             <path transform="translate(0,0)" fill="rgb(195,149,64)" d="M 1051.26 841.375 C 1060.14 840.187 1073.17 842.237 1081.91 844.645 C 1084.72 845.418 1085.03 847.346 1086.24 849.851 L 1085.49 851.137 C 1083.48 851.237 1069.61 848.627 1066.25 848.106 C 1055.77 847.547 1044.1 848 1033.82 850.305 C 1031.15 850.903 1031.94 851.096 1028.64 851.121 C 1028.44 848.5 1029.84 846.999 1031.3 844.688 C 1034.77 843.072 1046.75 841.939 1051.26 841.375 z"/>
@@ -90,6 +92,7 @@ export default function Navbar() {
           </svg>
         </Link>
 
+        {/* Desktop Navigation Links */}
         <div className="hidden md:flex gap-6 lg:gap-10 text-[13px] font-bold text-gray-500 dark:text-gray-300 uppercase tracking-widest">
           <Link href="/" className="hover:text-gray-900 dark:hover:text-[#00C2FF] transition-colors">{t.home}</Link>
           <Link href="/services" className="hover:text-gray-900 dark:hover:text-[#00C2FF] transition-colors">{t.services}</Link>
@@ -97,6 +100,7 @@ export default function Navbar() {
           <Link href="/contact" className="hover:text-gray-900 dark:hover:text-[#00C2FF] transition-colors">{t.contact}</Link>
         </div>
 
+        {/* Desktop Controls */}
         <div className="flex items-center gap-4">
           <button onClick={toggleLang} className="hidden md:flex items-center gap-1.5 text-sm font-bold text-gray-500 dark:text-gray-300 hover:text-[#00C2FF] transition-colors px-2">
             <Globe className="w-4 h-4" /> {lang}
@@ -107,19 +111,38 @@ export default function Navbar() {
           <Link href="/contact" className="hidden md:inline-flex bg-[#00C2FF] text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-blue-600 transition-colors whitespace-nowrap">
             {t.message}
           </Link>
-          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="block md:hidden dark:text-white focus:outline-none">
-            <Menu className="w-8 h-8" />
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="block md:hidden text-gray-900 dark:text-white focus:outline-none">
+            {isMobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
           </button>
         </div>
       </div>
 
+      {/* Mobile Drawer Dropdown Menu (ခလုတ်များအားလုံး စနစ်တကျ ပြန်လည်ထည့်သွင်းပေးထားပါသည်) */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white dark:bg-gray-950 shadow-lg border-t dark:border-gray-800 md:hidden flex flex-col px-6 py-6 z-50">
+        <div className="absolute top-full left-0 w-full bg-white dark:bg-gray-950 shadow-2xl border-t border-gray-100 dark:border-gray-900 md:hidden flex flex-col px-6 py-8 z-[100] transition-all duration-200 animate-in fade-in slide-in-from-top-2">
           <div className="flex flex-col gap-6">
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-900 dark:text-white font-bold text-lg hover:text-[#00C2FF]">{t.home}</Link>
-            <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-500 dark:text-gray-300 font-bold text-lg hover:text-[#00C2FF]">{t.services}</Link>
-            <Link href="/portfolio" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-500 dark:text-gray-300 font-bold text-lg hover:text-[#00C2FF]">{t.portfolio}</Link>
-            <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-500 dark:text-gray-300 font-bold text-lg hover:text-[#00C2FF]">{t.contact}</Link>
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-900 dark:text-white font-bold text-lg hover:text-[#00C2FF] transition-colors">{t.home}</Link>
+            <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-900 dark:text-white font-bold text-lg hover:text-[#00C2FF] transition-colors">{t.services}</Link>
+            <Link href="/portfolio" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-900 dark:text-white font-bold text-lg hover:text-[#00C2FF] transition-colors">{t.portfolio}</Link>
+            <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-900 dark:text-white font-bold text-lg hover:text-[#00C2FF] transition-colors">{t.contact}</Link>
+          </div>
+
+          <div className="flex flex-col items-start gap-6 pt-6 mt-6 border-t border-gray-100 dark:border-gray-900">
+            {/* Mobile Language Switcher */}
+            <button onClick={() => { toggleLang(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 font-bold text-gray-900 dark:text-white text-base w-full hover:text-[#00C2FF] transition-colors">
+              <Globe className="w-5 h-5 text-[#00C2FF]" /> {t.langText} ({lang})
+            </button>
+            
+            {/* Mobile Dark/Light Theme Toggle */}
+            <button onClick={() => { toggleTheme(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 font-bold text-gray-900 dark:text-white text-base w-full hover:text-[#00C2FF] transition-colors">
+              {theme === "dark" ? <Sun className="w-5 h-5 text-[#00C2FF]" /> : <Moon className="w-5 h-5 text-[#00C2FF]" />}
+              {theme === "dark" ? t.light : t.dark}
+            </button>
+            
+            {/* Mobile Message Button */}
+            <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="inline-flex justify-center items-center bg-[#00C2FF] text-white px-5 py-3 rounded-xl font-bold text-sm w-full shadow-md hover:bg-blue-600 transition-colors text-center">
+              {t.message}
+            </Link>
           </div>
         </div>
       )}
