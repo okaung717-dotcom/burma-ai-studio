@@ -38,7 +38,7 @@ function isValidMessage(value: unknown): value is ChatMessage {
   return (message.role === "assistant" || message.role === "user") && typeof message.content === "string";
 }
 
-async function getMessages(request: Request) {
+async function getMessages(request: Request): Promise<ChatMessage[]> {
   const body = (await request.json().catch(() => null)) as { messages?: unknown } | null;
   const rawMessages = Array.isArray(body?.messages) ? body.messages : [];
   return rawMessages.filter(isValidMessage).slice(-10);
@@ -55,13 +55,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const messages = await getMessages(request);
+    const messages: ChatMessage[] = await getMessages(request);
 
     if (messages.length === 0) {
       return jsonReply("Please send a message first.", 400);
     }
 
-    const contents = messages.map((message) => ({
+    const contents = messages.map((message: ChatMessage) => ({
       role: message.role === "assistant" ? "model" : "user",
       parts: [{ text: message.content }],
     }));
