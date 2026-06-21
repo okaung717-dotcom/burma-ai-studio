@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Bot, MessageCircle, Send, Sparkles, X } from "lucide-react";
+import { Bot, Mail, MessageCircle, Phone, Send, Sparkles, X } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
 type ChatMessage = {
@@ -9,22 +9,31 @@ type ChatMessage = {
   content: string;
 };
 
+const contactLinks = {
+  email: "mailto:okaung717@gmail.com",
+  telegram: "tg://resolve?phone=959671010011",
+  viber: "viber://chat?number=%2B959671010011",
+  phone: "tel:09671010011",
+};
+
 const websiteFacts = {
   EN: {
-    welcome: "Hi, I’m the Burma AI Studio assistant. Ask me in English or Burmese about our services, pricing, delivery, portfolio, contact, privacy, or terms.",
+    welcome: "Hi, I’m the Burma AI Studio assistant. Ask me in English or Burmese about services, pricing, delivery, portfolio, formats, revisions, or direct contact.",
     fallback: "AI response is not available right now. You can still ask about our AI video services, pricing, delivery, portfolio, and contact details. For a quote, please send your video type, duration, style, deadline, and reference.",
     typing: "AI is thinking...",
+    contactTitle: "Direct contact",
   },
   MM: {
-    welcome: "မင်္ဂလာပါ။ Burma AI Studio assistant ပါ။ Website, service, price, delivery, portfolio, contact, privacy/terms အကြောင်း English သို့မဟုတ် မြန်မာလို မေးနိုင်ပါတယ်။",
+    welcome: "မင်္ဂလာပါ။ Burma AI Studio assistant ပါ။ Service, ဈေးနှုန်း, delivery, portfolio, video format, revision, direct contact အကြောင်း English သို့မဟုတ် မြန်မာလို မေးနိုင်ပါတယ်။",
     fallback: "AI response ယာယီမရသေးပါ။ AI video service, price, delivery, portfolio, contact အကြောင်းမေးနိုင်ပါတယ်။ Quote တိတိကျကျလိုချင်ရင် video type, duration, style, deadline, reference ကိုပို့ပေးပါ။",
     typing: "AI စဉ်းစားနေပါတယ်...",
+    contactTitle: "တိုက်ရိုက်ဆက်သွယ်ရန်",
   },
 };
 
 const quick = {
-  EN: ["What services do you offer?", "How much does a video cost?", "How can I contact you?"],
-  MM: ["ဘာဝန်ဆောင်မှုတွေလုပ်ပေးလဲ", "ဗီဒီယိုဈေးဘယ်လောက်လဲ", "ဘယ်လိုဆက်သွယ်ရမလဲ"],
+  EN: ["How much in one video?", "What services do you offer?", "How can I contact you?"],
+  MM: ["ဗီဒီယိုတစ်ပုဒ်ဈေးဘယ်လောက်လဲ", "ဘာဝန်ဆောင်မှုတွေလုပ်ပေးလဲ", "ဘယ်လိုဆက်သွယ်ရမလဲ"],
 } as const;
 
 export default function AIAssistant() {
@@ -86,7 +95,7 @@ export default function AIAssistant() {
   return (
     <div className="fixed bottom-5 right-5 z-[10000] font-sans">
       {isOpen && (
-        <div className="mb-4 flex h-[600px] max-h-[calc(100vh-7rem)] w-[calc(100vw-2.5rem)] max-w-[420px] flex-col overflow-hidden rounded-[2rem] border border-[#be9537]/30 bg-white shadow-[0_24px_80px_rgba(145,25,35,0.22)] dark:border-[#be9537]/20 dark:bg-[#100708]">
+        <div className="mb-4 flex h-[620px] max-h-[calc(100vh-7rem)] w-[calc(100vw-2.5rem)] max-w-[420px] flex-col overflow-hidden rounded-[2rem] border border-[#be9537]/30 bg-white shadow-[0_24px_80px_rgba(145,25,35,0.22)] dark:border-[#be9537]/20 dark:bg-[#100708]">
           <div className="flex shrink-0 items-center justify-between bg-[#911923] px-5 py-4 text-white">
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] shadow-inner ring-2 ring-[#be9537]/45 dark:bg-[#e3bc61] dark:text-[#100708]">
@@ -131,6 +140,24 @@ export default function AIAssistant() {
           </div>
 
           <div className="shrink-0 border-t border-[#be9537]/20 bg-white p-4 shadow-[0_-18px_40px_rgba(145,25,35,0.08)] dark:bg-[#1a0b0e]">
+            <div className="mb-3">
+              <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#911923] dark:text-[#e3bc61]">{websiteFacts[activeLang].contactTitle}</p>
+              <div className="grid grid-cols-4 gap-2">
+                <a href={contactLinks.email} className="flex items-center justify-center gap-1 rounded-xl border border-[#be9537]/25 bg-[#fff9f0] px-2 py-2 text-[11px] font-bold text-[#911923] hover:bg-[#fff3e3] dark:bg-[#100708] dark:text-[#e3bc61]">
+                  <Mail className="h-3.5 w-3.5" /> Email
+                </a>
+                <a href={contactLinks.telegram} className="flex items-center justify-center gap-1 rounded-xl border border-[#be9537]/25 bg-[#fff9f0] px-2 py-2 text-[11px] font-bold text-[#911923] hover:bg-[#fff3e3] dark:bg-[#100708] dark:text-[#e3bc61]">
+                  <Send className="h-3.5 w-3.5" /> Telegram
+                </a>
+                <a href={contactLinks.viber} className="flex items-center justify-center gap-1 rounded-xl border border-[#be9537]/25 bg-[#fff9f0] px-2 py-2 text-[11px] font-bold text-[#911923] hover:bg-[#fff3e3] dark:bg-[#100708] dark:text-[#e3bc61]">
+                  <MessageCircle className="h-3.5 w-3.5" /> Viber
+                </a>
+                <a href={contactLinks.phone} className="flex items-center justify-center gap-1 rounded-xl border border-[#be9537]/25 bg-[#fff9f0] px-2 py-2 text-[11px] font-bold text-[#911923] hover:bg-[#fff3e3] dark:bg-[#100708] dark:text-[#e3bc61]">
+                  <Phone className="h-3.5 w-3.5" /> Call
+                </a>
+              </div>
+            </div>
+
             <form onSubmit={handleSubmit} className="flex items-center gap-2">
               <input value={input} disabled={isLoading} onChange={(event) => setInput(event.target.value)} placeholder={activeLang === "MM" ? "မေးချင်တာရေးပါ..." : "Ask anything about the website..."} className="min-w-0 flex-1 rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 text-sm text-gray-900 outline-none transition-shadow focus:ring-2 focus:ring-[#911923]/30 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-[#100708] dark:text-white" />
               <button type="submit" disabled={isLoading} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#911923] text-white transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-70" aria-label="Send message"><Send className="h-5 w-5" /></button>
