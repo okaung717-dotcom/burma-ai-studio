@@ -23,8 +23,8 @@ async function withRedis<T>(callback: (client: ReturnType<typeof createClient>) 
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as { code?: string } | null;
-    const code = process.env.ADMIN_PIN;
-    if (!code) return Response.json({ ok: false, message: "ADMIN_PIN is not configured." }, { status: 503 });
+    const code = process.env.ADMIN_CONTROL || process.env.ADMIN_PIN || "";
+    if (!code) return Response.json({ ok: false, message: "ADMIN_CONTROL is not configured." }, { status: 503 });
     if (!body?.code || body.code !== code) return Response.json({ ok: false, message: "Invalid code." }, { status: 401 });
 
     const raw = await withRedis(async (client) => client.lRange(KEY, 0, 199));
