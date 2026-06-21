@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { withRedis } from "../../../lib/redis";
+import { basicLimit } from "../../../lib/guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,6 +35,9 @@ function hashVisitor(visitorId: string) {
 
 export async function POST(request: Request) {
   try {
+    const allowed = await basicLimit(request, "analytics", 90, 60);
+    if (!allowed) return Response.json({ ok: true });
+
     const body = (await request.json().catch(() => null)) as TrackBody | null;
     const visitorId = clean(body?.visitorId, "anonymous", 200);
     const now = new Date();
