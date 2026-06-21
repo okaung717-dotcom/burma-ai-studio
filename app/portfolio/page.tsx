@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { Video } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 import VideoGrid from "./VideoGrid";
@@ -40,11 +39,14 @@ function getDevice() {
 
 export default function Portfolio() {
   const { lang } = useLanguage();
-  const searchParams = useSearchParams();
-  const isAdminPreview = searchParams.get("adminPreview") === "1";
+  const [isAdminPreview, setIsAdminPreview] = useState(false);
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
   const sentVideos = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    setIsAdminPreview(new URLSearchParams(window.location.search).get("adminPreview") === "1");
+  }, []);
 
   useEffect(() => {
     const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-portfolio-video]"));
