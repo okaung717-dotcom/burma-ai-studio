@@ -14,6 +14,9 @@ type TrackBody = {
   device?: string;
   language?: string;
   timezone?: string;
+  eventType?: string;
+  videoId?: string;
+  videoTitle?: string;
 };
 
 function clean(value: unknown, fallback = "Unknown", max = 180) {
@@ -37,6 +40,7 @@ export async function POST(request: Request) {
     const event = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       visitorId: hashVisitor(visitorId),
+      eventType: clean(body?.eventType, "page-view", 80),
       path: clean(body?.path, "/", 260),
       page: clean(body?.page, "/", 160),
       source: clean(body?.source, "Direct", 120),
@@ -44,13 +48,15 @@ export async function POST(request: Request) {
       language: clean(body?.language, "Unknown", 80),
       timezone: clean(body?.timezone, "Unknown", 120),
       country: countryFromRequest(request),
+      videoId: clean(body?.videoId, "", 120),
+      videoTitle: clean(body?.videoTitle, "", 180),
       createdAt: now.toISOString(),
       day: now.toISOString().slice(0, 10),
     };
 
     await withRedis(async (client) => {
       await client.lPush(EVENTS_KEY, JSON.stringify(event));
-      await client.lTrim(EVENTS_KEY, 0, 999);
+      await client.lTrim(EVENTS_KEY, 0, 1499);
     });
 
     return Response.json({ ok: true });
