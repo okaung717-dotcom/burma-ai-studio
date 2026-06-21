@@ -5,14 +5,11 @@ const ThemeContext = createContext({ theme: "light", toggleTheme: () => {} });
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState("light");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Page အပြည့်အစုံ Load ပြီးမှသာ ဒီအလုပ်ကို လုပ်မယ်
+    // Client Side ရောက်မှ State ကို Update လုပ်မယ်
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
-    document.documentElement.classList.toggle("dark", savedTheme === "dark");
-    setMounted(true);
   }, []);
 
   const toggleTheme = () => {
@@ -21,11 +18,6 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("theme", newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
-
-  // Page မပွင့်ခင်မှာ အဖြူရောင် flash မဖြစ်အောင် ခဏစောင့်ပေးမယ်
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

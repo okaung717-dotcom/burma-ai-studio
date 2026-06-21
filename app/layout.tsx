@@ -27,7 +27,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} h-full antialiased min-h-full flex flex-col w-full overflow-x-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300`}>
+      <head>
+        {/* ဒီ Script က Page မပွင့်ခင် Dark Mode ကို အရင်ဆုံး တွက်ချက်ပေးမှာပါ */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
+      {/* Flash မဖြစ်အောင် body ထဲက transition-colors ကို ဖြုတ်ထားလိုက်ပါပြီ */}
+      <body className={`${geistSans.variable} ${geistMono.variable} h-full antialiased min-h-full flex flex-col w-full overflow-x-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}>
         <ThemeProvider>
           <LanguageProvider>
             <Navbar />
