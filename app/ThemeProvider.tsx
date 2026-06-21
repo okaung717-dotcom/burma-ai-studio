@@ -5,27 +5,27 @@ const ThemeContext = createContext({ theme: "light", toggleTheme: () => {} });
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState("light");
+  const [mounted, setMounted] = useState(false);
 
-  // အရေးကြီးဆုံး: Page တိုင်းကို ရောက်တိုင်း ဒီအလုပ်ကို အရင်လုပ်ခိုင်းမယ်
   useEffect(() => {
-    // ၁။ Browser ထဲမှာ သိမ်းထားတဲ့ 'theme' ကို အရင်ရှာမယ်
+    // Page အပြည့်အစုံ Load ပြီးမှသာ ဒီအလုပ်ကို လုပ်မယ်
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
-    
-    // ၂။ HTML တက်ဂ်မှာ class ပြန်ထည့်မယ်
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []); // [] ဆိုတော့ Page တိုင်းစဖွင့်တိုင်း တစ်ခါပဲ အလုပ်လုပ်မယ်
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    localStorage.setItem("theme", newTheme); // Theme ကို အမြဲသိမ်းထားမယ်
-    document.documentElement.classList.toggle("dark");
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
+
+  // Page မပွင့်ခင်မှာ အဖြူရောင် flash မဖြစ်အောင် ခဏစောင့်ပေးမယ်
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
