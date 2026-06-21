@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
+import AIAssistant from "./AIAssistant";
 import { LanguageProvider } from "./LanguageContext";
 import { ThemeProvider } from "./ThemeProvider";
 
@@ -50,6 +51,7 @@ export default function RootLayout({
             <main className="w-full flex-grow">
               {children}
             </main>
+            <AIAssistant />
           </LanguageProvider>
         </ThemeProvider>
       </body>
