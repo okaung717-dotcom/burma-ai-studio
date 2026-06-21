@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { Video } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 import VideoGrid from "./VideoGrid";
@@ -39,6 +40,8 @@ function getDevice() {
 
 export default function Portfolio() {
   const { lang } = useLanguage();
+  const searchParams = useSearchParams();
+  const isAdminPreview = searchParams.get("adminPreview") === "1";
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
   const sentVideos = useRef<Set<string>>(new Set());
@@ -84,6 +87,15 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+      {isAdminPreview && (
+        <div className="sticky top-0 z-50 border-b border-[#be9537]/25 bg-[#fff9f0]/95 px-5 py-3 shadow backdrop-blur dark:bg-[#100708]/95">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2">
+            <a href="/admin6996/tools" className="rounded-full bg-[#be9537] px-4 py-2 text-sm font-black text-[#100708]">Back to Admin Tools</a>
+            <a href="/admin6996/portfolio" className="rounded-full border border-[#be9537]/35 bg-white/60 px-3 py-2 text-xs font-bold text-[#911923] dark:border-white/10 dark:bg-white/5 dark:text-white/85">Portfolio Manager</a>
+          </div>
+        </div>
+      )}
+
       <header className="py-20 px-6 md:px-16 lg:px-24 bg-gray-50 dark:bg-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
           {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span>
