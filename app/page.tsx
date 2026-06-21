@@ -44,8 +44,8 @@ export default function Home() {
             {t.badge}
           </div>
 
-          {/* leading-[1.5] ကို ပြောင်းထားပါတယ်၊ မြန်မာစာတွေ ထပ်နေတော့မှာ မဟုတ်ပါဘူး */}
-          <h1 className="text-5xl md:text-[64px] font-extrabold leading-[1.5] tracking-tight dark:text-white">
+          {/* မြန်မာစာလုံးများ မထပ်စေရန် leading-loose နှင့် tracking-normal ကို သုံးပေးထားပါသည် */}
+          <h1 className="text-4xl md:text-[64px] font-extrabold leading-loose tracking-normal dark:text-white">
             {t.title1} <br /> {t.title2} <br /> {t.title3} <span className="text-[#00C2FF]">{t.title4}</span>
           </h1>
 
@@ -89,6 +89,7 @@ export default function Home() {
         </div>
       </main>
 
+      {/* Statistics Section */}
       <section className="bg-[#f9fafb] dark:bg-gray-900 border-t border-b border-gray-100 dark:border-gray-800 py-16 px-6 md:px-16 lg:px-24 transition-colors duration-300">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-4 text-center md:divide-x divide-gray-200 dark:divide-gray-700">
           <div className="flex flex-col items-center justify-center space-y-2">
@@ -114,29 +115,23 @@ export default function Home() {
 
       <footer className="bg-[#e5e7eb] dark:bg-black py-16 px-6 md:px-16 lg:px-24 transition-colors duration-300">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
-          
           <div className="col-span-2 space-y-4">
             <div className="flex items-center gap-2 font-bold text-xl text-[#111827] dark:text-white">
               <Video className="text-[#00C2FF] w-6 h-6" />
               Burma AI Studio
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t.footerText}
-            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t.footerText}</p>
           </div>
-
           <div className="col-span-1 flex flex-col space-y-4">
             <a href="/" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Home</a>
             <a href="/services" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Services</a>
             <a href="/portfolio" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Portfolio</a>
           </div>
-
           <div className="col-span-1 flex flex-col space-y-4">
             <a href="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Contact</a>
             <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Terms of Service</a>
           </div>
-
         </div>
       </footer>
     </>

@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-// ၁။ ဘာသာစကား အမျိုးအစားကို တိတိကျကျ သတ်မှတ်ပါမယ်
 export type Language = "EN" | "MM";
 
 type LanguageContextType = {
@@ -9,13 +8,16 @@ type LanguageContextType = {
   toggleLang: () => void;
 };
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+// ဒီနေရာမှာ default value ကို "EN" လို့ ပေးထားလိုက်ရင် Error မတက်တော့ပါဘူး
+const LanguageContext = createContext<LanguageContextType>({
+  lang: "EN",
+  toggleLang: () => {},
+});
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Language>("EN");
 
   useEffect(() => {
-    // ဖွင့်တာနဲ့ localStorage ထဲက မှတ်ထားတဲ့ ဘာသာစကားကို ဆွဲယူမယ်
     const savedLang = localStorage.getItem("lang") as Language | null;
     if (savedLang === "EN" || savedLang === "MM") {
       setLang(savedLang);
@@ -25,7 +27,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const toggleLang = () => {
     setLang((prev) => {
       const newLang = prev === "EN" ? "MM" : "EN";
-      localStorage.setItem("lang", newLang); // ရွေးချယ်မှုကို မှတ်ထားမယ်
+      localStorage.setItem("lang", newLang);
       return newLang;
     });
   };
@@ -37,10 +39,4 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-  return context;
-};
+export const useLanguage = () => useContext(LanguageContext);
