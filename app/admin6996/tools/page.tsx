@@ -6,7 +6,8 @@ const links = [
   ["Operations", "/admin6996/ops"],
   ["Content Control", "/admin6996/content"],
   ["Backup Center", "/admin6996/backup"],
-  ["Portfolio", "/portfolio"],
+  ["Portfolio Manager", "/admin6996/portfolio"],
+  ["Public Portfolio", "/portfolio"],
 ];
 
 export default function ToolsPage() {
