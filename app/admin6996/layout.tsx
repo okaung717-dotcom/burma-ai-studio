@@ -13,7 +13,7 @@ const links = [
 export default function Admin6996Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <nav className="sticky top-0 z-50 border-b border-[#be9537]/25 bg-[#fff9f0]/95 px-4 py-3 shadow-xl backdrop-blur dark:bg-[#100708]/95">
+      <nav className="relative z-10 border-b border-[#be9537]/25 bg-[#fff9f0] px-4 py-3 shadow-sm dark:bg-[#100708]">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2">
           <a href="/admin6996/tools" className="mr-2 rounded-full bg-[#be9537] px-4 py-2 text-sm font-black text-[#100708]">Admin Tools</a>
           {links.map(([label, href]) => (
