@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* ဒီ Script က Page မပွင့်ခင် Dark Mode ကို အရင်ဆုံး တွက်ချက်ပေးမှာပါ */}
+        {/* စာမျက်နှာ မပွင့်ခင် Theme ကွဲလွဲမှုကို ကာကွယ်ပေးသည့် Script */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -43,14 +43,13 @@ export default function RootLayout({
           }}
         />
       </head>
-      {/* Flash မဖြစ်အောင် body ထဲက transition-colors ကို ဖြုတ်ထားလိုက်ပါပြီ */}
-      <body className={`${geistSans.variable} ${geistMono.variable} h-full antialiased min-h-full flex flex-col w-full overflow-x-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col w-full overflow-x-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}>
         <ThemeProvider>
           <LanguageProvider>
             <Navbar />
-            <div className="w-full">
+            <main className="w-full flex-grow">
               {children}
-            </div>
+            </main>
           </LanguageProvider>
         </ThemeProvider>
       </body>
