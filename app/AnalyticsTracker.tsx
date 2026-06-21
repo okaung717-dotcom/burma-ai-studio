@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 function getSource() {
   const referrer = document.referrer || "Direct";
@@ -13,7 +13,11 @@ function getSource() {
   if (lower.includes("google")) return "Google";
   if (lower.includes("telegram")) return "Telegram";
   if (lower.includes("instagram")) return "Instagram";
-  return new URL(referrer).hostname.replace("www.", "");
+  try {
+    return new URL(referrer).hostname.replace("www.", "");
+  } catch {
+    return "Other";
+  }
 }
 
 function getDevice() {
@@ -25,7 +29,6 @@ function getDevice() {
 
 export default function AnalyticsTracker() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     const key = "bas_visitor_id";
@@ -36,7 +39,7 @@ export default function AnalyticsTracker() {
     }
 
     const controller = new AbortController();
-    const query = searchParams.toString();
+    const query = window.location.search.replace(/^\?/, "");
 
     fetch("/api/analytics/track", {
       method: "POST",
@@ -55,7 +58,7 @@ export default function AnalyticsTracker() {
     }).catch(() => undefined);
 
     return () => controller.abort();
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   return null;
 }
