@@ -26,7 +26,7 @@ export default function VideoGrid() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => (
-        <article key={item.src} className="group">
+        <article key={item.src} data-portfolio-video data-video-id={item.src} data-video-title={item.titleEN || item.titleMM || "AI Video"} className="group">
           <div className="aspect-video overflow-hidden rounded-2xl border border-gray-100 bg-gray-100 shadow-lg dark:border-gray-800 dark:bg-gray-900">
             <iframe className="h-full w-full" src={`https://www.youtube.com/embed/${item.src}`} allowFullScreen title={item.titleEN || "AI Video"} />
           </div>
