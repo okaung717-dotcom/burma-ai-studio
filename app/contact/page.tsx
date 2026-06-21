@@ -53,7 +53,8 @@ export default function Contact() {
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-[#00C2FF] selection:text-white transition-colors duration-300">
       <main className="py-20 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto flex flex-col md:flex-row gap-16">
         <div className="md:w-1/2 space-y-8">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-normal">
+          {/* tracking-tight ကို ဖြုတ်ပြီး tracking-normal နှင့် leading-normal ကိုသုံးထားပါသည် */}
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-normal leading-normal">
             {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span> <br/>{t.title2}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
