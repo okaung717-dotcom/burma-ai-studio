@@ -1,6 +1,8 @@
 "use client";
-import { Play, TrendingUp, Palette, Video } from "lucide-react";
+import { Play, TrendingUp, Palette, Video, Sparkles } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
+
+const heroVideoId = "T9p2lqcETCE";
 
 const translations = {
   EN: {
@@ -12,6 +14,9 @@ const translations = {
     desc: "High-quality, affordable promotional videos powered by advanced AI. We craft cinematic narratives that captivate your audience and elevate your brand identity without the traditional studio costs.",
     btn1: "Get Started",
     btn2: "Watch Examples",
+    heroLabel: "Auto-playing AI commercial sample",
+    heroTitle: "Cinematic brand video preview",
+    heroCaption: "Muted autoplay • AI commercial style • Ready for social media",
     footerText: "© 2026 Burma AI Studio. All rights reserved."
   },
   MM: {
@@ -23,6 +28,9 @@ const translations = {
     desc: "ကုန်ကျစရိတ် အရမ်းများတဲ့ ရိုးရိုး Studio တွေနဲ့ မတူဘဲ၊ အဆင့်မြင့် AI နည်းပညာကို သုံးပြီး အရည်အသွေးမြင့် ကြော်ငြာဗီဒီယိုတွေကို သင့်တင့်တဲ့ ဈေးနှုန်းနဲ့ ဖန်တီးပေးနေပါတယ်။ သင့်ပရိသတ်ကို အပြည့်အဝ ဆွဲဆောင်နိုင်မယ့် ရုပ်ရှင်ဆန်ဆန် ဖန်တီးမှုတွေနဲ့ Brand ရဲ့ Image ကို မြှင့်တင်လိုက်ပါ။",
     btn1: "အခုပဲ စလိုက်ရအောင်",
     btn2: "နမူနာ ကြည့်ရန်",
+    heroLabel: "အလိုအလျောက်ပြသနေသော AI ကြော်ငြာနမူနာ",
+    heroTitle: "ရုပ်ရှင်ဆန်သော Brand Video Preview",
+    heroCaption: "အသံပိတ် autoplay • AI commercial style • Social media အတွက်အသင့်",
     footerText: "© 2026 Burma AI Studio. မူပိုင်ခွင့်များအားလုံး ရယူထားပြီးဖြစ်ပါသည်။"
   }
 } as const;
@@ -35,7 +43,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex flex-col lg:flex-row items-center justify-between py-12 md:py-20 px-6 md:px-16 lg:px-24">
+      <main className="flex flex-col lg:flex-row items-center justify-between py-12 md:py-20 px-6 md:px-16 lg:px-24 gap-12">
         
         <div className="lg:w-[50%] space-y-8">
           
@@ -63,16 +71,26 @@ export default function Home() {
           </div>
         </div>
         
-        <div className="lg:w-[45%] w-full h-[450px] md:h-[600px] relative">
-          <div className="w-full h-full rounded-[2.5rem] bg-[#111827] overflow-hidden relative shadow-2xl flex items-center justify-center">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#00C2FF]/20 via-transparent to-transparent blur-2xl"></div>
-            <div className="absolute inset-0 opacity-40 flex items-center justify-center flex-col gap-8 transform rotate-12 scale-150">
-              <div className="w-64 h-16 border-4 border-[#00C2FF]/30 rounded-xl"></div>
-              <div className="w-80 h-16 border-4 border-[#00C2FF]/20 rounded-xl"></div>
-              <div className="w-72 h-16 border-4 border-[#00C2FF]/10 rounded-xl"></div>
+        <div className="lg:w-[45%] w-full relative">
+          <div className="relative rounded-[2.5rem] overflow-hidden bg-[#111827] border border-[#00C2FF]/20 shadow-2xl shadow-red-950/20">
+            <div className="relative aspect-[4/5] md:aspect-video lg:aspect-[4/5] xl:aspect-video bg-[#111827]">
+              <iframe
+                className="absolute inset-0 h-full w-full scale-[1.02]"
+                src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&playlist=${heroVideoId}&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
+                title="Burma AI Studio cinematic commercial autoplay preview"
+                allow="autoplay; encrypted-media; picture-in-picture; web-share"
+                allowFullScreen
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#100708]/80 via-transparent to-[#100708]/20" />
+              <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
             </div>
-            <div className="relative w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(0,194,255,0.4)] z-10 cursor-pointer hover:scale-110 transition-transform duration-300">
-              <Play className="text-[#00C2FF] w-8 h-8 ml-1" fill="currentColor" />
+
+            <div className="absolute left-5 right-5 bottom-5 rounded-3xl border border-white/10 bg-[#100708]/75 p-4 md:p-5 text-white backdrop-blur-xl">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/80">
+                <Sparkles className="h-3.5 w-3.5 text-[#00C2FF]" /> {t.heroLabel}
+              </div>
+              <h2 className="text-xl md:text-2xl font-extrabold leading-relaxed">{t.heroTitle}</h2>
+              <p className="mt-1 text-sm text-white/70 leading-relaxed">{t.heroCaption}</p>
             </div>
           </div>
         </div>
