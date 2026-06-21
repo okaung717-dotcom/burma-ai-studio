@@ -2,6 +2,7 @@
 import { Mail, Phone, Globe, Send } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 
+// TypeScript Error မတက်စေရန် 'as const' ဖြင့် တိတိကျကျ သတ်မှတ်ထားပါသည်
 const translations = {
   EN: {
     title1: "Let's ",
@@ -46,6 +47,7 @@ const translations = {
 export default function Contact() {
   const { lang } = useLanguage();
 
+  // Vercel တွင် Error မတက်စေရန် အထူးကာကွယ်ထားပါသည်
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
 
