@@ -44,8 +44,8 @@ export default function Home() {
             {t.badge}
           </div>
 
-          {/* မြန်မာစာလုံးများ မထပ်စေရန် leading-loose နှင့် tracking-normal ကို သုံးပေးထားပါသည် */}
-          <h1 className="text-4xl md:text-[64px] font-extrabold leading-loose tracking-normal dark:text-white">
+          {/* မြန်မာစာလုံးများ ထပ်မနေစေရန် leading-[1.4] နှင့် text-5xl ကိုသုံးထားပါသည် */}
+          <h1 className="text-5xl font-extrabold leading-[1.4] tracking-normal dark:text-white">
             {t.title1} <br /> {t.title2} <br /> {t.title3} <span className="text-[#00C2FF]">{t.title4}</span>
           </h1>
 
@@ -65,31 +65,19 @@ export default function Home() {
         
         <div className="lg:w-[45%] w-full h-[450px] md:h-[600px] relative">
           <div className="w-full h-full rounded-[2.5rem] bg-[#111827] overflow-hidden relative shadow-2xl flex items-center justify-center">
-            
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#00C2FF]/20 via-transparent to-transparent blur-2xl"></div>
-            
             <div className="absolute inset-0 opacity-40 flex items-center justify-center flex-col gap-8 transform rotate-12 scale-150">
               <div className="w-64 h-16 border-4 border-[#00C2FF]/30 rounded-xl"></div>
               <div className="w-80 h-16 border-4 border-[#00C2FF]/20 rounded-xl"></div>
               <div className="w-72 h-16 border-4 border-[#00C2FF]/10 rounded-xl"></div>
             </div>
-
             <div className="relative w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(0,194,255,0.4)] z-10 cursor-pointer hover:scale-110 transition-transform duration-300">
               <Play className="text-[#00C2FF] w-8 h-8 ml-1" fill="currentColor" />
-            </div>
-
-            <div className="absolute left-6 md:left-10 top-1/4 w-28 h-36 bg-gray-800 rounded-xl border-4 border-white shadow-xl transform -rotate-12 hidden md:block overflow-hidden">
-               <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover opacity-80" alt="Video frame 1" />
-            </div>
-            <div className="absolute right-6 md:right-10 bottom-1/4 w-36 h-24 bg-gray-800 rounded-xl border-4 border-white shadow-xl transform rotate-6 hidden md:block overflow-hidden flex items-center justify-center">
-               <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Video frame 2" />
-               <div className="w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center z-10"><Play className="w-3 h-3 text-gray-900 ml-0.5" fill="currentColor"/></div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Statistics Section */}
       <section className="bg-[#f9fafb] dark:bg-gray-900 border-t border-b border-gray-100 dark:border-gray-800 py-16 px-6 md:px-16 lg:px-24 transition-colors duration-300">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-4 text-center md:divide-x divide-gray-200 dark:divide-gray-700">
           <div className="flex flex-col items-center justify-center space-y-2">
@@ -129,8 +117,8 @@ export default function Home() {
           </div>
           <div className="col-span-1 flex flex-col space-y-4">
             <a href="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Contact</a>
-            <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Terms of Service</a>
+            <a href="/privacy-policy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Privacy Policy</a>
+            <a href="/terms-of-service" className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors">Terms of Service</a>
           </div>
         </div>
       </footer>

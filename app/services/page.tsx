@@ -2,7 +2,6 @@
 import { Video, Clapperboard, Mic, Building, ArrowRight } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 
-// TypeScript Error လုံးဝ မတက်စေရန် 'as const' ဖြင့် အသေချာဆုံး ရေးထားပါသည်
 const translations = {
   EN: {
     title1: "Next-Gen ",
@@ -43,7 +42,6 @@ const translations = {
 export default function Services() {
   const { lang } = useLanguage();
 
-  // Vercel တွင် 't is possibly undefined' error မတက်စေရန် အထူးကာကွယ်ထားခြင်းဖြစ်သည်
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
 
@@ -52,7 +50,8 @@ export default function Services() {
       
       {/* Header Section */}
       <header className="py-20 px-6 md:px-16 lg:px-24 bg-gray-50 dark:bg-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
+        {/* leading-loose ကို သုံးပေးထားပါသည် */}
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-normal leading-loose">
           {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span> {t.title2}
         </h1>
         <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -63,7 +62,6 @@ export default function Services() {
       {/* Services Grid */}
       <main className="py-16 px-4 md:px-16 lg:px-24 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          
           {[
             { Icon: Clapperboard, title: t.s1Title, desc: t.s1Desc },
             { Icon: Mic, title: t.s2Title, desc: t.s2Desc },
@@ -89,9 +87,12 @@ export default function Services() {
       {/* Call to Action */}
       <section className="py-20 px-6 text-center bg-gray-900 dark:bg-gray-900 text-white mt-8">
         <h2 className="text-3xl font-bold mb-6">{t.ctaTitle}</h2>
-        <button className="bg-[#00C2FF] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#00a8e0] transition-all shadow-lg shadow-cyan-500/30">
+        <a 
+          href="/contact" 
+          className="inline-block bg-[#00C2FF] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#00a8e0] transition-all shadow-lg shadow-cyan-500/30"
+        >
           {t.ctaBtn}
-        </button>
+        </a>
       </section>
     </div>
   );
