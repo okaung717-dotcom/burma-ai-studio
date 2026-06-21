@@ -18,22 +18,22 @@ const contactLinks = {
 
 const websiteFacts = {
   EN: {
-    welcome: "Hi, I’m the Burma AI Studio assistant. Ask me in English or Burmese about services, pricing, delivery, portfolio, formats, revisions, or direct contact.",
-    fallback: "AI response is not available right now. You can still ask about our AI video services, pricing, delivery, portfolio, and contact details. For a quote, please send your video type, duration, style, deadline, and reference.",
-    typing: "AI is thinking...",
+    welcome: "Hi, I’m your Burma AI Studio assistant. Ask me anything about AI videos, pricing, campaign ideas, scripts, formats, delivery, portfolio, revisions, or direct contact. I’ll guide you like a project consultant.",
+    fallback: "I can still help as a Burma AI Studio website assistant. Tell me your video goal, product/service, platform, style, duration, and deadline, and I’ll suggest the best next step.",
+    typing: "AI assistant is preparing the best answer...",
     contactTitle: "Direct contact",
   },
   MM: {
-    welcome: "မင်္ဂလာပါ။ Burma AI Studio assistant ပါ။ Service, ဈေးနှုန်း, delivery, portfolio, video format, revision, direct contact အကြောင်း English သို့မဟုတ် မြန်မာလို မေးနိုင်ပါတယ်။",
-    fallback: "AI response ယာယီမရသေးပါ။ AI video service, price, delivery, portfolio, contact အကြောင်းမေးနိုင်ပါတယ်။ Quote တိတိကျကျလိုချင်ရင် video type, duration, style, deadline, reference ကိုပို့ပေးပါ။",
-    typing: "AI စဉ်းစားနေပါတယ်...",
+    welcome: "မင်္ဂလာပါ။ Burma AI Studio assistant ပါ။ AI video, ဈေးနှုန်း, campaign idea, script, format, delivery, portfolio, revision, direct contact အကြောင်း ဘာမဆိုမေးနိုင်ပါတယ်။ Project consultant လို အဆင်ပြေအောင်လမ်းညွှန်ပေးပါမယ်။",
+    fallback: "Burma AI Studio website assistant အနေနဲ့ ဆက်ကူညီပေးနိုင်ပါတယ်။ Video goal, product/service, platform, style, duration နဲ့ deadline ကိုပြောပြပါ — အကောင်းဆုံး next step ကိုအကြံပေးပါမယ်။",
+    typing: "AI assistant က အကောင်းဆုံးအဖြေကိုပြင်ဆင်နေပါတယ်...",
     contactTitle: "တိုက်ရိုက်ဆက်သွယ်ရန်",
   },
 };
 
 const quick = {
-  EN: ["How much in one video?", "What services do you offer?", "How can I contact you?"],
-  MM: ["ဗီဒီယိုတစ်ပုဒ်ဈေးဘယ်လောက်လဲ", "ဘာဝန်ဆောင်မှုတွေလုပ်ပေးလဲ", "ဘယ်လိုဆက်သွယ်ရမလဲ"],
+  EN: ["Suggest the best video for my brand", "How much in one video?", "Write a video script idea", "How can I contact you?"],
+  MM: ["ငါ့ Brand အတွက် Video အကြံပေးပါ", "ဗီဒီယိုတစ်ပုဒ်ဈေးဘယ်လောက်လဲ", "ကြော်ငြာ Script အကြံပေးပါ", "ဘယ်လိုဆက်သွယ်ရမလဲ"],
 } as const;
 
 export default function AIAssistant() {
@@ -103,7 +103,7 @@ export default function AIAssistant() {
               </div>
               <div className="min-w-0">
                 <p className="truncate text-base font-extrabold">Burma AI Assistant</p>
-                <p className="truncate text-xs text-white/75">Powered by Gemini • English / မြန်မာ</p>
+                <p className="truncate text-xs text-white/75">AI Agent • Brand Video Guide</p>
               </div>
             </div>
             <button onClick={() => setIsOpen(false)} className="ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] shadow-sm transition-transform hover:scale-105" aria-label="Close AI assistant">
@@ -159,7 +159,7 @@ export default function AIAssistant() {
             </div>
 
             <form onSubmit={handleSubmit} className="flex items-center gap-2">
-              <input value={input} disabled={isLoading} onChange={(event) => setInput(event.target.value)} placeholder={activeLang === "MM" ? "မေးချင်တာရေးပါ..." : "Ask anything about the website..."} className="min-w-0 flex-1 rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 text-sm text-gray-900 outline-none transition-shadow focus:ring-2 focus:ring-[#911923]/30 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-[#100708] dark:text-white" />
+              <input value={input} disabled={isLoading} onChange={(event) => setInput(event.target.value)} placeholder={activeLang === "MM" ? "သင်မေးချင်တာရေးပါ..." : "Ask anything about your video project..."} className="min-w-0 flex-1 rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 text-sm text-gray-900 outline-none transition-shadow focus:ring-2 focus:ring-[#911923]/30 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-[#100708] dark:text-white" />
               <button type="submit" disabled={isLoading} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#911923] text-white transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-70" aria-label="Send message"><Send className="h-5 w-5" /></button>
             </form>
           </div>
