@@ -94,18 +94,18 @@
 
   @media (max-width: 767px) {
     html {
-      scroll-padding-top: 78px;
+      scroll-padding-top: 92px;
     }
 
     body > nav,
     body nav:first-of-type {
-      padding-top: 0.75rem !important;
-      padding-bottom: 0.75rem !important;
+      padding-top: 0.8rem !important;
+      padding-bottom: 0.8rem !important;
     }
 
     body > nav a[href="/"] svg,
     body nav:first-of-type a[href="/"] svg {
-      max-height: 42px;
+      max-height: 56px;
     }
   }
 
