@@ -43,6 +43,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 96px;
   }
 
   body {
@@ -57,6 +58,63 @@
   ::selection {
     background-color: var(--brand-primary);
     color: #ffffff;
+  }
+}
+
+@layer components {
+  /* Always-visible navigation for long pages on desktop and mobile */
+  body > nav,
+  body nav:first-of-type {
+    position: sticky !important;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 9999 !important;
+    background-color: rgba(255, 253, 248, 0.9) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    backdrop-filter: blur(18px) saturate(1.2);
+    box-shadow: 0 14px 34px rgba(26, 11, 14, 0.07);
+  }
+
+  body > nav::after,
+  body nav:first-of-type::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--brand-gold-rgb), 0.45), transparent);
+    pointer-events: none;
+  }
+
+  .dark body > nav,
+  .dark body nav:first-of-type {
+    background-color: rgba(16, 7, 8, 0.88) !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+  }
+
+  @media (max-width: 767px) {
+    html {
+      scroll-padding-top: 78px;
+    }
+
+    body > nav,
+    body nav:first-of-type {
+      padding-top: 0.75rem !important;
+      padding-bottom: 0.75rem !important;
+    }
+
+    body > nav a[href="/"] svg,
+    body nav:first-of-type a[href="/"] svg {
+      max-height: 42px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    body > nav,
+    body nav:first-of-type {
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+    }
   }
 }
 
