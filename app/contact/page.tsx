@@ -4,6 +4,9 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Mail, Phone, Globe, Send, MessageCircle } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 
+const telegramDirectLink = "tg://resolve?phone=959671010011";
+const viberDirectLink = "viber://chat?number=%2B959671010011";
+
 const translations = {
   EN: {
     title1: "Let's ",
@@ -62,8 +65,8 @@ const translations = {
 const contactLinks = [
   { key: "email", Icon: Mail, val: "okaung717@gmail.com", href: "mailto:okaung717@gmail.com" },
   { key: "phone", Icon: Phone, val: "09671010011", href: "tel:09671010011" },
-  { key: "telegram", Icon: Send, val: "@BurmaAiStudio", href: "https://t.me/BurmaAiStudio" },
-  { key: "viber", Icon: MessageCircle, val: "+95 9 671 010 011", href: "viber://chat?number=%2B959671010011" },
+  { key: "telegram", Icon: Send, val: "+95 9 671 010 011", href: telegramDirectLink },
+  { key: "viber", Icon: MessageCircle, val: "+95 9 671 010 011", href: viberDirectLink },
   { key: "facebook", Icon: Globe, val: "Burma Ai Studio", href: "https://www.facebook.com/BurmaAiaStudio/" },
 ] as const;
 
@@ -175,10 +178,10 @@ export default function Contact() {
             </button>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <a href="https://t.me/BurmaAiStudio" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
+              <a href={telegramDirectLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
                 <Send className="w-4 h-4 text-[#00C2FF]" /> {t.telegramButton}
               </a>
-              <a href="viber://chat?number=%2B959671010011" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
+              <a href={viberDirectLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
                 <MessageCircle className="w-4 h-4 text-[#00C2FF]" /> {t.viberButton}
               </a>
             </div>
