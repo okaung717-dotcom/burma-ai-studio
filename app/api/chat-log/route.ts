@@ -1,4 +1,5 @@
 import { withRedis } from "../../lib/redis";
+import { basicLimit, tooLong } from "../../lib/guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,11 +20,14 @@ function clean(value: unknown, fallback = "", max = 3000) {
 
 export async function POST(request: Request) {
   try {
+    const allowed = await basicLimit(request, "chat-log", 30, 60);
+    if (!allowed) return Response.json({ ok: true });
+
     const body = (await request.json().catch(() => null)) as Body | null;
     const visitorId = clean(body?.visitorId, "unknown", 160);
     const role = body?.role === "assistant" || body?.role === "admin" || body?.role === "user" ? body.role : "user";
     const content = clean(body?.content, "", 4000);
-    if (!content) return Response.json({ ok: true });
+    if (!content || tooLong(content, 4000)) return Response.json({ ok: true });
 
     const message = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
