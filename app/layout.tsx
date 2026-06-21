@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
+import AnalyticsTracker from "./AnalyticsTracker";
 import { LanguageProvider } from "./LanguageContext";
 import { ThemeProvider } from "./ThemeProvider";
 
@@ -29,7 +30,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* စာမျက်နှာ မပွင့်ခင် Theme ကွဲလွဲမှုကို ကာကွယ်ပေးသည့် Script */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -47,6 +47,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col w-full overflow-x-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}>
         <ThemeProvider>
           <LanguageProvider>
+            <AnalyticsTracker />
             <Navbar />
             <main className="w-full flex-grow">
               {children}
