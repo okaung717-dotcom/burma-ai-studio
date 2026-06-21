@@ -1,9 +1,11 @@
 const links = [
   ["Main Control", "/admin6996"],
   ["Chat Inbox", "/admin6996/chat"],
+  ["Chat Status Panel", "/admin6996/chat/state"],
   ["Analytics", "/admin6996/analytics"],
   ["Operations", "/admin6996/ops"],
   ["Content Control", "/admin6996/content"],
+  ["Backup Center", "/admin6996/backup"],
   ["Portfolio", "/portfolio"],
 ];
 
