@@ -4,6 +4,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const KEY = "burma-ai-studio:leads";
+const STATUS_KEY = "burma-ai-studio:lead-status";
 
 async function withRedis<T>(callback: (client: ReturnType<typeof createClient>) => Promise<T>) {
   const url = process.env.REDIS_URL;
@@ -27,10 +28,17 @@ export async function POST(request: Request) {
     if (!code) return Response.json({ ok: false, message: "ADMIN_CONTROL is not configured." }, { status: 503 });
     if (!body?.code || body.code !== code) return Response.json({ ok: false, message: "Invalid code." }, { status: 401 });
 
-    const raw = await withRedis(async (client) => client.lRange(KEY, 0, 199));
+    const { raw, statuses } = await withRedis(async (client) => ({
+      raw: await client.lRange(KEY, 0, 199),
+      statuses: await client.hGetAll(STATUS_KEY),
+    }));
+
     const leads = raw.map((item) => {
       try {
-        return JSON.parse(item) as unknown;
+        const lead = JSON.parse(item) as Record<string, unknown>;
+        const id = typeof lead.id === "string" ? lead.id : "";
+        const saved = id && statuses[id] ? JSON.parse(statuses[id]) as Record<string, unknown> : null;
+        return { status: "New", ...lead, ...(saved || {}) };
       } catch {
         return null;
       }
