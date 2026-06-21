@@ -1,3 +1,5 @@
+import { createClient } from "redis";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -15,31 +17,19 @@ function clean(value: unknown) {
   return typeof value === "string" ? value.trim().slice(0, 3000) : "";
 }
 
-async function redisCommand(command: string[]) {
-  const url = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
+async function withRedis<T>(callback: (client: ReturnType<typeof createClient>) => Promise<T>) {
+  const url = process.env.REDIS_URL;
+  if (!url) throw new Error("REDIS_URL is not configured.");
 
-  if (!url || !token) {
-    throw new Error("Lead storage is not configured.");
+  const client = createClient({ url });
+  client.on("error", (error) => console.error("Redis client error:", error));
+
+  await client.connect();
+  try {
+    return await callback(client);
+  } finally {
+    await client.quit();
   }
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(command),
-    cache: "no-store",
-  });
-
-  const data = await response.json().catch(() => null);
-
-  if (!response.ok || data?.error) {
-    throw new Error(data?.error || "Lead storage request failed.");
-  }
-
-  return data?.result;
 }
 
 export async function POST(request: Request) {
@@ -67,8 +57,10 @@ export async function POST(request: Request) {
       userAgent: request.headers.get("user-agent") || "Unknown",
     };
 
-    await redisCommand(["LPUSH", LEADS_KEY, JSON.stringify(lead)]);
-    await redisCommand(["LTRIM", LEADS_KEY, "0", "199"]);
+    await withRedis(async (client) => {
+      await client.lPush(LEADS_KEY, JSON.stringify(lead));
+      await client.lTrim(LEADS_KEY, 0, 199);
+    });
 
     return Response.json({ ok: true, leadId: lead.id });
   } catch (error) {
