@@ -2,49 +2,52 @@
 import { Mail, Phone, Globe, Send } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 
+const translations = {
+  EN: {
+    title1: "Let's ",
+    titleHighlight: "Create",
+    title2: " Something Amazing",
+    subtitle: "Ready to elevate your brand with next-gen AI video production? Reach out directly via any of the channels below, and we will get back to you immediately.",
+    emailLabel: "Email Us",
+    phoneLabel: "Call Us",
+    telegramLabel: "Telegram",
+    facebookLabel: "Facebook",
+    firstName: "First Name",
+    lastName: "Last Name",
+    emailAddress: "Email Address",
+    projectDetails: "Project Details",
+    firstNamePlaceholder: "John",
+    lastNamePlaceholder: "Doe",
+    emailPlaceholder: "john@company.com",
+    projectPlaceholder: "Tell us about your video needs...",
+    sendButton: "Send Message"
+  },
+  MM: {
+    title1: "အကောင်းဆုံး ",
+    titleHighlight: "လက်ရာများကို",
+    title2: " ဖန်တီးကြစို့",
+    subtitle: "ခေတ်မီ AI ဗီဒီယို ဖန်တီးမှုများဖြင့် သင့်လုပ်ငန်းကို မြှင့်တင်ဖို့ အဆင်သင့်ပဲလား? အောက်ပါ ဆက်သွယ်ရန် လမ်းကြောင်းများမှတဆင့် တိုက်ရိုက်ဆက်သွယ်နိုင်ပြီး ကျွန်ုပ်တို့ ချက်ချင်း အကြောင်းပြန်ပေးပါမည်။",
+    emailLabel: "အီးမေးလ် ပို့ရန်",
+    phoneLabel: "ဖုန်းခေါ်ဆိုရန်",
+    telegramLabel: "Telegram",
+    facebookLabel: "Facebook",
+    firstName: "ပထမအမည်",
+    lastName: "နောက်ဆုံးအမည်",
+    emailAddress: "အီးမေးလ် လိပ်စာ",
+    projectDetails: "ပရောဂျက် အသေးစိတ်",
+    firstNamePlaceholder: "ဥပမာ - အောင်",
+    lastNamePlaceholder: "ဥပမာ - ခန့်",
+    emailPlaceholder: "သင့်အီးမေးလ်ထည့်ပါ",
+    projectPlaceholder: "သင်လိုအပ်သော ဗီဒီယိုအကြောင်း ပြောပြပေးပါ...",
+    sendButton: "မက်ဆေ့ချ် ပို့ရန်"
+  }
+} as const;
+
 export default function Contact() {
   const { lang } = useLanguage();
 
-  const t = {
-    EN: {
-      title1: "Let's ",
-      titleHighlight: "Create",
-      title2: " Something Amazing",
-      subtitle: "Ready to elevate your brand with next-gen AI video production? Reach out directly via any of the channels below, and we will get back to you immediately.",
-      emailLabel: "Email Us",
-      phoneLabel: "Call Us",
-      telegramLabel: "Telegram",
-      facebookLabel: "Facebook",
-      firstName: "First Name",
-      lastName: "Last Name",
-      emailAddress: "Email Address",
-      projectDetails: "Project Details",
-      firstNamePlaceholder: "John",
-      lastNamePlaceholder: "Doe",
-      emailPlaceholder: "john@company.com",
-      projectPlaceholder: "Tell us about your video needs...",
-      sendButton: "Send Message"
-    },
-    MM: {
-      title1: "အကောင်းဆုံး ",
-      titleHighlight: "လက်ရာများကို",
-      title2: " ဖန်တီးကြစို့",
-      subtitle: "ခေတ်မီ AI ဗီဒီယို ဖန်တီးမှုများဖြင့် သင့်လုပ်ငန်းကို မြှင့်တင်ဖို့ အဆင်သင့်ပဲလား? အောက်ပါ ဆက်သွယ်ရန် လမ်းကြောင်းများမှတဆင့် တိုက်ရိုက်ဆက်သွယ်နိုင်ပြီး ကျွန်ုပ်တို့ ချက်ချင်း အကြောင်းပြန်ပေးပါမည်။",
-      emailLabel: "အီးမေးလ် ပို့ရန်",
-      phoneLabel: "ဖုန်းခေါ်ဆိုရန်",
-      telegramLabel: "Telegram",
-      facebookLabel: "Facebook",
-      firstName: "ပထမအမည်",
-      lastName: "နောက်ဆုံးအမည်",
-      emailAddress: "အီးမေးလ် လိပ်စာ",
-      projectDetails: "ပရောဂျက် အသေးစိတ်",
-      firstNamePlaceholder: "ဥပမာ - အောင်",
-      lastNamePlaceholder: "ဥပမာ - ခန့်",
-      emailPlaceholder: "သင့်အီးမေးလ်ထည့်ပါ",
-      projectPlaceholder: "သင်လိုအပ်သော ဗီဒီယိုအကြောင်း ပြောပြပေးပါ...",
-      sendButton: "မက်ဆေ့ချ် ပို့ရန်"
-    }
-  }[lang];
+  const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
+  const t = translations[safeLang];
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-[#00C2FF] selection:text-white transition-colors duration-300">
