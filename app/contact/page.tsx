@@ -2,7 +2,6 @@
 import { Mail, Phone, Globe, Send } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 
-// TypeScript Error မတက်စေရန် 'as const' ဖြင့် တိတိကျကျ သတ်မှတ်ထားပါသည်
 const translations = {
   EN: {
     title1: "Let's ",
@@ -47,7 +46,6 @@ const translations = {
 export default function Contact() {
   const { lang } = useLanguage();
 
-  // Vercel တွင် Error မတက်စေရန် အထူးကာကွယ်ထားပါသည်
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
 
@@ -59,7 +57,8 @@ export default function Contact() {
         
         {/* Left: Contact Info */}
         <div className="md:w-1/2 space-y-8">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+          {/* leading-normal ကို သုံးထားလို့ မြန်မာစာလုံးတွေ ထပ်နေတော့မှာ မဟုတ်ပါဘူး */}
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-normal">
             {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span> <br/>{t.title2}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
