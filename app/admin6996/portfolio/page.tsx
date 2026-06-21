@@ -132,7 +132,7 @@ export default function PortfolioManagerPage() {
             <h1 className="mt-3 text-3xl font-black md:text-5xl">Portfolio Video Manager</h1>
             <p className="mt-3 max-w-2xl text-sm text-gray-500 dark:text-[#d8c4a3]">Add, edit, reorder, preview, and publish YouTube portfolio videos. Public portfolio page reads these saved videos from the backend.</p>
           </div>
-          <a href="/portfolio" className="rounded-xl border border-[#be9537]/35 px-4 py-3 text-sm font-black text-[#911923] transition hover:bg-[#fff3e3] dark:text-[#e3bc61]">View Public Portfolio</a>
+          <a href="/portfolio?adminPreview=1" className="rounded-xl border border-[#be9537]/35 px-4 py-3 text-sm font-black text-[#911923] transition hover:bg-[#fff3e3] dark:text-[#e3bc61]">Preview Public Portfolio</a>
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-[1fr_auto_auto_auto]">
