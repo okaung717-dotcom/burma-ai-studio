@@ -51,20 +51,14 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-[#00C2FF] selection:text-white transition-colors duration-300">
-      
-      {/* Contact Section */}
       <main className="py-20 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto flex flex-col md:flex-row gap-16">
-        
-        {/* Left: Contact Info */}
         <div className="md:w-1/2 space-y-8">
-          {/* leading-normal ကို သုံးထားလို့ မြန်မာစာလုံးတွေ ထပ်နေတော့မှာ မဟုတ်ပါဘူး */}
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-normal">
             {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span> <br/>{t.title2}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
             {t.subtitle}
           </p>
-          
           <div className="space-y-6 pt-4">
             {[
               { Icon: Mail, label: t.emailLabel, val: "okaung717@gmail.com", href: "mailto:okaung717@gmail.com" },
@@ -85,7 +79,6 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Right: Contact Form */}
         <div className="md:w-1/2 bg-white dark:bg-gray-900 p-8 md:p-12 rounded-3xl shadow-xl shadow-gray-200/20 dark:shadow-none border border-gray-100 dark:border-gray-800">
           <form className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
