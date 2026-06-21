@@ -7,8 +7,8 @@ type PortfolioItem = { id: string; src: string; titleEN: string; descEN: string;
 
 const emptyItem = (): PortfolioItem => ({ id: `${Date.now()}`, src: "", titleEN: "", descEN: "", titleMM: "", descMM: "", featured: true });
 const modules = [
-  { title: "AI Chat Inbox", desc: "Visitor chatbot messages and manual replies", href: "/admin/chat" },
-  { title: "Website Analytics", desc: "Countries, pages, sources, devices, video views", href: "/admin/analytics" },
+  { title: "AI Chat Inbox", desc: "Visitor chatbot messages and manual replies", href: "/admin6996/chat" },
+  { title: "Website Analytics", desc: "Countries, pages, sources, devices, video views", href: "/admin6996/analytics" },
   { title: "Project Messages", desc: "Contact form leads and client inquiries", href: "#messages" },
   { title: "Portfolio Manager", desc: "Add or edit YouTube portfolio videos", href: "#portfolio" },
 ];
