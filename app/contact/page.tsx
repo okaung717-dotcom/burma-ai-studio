@@ -29,8 +29,7 @@ const translations = {
     projectPlaceholder: "Tell us about your video needs, duration, style, deadline, and brand details...",
     sendButton: "Prepare Email Message",
     telegramButton: "Message on Telegram",
-    viberButton: "Chat on Viber",
-    emailButton: "Send Email"
+    viberButton: "Chat on Viber"
   },
   MM: {
     title1: "အကောင်းဆုံး ",
@@ -56,8 +55,7 @@ const translations = {
     projectPlaceholder: "လိုချင်တဲ့ video အမျိုးအစား၊ ကြာချိန်၊ style၊ deadline၊ brand အချက်အလက်တွေ ရေးပေးပါ...",
     sendButton: "Email Message ပြင်ဆင်ရန်",
     telegramButton: "Telegram မှာ စကားပြောရန်",
-    viberButton: "Viber မှာ စကားပြောရန်",
-    emailButton: "Email ပို့ရန်"
+    viberButton: "Viber မှာ စကားပြောရန်"
   }
 } as const;
 
@@ -128,7 +126,7 @@ export default function Contact() {
 
             <div className="mt-6 space-y-5">
               {contactLinks.map((item) => (
-                <a key={item.key} href={item.href} target={item.key === "phone" ? undefined : "_blank"} rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer w-fit">
+                <a key={item.key} href={item.href} target={item.key === "phone" || item.key === "email" ? undefined : "_blank"} rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer w-fit">
                   <div className="w-12 h-12 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors shrink-0">
                     <item.Icon className="w-5 h-5 text-[#00C2FF]" />
                   </div>
@@ -141,18 +139,6 @@ export default function Contact() {
                 </a>
               ))}
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <a href="mailto:okaung717@gmail.com" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 text-sm font-extrabold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
-              <Mail className="w-4 h-4 text-[#00C2FF]" /> {t.emailButton}
-            </a>
-            <a href="https://t.me/BurmaAiStudio" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 text-sm font-extrabold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
-              <Send className="w-4 h-4 text-[#00C2FF]" /> Telegram
-            </a>
-            <a href="viber://chat?number=%2B959671010011" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 text-sm font-extrabold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
-              <MessageCircle className="w-4 h-4 text-[#00C2FF]" /> Viber
-            </a>
           </div>
         </div>
 
