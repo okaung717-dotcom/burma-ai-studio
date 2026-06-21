@@ -6,7 +6,7 @@ const translations = {
   EN: {
     title1: "Let's ",
     titleHighlight: "Create",
-    title2: " Something Amazing",
+    title2: "Something Amazing",
     subtitle: "Ready to elevate your brand with next-gen AI video production? Reach out directly via any of the channels below, and we will get back to you immediately.",
     emailLabel: "Email Us",
     phoneLabel: "Call Us",
@@ -25,7 +25,7 @@ const translations = {
   MM: {
     title1: "အကောင်းဆုံး ",
     titleHighlight: "လက်ရာများကို",
-    title2: " ဖန်တီးကြစို့",
+    title2: "ဖန်တီးကြစို့",
     subtitle: "ခေတ်မီ AI ဗီဒီယို ဖန်တီးမှုများဖြင့် သင့်လုပ်ငန်းကို မြှင့်တင်ဖို့ အဆင်သင့်ပဲလား? အောက်ပါ ဆက်သွယ်ရန် လမ်းကြောင်းများမှတဆင့် တိုက်ရိုက်ဆက်သွယ်နိုင်ပြီး ကျွန်ုပ်တို့ ချက်ချင်း အကြောင်းပြန်ပေးပါမည်။",
     emailLabel: "အီးမေးလ် ပို့ရန်",
     phoneLabel: "ဖုန်းခေါ်ဆိုရန်",
@@ -53,9 +53,12 @@ export default function Contact() {
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-[#00C2FF] selection:text-white transition-colors duration-300">
       <main className="py-20 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto flex flex-col md:flex-row gap-16">
         <div className="md:w-1/2 space-y-8">
-          {/* leading-loose ကို သုံးထားလို့ မြန်မာစာလုံးတွေ ထပ်မနေတော့ပါဘူး */}
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-normal leading-loose">
-            {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span> <br/>{t.title2}
+          {/* Burmese glyph-safe headline: fixed line wrap and vertical spacing */}
+          <h1 className="max-w-[680px] text-[34px] sm:text-[40px] md:text-[44px] lg:text-[48px] font-extrabold text-gray-900 dark:text-white tracking-normal leading-[1.85] md:leading-[1.75] lg:leading-[1.68] break-words">
+            <span className="block">
+              {t.title1}<span className="text-[#00C2FF] inline-block">{t.titleHighlight}</span>
+            </span>
+            <span className="block mt-1 md:mt-2">{t.title2}</span>
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
             {t.subtitle}
