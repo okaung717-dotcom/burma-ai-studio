@@ -7,6 +7,7 @@ const EVENTS_KEY = "burma-ai-studio:analytics-events";
 
 type Event = {
   visitorId?: string;
+  eventType?: string;
   path?: string;
   page?: string;
   source?: string;
@@ -14,6 +15,8 @@ type Event = {
   country?: string;
   language?: string;
   timezone?: string;
+  videoId?: string;
+  videoTitle?: string;
   createdAt?: string;
   day?: string;
 };
@@ -42,8 +45,9 @@ export async function POST(request: Request) {
     const body = (await request.json().catch(() => null)) as { code?: string } | null;
     if (!isAdminPin(body?.code)) return Response.json({ ok: false, message: "Invalid admin code." }, { status: 401 });
 
-    const raw = await withRedis(async (client) => client.lRange(EVENTS_KEY, 0, 999));
+    const raw = await withRedis(async (client) => client.lRange(EVENTS_KEY, 0, 1499));
     const events = parseEvents(raw);
+    const pageEvents = events.filter((event) => event.eventType !== "portfolio-video-view");
     const visitorSet = new Set<string>();
     const countries: Record<string, number> = {};
     const pages: Record<string, number> = {};
@@ -51,8 +55,9 @@ export async function POST(request: Request) {
     const devices: Record<string, number> = {};
     const languages: Record<string, number> = {};
     const days: Record<string, number> = {};
+    const videos: Record<string, number> = {};
 
-    events.forEach((event) => {
+    pageEvents.forEach((event) => {
       if (event.visitorId) visitorSet.add(event.visitorId);
       increment(countries, event.country || "Unknown");
       increment(pages, event.page || event.path || "/");
@@ -62,10 +67,16 @@ export async function POST(request: Request) {
       increment(days, event.day || (event.createdAt || "").slice(0, 10) || "Unknown");
     });
 
+    events.forEach((event) => {
+      if (event.eventType === "portfolio-video-view" && event.videoId) {
+        increment(videos, event.videoTitle || event.videoId);
+      }
+    });
+
     return Response.json({
       ok: true,
       summary: {
-        totalViews: events.length,
+        totalViews: pageEvents.length,
         uniqueVisitors: visitorSet.size,
         countries: top(countries),
         pages: top(pages),
@@ -73,6 +84,7 @@ export async function POST(request: Request) {
         devices: top(devices),
         languages: top(languages),
         days: top(days, 14),
+        portfolioVideos: top(videos, 20),
         recentEvents: events.slice(0, 30),
       },
     });
