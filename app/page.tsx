@@ -30,7 +30,6 @@ const translations = {
 export default function Home() {
   const { lang } = useLanguage();
   
-  // TypeScript Error မတက်အောင် သေချာစွာ စစ်ဆေးပေးထားခြင်း
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
 
@@ -45,8 +44,8 @@ export default function Home() {
             {t.badge}
           </div>
 
-          {/* leading-tight ကို သုံးပေးထားလို့ မြန်မာစာတွေ ထပ်နေတော့မှာ မဟုတ်ပါဘူး */}
-          <h1 className="text-5xl md:text-[64px] font-extrabold leading-tight tracking-tight dark:text-white">
+          {/* leading-[1.5] ကို ပြောင်းထားပါတယ်၊ မြန်မာစာတွေ ထပ်နေတော့မှာ မဟုတ်ပါဘူး */}
+          <h1 className="text-5xl md:text-[64px] font-extrabold leading-[1.5] tracking-tight dark:text-white">
             {t.title1} <br /> {t.title2} <br /> {t.title3} <span className="text-[#00C2FF]">{t.title4}</span>
           </h1>
 
