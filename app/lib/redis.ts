@@ -19,6 +19,11 @@ export async function withRedis<T>(callback: (client: ReturnType<typeof createCl
   }
 }
 
+export function getAdminControlCode() {
+  return process.env.ADMIN_CONTROL || process.env.ADMIN_PIN || "";
+}
+
 export function isAdminPin(pin: unknown) {
-  return typeof pin === "string" && Boolean(process.env.ADMIN_PIN) && pin === process.env.ADMIN_PIN;
+  const adminCode = getAdminControlCode();
+  return typeof pin === "string" && Boolean(adminCode) && pin === adminCode;
 }
