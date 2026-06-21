@@ -1,26 +1,28 @@
 "use client";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-type LanguageContextType = {
-  lang: "EN" | "MM";
-  toggleLang: () => void;
-};
+const LanguageContext = createContext({ lang: "EN", toggleLang: () => {} });
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
+  const [lang, setLang] = useState("EN");
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<"EN" | "MM">("EN");
-  const toggleLang = () => setLang((prev) => (prev === "EN" ? "MM" : "EN"));
+  useEffect(() => {
+    // Page ဖွင့်တာနဲ့ localStorage ထဲက နောက်ဆုံးရွေးထားတဲ့ ဘာသာစကားကို ပြန်ဆွဲထုတ်မယ်
+    const savedLang = localStorage.getItem("lang") || "EN";
+    setLang(savedLang);
+  }, []);
+
+  const toggleLang = () => {
+    const newLang = lang === "EN" ? "MM" : "EN";
+    setLang(newLang);
+    localStorage.setItem("lang", newLang); // ရွေးလိုက်တဲ့ ဘာသာစကားကို သိမ်းထားမယ်
+  };
 
   return (
     <LanguageContext.Provider value={{ lang, toggleLang }}>
       {children}
     </LanguageContext.Provider>
   );
-}
-
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (!context) throw new Error("Error");
-  return context;
 };
+
+export const useLanguage = () => useContext(LanguageContext);
