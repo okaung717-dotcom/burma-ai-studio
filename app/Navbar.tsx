@@ -15,7 +15,6 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { lang, toggleLang } = useLanguage();
 
-  // Vercel build error မတက်အောင် လုံခြုံစွာ ခေါ်ယူခြင်း
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
 
@@ -23,12 +22,12 @@ export default function Navbar() {
     <nav className="relative py-6 px-4 md:px-12 lg:px-24 bg-white dark:bg-gray-950 z-50 transition-colors duration-300">
       <div className="flex justify-between items-center">
         
-        {/* Logo အသစ်ကို ထည့်သွင်းထားသည် (public folder ထဲမှာ logo.jpg လို့ rename လုပ်ထားပါ) */}
+        {/* Logo အသစ်ကို ချိတ်ဆက်ထားသည် */}
         <Link href="/" className="flex items-center">
           <img 
-            src="/logo.jpg" 
-            alt="Burma AI Studio Logo" 
-            className="h-10 w-auto object-contain" 
+            src="/image.png" 
+            alt="Burma AI Studio" 
+            className="h-12 w-auto object-contain" 
           />
         </Link>
 
