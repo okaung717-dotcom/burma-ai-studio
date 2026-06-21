@@ -21,7 +21,7 @@ const translations = {
     viberLabel: "Viber",
     facebookLabel: "Facebook",
     formTitle: "Tell us about your project",
-    formSubtitle: "Your message will open as a prepared email so you can review it before sending.",
+    formSubtitle: "Your message will be saved to the admin inbox and also opened as an email draft for backup.",
     firstName: "First Name",
     lastName: "Last Name",
     emailAddress: "Email Address",
@@ -30,7 +30,10 @@ const translations = {
     lastNamePlaceholder: "Doe",
     emailPlaceholder: "john@company.com",
     projectPlaceholder: "Tell us about your video needs, duration, style, deadline, and brand details...",
-    sendButton: "Prepare Email Message",
+    sendButton: "Send Project Message",
+    sending: "Sending...",
+    saved: "Message saved. Opening email backup...",
+    fallback: "Email backup is opening. Admin inbox storage may need setup.",
     telegramButton: "Message on Telegram",
     viberButton: "Chat on Viber"
   },
@@ -47,7 +50,7 @@ const translations = {
     viberLabel: "Viber",
     facebookLabel: "Facebook",
     formTitle: "သင့်ပရောဂျက်အကြောင်း ပြောပြပါ",
-    formSubtitle: "Form ဖြည့်ပြီးနှိပ်လိုက်ရင် email draft အဖြစ်ဖွင့်ပေးမှာဖြစ်လို့ မပို့ခင် ပြန်စစ်နိုင်ပါတယ်။",
+    formSubtitle: "Form ဖြည့်ပြီးပို့လိုက်ရင် Admin Inbox ထဲသိမ်းပေးပြီး backup အနေနဲ့ email draft လည်းဖွင့်ပေးပါမယ်။",
     firstName: "ပထမအမည်",
     lastName: "နောက်ဆုံးအမည်",
     emailAddress: "အီးမေးလ် လိပ်စာ",
@@ -56,7 +59,10 @@ const translations = {
     lastNamePlaceholder: "ဥပမာ - ခန့်",
     emailPlaceholder: "သင့်အီးမေးလ်ထည့်ပါ",
     projectPlaceholder: "လိုချင်တဲ့ video အမျိုးအစား၊ ကြာချိန်၊ style၊ deadline၊ brand အချက်အလက်တွေ ရေးပေးပါ...",
-    sendButton: "Email Message ပြင်ဆင်ရန်",
+    sendButton: "Project Message ပို့ရန်",
+    sending: "ပို့နေပါတယ်...",
+    saved: "Message သိမ်းပြီးပါပြီ။ Email backup ဖွင့်နေပါတယ်...",
+    fallback: "Email backup ဖွင့်နေပါတယ်။ Admin inbox storage ကို setup လုပ်ဖို့လိုနိုင်ပါတယ်။",
     telegramButton: "Telegram မှာ စကားပြောရန်",
     viberButton: "Viber မှာ စကားပြောရန်"
   }
@@ -72,73 +78,70 @@ const contactLinks = [
 
 export default function Contact() {
   const { lang } = useLanguage();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    projectDetails: "",
-  });
+  const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", projectDetails: "" });
+  const [status, setStatus] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
 
-  const updateField =
-    (field: keyof typeof formData) =>
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setFormData((current) => ({ ...current, [field]: event.target.value }));
-    };
+  const updateField = (field: keyof typeof formData) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((current) => ({ ...current, [field]: event.target.value }));
+  };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const openEmailBackup = () => {
     const fullName = `${formData.firstName} ${formData.lastName}`.trim() || "New Client";
     const subject = encodeURIComponent(`New AI Video Project Inquiry - ${fullName}`);
-    const body = encodeURIComponent(
-      `Hello Burma AI Studio,\n\nI want to discuss an AI video project.\n\nName: ${fullName}\nEmail: ${formData.email || "Not provided"}\n\nProject Details:\n${formData.projectDetails || "Please contact me for more details."}\n\nThank you.`
-    );
-
+    const body = encodeURIComponent(`Hello Burma AI Studio,\n\nI want to discuss an AI video project.\n\nName: ${fullName}\nEmail: ${formData.email || "Not provided"}\n\nProject Details:\n${formData.projectDetails || "Please contact me for more details."}\n\nThank you.`);
     window.location.href = `mailto:okaung717@gmail.com?subject=${subject}&body=${body}`;
   };
 
-  const labelMap = {
-    email: t.emailLabel,
-    phone: t.phoneLabel,
-    telegram: t.telegramLabel,
-    viber: t.viberLabel,
-    facebook: t.facebookLabel,
-  } as const;
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSending(true);
+    setStatus(t.sending);
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, source: "contact-page" }),
+      });
+
+      if (response.ok) {
+        setStatus(t.saved);
+      } else {
+        setStatus(t.fallback);
+      }
+    } catch {
+      setStatus(t.fallback);
+    } finally {
+      setIsSending(false);
+      window.setTimeout(openEmailBackup, 350);
+    }
+  };
+
+  const labelMap = { email: t.emailLabel, phone: t.phoneLabel, telegram: t.telegramLabel, viber: t.viberLabel, facebook: t.facebookLabel } as const;
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-[#00C2FF] selection:text-white transition-colors duration-300">
       <main className="py-16 md:py-20 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto flex flex-col md:flex-row gap-12 lg:gap-16">
         <div className="md:w-1/2 space-y-8">
           <h1 className="max-w-[680px] text-[34px] sm:text-[40px] md:text-[44px] lg:text-[52px] font-extrabold text-gray-900 dark:text-white tracking-normal leading-[1.85] md:leading-[1.72] lg:leading-[1.58] break-words">
-            <span className="block">
-              {t.title1}<span className="text-[#00C2FF] inline-block">{t.titleHighlight}</span>
-            </span>
+            <span className="block">{t.title1}<span className="text-[#00C2FF] inline-block">{t.titleHighlight}</span></span>
             <span className="block mt-1 md:mt-2">{t.title2}</span>
           </h1>
 
-          <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed max-w-xl">
-            {t.subtitle}
-          </p>
+          <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed max-w-xl">{t.subtitle}</p>
 
           <div className="rounded-3xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 md:p-7 shadow-sm">
             <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white leading-relaxed">{t.contactTitle}</h2>
             <p className="mt-2 text-gray-500 dark:text-gray-400 leading-relaxed">{t.contactSubtitle}</p>
-
             <div className="mt-6 space-y-5">
               {contactLinks.map((item) => (
                 <a key={item.key} href={item.href} target={item.key === "phone" || item.key === "email" ? undefined : "_blank"} rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer w-fit">
-                  <div className="w-12 h-12 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors shrink-0">
-                    <item.Icon className="w-5 h-5 text-[#00C2FF]" />
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
-                      {labelMap[item.key]}
-                    </p>
-                    <p className="font-bold text-gray-900 dark:text-white break-all">{item.val}</p>
-                  </div>
+                  <div className="w-12 h-12 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center group-hover:bg-[#00C2FF]/10 transition-colors shrink-0"><item.Icon className="w-5 h-5 text-[#00C2FF]" /></div>
+                  <div><p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">{labelMap[item.key]}</p><p className="font-bold text-gray-900 dark:text-white break-all">{item.val}</p></div>
                 </a>
               ))}
             </div>
@@ -154,37 +157,14 @@ export default function Contact() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.firstName}</label>
-                <input value={formData.firstName} onChange={updateField("firstName")} type="text" className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all text-gray-900 dark:text-white" placeholder={t.firstNamePlaceholder} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.lastName}</label>
-                <input value={formData.lastName} onChange={updateField("lastName")} type="text" className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all text-gray-900 dark:text-white" placeholder={t.lastNamePlaceholder} />
-              </div>
+              <div className="space-y-2"><label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.firstName}</label><input value={formData.firstName} onChange={updateField("firstName")} type="text" className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all text-gray-900 dark:text-white" placeholder={t.firstNamePlaceholder} /></div>
+              <div className="space-y-2"><label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.lastName}</label><input value={formData.lastName} onChange={updateField("lastName")} type="text" className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all text-gray-900 dark:text-white" placeholder={t.lastNamePlaceholder} /></div>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.emailAddress}</label>
-              <input value={formData.email} onChange={updateField("email")} type="email" className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all text-gray-900 dark:text-white" placeholder={t.emailPlaceholder} />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.projectDetails}</label>
-              <textarea value={formData.projectDetails} onChange={updateField("projectDetails")} rows={5} className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all resize-none text-gray-900 dark:text-white" placeholder={t.projectPlaceholder}></textarea>
-            </div>
-            <button type="submit" className="w-full bg-[#911923] text-white px-8 py-4 rounded-xl font-extrabold hover:bg-[#7a141e] focus:outline-none focus:ring-4 focus:ring-[#911923]/25 transition-all shadow-lg shadow-red-900/20">
-              <span className="inline-flex items-center justify-center gap-2">
-                <Mail className="w-5 h-5" /> {t.sendButton}
-              </span>
-            </button>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <a href={telegramDirectLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
-                <Send className="w-4 h-4 text-[#00C2FF]" /> {t.telegramButton}
-              </a>
-              <a href={viberDirectLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors">
-                <MessageCircle className="w-4 h-4 text-[#00C2FF]" /> {t.viberButton}
-              </a>
-            </div>
+            <div className="space-y-2"><label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.emailAddress}</label><input value={formData.email} onChange={updateField("email")} type="email" className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all text-gray-900 dark:text-white" placeholder={t.emailPlaceholder} /></div>
+            <div className="space-y-2"><label className="text-sm font-bold text-gray-700 dark:text-gray-300">{t.projectDetails}</label><textarea value={formData.projectDetails} onChange={updateField("projectDetails")} rows={5} className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00C2FF]/50 transition-all resize-none text-gray-900 dark:text-white" placeholder={t.projectPlaceholder}></textarea></div>
+            {status && <p className="rounded-xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#241113] dark:text-[#e3bc61]">{status}</p>}
+            <button type="submit" disabled={isSending} className="w-full bg-[#911923] text-white px-8 py-4 rounded-xl font-extrabold hover:bg-[#7a141e] focus:outline-none focus:ring-4 focus:ring-[#911923]/25 transition-all shadow-lg shadow-red-900/20 disabled:opacity-60"><span className="inline-flex items-center justify-center gap-2"><Mail className="w-5 h-5" /> {isSending ? t.sending : t.sendButton}</span></button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"><a href={telegramDirectLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors"><Send className="w-4 h-4 text-[#00C2FF]" /> {t.telegramButton}</a><a href={viberDirectLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white hover:text-[#00C2FF] transition-colors"><MessageCircle className="w-4 h-4 text-[#00C2FF]" /> {t.viberButton}</a></div>
           </form>
         </div>
       </main>
