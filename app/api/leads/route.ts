@@ -1,5 +1,6 @@
 import { createClient } from "redis";
 import { sendOwnerNotice } from "../../lib/notify";
+import { basicLimit } from "../../lib/guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -35,6 +36,9 @@ async function withRedis<T>(callback: (client: ReturnType<typeof createClient>) 
 
 export async function POST(request: Request) {
   try {
+    const allowed = await basicLimit(request, "lead", 6, 60);
+    if (!allowed) return Response.json({ ok: false, message: "Too many requests." }, { status: 429 });
+
     const body = (await request.json().catch(() => null)) as LeadInput | null;
 
     const firstName = clean(body?.firstName);
