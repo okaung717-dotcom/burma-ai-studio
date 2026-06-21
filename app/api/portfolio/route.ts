@@ -14,34 +14,47 @@ type PortfolioItem = {
 };
 
 const defaultPortfolio: PortfolioItem[] = [
-  { id: "trailer", src: "DVM3o2Wqcys", titleEN: "Cinematic Trailers AI Video", descEN: "TikTok, YouTube, Facebook AI videos", titleMM: "ရုပ်ရှင်ဆန်သော Trailer AI ဗီဒီယိုများ", descMM: "TikTok, YouTube, Facebook AI ဗီဒီယိုများ", featured: true },
-  { id: "architecture", src: "IrukbYGHhQs", titleEN: "Architecture AI Videos", descEN: "Advanced AI video production", titleMM: "ဗိသုကာနှင့် အဆောက်အဦး AI ဗီဒီယိုများ", descMM: "အဆင့်မြင့် AI ဗီဒီယို ဖန်တီးမှု", featured: true },
-  { id: "commercial", src: "T9p2lqcETCE", titleEN: "Cinematic Commercial", descEN: "High-end AI promotional video", titleMM: "ရုပ်ရှင်ဆန်သော ကြော်ငြာများ", descMM: "အဆင့်မြင့် AI ကြော်ငြာဗီဒီယို", featured: true },
-  { id: "presenter", src: "wJjyMQ3bjt4", titleEN: "Virtual Presenter Campaign", descEN: "Advanced AI virtual presenter production", titleMM: "AI Presenter ဗီဒီယိုများ", descMM: "အဆင့်မြင့် AI Presenter ဖန်တီးမှု", featured: true }
+  { id: "trailer", src: "DVM3o2Wqcys", titleEN: "Cinematic Trailers AI Video", descEN: "TikTok, YouTube, Facebook AI videos", titleMM: "Trailer AI Video", descMM: "TikTok, YouTube, Facebook AI videos", featured: true },
+  { id: "architecture", src: "IrukbYGHhQs", titleEN: "Architecture AI Videos", descEN: "Advanced AI video production", titleMM: "Architecture AI Videos", descMM: "Advanced AI video production", featured: true },
+  { id: "commercial", src: "T9p2lqcETCE", titleEN: "Cinematic Commercial", descEN: "High-end AI promotional video", titleMM: "Cinematic Commercial", descMM: "High-end AI promotional video", featured: true },
+  { id: "presenter", src: "wJjyMQ3bjt4", titleEN: "Virtual Presenter Campaign", descEN: "Advanced AI virtual presenter production", titleMM: "AI Presenter Videos", descMM: "AI presenter video production", featured: true }
 ];
 
 function safeText(value: unknown, max = 500) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
+function cleanSource(value: unknown) {
+  return safeText(value, 160)
+    .replace("https://youtu.be/", "")
+    .replace("https://www.youtube.com/watch?v=", "")
+    .replace("https://youtube.com/watch?v=", "")
+    .split("&")[0]
+    .split("?")[0]
+    .trim();
+}
+
 function cleanItems(value: unknown): PortfolioItem[] {
   if (!Array.isArray(value)) return [];
-  return value
-    .map((item, index) => {
-      const raw = item as Partial<PortfolioItem>;
-      const src = safeText(raw.src, 120).replace("https://youtu.be/", "").replace("https://www.youtube.com/watch?v=", "").split("&")[0];
-      if (!src) return null;
-      return {
-        id: safeText(raw.id, 80) || `${Date.now()}-${index}`,
-        src,
-        titleEN: safeText(raw.titleEN) || "AI Video Project",
-        descEN: safeText(raw.descEN) || "Burma AI Studio portfolio video",
-        titleMM: safeText(raw.titleMM) || "AI ဗီဒီယို လက်ရာ",
-        descMM: safeText(raw.descMM) || "Burma AI Studio နမူနာဗီဒီယို",
-        featured: Boolean(raw.featured),
-      };
-    })
-    .filter((item): item is PortfolioItem => Boolean(item));
+  const items: PortfolioItem[] = [];
+
+  value.forEach((item, index) => {
+    const raw = item as Partial<PortfolioItem>;
+    const src = cleanSource(raw.src);
+    if (!src) return;
+
+    items.push({
+      id: safeText(raw.id, 80) || `${Date.now()}-${index}`,
+      src,
+      titleEN: safeText(raw.titleEN) || "AI Video Project",
+      descEN: safeText(raw.descEN) || "Burma AI Studio portfolio video",
+      titleMM: safeText(raw.titleMM) || "AI Video Project",
+      descMM: safeText(raw.descMM) || "Burma AI Studio portfolio video",
+      featured: Boolean(raw.featured),
+    });
+  });
+
+  return items;
 }
 
 export async function GET() {
@@ -59,7 +72,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as { pin?: string; items?: unknown } | null;
-    if (!isAdminPin(body?.pin)) return Response.json({ ok: false, message: "Invalid admin PIN." }, { status: 401 });
+    if (!isAdminPin(body?.pin)) return Response.json({ ok: false, message: "Invalid admin code." }, { status: 401 });
 
     const items = cleanItems(body?.items);
     if (!items.length) return Response.json({ ok: false, message: "Add at least one portfolio item." }, { status: 400 });
