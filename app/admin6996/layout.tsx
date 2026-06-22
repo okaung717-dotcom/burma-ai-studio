@@ -17,12 +17,21 @@ const links = [
 export default function Admin6996Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [allowed, setAllowed] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const isAuthPage = pathname === "/admin6996/login" || pathname === "/admin6996/logout";
 
   useEffect(() => {
     document.body.classList.add("bas-admin-route");
+    setDarkMode(document.documentElement.classList.contains("dark"));
     return () => document.body.classList.remove("bas-admin-route");
   }, []);
+
+  function toggleTheme() {
+    const next = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+    setDarkMode(next);
+  }
 
   useEffect(() => {
     if (isAuthPage) {
@@ -70,20 +79,20 @@ export default function Admin6996Layout({ children }: { children: React.ReactNod
               {links.map(([label, href]) => {
                 const active = pathname === href || (href !== "/admin6996" && pathname?.startsWith(href));
                 return (
-                  <a key={href} href={href} className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-extrabold transition ${active ? "bg-[#be9537] text-[#100708]" : "text-white/75 hover:bg-white/10 hover:text-white"}`}>
+                  <a key={href} href={href} className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-sm font-extrabold shadow-sm transition ${active ? "border-[#be9537] bg-[#be9537] text-[#100708]" : "border-[#be9537]/25 bg-[#fff9f0] text-[#911923] hover:bg-[#f1dfbd] hover:text-[#100708]"}`}>
                     <span>{label}</span>
                     <span className="text-xs">›</span>
                   </a>
                 );
               })}
             </div>
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
-              <p className="font-black text-white">Production backend</p>
-              <p className="mt-1 text-xs leading-relaxed">Leads, chats, analytics, CMS, backups and portfolio tools.</p>
+            <div className="mt-6 rounded-2xl border border-[#be9537]/25 bg-[#1a0b0e] p-4 text-sm text-[#d8c4a3]">
+              <p className="font-black text-[#e3bc61]">Production backend</p>
+              <p className="mt-1 text-xs leading-relaxed text-[#d8c4a3]">Leads, chats, analytics, CMS, backups and portfolio tools.</p>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <a href="/admin6996/logout" className="rounded-2xl border border-red-400/30 bg-red-950/20 px-3 py-3 text-center text-xs font-black text-red-100">Logout</a>
-              <a href="/" className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-center text-xs font-black text-white/80">View Site</a>
+              <a href="/admin6996/logout" className="rounded-2xl border border-red-300/40 bg-red-50 px-3 py-3 text-center text-xs font-black text-red-700">Logout</a>
+              <a href="/" className="rounded-2xl border border-[#be9537]/35 bg-[#fff9f0] px-3 py-3 text-center text-xs font-black text-[#911923]">View Site</a>
             </div>
           </aside>
           <section className="min-w-0 flex-1 rounded-[2rem] border border-[#be9537]/20 bg-white/70 shadow-2xl shadow-[#100708]/5 backdrop-blur dark:bg-[#1a0b0e]/70 dark:shadow-black/20">
@@ -94,8 +103,11 @@ export default function Admin6996Layout({ children }: { children: React.ReactNod
                   <h1 className="mt-1 text-2xl font-black md:text-3xl">Burma AI Studio Control</h1>
                 </div>
                 <div className="flex flex-wrap gap-2">
+                  <button onClick={toggleTheme} className="rounded-full border border-[#be9537]/30 bg-white px-4 py-2 text-xs font-black text-[#911923] shadow-sm dark:bg-[#100708] dark:text-[#e3bc61]">
+                    {darkMode ? "Light Mode" : "Dark Mode"}
+                  </button>
                   <a href="/admin6996/tools" className="rounded-full bg-[#be9537] px-4 py-2 text-xs font-black text-[#100708]">Tools</a>
-                  <a href="/admin6996/portfolio" className="rounded-full border border-[#be9537]/30 px-4 py-2 text-xs font-black text-[#911923] dark:text-[#e3bc61]">Portfolio</a>
+                  <a href="/admin6996/portfolio" className="rounded-full border border-[#be9537]/30 bg-white px-4 py-2 text-xs font-black text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">Portfolio</a>
                 </div>
               </div>
             </header>
