@@ -33,20 +33,30 @@ export default function ContentControlPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fff9f0] px-5 py-10 text-[#1a0b0e] dark:bg-[#100708] dark:text-[#fff7eb]">
-      <section className="mx-auto max-w-3xl rounded-[2rem] border border-[#be9537]/25 bg-white p-6 shadow-xl dark:bg-[#1a0b0e]">
-        <p className="text-xs font-black uppercase tracking-[0.25em] text-[#911923] dark:text-[#e3bc61]">Burma AI Studio</p>
-        <h1 className="mt-3 text-3xl font-black">Website Content Control</h1>
-        <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Control code" className="mt-6 w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-        <div className="mt-5 space-y-3">
-          <input value={form.homeTitle} onChange={(e) => update("homeTitle", e.target.value)} placeholder="Home title" className="w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-          <textarea value={form.homeSubtitle} onChange={(e) => update("homeSubtitle", e.target.value)} placeholder="Home subtitle" className="h-24 w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-          <input value={form.servicesTitle} onChange={(e) => update("servicesTitle", e.target.value)} placeholder="Services title" className="w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-          <input value={form.contactEmail} onChange={(e) => update("contactEmail", e.target.value)} placeholder="Contact email" className="w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-          <input value={form.contactPhone} onChange={(e) => update("contactPhone", e.target.value)} placeholder="Contact phone" className="w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+    <main className="space-y-6">
+      <section className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="rounded-[2rem] border border-[#be9537]/20 bg-[#100708] p-6 text-white shadow-xl">
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-[#e3bc61]">CMS Control</p>
+          <h2 className="mt-3 text-4xl font-black">Website Content</h2>
+          <p className="mt-3 text-sm leading-relaxed text-white/65">Edit the main text for Home, Services and Contact. Save once and your public pages can read from the backend content store.</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="rounded-2xl bg-white/5 p-4"><p className="text-2xl font-black">5</p><p className="text-xs font-bold text-white/55">Editable Fields</p></div>
+            <div className="rounded-2xl bg-white/5 p-4"><p className="text-2xl font-black">CMS</p><p className="text-xs font-bold text-white/55">Backend Source</p></div>
+          </div>
         </div>
-        <button disabled={!code} onClick={() => void save()} className="mt-5 w-full rounded-xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Save Content</button>
-        <p className="mt-4 rounded-xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#241113] dark:text-[#e3bc61]">{note}</p>
+        <div className="rounded-[2rem] border border-[#be9537]/20 bg-white p-6 shadow-sm dark:bg-[#1a0b0e]">
+          <label className="text-xs font-black uppercase tracking-[0.2em] text-[#911923] dark:text-[#e3bc61]">Control Code</label>
+          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="ADMIN_CONTROL" className="mt-2 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            <input value={form.homeTitle} onChange={(e) => update("homeTitle", e.target.value)} placeholder="Home title" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+            <input value={form.servicesTitle} onChange={(e) => update("servicesTitle", e.target.value)} placeholder="Services title" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+            <input value={form.contactEmail} onChange={(e) => update("contactEmail", e.target.value)} placeholder="Contact email" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+            <input value={form.contactPhone} onChange={(e) => update("contactPhone", e.target.value)} placeholder="Contact phone" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+            <textarea value={form.homeSubtitle} onChange={(e) => update("homeSubtitle", e.target.value)} placeholder="Home subtitle" className="h-32 resize-none rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708] md:col-span-2" />
+          </div>
+          <button disabled={!code} onClick={() => void save()} className="mt-5 w-full rounded-2xl bg-[#911923] px-5 py-4 font-extrabold text-white disabled:opacity-50">Save Content</button>
+          <p className="mt-4 rounded-2xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">{note}</p>
+        </div>
       </section>
     </main>
   );
