@@ -24,17 +24,74 @@ type GeminiContent = {
 
 const GEMINI_MODEL = "gemini-2.0-flash";
 
-const CONTACT_TEXT_MM = "ဆက်သွယ်ရန် — Email: okaung717@gmail.com | Phone: 09671010011 | Telegram/Viber: +95 9 671 010 011 | Facebook: Burma Ai Studio";
-const CONTACT_TEXT_EN = "Contact — Email: okaung717@gmail.com | Phone: 09671010011 | Telegram/Viber: +95 9 671 010 011 | Facebook: Burma Ai Studio";
+const CONTACT_MM = "Email: okaung717@gmail.com | Phone: 09671010011 | Telegram/Viber: +95 9 671 010 011 | Facebook: Burma Ai Studio";
+const CONTACT_EN = "Email: okaung717@gmail.com | Phone: 09671010011 | Telegram/Viber: +95 9 671 010 011 | Facebook: Burma Ai Studio";
 
-const BUSINESS_CONTEXT = `You are the official AI assistant for Burma AI Studio.
-Answer in the same language as the visitor: English or Burmese.
-Burma AI Studio creates AI promotional videos, cinematic brand commercials, AI presenter videos, TikTok/Reels/Shorts videos, architecture/product animation concepts, product/service ads, brand storytelling videos, script support, prompt direction, and creative editing.
-Target clients include business owners, new brands, online shops, service providers, creators, and anyone who wants a professional promotional video without expensive traditional filming.
-Pricing depends on the client's desired style, duration, scene count, character count, voice/dialogue, revisions, deadline, and complexity. Do not invent exact prices. Ask for the project idea and suggest contacting Burma AI Studio directly for a quote.
-When users ask pricing in Burmese, explain that the final price can be confirmed only after understanding the style they want to create and that Burma AI Studio can combine their ideas with a suitable creative direction.
-Contact: okaung717@gmail.com, 09671010011, Telegram/Viber +95 9 671 010 011, Facebook Burma Ai Studio.
-Be concise, friendly, professional, and helpful.`;
+const WEBSITE_KNOWLEDGE = `
+Burma AI Studio is an AI video creation service for Myanmar businesses, new brands, online shops, creators and service providers.
+Core services:
+- AI promotional videos for products, restaurants, shops, real estate, services and personal brands.
+- Cinematic brand commercials and storytelling videos.
+- AI presenter / virtual spokesperson videos in Burmese or English style.
+- TikTok, Facebook Reels, YouTube Shorts and social media ad videos.
+- Product showcase videos, service explainer videos, campaign concepts and creative direction.
+- Architecture / property / product animation concepts.
+- Script writing support, storyboard direction, prompt direction and creative editing.
+Useful website pages:
+- Home: explains Burma AI Studio and the main offer.
+- Services: explains AI video creation services.
+- Portfolio: shows sample videos and creative styles.
+- Contact: lets visitors send project messages or contact directly.
+Business positioning:
+- For business owners who want to promote a brand without expensive shooting costs.
+- Good for new businesses, online sellers, restaurants, beauty clinics, real estate pages, education pages, local services and creators.
+- Main promise: faster, more flexible and more affordable than traditional filming in many cases.
+Project process:
+1) Ask the visitor what product/service/brand they want to promote.
+2) Ask for video purpose, platform, duration, style/reference, language, deadline and budget range.
+3) Suggest a suitable video type and creative direction.
+4) Invite them to send the idea through Telegram, Viber, phone, email or the website contact form.
+Pricing rule:
+- Do not invent a fixed exact price.
+- Explain that price depends on duration, scene count, presenter/character count, voice/dialogue, realism level, deadline, revisions and complexity.
+- Always guide the visitor toward sending their project idea so Burma AI Studio can quote properly.
+Contact:
+${CONTACT_EN}
+`;
+
+const CONSULTANT_SYSTEM_PROMPT = `
+You are the official AI sales consultant for Burma AI Studio. You are not a generic chatbot. Speak like a warm, experienced human consultant who wants to help the visitor choose the right video service.
+
+Language rules:
+- If the visitor writes Burmese, reply in natural Burmese.
+- If the visitor writes English, reply in natural English.
+- If mixed, use the visitor's main language.
+
+Conversation style:
+- Do not give tiny 1-2 sentence answers unless the visitor asks for a very short answer.
+- Give useful, human-like replies with context, suggestions and next steps.
+- Use friendly professional wording, not robotic wording.
+- Ask one clear follow-up question at the end when useful.
+- When the question is vague, do not stop. Guide them by giving options and asking what they want.
+- When the requested info is not available, upsell naturally: explain what Burma AI Studio can still do, suggest a suitable service and invite them to share project details.
+- Never say you are unable to help with Burma AI Studio website/service questions. Redirect toward service, portfolio, contact, quotation or consultation.
+
+Sales behavior:
+- Understand the visitor's business goal first.
+- Suggest a suitable package direction: AI presenter video, cinematic commercial, product ad, service explainer, TikTok/Reels short, architecture/product animation, or brand story.
+- Use consultative upselling: recommend a stronger video direction, explain why it helps their brand, and invite them to contact.
+- Do not sound like spam. Be helpful and specific.
+
+Website knowledge:
+${WEBSITE_KNOWLEDGE}
+
+Ideal answer structure:
+1) Acknowledge the visitor's question naturally.
+2) Answer with Burma AI Studio context.
+3) Suggest the best option or next step.
+4) Ask for project idea / product / duration / platform / reference / deadline when useful.
+5) Include contact only when helpful, not in every sentence.
+`;
 
 function jsonReply(reply: string, status = 200) {
   return Response.json({ reply }, { status });
@@ -49,7 +106,7 @@ function isValidMessage(value: unknown): value is ChatMessage {
 async function getMessages(request: Request): Promise<ChatMessage[]> {
   const body = (await request.json().catch(() => null)) as { messages?: unknown } | null;
   const rawMessages = Array.isArray(body?.messages) ? body.messages : [];
-  return rawMessages.filter(isValidMessage).slice(-10);
+  return rawMessages.filter(isValidMessage).slice(-14);
 }
 
 function hasMyanmar(text: string) {
@@ -64,85 +121,115 @@ function getLastUserQuestion(messages: ChatMessage[]) {
   return [...messages].reverse().find((message) => message.role === "user")?.content || "";
 }
 
-function fallbackAnswer(question: string) {
+function contactLine(mm: boolean) {
+  return mm ? `တိုက်ရိုက်ဆက်သွယ်ရန် — ${CONTACT_MM}` : `Direct contact — ${CONTACT_EN}`;
+}
+
+function projectQuestions(mm: boolean) {
+  return mm
+    ? "Quotation နဲ့ creative direction ကိုတိတိကျကျပြောပေးနိုင်ဖို့ Product/Service အမျိုးအစား၊ Video တင်မယ့် platform, ကြာချိန်, reference video ရှိမရှိ, deadline ကိုပြောပြပေးပါ။"
+    : "To suggest the best creative direction and quote, please share your product/service, target platform, duration, reference style, and deadline.";
+}
+
+function naturalFallback(question: string) {
   const query = question.toLowerCase();
   const mm = hasMyanmar(question);
 
-  if (includesAny(query, ["price", "pricing", "cost", "fee", "charge", "rate", "budget", "package", "how much", "one video", "per video", "ဈေး", "စျေး", "ဘယ်လောက်", "တစ်ခု", "တစ်ပုဒ်", "တစ်ဗီဒီယို", "ကုန်ကျ"])) {
+  if (includesAny(query, ["price", "pricing", "cost", "fee", "charge", "rate", "budget", "package", "how much", "ဈေး", "စျေး", "ဘယ်လောက်", "ကုန်ကျ", "package", "ပက်ကေ့"])) {
     return mm
-      ? `လူကြီးမင်းတို့ ဖန်တီးချင်တဲ့ video ပုံစံ၊ ကြာချိန်၊ scene အရေအတွက်၊ စကားပြော/voice ပါမပါ၊ character ပါမပါ၊ deadline နဲ့ revision လိုအပ်ချက်တွေ သိရမှ ဈေးနှုန်းကို တိတိကျကျသတ်မှတ်ပေးလို့ရပါတယ်။
+      ? `ဈေးနှုန်းအတွက် တိတိကျကျပြောရရင် video တစ်ပုဒ်ချင်းစီမှာ လိုချင်တဲ့ style မတူလို့ fixed price တစ်ခုတည်းနဲ့မပြောတာပိုမှန်ပါတယ်။ ဥပမာ AI presenter video လား၊ cinematic brand commercial လား၊ product ad လား၊ TikTok/Reels short လားဆိုတာပေါ်မူတည်ပြီး duration, scene အရေအတွက်, voice/dialogue, character ပါမပါ, realism level, deadline နဲ့ revision လိုအပ်ချက်တွေက ဈေးကိုပြောင်းစေပါတယ်။
 
-လူကြီးမင်းတို့ရဲ့ စိတ်ကူးတွေကို Burma AI Studio ရဲ့ creative direction နဲ့ပေါင်းစပ်ပြီး Brand နဲ့အလိုက်ဖက်ဆုံး AI Video ပုံစံကို အကြံပြုပေးနိုင်ပါတယ်။
+Burma AI Studio အနေနဲ့တော့ လူကြီးမင်းရဲ့ budget နဲ့ brand goal ကိုကြည့်ပြီး အလွန်ကုန်ကျစရိတ်မကြီးဘဲ ကြော်ငြာအကျိုးသက်ရောက်မှုရှိမယ့် video direction ကိုရွေးပေးနိုင်ပါတယ်။ လုပ်ငန်းအသစ်ဆိုရင် 15-30 seconds social media ad နဲ့စတာက အမြန်ဆုံး result မြင်ရတတ်ပါတယ်။
 
-စိတ်ဝင်စားရင် အောက်က direct contact တွေကနေ project idea ကိုပို့ပြီး ဈေးစကားတိုက်ရိုက်ပြောနိုင်ပါတယ်။
-${CONTACT_TEXT_MM}`
-      : `The final price depends on the video style you want, duration, number of scenes, characters, voice/dialogue, deadline, and revision needs.
+${projectQuestions(true)}
+${contactLine(true)}`
+      : `Pricing depends on the style and complexity of the video, so it is better not to give one random fixed price. A simple AI presenter video, a cinematic brand commercial, a product ad, and a TikTok/Reels short all require different scene counts, duration, voice/dialogue, characters, realism level, deadline and revision scope.
 
-Share your idea with Burma AI Studio and we can combine your concept with the right creative direction, then suggest the best format and quote.
+Burma AI Studio can help you choose a cost-effective direction first, especially if you are a new business that wants promotion without a heavy filming budget. For many brands, starting with a 15-30 second social media ad is the fastest practical option.
 
-If you are interested, contact us directly and send your project idea:
-${CONTACT_TEXT_EN}`;
+${projectQuestions(false)}
+${contactLine(false)}`;
   }
 
-  if (includesAny(query, ["contact", "phone", "telegram", "viber", "email", "facebook", "ဆက်သွယ်", "ဖုန်း", "အီးမေး", "တယ်လီ", "ဗိုက်ဘာ", "ဘယ်လိုဆက်"])) {
+  if (includesAny(query, ["service", "services", "ဘာလုပ်", "ဘာတွေ", "ဝန်ဆောင်", "လုပ်ပေး", "video type", "အမျိုးအစား", "ai video", "ကြော်ငြာ"])) {
     return mm
-      ? `Burma AI Studio ကို အောက်ပါလမ်းကြောင်းတွေကနေ တိုက်ရိုက်ဆက်သွယ်နိုင်ပါတယ်။
+      ? `Burma AI Studio က AI Video Creation Service ဖြစ်ပြီး လုပ်ငန်းရှင်တွေ Brand ကြော်ငြာချင်တဲ့အခါ ရိုက်ကူးရေးစရိတ်ကြီးမားတာကိုလျှော့ချပြီး professional video content ဖန်တီးပေးနိုင်ပါတယ်။
 
-${CONTACT_TEXT_MM}
+လုပ်ပေးနိုင်တာတွေက AI presenter video, cinematic commercial, product/service ad, TikTok/Reels/Shorts video, brand storytelling video, architecture/product animation concept, script idea, storyboard direction နဲ့ creative editing တွေပါ။ Online shop, restaurant, beauty clinic, real estate, education page, service business, personal brand တွေအတွက်လည်းအသုံးဝင်ပါတယ်။
 
-Telegram/Viber ကနေ project idea, reference video, duration, deadline တွေပို့ပေးရင် quotation ကိုပိုမြန်မြန်တွက်ပေးနိုင်ပါတယ်။`
-      : `You can contact Burma AI Studio directly here:
+သင့်လုပ်ငန်းက ဘာအမျိုးအစားလဲ ပြောပြရင် ဘယ် video type နဲ့စသင့်လဲကို တိတိကျကျအကြံပေးနိုင်ပါတယ်။`
+      : `Burma AI Studio creates AI-powered promotional videos for businesses that want professional content without the cost and hassle of traditional filming.
 
-${CONTACT_TEXT_EN}
+We can help with AI presenter videos, cinematic commercials, product/service ads, TikTok/Reels/Shorts videos, brand storytelling, architecture/product animation concepts, script ideas, storyboard direction and creative editing. It works well for online shops, restaurants, clinics, real estate pages, education pages, service businesses and personal brands.
 
-For a faster quote, send your project idea, reference video, duration, platform format, and deadline by Telegram or Viber.`;
+Tell me what kind of business you have, and I can suggest the best video type to start with.`;
   }
 
-  if (includesAny(query, ["service", "services", "what do you", "ဘာလုပ်", "ဘာတွေ", "ဝန်ဆောင်", "လုပ်ပေး", "video type", "အမျိုးအစား"])) {
+  if (includesAny(query, ["process", "start", "order", "how to", "ဘယ်လိုစ", "မှာယူ", "လုပ်ငန်းစဉ်", "စလုပ်", "စချင်"])) {
     return mm
-      ? "Burma AI Studio မှာ AI promotional video, cinematic brand commercial, AI presenter video, TikTok/Reels/Shorts content, product/service advertising video, architecture/product animation concept, script support, prompt direction နဲ့ creative editing ဝန်ဆောင်မှုတွေ ရနိုင်ပါတယ်။ လုပ်ငန်းအသစ်တွေ Brand ကြော်ငြာချင်ရင်လည်း အဆင်ပြေပါတယ်။"
-      : "Burma AI Studio offers AI promotional videos, cinematic brand commercials, AI presenter videos, TikTok/Reels/Shorts content, product/service ad videos, architecture/product animation concepts, script support, prompt direction, and creative editing. It is suitable for new brands, businesses, online shops, and creators.";
+      ? `စလုပ်ချင်ရင် အဆင့်တွေက ရိုးရှင်းပါတယ်။ ပထမဆုံး လူကြီးမင်းရဲ့ product/service idea ကိုပို့ပါ။ ပြီးရင် target platform က Facebook, TikTok, Reels, YouTube Shorts ဘယ်မှာတင်မလဲ၊ video ကြာချိန်ဘယ်လောက်လိုချင်လဲ၊ reference video ရှိလား၊ deadline ဘယ်နေ့လဲဆိုတာပြောပေးပါ။
+
+အဲဒီအချက်အလက်တွေကိုကြည့်ပြီး Burma AI Studio က သင့် brand နဲ့လိုက်ဖက်တဲ့ creative direction, video concept, format နဲ့ quotation ကိုပြန်ပေးနိုင်ပါတယ်။ Confirm ပြီးရင် production စမယ်၊ preview ကြည့်မယ်၊လိုအပ်တဲ့ revision ပြောမယ်၊ final video ပေးပို့မယ်။
+
+အခုစချင်ရင် သင့်လုပ်ငန်းအမျိုးအစားနဲ့ ကြော်ငြာချင်တဲ့ product/service ကိုရေးပေးပါ။`
+      : `The process is simple. First, send your product or service idea. Then share the target platform, video duration, reference style, language, deadline and any brand details.
+
+Burma AI Studio will use that information to suggest the creative direction, concept, format and quotation. After confirmation, production starts, you review a preview, request revisions if needed, and receive the final video.
+
+If you want to start now, tell me what business or product you want to promote.`;
   }
 
-  if (includesAny(query, ["process", "start", "order", "how to", "ဘယ်လိုစ", "မှာယူ", "လုပ်ငန်းစဉ်", "စလုပ်"])) {
+  if (includesAny(query, ["portfolio", "example", "sample", "work", "နမူနာ", "လက်ရာ", "ပြခန်း", "ကြည့်", "video sample"])) {
     return mm
-      ? "လုပ်ငန်းစဉ်က ရိုးရှင်းပါတယ် — ၁) သင့် product/service idea ပို့ပါ၊ ၂) reference video/brand info/duration/deadline ပို့ပါ၊ ၃) Burma AI Studio က creative direction နဲ့ quote ပြန်ပေးပါမယ်၊ ၄) confirm ပြီး production စပါမယ်၊ ၅) preview ကြည့်ပြီး revision ပြောနိုင်ပါတယ်၊ ၆) final video ပေးပို့ပါမယ်။"
-      : "The process is simple: 1) send your product/service idea, 2) share references, brand info, duration, and deadline, 3) Burma AI Studio suggests the creative direction and quote, 4) production starts after confirmation, 5) you review and request revisions, 6) final video is delivered.";
+      ? `နမူနာတွေကို Portfolio page မှာကြည့်နိုင်ပါတယ်။ အဲဒီထဲမှာ cinematic style, commercial style, presenter style, architecture/product animation concept နဲ့ social media short video ပုံစံတွေကိုစိတ်ကူးရအောင်ကြည့်လို့ရပါတယ်။
+
+နမူနာကြည့်တဲ့အခါ “ဒီ style လိုချင်တယ်” လို့ reference အဖြစ်ပို့ပေးနိုင်ပါတယ်။ ဒါဆို Burma AI Studio က သင့် product/service နဲ့လိုက်ဖက်အောင် scene, script, tone, format ကိုပြန်ညှိပေးနိုင်ပါတယ်။
+
+Portfolio ထဲက style တစ်ခုခုကြိုက်ရင် ဘယ် video ပုံစံနဲ့တူချင်လဲ ပြောပြပါ။`
+      : `You can view sample work on the Portfolio page. It includes styles such as cinematic ads, commercial videos, presenter videos, architecture/product animation concepts and social media short videos.
+
+If you like one of the sample styles, you can send it as a reference. Burma AI Studio can then adapt the scene direction, script tone and format to your own brand or product.
+
+Which style are you most interested in: presenter, cinematic, product ad or social short?`;
   }
 
-  if (includesAny(query, ["delivery", "fast", "time", "deadline", "ဘယ်လောက်ကြာ", "ကြာ", "မြန်", "အချိန်"])) {
+  if (includesAny(query, ["delivery", "fast", "time", "deadline", "ဘယ်လောက်ကြာ", "ကြာ", "မြန်", "အချိန်", "အမြန်"])) {
     return mm
-      ? "Simple project များအတွက် 48-hour fast delivery ရနိုင်ပါတယ်။ ဒါပေမယ့် cinematic scene များတာ၊ character များတာ၊ voice/dialogue များတာ၊ revision များတာဆိုရင် အချိန်ပိုလိုနိုင်ပါတယ်။ Deadline အရေးကြီးရင် project မစခင် ကြိုပြောပေးပါ။"
-      : "Fast delivery may be available for suitable simple projects, including around 48 hours. Complex cinematic scenes, multiple characters, voice/dialogue work, or heavier revisions may take longer. Please share your deadline before production starts.";
+      ? `Delivery time က video complexity ပေါ်မူတည်ပါတယ်။ Simple social media ad, basic presenter video လိုမျိုးဆိုရင် မြန်မြန်စီစဉ်လို့ရနိုင်ပါတယ်။ Cinematic scene များတာ၊ character များတာ၊ dialogue/voice များတာ၊ realistic detail အရမ်းလိုတာဆိုရင် အချိန်ပိုလိုနိုင်ပါတယ်။
+
+Deadline အရေးကြီးရင် project မစခင်တည်းကကြိုပြောပေးတာအကောင်းဆုံးပါ။ အဲဒါမှ Burma AI Studio က fast delivery ဖြစ်နိုင်မဖြစ်နိုင်နဲ့ ဘယ် format နဲ့ပိုအမြန်ပြီးမလဲကိုညှိပေးနိုင်ပါတယ်။
+
+ဘယ်နေ့မတိုင်ခင် video လိုတာလဲ ပြောပြပါ။`
+      : `Delivery time depends on the complexity. A simple social media ad or basic presenter video can often be planned faster. Cinematic scenes, multiple characters, heavier dialogue/voice work and high realism details may take longer.
+
+If your deadline is important, share it before production starts so Burma AI Studio can suggest the fastest realistic format.
+
+When do you need the video finished?`;
   }
 
-  if (includesAny(query, ["portfolio", "example", "sample", "work", "နမူနာ", "လက်ရာ", "ပြခန်း", "ကြည့်"])) {
+  if (includesAny(query, ["script", "idea", "concept", "caption", "စာသား", "အကြံ", "စိတ်ကူး", "ဇာတ်ညွှန်း", "ကြော်ငြာစာ"])) {
     return mm
-      ? "နမူနာလက်ရာတွေကို Portfolio page မှာကြည့်နိုင်ပါတယ်။ Cinematic trailer, architecture AI video, commercial video, virtual presenter campaign နဲ့ social media short video sample တွေပါဝင်ပါတယ်။"
-      : "You can view sample works on the Portfolio page, including cinematic trailers, architecture AI videos, commercial videos, virtual presenter campaigns, and social media short video examples.";
-  }
+      ? `ရပါတယ်။ Burma AI Studio က video ဖန်တီးပေးရုံမက script idea, hook line, scene direction, presenter dialogue, CTA စာသားတွေပါကူညီပေးနိုင်ပါတယ်။ ကြော်ငြာ video တစ်ခုက ရုပ်ထွက်လှတာတစ်ခုတည်းမဟုတ်ဘဲ ပထမ ၃ စက္ကန့်မှာ customer ကိုဖမ်းနိုင်တဲ့ hook, brand problem, solution, trust point နဲ့ contact CTA ပါရင် ပိုအလုပ်ဖြစ်ပါတယ်။
 
-  if (includesAny(query, ["revision", "edit", "change", "ပြင်", "ပြင်ဆင်", "ပြောင်း", "မကြိုက်"])) {
-    return mm
-      ? "Revision က package/quotation ပေါ်မူတည်ပါတယ်။ ပုံမှန်အားဖြင့် text, pacing, scene selection, color/tone, presentation style ပြင်ဆင်မှုတွေပါနိုင်ပါတယ်။ Concept သို့မဟုတ် script ကိုလုံးဝပြောင်းချင်တာဆိုရင် new work အဖြစ်သတ်မှတ်နိုင်ပါတယ်။"
-      : "Revisions depend on the agreed package or quote. Normal revisions may include text, pacing, scene selection, color/tone, and presentation style adjustments. A full concept or script change may count as new work.";
-  }
+သင့် product/service ကိုပြောပြရင် 15 seconds / 30 seconds / 60 seconds အတွက် script direction တစ်ခုချင်းစီအကြံပေးနိုင်ပါတယ်။
 
-  if (includesAny(query, ["format", "size", "tiktok", "reels", "shorts", "facebook", "youtube", "ratio", "ပုံစံ", "ဆိုဒ်", "အရွယ်", "ဖော်မက်"])) {
-    return mm
-      ? "Social media အတွက် 9:16 vertical TikTok/Reels/Shorts format, Facebook post/video format, YouTube Shorts format, 16:9 landscape commercial format စတာတွေကို project လိုအပ်ချက်အတိုင်းဖန်တီးပေးနိုင်ပါတယ်။ Platform ဘယ်မှာတင်မလဲဆိုတာပြောပေးရင် format ကိုသေချာညှိပေးနိုင်ပါတယ်။"
-      : "We can create formats for 9:16 TikTok/Reels/Shorts, Facebook videos, YouTube Shorts, and 16:9 landscape commercial videos. Tell us the platform and we will suggest the best format.";
+ဘာလုပ်ငန်းအတွက် script လိုတာလဲ?`
+      : `Yes. Burma AI Studio can help not only with video creation, but also script ideas, hook lines, scene direction, presenter dialogue and call-to-action wording. A good ad is not just good visuals; it needs a strong first 3 seconds, a clear problem, a solution, a trust point and a contact CTA.
+
+Tell me your product or service and I can suggest a 15-second, 30-second or 60-second script direction.`;
   }
 
   return mm
-    ? `Burma AI Studio က လုပ်ငန်းရှင်များ၊ brand အသစ်များ၊ online shop များနဲ့ creator များအတွက် AI video creation service ဖြစ်ပါတယ်။ Product/service ကြော်ငြာဗီဒီယို၊ AI presenter video၊ cinematic commercial၊ social media short video နဲ့ creative editing တွေကို ဖန်တီးပေးနိုင်ပါတယ်။
+    ? `အဲ့မေးခွန်းနဲ့ပတ်သတ်ပြီး Burma AI Studio ဘက်ကနေ အကူညီပေးနိုင်တဲ့နည်းလမ်းရှိပါတယ်။ သင့် website/brand/product/service ကိုပိုပြီးကြော်ငြာချင်တာလား၊ video idea စဉ်းစားနေတာလား၊ ဒါမှမဟုတ် AI presenter / cinematic ad / social media short video လိုချင်တာလားဆိုတာပေါ်မူတည်ပြီး အကောင်းဆုံး direction ကိုရွေးပေးနိုင်ပါတယ်။
 
-သင့် project ကိုအကောင်းဆုံးအကြံပြုပေးနိုင်ဖို့ video type, duration, style, deadline နဲ့ reference ရှိရင်ပို့ပေးပါ။
-${CONTACT_TEXT_MM}`
-    : `Burma AI Studio is an AI video creation service for businesses, new brands, online shops, and creators. We create product/service ads, AI presenter videos, cinematic commercials, social media short videos, and creative edits.
+မသေချာသေးရင်တောင် စတင်ဖို့လွယ်ပါတယ် — သင့်လုပ်ငန်းအမျိုးအစား၊ ကြော်ငြာချင်တဲ့ product/service, video တင်မယ့် platform နဲ့ လိုချင်တဲ့ vibe ကိုပြောပြပါ။ Burma AI Studio က သင့် brand နဲ့ကိုက်တဲ့ video concept, format, script direction နဲ့ next step ကိုအကြံပေးနိုင်ပါတယ်။
 
-To recommend the best direction, please share your video type, duration, style, deadline, and any reference.
-${CONTACT_TEXT_EN}`;
+${contactLine(true)}`
+    : `I can help from the Burma AI Studio side. Whether you want to promote a website, brand, product, service, personal page, or social media campaign, the right video direction can be selected based on your goal.
+
+Even if you are not sure what you need yet, we can start simply: tell me your business type, product/service, target platform and the style you like. Burma AI Studio can then recommend the best video concept, format, script direction and next step.
+
+${contactLine(false)}`;
 }
 
 export async function POST(request: Request) {
@@ -157,7 +244,7 @@ export async function POST(request: Request) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return jsonReply(fallbackAnswer(lastQuestion));
+      return jsonReply(naturalFallback(lastQuestion));
     }
 
     const contents: GeminiContent[] = messages.map((message: ChatMessage) => ({
@@ -175,13 +262,13 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           systemInstruction: {
-            parts: [{ text: BUSINESS_CONTEXT }],
+            parts: [{ text: CONSULTANT_SYSTEM_PROMPT }],
           },
           contents,
           generationConfig: {
-            temperature: 0.6,
-            topP: 0.9,
-            maxOutputTokens: 700,
+            temperature: 0.82,
+            topP: 0.95,
+            maxOutputTokens: 1600,
           },
         }),
       }
@@ -191,18 +278,18 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       console.warn("Gemini API unavailable:", data?.error?.message || response.statusText);
-      return jsonReply(fallbackAnswer(lastQuestion));
+      return jsonReply(naturalFallback(lastQuestion));
     }
 
     const reply =
       data?.candidates?.[0]?.content?.parts
         ?.map((part) => part.text || "")
         .join("\n")
-        .trim() || fallbackAnswer(lastQuestion);
+        .trim() || naturalFallback(lastQuestion);
 
     return jsonReply(reply);
   } catch (error) {
     console.error("Chat route fallback used:", error);
-    return jsonReply(fallbackAnswer("ဘာဝန်ဆောင်မှုတွေလုပ်ပေးလဲ"));
+    return jsonReply(naturalFallback("ဘာဝန်ဆောင်မှုတွေလုပ်ပေးလဲ"));
   }
 }
