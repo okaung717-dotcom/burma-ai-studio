@@ -13,9 +13,18 @@ const links = [
 export default function Admin6996Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `try { document.body.classList.add('bas-admin-route'); } catch (e) {}`,
+        }}
+      />
       <style>{`
-        body:has(.bas-admin-area) > div nav:not(.bas-admin-menu),
-        body:has(.bas-admin-area) nav:not(.bas-admin-menu):has(a[href="/"]) {
+        body.bas-admin-route nav:not(.bas-admin-menu),
+        body:has(.bas-admin-area) nav:not(.bas-admin-menu) {
+          display: none !important;
+        }
+        body.bas-admin-route .fixed.bottom-6.right-6,
+        body:has(.bas-admin-area) .fixed.bottom-6.right-6 {
           display: none !important;
         }
       `}</style>
