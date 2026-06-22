@@ -36,35 +36,41 @@ export default function OpsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fff9f0] px-5 py-10 text-[#1a0b0e] dark:bg-[#100708] dark:text-[#fff7eb]">
-      <section className="mx-auto max-w-4xl rounded-[2rem] border border-[#be9537]/25 bg-white p-6 shadow-xl dark:bg-[#1a0b0e]">
-        <p className="text-xs font-black uppercase tracking-[0.25em] text-[#911923] dark:text-[#e3bc61]">Burma AI Studio</p>
-        <h1 className="mt-3 text-3xl font-black">Operations Control</h1>
-        <p className="mt-2 text-sm text-gray-500 dark:text-[#d8c4a3]">Status tools for leads and chat conversations.</p>
-        <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Control code" className="mt-6 w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+    <main className="space-y-6">
+      <section className="rounded-[2rem] border border-[#be9537]/20 bg-[#100708] p-6 text-white shadow-xl">
+        <p className="text-xs font-black uppercase tracking-[0.25em] text-[#e3bc61]">Operations</p>
+        <h2 className="mt-3 text-4xl font-black">Lead & Chat Control</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/65">Update client lead progress and visitor chat states from a single operation workspace.</p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-4">
+          {leadOptions.slice(0, 4).map((item) => <div key={item} className="rounded-2xl bg-white/5 p-4"><p className="text-xl font-black">{item}</p><p className="text-xs text-white/55">Lead state</p></div>)}
+        </div>
+      </section>
 
-        <div className="mt-6 grid gap-5 md:grid-cols-2">
-          <div className="rounded-2xl border border-[#be9537]/20 p-4">
-            <h2 className="text-xl font-black">Lead Status</h2>
-            <input value={leadId} onChange={(e) => setLeadId(e.target.value)} placeholder="Lead ID" className="mt-4 w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-            <select value={leadStatus} onChange={(e) => setLeadStatus(e.target.value)} className="mt-3 w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]">
-              {leadOptions.map((item) => <option key={item}>{item}</option>)}
-            </select>
-            <button disabled={!code || !leadId} onClick={() => void saveLead()} className="mt-4 w-full rounded-xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Save Lead Status</button>
-          </div>
-
-          <div className="rounded-2xl border border-[#be9537]/20 p-4">
-            <h2 className="text-xl font-black">Chat State</h2>
-            <input value={visitorId} onChange={(e) => setVisitorId(e.target.value)} placeholder="Visitor ID" className="mt-4 w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-            <select value={chatState} onChange={(e) => setChatState(e.target.value)} className="mt-3 w-full rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]">
-              {chatOptions.map((item) => <option key={item}>{item}</option>)}
-            </select>
-            <button disabled={!code || !visitorId} onClick={() => void saveChat()} className="mt-4 w-full rounded-xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Save Chat State</button>
-          </div>
+      <section className="grid gap-4 lg:grid-cols-2">
+        <div className="rounded-[2rem] border border-[#be9537]/20 bg-white p-6 shadow-sm dark:bg-[#1a0b0e]">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#911923] dark:text-[#e3bc61]">Lead Pipeline</p>
+          <h3 className="mt-3 text-2xl font-black">Lead Status</h3>
+          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="ADMIN_CONTROL code" className="mt-5 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <input value={leadId} onChange={(e) => setLeadId(e.target.value)} placeholder="Lead ID" className="mt-3 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <select value={leadStatus} onChange={(e) => setLeadStatus(e.target.value)} className="mt-3 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]">
+            {leadOptions.map((item) => <option key={item}>{item}</option>)}
+          </select>
+          <button disabled={!code || !leadId} onClick={() => void saveLead()} className="mt-4 w-full rounded-2xl bg-[#911923] px-5 py-4 font-extrabold text-white disabled:opacity-50">Save Lead Status</button>
         </div>
 
-        <p className="mt-6 rounded-xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#241113] dark:text-[#e3bc61]">{note}</p>
+        <div className="rounded-[2rem] border border-[#be9537]/20 bg-white p-6 shadow-sm dark:bg-[#1a0b0e]">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#911923] dark:text-[#e3bc61]">Conversation State</p>
+          <h3 className="mt-3 text-2xl font-black">Chat Status</h3>
+          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="ADMIN_CONTROL code" className="mt-5 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <input value={visitorId} onChange={(e) => setVisitorId(e.target.value)} placeholder="Visitor ID" className="mt-3 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <select value={chatState} onChange={(e) => setChatState(e.target.value)} className="mt-3 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]">
+            {chatOptions.map((item) => <option key={item}>{item}</option>)}
+          </select>
+          <button disabled={!code || !visitorId} onClick={() => void saveChat()} className="mt-4 w-full rounded-2xl bg-[#911923] px-5 py-4 font-extrabold text-white disabled:opacity-50">Save Chat State</button>
+        </div>
       </section>
+
+      <p className="rounded-2xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#1a0b0e] dark:text-[#e3bc61]">{note}</p>
     </main>
   );
 }
