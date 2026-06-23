@@ -31,6 +31,7 @@ Behavior:
 - Never be rude.
 - Keep replies short, natural, and complete.
 - Never stop mid-sentence.
+- Never give one-sentence answers unless the user only asks for a phone number or direct contact.
 
 Burma AI Studio website knowledge:
 - Home: introduces Burma AI Studio as an AI video creation service for brands and businesses. Main promise: high-quality, affordable promotional videos powered by advanced AI, with cinematic narratives that make a brand stand out.
@@ -57,6 +58,11 @@ function hasMyanmar(text: string) {
   return /[\u1000-\u109F]/.test(text);
 }
 
+function hasAny(text: string, words: string[]) {
+  const lower = text.toLowerCase();
+  return words.some((word) => lower.includes(word));
+}
+
 function isMessage(value: unknown): value is ChatMessage {
   if (!value || typeof value !== "object") return false;
   const message = value as ChatMessage;
@@ -64,15 +70,48 @@ function isMessage(value: unknown): value is ChatMessage {
 }
 
 function fallback(text: string) {
-  return hasMyanmar(text)
-    ? "မင်္ဂလာပါရှင့်။ Burma AI Studio မှကြိုဆိုပါတယ်။ သင့် video project အကြောင်းပြောပြပါနော်။"
-    : "Hello, welcome to Burma AI Studio. Tell me about your video project.";
+  const mm = hasMyanmar(text);
+
+  if (hasAny(text, ["what can", "what do", "ဘာလုပ်", "ဘာတွေ", "ကူညီ", "ဘယ်လိုလုပ်", "service"])) {
+    return mm
+      ? "Burma AI Studio မှာ AI presenter video, cinematic ad, product ad, music promo, hotel/restaurant ads, Reels/TikTok short video, script idea, portfolio guidance, quotation နဲ့ delivery/revision အကြောင်းတွေကို ကူညီပေးနိုင်ပါတယ်ရှင့်။\n\nသင့်လုပ်ငန်းအမျိုးအစား၊ တင်မယ့် platform၊ video ကြာချိန်နဲ့လိုချင်တဲ့ style ကိုပြောပြပါနော်။ အကောင်းဆုံး video direction ကိုညှိပေးပါမယ်။"
+      : "Burma AI Studio can help with AI presenter videos, cinematic ads, product ads, music promos, hotel/restaurant ads, Reels/TikTok shorts, script ideas, portfolio guidance, quotation, delivery, and revisions.\n\nTell me your business type, target platform, video duration, and preferred style. I’ll suggest the best direction.";
+  }
+
+  if (hasAny(text, ["price", "cost", "how much", "budget", "ဈေး", "စျေး", "ဘယ်လောက်", "quote"])) {
+    return mm
+      ? "ဈေးနှုန်းက video ကြာချိန်၊ scene အရေအတွက်၊ voice/dialogue၊ presenter/character၊ realism level၊ deadline နဲ့ revision ပေါ်မူတည်ပါတယ်ရှင့်။ Fixed price မပြောခင် project detail သိရင် ပိုမှန်တဲ့ quote ပေးနိုင်ပါတယ်။\n\nProduct/service, platform, duration, reference style နဲ့ deadline ကိုပို့ပေးပါနော်။ သင့် budget နဲ့ကိုက်အောင် option ညှိပေးပါမယ်။"
+      : "Pricing depends on duration, scene count, voice/dialogue, presenter or character, realism level, deadline, and revisions. A proper quote is more accurate after seeing the project details.\n\nSend your product/service, platform, duration, reference style, and deadline. I’ll suggest an option that fits your budget.";
+  }
+
+  if (hasAny(text, ["portfolio", "sample", "example", "နမူနာ", "လက်ရာ", "ပြခန်း", "watch"])) {
+    return mm
+      ? "နမူနာ video တွေကို Portfolio page မှာကြည့်နိုင်ပါတယ်ရှင့်။ ကြိုက်တဲ့ style တစ်ခုကို reference အဖြစ်ရွေးပေးရင် သင့် project နဲ့ကိုက်အောင် concept ပြန်ညှိပေးနိုင်ပါတယ်။\n\nAI presenter style ကြိုက်လား၊ cinematic product ad style ကြိုက်လား ပြောပြပါနော်။"
+      : "You can check sample videos on the Portfolio page. If you pick a style you like, I can adapt the concept for your project.\n\nDo you prefer AI presenter style or cinematic product-ad style?";
+  }
+
+  if (hasAny(text, ["contact", "phone", "telegram", "viber", "email", "ဆက်သွယ်", "ဖုန်း", "တယ်လီဂရမ်"])) {
+    return mm
+      ? `တိုက်ရိုက်ဆက်သွယ်နိုင်ပါတယ်ရှင့် — ${CONTACT}။\n\nProject idea, reference video, duration နဲ့ platform ပို့ပေးရင် video direction နဲ့ quote ကိုပြန်ညှိပေးပါမယ်။`
+      : `You can contact Burma AI Studio directly — ${CONTACT}.\n\nSend your project idea, reference video, duration, and platform, and we’ll suggest the video direction and quote.`;
+  }
+
+  if (hasAny(text, ["hotel", "room", "booking", "resort", "ဟိုတယ်", "အခန်း", "ဧည့်"])) {
+    return mm
+      ? "Hotel ကြော်ငြာအတွက် TikTok/Reels 30s cinematic video ဆိုရင် lobby, room, guest experience, service highlight, location နဲ့ booking CTA ပါတဲ့ structure ကအထိရောက်ဆုံးပါရှင့်။ ပထမ ၃ စက္ကန့်မှာ hotel vibe ကိုဖမ်းနိုင်တဲ့ hook ထည့်သင့်ပါတယ်။\n\nHotel name, location, room type, highlight service နဲ့ reference video ပို့ပေးပါနော်။ 30s concept/script ကိုညှိပေးပါမယ်။"
+      : "For a hotel ad, a 30s cinematic TikTok/Reels video should show the lobby, rooms, guest experience, service highlights, location, and a booking CTA. The first 3 seconds should hook viewers with the hotel vibe.\n\nSend the hotel name, location, room type, key service, and reference video. I’ll suggest a 30s concept/script.";
+  }
+
+  return mm
+    ? "မင်္ဂလာပါရှင့်။ Burma AI Studio မှကြိုဆိုပါတယ်။ သင့် brand အတွက် AI video ကြော်ငြာ၊ cinematic ad၊ product ad၊ Reels/TikTok short video၊ script idea နဲ့ portfolio guidance တွေကို ကူညီပေးနိုင်ပါတယ်ရှင့်။\n\nသင့်လုပ်ငန်းအမျိုးအစား၊ product/service၊ platform၊ duration နဲ့လိုချင်တဲ့ style ကိုပြောပြပါနော်။ အကောင်းဆုံး next step ကိုညှိပေးပါမယ်။"
+    : "Welcome to Burma AI Studio. I can help your brand with AI video ads, cinematic ads, product ads, Reels/TikTok shorts, script ideas, and portfolio guidance.\n\nTell me your business type, product/service, platform, duration, and preferred style. I’ll suggest the best next step.";
 }
 
 async function callGemini(
   model: string,
   apiKey: string,
-  contents: Array<{ role: string; parts: Array<{ text: string }> }>
+  contents: Array<{ role: string; parts: Array<{ text: string }> }>,
+  question: string
 ) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
@@ -105,9 +144,10 @@ async function callGemini(
       .join("\n")
       .trim();
 
-    return response.ok && text ? text.replace(/\n{3,}/g, "\n\n").trim() : "";
+    const clean = response.ok && text ? text.replace(/\n{3,}/g, "\n\n").trim() : "";
+    return clean.length < 90 ? fallback(question) : clean;
   } catch {
-    return "";
+    return fallback(question);
   } finally {
     clearTimeout(timeout);
   }
@@ -137,7 +177,7 @@ export async function POST(request: Request) {
   }));
 
   for (const model of MODELS) {
-    const answer = await callGemini(model, apiKey, contents);
+    const answer = await callGemini(model, apiKey, contents, question);
     if (answer) {
       return Response.json({ reply: answer });
     }
