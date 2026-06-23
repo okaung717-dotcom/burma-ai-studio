@@ -26,6 +26,11 @@ function clean(value: unknown, fallback = "", max = 3000) {
   return typeof value === "string" && value.trim() ? value.trim().slice(0, max) : fallback;
 }
 
+function isLoggedIn(request: Request, code?: string) {
+  const cookie = request.headers.get("cookie") || "";
+  return cookie.includes("bas_admin_ok=1") || isAdminPin(code);
+}
+
 function parseLogs(items: string[]) {
   return items
     .map((item) => { try { return JSON.parse(item) as ChatLog; } catch { return null; } })
@@ -51,13 +56,13 @@ function buildThreads(logs: ChatLog[]) {
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as Body | null;
-    if (!isAdminPin(body?.code)) return Response.json({ ok: false, message: "Invalid admin code." }, { status: 401 });
+    if (!isLoggedIn(request, body?.code)) return Response.json({ ok: false, message: "Admin login required." }, { status: 401 });
 
     if (body?.action === "reply") {
       const visitorId = clean(body.visitorId, "", 160);
       const content = clean(body.content, "", 4000);
       if (!visitorId || !content) return Response.json({ ok: false, message: "Visitor and reply are required." }, { status: 400 });
-      const reply = { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, visitorId, role: "admin", content, page: "/admin/chat", language: "Admin", createdAt: new Date().toISOString() };
+      const reply = { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, visitorId, role: "admin", content, page: "/admin6996/chat", language: "Admin", createdAt: new Date().toISOString() };
       await withRedis(async (client) => client.lPush(CHAT_KEY, JSON.stringify(reply)));
       return Response.json({ ok: true, reply });
     }
