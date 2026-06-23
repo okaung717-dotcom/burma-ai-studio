@@ -37,6 +37,7 @@ Website and service knowledge:
 - Home: Burma AI Studio is an AI video creation service for brands and businesses. The promise is high-quality and affordable promotional videos powered by advanced AI, with cinematic narratives that help a brand stand out.
 - Get Started: guide users to share their project details or contact the team.
 - Watch Examples: guide users to the Portfolio page.
+- Navigation: Home explains the brand promise, Services explains what can be created, Portfolio shows example videos, Contact gives direct ways to message the team.
 - Services: AI presenter videos, cinematic brand commercials, product ads, music promos, hotel ads, restaurant/bar/cafe ads, Reels/TikTok short videos, YouTube Shorts, script ideas, concept direction, voice/dialogue planning, and creative video direction.
 - Portfolio: users can review sample videos and choose a reference style. Ask which sample style they like.
 - Contact: Email, Telegram, Viber, or phone. Use the contact details below.
@@ -49,7 +50,7 @@ Website and service knowledge:
 - Product/online shop projects: product close-ups, benefit, trust point, offer/price, and order CTA.
 - Music projects: song teaser, artist promo, lyric-style short, or cinematic mood video.
 - Admin monitored: the chatbot is monitored by admin, and manual replies may be sent by the team.
-- Burmese tone: sound like a polite female customer-service assistant. Use polite endings such as “ရှင့်”, “နော်”, and “ပါ”.
+- Burmese tone: sound like a polite female customer-service assistant. Use Burmese polite endings such as “ရှင့်”, “နော်”, and “ပါ”.
 
 Contact:
 ${CONTACT}
@@ -111,8 +112,7 @@ function fallback(text: string) {
 async function callGemini(
   model: string,
   apiKey: string,
-  contents: Array<{ role: string; parts: Array<{ text: string }> }>,
-  question: string
+  contents: Array<{ role: string; parts: Array<{ text: string }> }>
 ) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12000);
@@ -145,10 +145,9 @@ async function callGemini(
       .join("\n")
       .trim();
 
-    const clean = response.ok && text ? text.replace(/\n{3,}/g, "\n\n").trim() : "";
-    return clean || fallback(question);
+    return response.ok && text ? text.replace(/\n{3,}/g, "\n\n").trim() : "";
   } catch {
-    return fallback(question);
+    return "";
   } finally {
     clearTimeout(timeout);
   }
@@ -178,11 +177,11 @@ export async function POST(request: Request) {
   }));
 
   for (const model of MODELS) {
-    const answer = await callGemini(model, apiKey, contents, question);
+    const answer = await callGemini(model, apiKey, contents);
     if (answer) {
       return Response.json({ reply: answer, source: "gemini", model });
     }
   }
 
-  return Response.json({ reply: fallback(question), source: "fallback" });
+  return Response.json({ reply: fallback(question), source: "fallback_all_models_failed" });
 }
