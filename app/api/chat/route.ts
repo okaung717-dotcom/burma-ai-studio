@@ -40,6 +40,10 @@ function getLastUserQuestion(messages: ChatMessage[]) {
   return [...messages].reverse().find((message) => message.role === "user")?.content || "";
 }
 
+function hasAny(text: string, words: string[]) {
+  return words.some((word) => text.includes(word));
+}
+
 function compact(text: string) {
   const cleaned = text.replace(/\n{3,}/g, "\n\n").trim();
   if (cleaned.length <= 460) return cleaned;
@@ -47,7 +51,34 @@ function compact(text: string) {
 }
 
 function fallback(question: string) {
-  return hasMyanmar(question)
+  const q = question.toLowerCase();
+  const mm = hasMyanmar(question);
+
+  if (hasAny(q, ["bar", "beer", "cocktail", "restaurant", "cafe", "စားသောက်", "ဘား", "ကဖေး", "ဆိုင်"])) {
+    return mm
+      ? "Bar/Restaurant ကြော်ငြာအတွက် ညအလင်းရောင် vibe, drink close-up, crowd mood, premium logo ending ပါတဲ့ 15-30s Reels/TikTok video ကအထိရောက်ဆုံးပါ။\n\nဆိုင်နာမည်၊ location, ကြော်ငြာချင်တဲ့ drink/food နဲ့လိုချင်တဲ့ vibe ကိုပို့ပေးပါ။"
+      : "For a bar/restaurant ad, a 15-30s Reels/TikTok video with night ambience, drink close-ups, crowd mood and a premium logo ending will work best.\n\nSend the shop name, location, product focus and preferred vibe.";
+  }
+
+  if (hasAny(q, ["music", "song", "artist", "singer", "သီချင်း", "အဆိုတော်", "music video"])) {
+    return mm
+      ? "Music video အတွက် song teaser, artist promo, lyric-style short ဒါမှမဟုတ် cinematic mood video ပုံစံနဲ့ဖန်တီးနိုင်ပါတယ်။ Social media အတွက်ဆို 15-30s hook video ကပိုထိရောက်ပါတယ်။\n\nသီချင်း mood, artist name, duration နဲ့ reference style ကိုပို့ပေးပါ။"
+      : "For a music ad, we can create a song teaser, artist promo, lyric-style short or cinematic mood video. For social media, a 15-30s hook video is usually strongest.\n\nSend the song mood, artist name, duration and reference style.";
+  }
+
+  if (hasAny(q, ["price", "cost", "how much", "budget", "ဈေး", "စျေး", "ဘယ်လောက်"])) {
+    return mm
+      ? "ဈေးနှုန်းက video ကြာချိန်, scene count, presenter/character, voice, realism, deadline နဲ့ revision ပေါ်မူတည်ပါတယ်။ Fixed price မပြောတာထက် project အလိုက် quote ပေးတာပိုမှန်ပါတယ်။\n\nProduct/service, platform, duration နဲ့ reference ကိုပို့ပေးပါ။"
+      : "Price depends on duration, scene count, presenter/character, voice, realism, deadline and revisions. It’s better to quote based on your exact project.\n\nSend the product/service, platform, duration and reference style.";
+  }
+
+  if (hasAny(q, ["contact", "phone", "telegram", "viber", "ဆက်သွယ်", "ဖုန်း", "တယ်လီဂရမ်"])) {
+    return mm
+      ? "Burma AI Studio ကို Email: okaung717@gmail.com, Phone: 09671010011, Telegram/Viber: +95 9 671 010 011 ကနေတိုက်ရိုက်ဆက်သွယ်နိုင်ပါတယ်။\n\nProject idea ကိုပို့လိုက်ရင် video direction နဲ့ quote ကိုပြန်ညှိပေးပါမယ်။"
+      : "You can contact Burma AI Studio directly: Email okaung717@gmail.com, Phone 09671010011, Telegram/Viber +95 9 671 010 011.\n\nSend your project idea and we’ll suggest the video direction and quote.";
+  }
+
+  return mm
     ? "Burma AI Studio က သင့်လုပ်ငန်းအတွက် AI presenter, cinematic ad, product ad, Reels/TikTok short video တွေကိုဖန်တီးပေးနိုင်ပါတယ်။\n\nသင့် product/service, တင်မယ့် platform, ကြာချိန်နဲ့လိုချင်တဲ့ style ကိုပြောပြပါ။ အကောင်းဆုံး video direction ကိုတိုတိုရှင်းရှင်းအကြံပေးပါမယ်။"
     : "Burma AI Studio can create AI presenter videos, cinematic ads, product ads and Reels/TikTok short videos for your business.\n\nTell me your product/service, platform, duration and preferred style. I’ll suggest the best video direction clearly and briefly.";
 }
