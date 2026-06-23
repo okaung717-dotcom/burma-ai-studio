@@ -11,13 +11,13 @@ function formatDate(value?: string) {
 }
 
 export default function AdminChatPage() {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState("session");
   const [activeCode, setActiveCode] = useState("");
   const [threads, setThreads] = useState<Thread[]>([]);
   const [selected, setSelected] = useState("");
   const [reply, setReply] = useState("");
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState("Enter ADMIN_CONTROL code and load chatbot inbox.");
+  const [status, setStatus] = useState("Press Load Chats to open the real chatbot inbox.");
   const [loading, setLoading] = useState(false);
 
   const filteredThreads = useMemo(() => {
@@ -103,7 +103,7 @@ export default function AdminChatPage() {
 
         <section className="rounded-[2rem] border border-[#be9537]/25 bg-white p-5 shadow-xl dark:bg-[#1a0b0e]">
           <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
-            <input value={code} onChange={(event) => setCode(event.target.value)} type="password" placeholder="Enter ADMIN_CONTROL code" className="rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+            <input value={code} onChange={(event) => setCode(event.target.value)} type="password" placeholder="Session" className="rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
             <button disabled={loading || !code} onClick={() => void loadChats(code)} className="rounded-xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Load Chats</button>
             <button disabled={loading || !activeCode} onClick={() => void loadChats()} className="rounded-xl border border-[#be9537]/30 px-5 py-3 font-extrabold text-[#911923] disabled:opacity-50 dark:text-[#e3bc61]">Refresh</button>
           </div>
