@@ -17,6 +17,28 @@ function related(text: string) {
   return has(q, ["ai", "video", "ad", "ads", "commercial", "brand", "service", "price", "cost", "portfolio", "contact", "script", "idea", "concept", "tiktok", "reels", "shorts", "product", "hotel", "restaurant", "bar", "cafe", "music", "business", "cinematic", "presenter", "delivery", "revision", "burma", "studio", "website", "ဗီဒီယို", "ကြော်ငြာ", "ဈေး", "စျေး", "နမူနာ", "ဆက်သွယ်", "ဇာတ်ညွှန်း", "ဟိုတယ်", "စားသောက်", "ဆိုင်", "ဘား", "ကဖေး", "သီချင်း", "လုပ်ငန်း", "လုပ်ချင်", "ဖန်တီး", "ပရောဂျက်"]);
 }
 
+function greeting(text: string) {
+  const q = text.toLowerCase().trim();
+  return q.length <= 80 && has(q, ["hi", "hello", "hey", "good morning", "good evening", "မင်္ဂလာပါ", "ဟယ်လို", "နေကောင်း", "ရှိလား", "hello", "hi"]);
+}
+
+function goodbye(text: string) {
+  const q = text.toLowerCase().trim();
+  return q.length <= 120 && has(q, ["bye", "goodbye", "thanks", "thank you", "ok thanks", "see you", "ကျေးဇူး", "တာ့တာ", "သွားတော့မယ်", "ပြီးပြီ", "အိုကေ", "ok"]);
+}
+
+function greetingReply(text: string) {
+  return mm(text)
+    ? "မင်္ဂလာပါ။ Burma AI Studio မှကြိုဆိုပါတယ်။ AI video ကြော်ငြာ, pricing, portfolio, script idea, delivery, revision, contact နဲ့ပတ်သတ်တာတွေကို customer service လိုကူညီပေးနိုင်ပါတယ်။\n\nဘာလုပ်ငန်းအတွက် video project လုပ်ချင်တာလဲ ပြောပြပါ။ အကောင်းဆုံး direction ကိုတိုတိုရှင်းရှင်းညှိပေးမယ်။"
+    : "Hello, welcome to Burma AI Studio. I can help with AI video ads, pricing, portfolio, script ideas, delivery, revisions, and contact like a customer service assistant.\n\nWhat kind of video project do you want to create? I’ll suggest the best direction clearly.";
+}
+
+function goodbyeReply(text: string) {
+  return mm(text)
+    ? `ကျေးဇူးတင်ပါတယ်။ AI video project လုပ်ချင်လာရင် Burma AI Studio ကို အချိန်မရွေးဆက်သွယ်နိုင်ပါတယ် — ${contact}။\n\nProject idea, reference video, duration နဲ့ platform ပို့ပေးရင် concept နဲ့ quote ကိုပြန်ညှိပေးပါမယ်။`
+    : `Thank you. Whenever you are ready for an AI video project, you can contact Burma AI Studio anytime — ${contact}.\n\nSend your project idea, reference video, duration, and platform, and we will suggest the concept and quote.`;
+}
+
 function offTopic(text: string) {
   return mm(text)
     ? "ကျေးဇူးပါ။ ဒီ AI assistant က Burma AI Studio ရဲ့ AI video service အတွက် customer service bot ပါ။\n\nAI video, pricing, portfolio, script idea, delivery, revisions, contact, ဒါမှမဟုတ် သင့် video project အကြောင်းမေးပေးပါ။"
@@ -26,6 +48,8 @@ function offTopic(text: string) {
 function answer(text: string) {
   const q = text.toLowerCase();
   const burmese = mm(text);
+  if (greeting(text)) return greetingReply(text);
+  if (goodbye(text)) return goodbyeReply(text);
   if (!related(text)) return offTopic(text);
 
   if (has(q, ["hotel", "room", "booking", "resort", "ဟိုတယ်", "အခန်း", "ဧည့်"])) {
