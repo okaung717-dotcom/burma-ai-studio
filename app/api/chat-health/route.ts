@@ -6,19 +6,32 @@ type GeminiHealth = {
   error?: { code?: number; message?: string; status?: string };
 };
 
+function getGeminiApiKey() {
+  return (
+    process.env.GEMINI_API_KEY ||
+    process.env.GOOGLE_GEMINI_API_KEY ||
+    process.env.GOOGLE_AI_API_KEY ||
+    process.env.GOOGLE_API_KEY ||
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
+    ""
+  ).trim();
+}
+
 export async function GET() {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = getGeminiApiKey();
 
   if (!apiKey) {
     return Response.json({
       ok: false,
       keyConfigured: false,
       model: null,
-      message: "GEMINI_API_KEY is not configured for this deployment environment.",
+      acceptedEnvNames: ["GEMINI_API_KEY", "GOOGLE_GEMINI_API_KEY", "GOOGLE_AI_API_KEY", "GOOGLE_API_KEY", "NEXT_PUBLIC_GEMINI_API_KEY"],
+      message: "No Gemini API key is configured for this deployment environment.",
     });
   }
 
   const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.5-flash-lite"];
+  const failures: Array<{ model: string; status?: number | string; message: string }> = [];
 
   for (const model of models) {
     try {
@@ -43,17 +56,13 @@ export async function GET() {
         });
       }
 
-      if (data?.error?.code === 400 || data?.error?.code === 403 || data?.error?.code === 429) {
-        return Response.json({
-          ok: false,
-          keyConfigured: true,
-          model,
-          status: data.error.status || response.status,
-          message: data.error.message || "Gemini request failed for this deployment.",
-        });
-      }
+      failures.push({
+        model,
+        status: data?.error?.status || response.status,
+        message: data?.error?.message || "Gemini request failed for this model.",
+      });
     } catch {
-      // Try the next model before reporting a failure.
+      failures.push({ model, message: "Network or runtime error while testing this model." });
     }
   }
 
@@ -61,6 +70,7 @@ export async function GET() {
     ok: false,
     keyConfigured: true,
     model: null,
-    message: "Gemini key exists, but all test model calls failed for this deployment.",
+    failures,
+    message: "A Gemini key exists, but every tested model failed for this deployment.",
   });
 }
