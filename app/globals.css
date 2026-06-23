@@ -119,6 +119,33 @@
 }
 
 @layer utilities {
+  /* Chatbot compact mode: hide suggestion chips and make mobile UI calmer */
+  body .fixed.bottom-5.right-5 > div.mb-4 > div:nth-child(2) {
+    display: none !important;
+  }
+
+  body .fixed.bottom-5.right-5 > div.mb-4 {
+    max-width: 390px !important;
+    max-height: calc(100vh - 6rem) !important;
+  }
+
+  body .fixed.bottom-5.right-5 > div.mb-4 [class*="max-w-[86%]"] {
+    max-width: 88% !important;
+  }
+
+  @media (max-width: 640px) {
+    body .fixed.bottom-5.right-5 {
+      right: 1rem !important;
+      bottom: 1rem !important;
+    }
+
+    body .fixed.bottom-5.right-5 > div.mb-4 {
+      width: calc(100vw - 2rem) !important;
+      height: min(560px, calc(100vh - 6rem)) !important;
+      border-radius: 1.4rem !important;
+    }
+  }
+
   /* Accent replacement: current cyan UI -> logo-matched burgundy/gold theme */
   [class*="text-[#00C2FF]"] {
     color: var(--brand-primary) !important;
