@@ -1,20 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 const links = [
-  ["Dashboard", "/admin6996/tools"],
-  ["Main Control", "/admin6996"],
-  ["Chat Inbox", "/admin6996/chat"],
-  ["Analytics", "/admin6996/analytics"],
-  ["Operations", "/admin6996/ops"],
-  ["Content CMS", "/admin6996/content"],
-  ["Backup", "/admin6996/backup"],
-  ["Portfolio", "/admin6996/portfolio"],
+  { label: "Dashboard", href: "/admin6996/tools", note: "real data overview" },
+  { label: "Main Control", href: "/admin6996", note: "command center" },
+  { label: "Chat Inbox", href: "/admin6996/chat", note: "visitor conversations" },
+  { label: "Analytics", href: "/admin6996/analytics", note: "traffic & portfolio views" },
+  { label: "Operations", href: "/admin6996/ops", note: "lead/chat status" },
+  { label: "Content CMS", href: "/admin6996/content", note: "website text" },
+  { label: "Backup", href: "/admin6996/backup", note: "export data" },
+  { label: "Portfolio", href: "/admin6996/portfolio", note: "video samples" },
 ];
 
-export default function Admin6996Layout({ children }: { children: React.ReactNode }) {
+export default function Admin6996Layout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [allowed, setAllowed] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -76,19 +76,22 @@ export default function Admin6996Layout({ children }: { children: React.ReactNod
             <a href="/admin6996/tools" className="block rounded-[1.5rem] bg-[#be9537] px-5 py-4 text-xl font-black text-[#100708] shadow-lg">Burma AI Studio</a>
             <p className="mt-3 px-2 text-xs font-black uppercase tracking-[0.25em] text-[#e3bc61]">Admin Control</p>
             <div className="mt-6 space-y-2">
-              {links.map(([label, href]) => {
+              {links.map(({ label, href, note }) => {
                 const active = pathname === href || (href !== "/admin6996" && pathname?.startsWith(href));
                 return (
-                  <a key={href} href={href} className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-sm font-extrabold shadow-sm transition ${active ? "border-[#be9537] bg-[#be9537] text-[#100708]" : "border-[#be9537]/25 bg-[#fff9f0] text-[#911923] hover:bg-[#f1dfbd] hover:text-[#100708]"}`}>
-                    <span>{label}</span>
-                    <span className="text-xs">›</span>
+                  <a key={href} href={href} className={`flex items-center justify-between gap-3 rounded-2xl border px-4 py-3 shadow-sm transition ${active ? "border-[#be9537] bg-[#be9537] text-[#100708]" : "border-[#be9537]/25 bg-[#fff9f0] text-[#911923] hover:bg-[#f1dfbd] hover:text-[#100708]"}`}>
+                    <span className="min-w-0">
+                      <span className="block text-sm font-black">{label}</span>
+                      <span className={`mt-0.5 block truncate text-[10px] font-bold uppercase tracking-[0.1em] ${active ? "text-[#100708]/65" : "text-[#911923]/55"}`}>{note}</span>
+                    </span>
+                    <span className="text-lg leading-none">›</span>
                   </a>
                 );
               })}
             </div>
             <div className="mt-6 rounded-2xl border border-[#be9537]/25 bg-[#1a0b0e] p-4 text-sm text-[#d8c4a3]">
-              <p className="font-black text-[#e3bc61]">Production backend</p>
-              <p className="mt-1 text-xs leading-relaxed text-[#d8c4a3]">Leads, chats, analytics, CMS, backups and portfolio tools.</p>
+              <p className="font-black text-[#e3bc61]">Admin workflow</p>
+              <p className="mt-1 text-xs leading-relaxed text-[#d8c4a3]">Review leads, reply to chats, check traffic, update content, manage portfolio and export backups.</p>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <a href="/admin6996/logout" className="rounded-2xl border border-red-300/40 bg-red-50 px-3 py-3 text-center text-xs font-black text-red-700">Logout</a>
@@ -99,15 +102,15 @@ export default function Admin6996Layout({ children }: { children: React.ReactNod
             <header className="border-b border-[#be9537]/20 px-5 py-5 md:px-8">
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.25em] text-[#911923] dark:text-[#e3bc61]">Dashboard Workspace</p>
+                  <p className="text-xs font-black uppercase tracking-[0.25em] text-[#911923] dark:text-[#e3bc61]">Real Website Backend</p>
                   <h1 className="mt-1 text-2xl font-black md:text-3xl">Burma AI Studio Control</h1>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <button onClick={toggleTheme} className="rounded-full border border-[#be9537]/30 bg-white px-4 py-2 text-xs font-black text-[#911923] shadow-sm dark:bg-[#100708] dark:text-[#e3bc61]">
                     {darkMode ? "Light Mode" : "Dark Mode"}
                   </button>
-                  <a href="/admin6996/tools" className="rounded-full bg-[#be9537] px-4 py-2 text-xs font-black text-[#100708]">Tools</a>
-                  <a href="/admin6996/portfolio" className="rounded-full border border-[#be9537]/30 bg-white px-4 py-2 text-xs font-black text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">Portfolio</a>
+                  <a href="/admin6996/chat" className="rounded-full bg-[#be9537] px-4 py-2 text-xs font-black text-[#100708]">Open Chat</a>
+                  <a href="/portfolio?adminPreview=1" className="rounded-full border border-[#be9537]/30 bg-white px-4 py-2 text-xs font-black text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">Preview Portfolio</a>
                 </div>
               </div>
             </header>
