@@ -15,6 +15,13 @@ type ChatLog = { id?: string; visitorId?: string; role?: "user" | "assistant" | 
 type AnalyticsEvent = { visitorId?: string; eventType?: string; page?: string; path?: string; source?: string; device?: string; country?: string; createdAt?: string; day?: string; videoTitle?: string; videoId?: string };
 type PortfolioItem = { id?: string; src?: string; titleEN?: string; titleMM?: string; featured?: boolean };
 
+const defaultPortfolio: PortfolioItem[] = [
+  { id: "trailer", titleEN: "Cinematic Trailers AI Video", titleMM: "Trailer AI Video", featured: true },
+  { id: "architecture", titleEN: "Architecture AI Videos", titleMM: "Architecture AI Videos", featured: true },
+  { id: "commercial", titleEN: "Cinematic Commercial", titleMM: "Cinematic Commercial", featured: true },
+  { id: "presenter", titleEN: "Virtual Presenter Campaign", titleMM: "AI Presenter Videos", featured: true },
+];
+
 function parseJson<T>(value: string | null): T | null {
   if (!value) return null;
   try { return JSON.parse(value) as T; } catch { return null; }
@@ -89,7 +96,8 @@ export async function GET() {
     const events = parseMany<AnalyticsEvent>(data.analyticsRaw);
     const pageEvents = events.filter((event) => event.eventType !== "portfolio-video-view");
     const visitors = new Set(pageEvents.map((event) => event.visitorId).filter(Boolean));
-    const portfolioItems = parseJson<PortfolioItem[]>(data.portfolioStored) || [];
+    const storedPortfolioItems = parseJson<PortfolioItem[]>(data.portfolioStored) || [];
+    const visiblePortfolioItems = storedPortfolioItems.length ? storedPortfolioItems : defaultPortfolio;
     const content = parseJson<Record<string, unknown>>(data.contentStored);
 
     const leadStatusCounts = countBy(leads, (lead) => String(lead.status || "New"));
@@ -99,7 +107,7 @@ export async function GET() {
     const recommendations = [
       ...(unreadThreads ? [`${unreadThreads} chat thread needs a reply.`] : ["No unread chat thread right now."]),
       ...((leadStatusCounts.New || 0) ? [`${leadStatusCounts.New} new lead should be reviewed.`] : ["No new lead waiting." ]),
-      ...(portfolioItems.length ? [`${portfolioItems.length} portfolio item(s) are stored.`] : ["Portfolio CMS has no stored custom item yet."]),
+      ...(storedPortfolioItems.length ? [`${storedPortfolioItems.length} custom portfolio item(s) are stored.`] : ["Portfolio is using the public default examples." ]),
       ...(content ? ["Website CMS content is configured."] : ["CMS is still using default website content." ]),
     ];
 
@@ -114,7 +122,7 @@ export async function GET() {
         unreadThreads,
         totalViews: pageEvents.length,
         uniqueVisitors: visitors.size,
-        portfolioItems: portfolioItems.length,
+        portfolioItems: visiblePortfolioItems.length,
         contentConfigured: Boolean(content),
       },
       leads: leads.slice(0, 8),
@@ -127,7 +135,7 @@ export async function GET() {
         topDevices: top(countBy(pageEvents, (event) => event.device || "Unknown"), 5),
         recentEvents: events.slice(0, 8),
       },
-      portfolioItems: portfolioItems.slice(0, 8),
+      portfolioItems: visiblePortfolioItems.slice(0, 8),
       content,
       recommendations,
     });
