@@ -1,0 +1,27 @@
+@layer utilities {
+  [class~="bg-white/5"] { background-color: rgba(255, 255, 255, 0.05) !important; }
+  [class~="bg-white/7"] { background-color: rgba(255, 255, 255, 0.07) !important; }
+  [class~="bg-white/8"] { background-color: rgba(255, 255, 255, 0.08) !important; }
+  [class~="bg-white/10"] { background-color: rgba(255, 255, 255, 0.10) !important; }
+  [class~="bg-white/60"] { background-color: rgba(255, 255, 255, 0.60) !important; }
+  [class~="bg-white/70"] { background-color: rgba(255, 255, 255, 0.70) !important; }
+  [class~="bg-white/82"] { background-color: rgba(255, 255, 255, 0.82) !important; }
+  [class~="bg-white/92"] { background-color: rgba(255, 255, 255, 0.92) !important; }
+
+  [class~="text-white/70"] { color: rgba(255, 255, 255, 0.70) !important; }
+  [class~="text-white/75"] { color: rgba(255, 255, 255, 0.75) !important; }
+  [class~="text-white/80"] { color: rgba(255, 255, 255, 0.80) !important; }
+  [class~="text-white/88"] { color: rgba(255, 255, 255, 0.88) !important; }
+
+  .dark [class~="dark:bg-white/5"] { background-color: rgba(255, 255, 255, 0.05) !important; }
+  .dark [class~="dark:bg-white/8"] { background-color: rgba(255, 255, 255, 0.08) !important; }
+  .dark [class~="dark:bg-white/10"] { background-color: rgba(255, 255, 255, 0.10) !important; }
+  .dark [class~="dark:text-white/70"] { color: rgba(255, 255, 255, 0.70) !important; }
+  .dark [class~="dark:text-white/80"] { color: rgba(255, 255, 255, 0.80) !important; }
+  .dark [class~="dark:text-white/88"] { color: rgba(255, 255, 255, 0.88) !important; }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder { color: rgba(216, 196, 163, 0.72) !important; }
+  input::placeholder,
+  textarea::placeholder { color: rgba(121, 105, 93, 0.72) !important; }
+}
