@@ -122,9 +122,9 @@ export default function Home() {
             <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#911923] dark:text-[#e3bc61]">{t.flowTitle}</p>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               {flow.map((text, index) => (
-                <div key={text} className="rounded-[1.6rem] border border-[#ead9bd] bg-[#fff9f0] p-5 dark:border-white/10 dark:bg-white/5">
+                <div key={text} className="rounded-[1.6rem] border border-[#ead9bd] bg-[#fff9f0] p-5 dark:border-[#4b2a1d] dark:bg-[#241113]">
                   <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#be9537] text-sm font-black text-[#100708]">{index + 1}</span>
-                  <p className="mt-4 text-sm font-bold leading-relaxed text-[#1a0b0e] dark:text-white/88">{text}</p>
+                  <p className="mt-4 text-sm font-bold leading-relaxed text-[#1a0b0e] dark:text-[#fff7eb]">{text}</p>
                 </div>
               ))}
             </div>
