@@ -15,6 +15,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const iconUrl = "/burma-ai-icon.svg?v=5";
+
 export const metadata: Metadata = {
   title: "Burma AI Studio",
   description: "AI video creation service for brands and businesses.",
@@ -27,15 +29,9 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
   },
   icons: {
-    icon: [
-      { url: "/burma-ai-icon.svg?v=3", type: "image/svg+xml" },
-    ],
-    shortcut: [
-      { url: "/burma-ai-icon.svg?v=3", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/burma-ai-icon.svg?v=3", type: "image/svg+xml" },
-    ],
+    icon: [{ url: iconUrl, type: "image/svg+xml" }],
+    shortcut: [{ url: iconUrl, type: "image/svg+xml" }],
+    apple: [{ url: iconUrl, type: "image/svg+xml" }],
   },
   openGraph: {
     title: "Burma AI Studio",
@@ -53,9 +49,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/burma-ai-icon.svg?v=3" type="image/svg+xml" />
-        <link rel="shortcut icon" href="/burma-ai-icon.svg?v=3" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/burma-ai-icon.svg?v=3" />
+        <link rel="icon" href={iconUrl} type="image/svg+xml" />
+        <link rel="shortcut icon" href={iconUrl} type="image/svg+xml" />
+        <link rel="apple-touch-icon" href={iconUrl} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
