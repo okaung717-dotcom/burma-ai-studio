@@ -1,98 +1,87 @@
 "use client";
-import { Video, Clapperboard, Mic, Building, ArrowRight } from "lucide-react";
+import { Video, Clapperboard, Mic, Building, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 
 const translations = {
   EN: {
-    title1: "Next-Gen ",
-    titleHighlight: "AI Video",
-    title2: " Solutions",
-    subtitle: "Elevate your brand with cutting-edge AI technology. From commercial campaigns to cinematic character performances, we deliver studio-quality results at unprecedented speed.",
+    title1: "AI Video",
+    title2: "Service Catalog",
+    subtitle: "Choose a video direction like a real app menu. Each service is built for social media, local business ads and premium brand presentation.",
     s1Title: "Cinematic Commercials",
-    s1Desc: "High-end promotional videos with advanced visual storytelling. We act as your cinematic prompt directors to generate breathtaking visuals that command attention.",
-    s2Title: "Virtual Presenter Campaigns",
-    s2Desc: "Engage your local audience with hyper-realistic AI avatars. We create customized Burmese presenter campaigns delivering localized scripts with authentic character performance.",
-    s3Title: "Architectural Animations",
-    s3Desc: "Transform blueprints into stunning reality. Our AI-driven architectural process animations showcase real estate and construction projects in fluid, dynamic motion.",
-    s4Title: "Social Media Content",
-    s4Desc: "Fast-paced, highly engaging short-form content tailored for TikTok, Reels, and Shorts. Optimized to boost viewer retention and maximize organic reach.",
-    learnMore: "Learn more",
-    ctaTitle: "Ready to transform your content?",
-    ctaBtn: "Start Your Project Today"
+    s1Desc: "Premium brand ads with dramatic visuals, product highlights and cinematic story flow.",
+    s2Title: "AI Presenter Campaigns",
+    s2Desc: "Realistic Burmese/English presenters for explainers, offers, launches and customer trust videos.",
+    s3Title: "Architecture & Process Videos",
+    s3Desc: "Building, water system, factory, real estate and process animation videos with clear visual direction.",
+    s4Title: "TikTok / Reels Shorts",
+    s4Desc: "Fast hooks, short scripts, vertical video direction and mobile-first ads ready for posting.",
+    learnMore: "View examples",
+    ctaTitle: "Tell us your product and platform.",
+    ctaBtn: "Request a video plan"
   },
   MM: {
-    title1: "ခေတ်သစ် ",
-    titleHighlight: "AI ဗီဒီယို",
-    title2: " ဝန်ဆောင်မှုများ",
-    subtitle: "ခေတ်မီ AI နည်းပညာများဖြင့် သင့်လုပ်ငန်းကို မြှင့်တင်လိုက်ပါ။ ကြော်ငြာများမှစ၍ ရုပ်ရှင်ဆန်သော ဗီဒီယိုများအထိ အကောင်းဆုံးအရည်အသွေးကို အမြန်ဆုံး ဖန်တီးပေးပါသည်။",
-    s1Title: "ရုပ်ရှင်ဆန်သော ကြော်ငြာဗီဒီယိုများ",
-    s1Desc: "အဆင့်မြင့်ပုံဖော်မှုများဖြင့် ဖန်တီးထားသော ကြော်ငြာဗီဒီယိုများ။ ဆွဲဆောင်မှုအပြည့်ရှိသော ရုပ်ထွက်များကို ဖန်တီးပေးပါသည်။",
-    s2Title: "AI Presenter ဗီဒီယိုများ",
-    s2Desc: "အသက်ဝင်သော AI Avatar များဖြင့် သင့်ပရိသတ်ကို ဆွဲဆောင်ပါ။ မြန်မာလိုပြောသော AI Presenter ဗီဒီယိုများကို စိတ်ကြိုက်ဖန်တီးပေးပါသည်။",
-    s3Title: "ဗိသုကာနှင့် အဆောက်အဦး ဗီဒီယိုများ",
-    s3Desc: "ပုံကြမ်းများမှသည် အသက်ဝင်လှပသော ဗီဒီယိုများဆီသို့။ အိမ်ခြံမြေနှင့် ဆောက်လုပ်ရေးလုပ်ငန်းများအတွက် AI ဖြင့် အသေးစိတ် ဖန်တီးပေးပါသည်။",
-    s4Title: "Social Media ဗီဒီယိုများ",
-    s4Desc: "TikTok, Reels နှင့် Shorts များအတွက် မြန်ဆန်ပြီး ဆွဲဆောင်မှုရှိသော ဗီဒီယိုတိုများ။ ကြည့်ရှုသူများပြားစေရန် အထူးဖန်တီးပေးပါသည်။",
-    learnMore: "အသေးစိတ်လေ့လာရန်",
-    ctaTitle: "သင့်ရဲ့ ဗီဒီယိုတွေကို အဆင့်မြှင့်တင်ဖို့ အဆင်သင့်ပဲလား?",
-    ctaBtn: "ယခုပဲ စတင်လိုက်ပါ"
+    title1: "AI Video",
+    title2: "ဝန်ဆောင်မှု Menu",
+    subtitle: "App menu တစ်ခုလို လိုချင်တဲ့ video direction ကိုရွေးနိုင်အောင် ပြင်ထားပါတယ်။ Social media, local business ad နဲ့ premium brand presentation အတွက်အဓိကထားဖန်တီးပေးပါတယ်။",
+    s1Title: "Cinematic Commercials",
+    s1Desc: "Brand ad, product highlight, offer campaign တွေအတွက် ရုပ်ရှင်ဆန်ဆန် visual flow နဲ့ဖန်တီးပေးပါတယ်။",
+    s2Title: "AI Presenter Campaigns",
+    s2Desc: "မြန်မာ/English AI presenter နဲ့ explain, launch, offer, trust-building video တွေဖန်တီးပေးပါတယ်။",
+    s3Title: "Architecture & Process Videos",
+    s3Desc: "အဆောက်အဦး၊ water system၊ factory၊ real estate၊ process animation တွေအတွက်ရှင်းလင်းတဲ့ video direction ဖန်တီးပေးပါတယ်။",
+    s4Title: "TikTok / Reels Shorts",
+    s4Desc: "Hook ကောင်း၊ script တို၊ vertical video direction နဲ့ posting-ready short ads တွေဖန်တီးပေးပါတယ်။",
+    learnMore: "နမူနာကြည့်ရန်",
+    ctaTitle: "Product နဲ့ Platform ကိုပြောပေးပါ။",
+    ctaBtn: "Video plan တောင်းရန်"
   }
 } as const;
 
 export default function Services() {
   const { lang } = useLanguage();
-
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
+  const services = [
+    { Icon: Clapperboard, title: t.s1Title, desc: t.s1Desc, tag: "Brand" },
+    { Icon: Mic, title: t.s2Title, desc: t.s2Desc, tag: "Presenter" },
+    { Icon: Building, title: t.s3Title, desc: t.s3Desc, tag: "Process" },
+    { Icon: Video, title: t.s4Title, desc: t.s4Desc, tag: "Shorts" },
+  ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
-      
-      {/* Header Section */}
-      <header className="py-20 px-6 md:px-16 lg:px-24 bg-gray-50 dark:bg-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
-        {/* leading-loose ကို သုံးပေးထားပါသည် */}
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-normal leading-loose">
-          {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span> {t.title2}
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-          {t.subtitle}
-        </p>
+    <div className="min-h-screen bg-[#fff9f0] text-[#1a0b0e] transition-colors duration-300 dark:bg-[#100708] dark:text-[#fff7eb]">
+      <header className="mx-auto max-w-7xl px-5 py-10 md:px-12 lg:px-24">
+        <div className="rounded-[2.2rem] border border-[#ead9bd] bg-[#fffdf8] p-6 shadow-[0_18px_55px_rgba(26,11,14,0.08)] md:p-10 dark:border-[#4b2a1d] dark:bg-[#1a0b0e]">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#fff3e3] px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#911923] dark:bg-white/5 dark:text-[#e3bc61]"><Sparkles className="h-4 w-4" /> Service Menu</div>
+          <h1 className="mt-5 text-4xl font-black leading-tight md:text-6xl">{t.title1} <span className="text-[#911923] dark:text-[#e3bc61]">{t.title2}</span></h1>
+          <p className="mt-4 max-w-3xl text-base font-medium leading-relaxed text-[#79695d] md:text-lg dark:text-[#d8c4a3]">{t.subtitle}</p>
+        </div>
       </header>
 
-      {/* Services Grid */}
-      <main className="py-16 px-4 md:px-16 lg:px-24 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {[
-            { Icon: Clapperboard, title: t.s1Title, desc: t.s1Desc },
-            { Icon: Mic, title: t.s2Title, desc: t.s2Desc },
-            { Icon: Building, title: t.s3Title, desc: t.s3Desc },
-            { Icon: Video, title: t.s4Title, desc: t.s4Desc },
-          ].map((service, index) => (
-            <div key={index} className="bg-white dark:bg-gray-900 p-10 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:shadow-[#00C2FF]/10 transition-all group">
-              <div className="w-14 h-14 bg-gray-50 dark:bg-gray-950 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#00C2FF]/10 transition-colors">
-                <service.Icon className="text-[#00C2FF] w-7 h-7" />
+      <main className="mx-auto max-w-7xl px-5 pb-12 md:px-12 lg:px-24">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {services.map((service, index) => (
+            <div key={service.title} className="group overflow-hidden rounded-[2rem] border border-[#ead9bd] bg-[#fffdf8] p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(145,25,35,0.12)] dark:border-[#4b2a1d] dark:bg-[#1a0b0e]">
+              <div className="mb-6 flex items-center justify-between">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#911923] text-white shadow-lg shadow-[#911923]/20"><service.Icon className="h-7 w-7" /></div>
+                <span className="rounded-full bg-[#fff3e3] px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#911923] dark:bg-white/8 dark:text-[#e3bc61]">{service.tag}</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{service.title}</h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
-                {service.desc}
-              </p>
-              <a href="/portfolio" className="inline-flex items-center gap-2 text-[13px] font-bold text-gray-900 dark:text-white uppercase tracking-wider group-hover:text-[#00C2FF] transition-colors">
-                {t.learnMore} <ArrowRight className="w-4 h-4" />
-              </a>
+              <h3 className="text-2xl font-black leading-snug">{service.title}</h3>
+              <p className="mt-3 min-h-[84px] text-sm font-medium leading-relaxed text-[#79695d] dark:text-[#d8c4a3]">{service.desc}</p>
+              <div className="mt-5 flex items-center justify-between border-t border-[#ead9bd] pt-5 dark:border-white/10">
+                <div className="flex items-center gap-2 text-sm font-black text-[#be9537]"><CheckCircle2 className="h-4 w-4" /> Ready</div>
+                <a href="/portfolio" className="inline-flex items-center gap-2 rounded-full bg-[#1a0b0e] px-4 py-2 text-xs font-black text-white transition group-hover:bg-[#911923] dark:bg-[#e3bc61] dark:text-[#100708]">{t.learnMore}<ArrowRight className="h-4 w-4" /></a>
+              </div>
             </div>
           ))}
         </div>
       </main>
 
-      {/* Call to Action */}
-      <section className="py-20 px-6 text-center bg-gray-900 dark:bg-gray-900 text-white mt-8">
-        <h2 className="text-3xl font-bold mb-6">{t.ctaTitle}</h2>
-        <a 
-          href="/contact" 
-          className="inline-block bg-[#00C2FF] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#00a8e0] transition-all shadow-lg shadow-cyan-500/30"
-        >
-          {t.ctaBtn}
-        </a>
+      <section className="mx-auto max-w-7xl px-5 pb-16 md:px-12 lg:px-24">
+        <div className="rounded-[2rem] bg-[#1a0b0e] p-7 text-white md:flex md:items-center md:justify-between md:p-10">
+          <h2 className="text-3xl font-black leading-snug">{t.ctaTitle}</h2>
+          <a href="/contact" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#be9537] px-6 py-3 text-sm font-black text-[#100708] md:mt-0">{t.ctaBtn}<ArrowRight className="h-4 w-4" /></a>
+        </div>
       </section>
     </div>
   );
