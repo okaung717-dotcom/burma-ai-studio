@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const iconUrl = "/burma-ai-icon.svg?v=7";
+const iconUrl = "/burma-ai-icon.svg?v=8";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -10,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/?source=pwa",
     scope: "/",
     display: "standalone",
-    background_color: "#fff9f0",
+    background_color: "#fffdf8",
     theme_color: "#911923",
     orientation: "portrait-primary",
     categories: ["business", "productivity", "photo", "video"],
