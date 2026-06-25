@@ -6,21 +6,17 @@
 
 @layer base {
   :root {
-    /* Burma AI Studio logo-inspired palette */
     --background: #fff9f0;
     --foreground: #1f1714;
     --surface: #fffdf8;
     --surface-muted: #fff3e3;
     --border-soft: #ead9bd;
-
     --brand-primary: #911923;
     --brand-primary-hover: #7a141e;
     --brand-primary-rgb: 145 25 35;
-
     --brand-gold: #be9537;
     --brand-gold-hover: #d7ad4b;
     --brand-gold-rgb: 190 149 55;
-
     --brand-ink: #1a0b0e;
     --brand-muted: #79695d;
   }
@@ -61,90 +57,21 @@
   }
 }
 
-@layer components {
-  /* Always-visible navigation for long pages on desktop and mobile */
-  body > nav,
-  body nav:first-of-type {
-    position: sticky !important;
-    top: env(safe-area-inset-top, 0px);
-    z-index: 9999 !important;
-    background-color: rgba(255, 253, 248, 0.9) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(1.2);
-    backdrop-filter: blur(18px) saturate(1.2);
-    box-shadow: 0 14px 34px rgba(26, 11, 14, 0.07);
-  }
-
-  body > nav::after,
-  body nav:first-of-type::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(var(--brand-gold-rgb), 0.45), transparent);
-    pointer-events: none;
-  }
-
-  .dark body > nav,
-  .dark body nav:first-of-type {
-    background-color: rgba(16, 7, 8, 0.88) !important;
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
-  }
-
-  @media (max-width: 767px) {
-    html {
-      scroll-padding-top: 92px;
-    }
-
-    body > nav,
-    body nav:first-of-type {
-      padding-top: 0.8rem !important;
-      padding-bottom: 0.8rem !important;
-    }
-
-    body > nav a[href="/"] svg,
-    body nav:first-of-type a[href="/"] svg {
-      max-height: 52px;
-    }
-
-    /* Native app feeling: mobile uses bottom navigation, so remove hamburger drawer. */
-    body > nav button[class*="md:hidden"],
-    body nav:first-of-type button[class*="md:hidden"] {
-      display: none !important;
-    }
-
-    body > nav div[class*="absolute"][class*="top-full"],
-    body nav:first-of-type div[class*="absolute"][class*="top-full"] {
-      display: none !important;
-    }
-  }
-
-  @media (min-width: 768px) {
-    body > nav,
-    body nav:first-of-type {
-      padding-top: 1rem !important;
-      padding-bottom: 1rem !important;
-    }
-  }
-}
-
 @layer utilities {
-  /* Chatbot compact mode: hide suggestion chips and make mobile UI calmer */
-  body .fixed.bottom-5.right-5 > div.mb-4 > div:nth-child(2) {
+  /* Website stays original. App-only bottom navigation is shown only when installed as PWA. */
+  .bas-app-bottom-nav {
     display: none !important;
   }
 
-  body .fixed.bottom-5.right-5 > div.mb-4 {
-    max-width: 390px !important;
-    max-height: calc(100vh - 6rem) !important;
-  }
+  @media (display-mode: standalone) and (max-width: 767px) {
+    .bas-app-bottom-nav {
+      display: block !important;
+    }
 
-  body .fixed.bottom-5.right-5 > div.mb-4 [class*="max-w-[86%]"] {
-    max-width: 88% !important;
-  }
+    body {
+      padding-bottom: 5.75rem;
+    }
 
-  @media (max-width: 640px) {
     body .fixed.bottom-5.right-5 {
       left: 50% !important;
       right: auto !important;
@@ -182,13 +109,8 @@
       margin: 0 !important;
       border-radius: 1.6rem !important;
     }
-
-    body .fixed.inset-x-0.bottom-0 nav > button:last-child {
-      display: none !important;
-    }
   }
 
-  /* Accent replacement: current cyan UI -> logo-matched burgundy/gold theme */
   [class*="text-[#00C2FF]"] {
     color: var(--brand-primary) !important;
   }
@@ -254,7 +176,6 @@
     --tw-shadow: var(--tw-shadow-colored) !important;
   }
 
-  /* Warm premium surfaces to match the burgundy/gold logo */
   [class*="bg-[#f9fafb]"] {
     background-color: var(--surface-muted) !important;
   }
