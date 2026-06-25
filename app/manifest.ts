@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
 
+const iconUrl = "/burma-ai-icon.svg?v=6";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Burma AI Studio",
     short_name: "Burma AI",
     description: "AI video creation service for brands and businesses.",
-    start_url: "/",
+    start_url: "/?source=pwa",
     scope: "/",
     display: "standalone",
     background_color: "#fff9f0",
@@ -14,13 +16,13 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "productivity", "photo", "video"],
     icons: [
       {
-        src: "/burma-ai-icon.svg?v=5",
+        src: iconUrl,
         sizes: "any",
         type: "image/svg+xml",
         purpose: "any",
       },
       {
-        src: "/burma-ai-icon.svg?v=5",
+        src: iconUrl,
         sizes: "any",
         type: "image/svg+xml",
         purpose: "maskable",
