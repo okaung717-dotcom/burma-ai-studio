@@ -58,7 +58,6 @@
 }
 
 @layer utilities {
-  /* Website stays original. App-only bottom navigation is shown only when installed as PWA. */
   .bas-app-bottom-nav {
     display: none !important;
   }
@@ -206,10 +205,6 @@
 
   [class*="bg-gray-100"] {
     background-color: #f4e9d8 !important;
-  }
-
-  [class*="bg-white"] {
-    background-color: var(--surface) !important;
   }
 
   .dark [class*="dark:bg-gray-950"],
