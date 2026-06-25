@@ -10,7 +10,22 @@ const CHAT_STATE_KEY = "burma-ai-studio:chat-state";
 const EVENTS_KEY = "burma-ai-studio:analytics-events";
 const CONTENT_KEY = "burma-ai-studio:content";
 
-type Lead = Record<string, unknown> & { id?: string; status?: string; createdAt?: string; name?: string; email?: string; service?: string; message?: string };
+type Lead = Record<string, unknown> & {
+  id?: string;
+  status?: string;
+  createdAt?: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  service?: string;
+  message?: string;
+  projectDetails?: string;
+  source?: string;
+  userAgent?: string;
+};
 type ChatLog = { id?: string; visitorId?: string; role?: "user" | "assistant" | "admin"; content?: string; page?: string; createdAt?: string };
 type AnalyticsEvent = { visitorId?: string; eventType?: string; page?: string; path?: string; source?: string; device?: string; country?: string; createdAt?: string; day?: string; videoTitle?: string; videoId?: string };
 type PortfolioItem = { id?: string; src?: string; titleEN?: string; titleMM?: string; featured?: boolean };
@@ -31,6 +46,33 @@ function parseMany<T>(items: string[]) {
   return items.map((item) => parseJson<T>(item)).filter((item): item is T => Boolean(item));
 }
 
+function cleanText(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizeLead(lead: Lead): Lead {
+  const firstName = cleanText(lead.firstName);
+  const lastName = cleanText(lead.lastName);
+  const fullName = cleanText(lead.fullName) || cleanText(lead.name) || [firstName, lastName].filter(Boolean).join(" ");
+  const message = cleanText(lead.message) || cleanText(lead.projectDetails);
+  const service = cleanText(lead.service) || cleanText(lead.source) || "contact-page";
+
+  return {
+    ...lead,
+    firstName,
+    lastName,
+    fullName: fullName || cleanText(lead.email) || "Unknown lead",
+    name: fullName || cleanText(lead.email) || "Unknown lead",
+    email: cleanText(lead.email),
+    phone: cleanText(lead.phone),
+    projectDetails: message,
+    message,
+    service,
+    source: cleanText(lead.source) || service,
+    userAgent: cleanText(lead.userAgent),
+  };
+}
+
 function countBy<T>(items: T[], getter: (item: T) => string | undefined, fallback = "Unknown") {
   return items.reduce<Record<string, number>>((acc, item) => {
     const key = getter(item) || fallback;
@@ -47,7 +89,7 @@ function applyLeadStatuses(leads: Lead[], statuses: Record<string, string>) {
   return leads.map((lead) => {
     const id = typeof lead.id === "string" ? lead.id : "";
     const saved = id ? parseJson<Partial<Lead>>(statuses[id] || null) : null;
-    return { status: "New", ...lead, ...(saved || {}) };
+    return normalizeLead({ status: "New", ...lead, ...(saved || {}) });
   });
 }
 
