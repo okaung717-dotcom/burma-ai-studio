@@ -105,7 +105,18 @@
 
     body > nav a[href="/"] svg,
     body nav:first-of-type a[href="/"] svg {
-      max-height: 56px;
+      max-height: 52px;
+    }
+
+    /* Native app feeling: mobile uses bottom navigation, so remove hamburger drawer. */
+    body > nav button[class*="md:hidden"],
+    body nav:first-of-type button[class*="md:hidden"] {
+      display: none !important;
+    }
+
+    body > nav div[class*="absolute"][class*="top-full"],
+    body nav:first-of-type div[class*="absolute"][class*="top-full"] {
+      display: none !important;
     }
   }
 
@@ -135,14 +146,45 @@
 
   @media (max-width: 640px) {
     body .fixed.bottom-5.right-5 {
-      right: 1rem !important;
-      bottom: 1rem !important;
+      left: 50% !important;
+      right: auto !important;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 1.05rem) !important;
+      transform: translateX(-50%) !important;
+    }
+
+    body .fixed.bottom-5.right-5 > button {
+      width: 72px !important;
+      height: 72px !important;
+      padding: 0 !important;
+      justify-content: center !important;
+      border-radius: 9999px !important;
+      box-shadow: 0 20px 55px rgba(145, 25, 35, 0.38) !important;
+    }
+
+    body .fixed.bottom-5.right-5 > button > span:first-child {
+      width: 52px !important;
+      height: 52px !important;
+    }
+
+    body .fixed.bottom-5.right-5 > button > span:not(:first-child),
+    body .fixed.bottom-5.right-5 > button > svg {
+      display: none !important;
     }
 
     body .fixed.bottom-5.right-5 > div.mb-4 {
-      width: calc(100vw - 2rem) !important;
-      height: min(560px, calc(100vh - 6rem)) !important;
-      border-radius: 1.4rem !important;
+      position: fixed !important;
+      left: 1rem !important;
+      right: 1rem !important;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 5.7rem) !important;
+      width: auto !important;
+      height: min(620px, calc(100vh - 8.5rem)) !important;
+      max-width: none !important;
+      margin: 0 !important;
+      border-radius: 1.6rem !important;
+    }
+
+    body .fixed.inset-x-0.bottom-0 nav > button:last-child {
+      display: none !important;
     }
   }
 
