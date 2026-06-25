@@ -2,54 +2,50 @@
 
 import { useEffect, useState } from "react";
 
-type BeforeInstallPromptEvent = Event & {
+type InstallEvent = Event & {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+  userChoice: Promise<{ outcome: string; platform: string }>;
 };
 
 export default function InstallAppPrompt() {
-  const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
+  const [installEvent, setInstallEvent] = useState<InstallEvent | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
-  const [isIos, setIsIos] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const ios = /iphone|ipad|ipod/.test(userAgent);
-    const standalone = window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
-    setIsIos(ios);
-    setIsStandalone(standalone);
+    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true);
 
-    function onBeforeInstallPrompt(event: Event) {
+    function handleInstall(event: Event) {
       event.preventDefault();
-      setInstallEvent(event as BeforeInstallPromptEvent);
+      setInstallEvent(event as InstallEvent);
     }
 
-    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-    return () => window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+    window.addEventListener("beforeinstallprompt", handleInstall);
+    return () => window.removeEventListener("beforeinstallprompt", handleInstall);
   }, []);
 
   if (isStandalone) return null;
 
   async function install() {
-    if (installEvent) {
-      await installEvent.prompt();
-      await installEvent.userChoice.catch(() => null);
-      setInstallEvent(null);
-      setPanelOpen(false);
+    if (!installEvent) {
+      setPanelOpen(true);
       return;
     }
-    setPanelOpen(true);
+
+    await installEvent.prompt();
+    await installEvent.userChoice.catch(() => null);
+    setInstallEvent(null);
+    setPanelOpen(false);
   }
 
   return (
     <>
       <button
         onClick={install}
-        className="bas-install-button fixed right-[20rem] top-[3.45rem] z-[60] hidden h-10 items-center gap-2 rounded-full border border-[#be9537]/45 bg-[#100708] px-4 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
+        className="bas-install-button fixed right-[20rem] top-[3.25rem] z-[60] hidden h-12 items-center gap-2 rounded-full border border-[#be9537]/45 bg-[#100708] px-4 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
         aria-label="Install Burma AI Studio app"
       >
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-[#be9537] text-xs font-black text-[#100708]">⌄</span>
+        <span className="grid h-7 w-7 place-items-center rounded-full bg-[#be9537] text-xs font-black text-[#100708]">⌄</span>
         Install App
       </button>
 
@@ -65,21 +61,11 @@ export default function InstallAppPrompt() {
             </div>
 
             <p className="mt-4 text-sm leading-relaxed text-[#f3dfc1]">
-              {isIos
-                ? "iPhone/iPad မှာ Safari နဲ့ဖွင့်ပြီး Share button → Add to Home Screen ကိုနှိပ်ပါ။"
-                : installEvent
-                  ? "ဒီခလုတ်ကိုနှိပ်ပြီး Burma AI Studio ကို phone/desktop မှာ app လို install လုပ်နိုင်ပါတယ်။"
-                  : "Browser menu ထဲက Add to Home Screen / Install App ကိုနှိပ်ပြီး free install လုပ်နိုင်ပါတယ်။"}
+              Open your browser menu and choose Add to Home Screen or Install App.
             </p>
 
-            <div className="mt-5 grid gap-3 rounded-2xl border border-[#be9537]/20 bg-white/5 p-4 text-sm text-[#f3dfc1]">
-              <p><b className="text-[#e3bc61]">Android Chrome:</b> Menu ⋮ → Add to Home screen / Install app</p>
-              <p><b className="text-[#e3bc61]">iPhone Safari:</b> Share → Add to Home Screen</p>
-              <p><b className="text-[#e3bc61]">Desktop:</b> Address bar install icon → Install</p>
-            </div>
-
-            <button onClick={install} className="mt-5 w-full rounded-full bg-[#be9537] px-5 py-3 text-sm font-black text-[#100708]">
-              {installEvent ? "Install Now" : "Open Install Guide"}
+            <button onClick={() => setPanelOpen(false)} className="mt-5 w-full rounded-full bg-[#be9537] px-5 py-3 text-sm font-black text-[#100708]">
+              Got it
             </button>
           </section>
         </div>
