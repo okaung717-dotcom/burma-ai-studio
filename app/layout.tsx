@@ -17,7 +17,25 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Burma AI Studio",
-  description: "Next-Gen Video Production",
+  description: "AI video creation service for brands and businesses.",
+  applicationName: "Burma AI Studio",
+  manifest: "/manifest.webmanifest",
+  themeColor: "#911923",
+  appleWebApp: {
+    capable: true,
+    title: "Burma AI Studio",
+    statusBarStyle: "default",
+  },
+  icons: {
+    icon: [{ url: "/mobile-icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/mobile-icon.svg" }],
+  },
+  openGraph: {
+    title: "Burma AI Studio",
+    description: "High-quality AI promotional videos for brands and businesses.",
+    siteName: "Burma AI Studio",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
