@@ -69,7 +69,7 @@ export default function Home() {
               <Sparkles className="h-4 w-4" /> {t.badge}
             </div>
             <div>
-              <h1 className="text-[42px] font-black leading-[1.16] tracking-tight text-[#1a0b0e] sm:text-6xl lg:text-7xl dark:text-[#fff7eb]">
+              <h1 className={`text-[42px] font-black tracking-tight text-[#1a0b0e] sm:text-6xl lg:text-7xl dark:text-[#fff7eb] ${safeLang === "MM" ? "leading-[1.38] sm:leading-[1.34] lg:leading-[1.3]" : "leading-[1.16]"}`}>
                 <span className="inline-block whitespace-nowrap">{t.title1}</span><br />{t.title2}<br /><span className="text-[#911923] dark:text-[#e3bc61]">{t.title3}</span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#79695d] md:text-lg dark:text-[#d8c4a3]">{t.desc}</p>
