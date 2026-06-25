@@ -14,13 +14,13 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "productivity", "photo", "video"],
     icons: [
       {
-        src: "/burma-ai-icon.svg?v=3",
+        src: "/burma-ai-icon.svg?v=5",
         sizes: "any",
         type: "image/svg+xml",
         purpose: "any",
       },
       {
-        src: "/burma-ai-icon.svg?v=3",
+        src: "/burma-ai-icon.svg?v=5",
         sizes: "any",
         type: "image/svg+xml",
         purpose: "maskable",
