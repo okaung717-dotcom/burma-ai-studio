@@ -21,7 +21,7 @@ export default function AppBottomNav() {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[9998] px-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.65rem)] md:hidden">
+    <div className="bas-app-bottom-nav fixed inset-x-0 bottom-0 z-[9998] px-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.65rem)] md:hidden">
       <nav className="mx-auto flex max-w-[430px] items-center justify-between rounded-[2rem] border border-[#be9537]/30 bg-[#fffdf8]/92 px-2 py-2 shadow-[0_18px_55px_rgba(26,11,14,0.18)] backdrop-blur-2xl dark:border-[#e3bc61]/25 dark:bg-[#100708]/92">
         {items.map(({ href, label, Icon }) => {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
