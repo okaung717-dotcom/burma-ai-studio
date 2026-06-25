@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Burma AI Studio app icon">
+  <defs>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f2c983"/>
+      <stop offset="0.55" stop-color="#be9537"/>
+      <stop offset="1" stop-color="#7f5f22"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#a61d2b"/>
+      <stop offset="1" stop-color="#720710"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="#100708"/>
+  <circle cx="256" cy="256" r="188" fill="none" stroke="url(#gold)" stroke-width="28"/>
+  <path fill="url(#red)" d="M142 332V176h59c37 0 61 18 61 49 0 18-10 33-28 41 26 7 42 25 42 54 0 38-29 62-76 62h-58zm52-96h8c20 0 31-8 31-23 0-14-10-22-31-22h-8v45zm0 82h14c24 0 37-9 37-27 0-17-13-26-39-26h-12v53z"/>
+  <path fill="url(#gold)" d="M304 332l58-156h45l58 156h-51l-9-28h-44l-9 28h-48zm69-66h21l-10-32-11 32z"/>
+  <text x="256" y="414" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="900" fill="#f2c983" letter-spacing="4">BURMA AI</text>
+</svg>
