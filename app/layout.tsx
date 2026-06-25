@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const iconUrl = "/burma-ai-icon.svg?v=6";
+const iconUrl = "/burma-ai-icon.svg?v=8";
 
 export const metadata: Metadata = {
   title: "Burma AI Studio",
