@@ -27,8 +27,15 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
   },
   icons: {
-    icon: [{ url: "/mobile-icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/mobile-icon.svg" }],
+    icon: [
+      { url: "/burma-ai-icon.svg?v=3", type: "image/svg+xml" },
+    ],
+    shortcut: [
+      { url: "/burma-ai-icon.svg?v=3", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/burma-ai-icon.svg?v=3", type: "image/svg+xml" },
+    ],
   },
   openGraph: {
     title: "Burma AI Studio",
@@ -46,6 +53,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/burma-ai-icon.svg?v=3" type="image/svg+xml" />
+        <link rel="shortcut icon" href="/burma-ai-icon.svg?v=3" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/burma-ai-icon.svg?v=3" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
