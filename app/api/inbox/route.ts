@@ -21,6 +21,33 @@ async function withRedis<T>(callback: (client: ReturnType<typeof createClient>) 
   }
 }
 
+function clean(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizeLead(lead: Record<string, unknown>) {
+  const firstName = clean(lead.firstName);
+  const lastName = clean(lead.lastName);
+  const fullName = clean(lead.fullName) || clean(lead.name) || [firstName, lastName].filter(Boolean).join(" ");
+  const message = clean(lead.message) || clean(lead.projectDetails);
+  const service = clean(lead.service) || clean(lead.source) || "contact-page";
+
+  return {
+    ...lead,
+    firstName,
+    lastName,
+    fullName: fullName || clean(lead.email) || "Unknown lead",
+    name: fullName || clean(lead.email) || "Unknown lead",
+    email: clean(lead.email),
+    phone: clean(lead.phone),
+    projectDetails: message,
+    message,
+    service,
+    source: clean(lead.source) || service,
+    userAgent: clean(lead.userAgent),
+  };
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as { code?: string } | null;
@@ -38,7 +65,7 @@ export async function POST(request: Request) {
         const lead = JSON.parse(item) as Record<string, unknown>;
         const id = typeof lead.id === "string" ? lead.id : "";
         const saved = id && statuses[id] ? JSON.parse(statuses[id]) as Record<string, unknown> : null;
-        return { status: "New", ...lead, ...(saved || {}) };
+        return normalizeLead({ status: "New", ...lead, ...(saved || {}) });
       } catch {
         return null;
       }
