@@ -1,21 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Video } from "lucide-react";
+import { PlaySquare, Sparkles } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 import VideoGrid from "./VideoGrid";
 
 const translations = {
   EN: {
-    title1: "Our ",
-    titleHighlight: "Masterpieces",
-    subtitle: "Explore our gallery of high-fidelity AI generated videos, showcasing our expertise in cinematic storytelling and virtual presenter campaigns.",
+    title1: "Video",
+    titleHighlight: "Portfolio",
+    subtitle: "A real app-style gallery of Burma AI Studio work: cinematic ads, product videos and short-form social media samples.",
     footerText: "© 2026 Burma AI Studio. All rights reserved."
   },
   MM: {
-    title1: "ကျွန်ုပ်တို့၏ ",
-    titleHighlight: "အကောင်းဆုံးလက်ရာများ",
-    subtitle: "ရုပ်ရှင်ဆန်သော ဇာတ်လမ်းဖွဲ့စည်းမှုနှင့် AI Presenter ဖန်တီးမှုများတွင် ကျွန်ုပ်တို့၏ ကျွမ်းကျင်မှုကို ပြသထားသော အရည်အသွေးမြင့် AI ဗီဒီယိုပြခန်းကို လေ့လာကြည့်ရှုပါ။",
+    title1: "Video",
+    titleHighlight: "လက်ရာပြခန်း",
+    subtitle: "Burma AI Studio ရဲ့ cinematic ad, product video, short-form social media sample တွေကို app gallery တစ်ခုလို ကြည့်ရှုနိုင်အောင်ပြင်ထားပါတယ်။",
     footerText: "© 2026 Burma AI Studio. မူပိုင်ခွင့်များအားလုံး ရယူထားပြီးဖြစ်ပါသည်။"
   }
 } as const;
@@ -78,7 +78,7 @@ export default function Portfolio() {
             videoId,
             videoTitle,
           }),
-          keepalive: true,
+          keepalive: true
         }).catch(() => undefined);
       });
     }, { threshold: 0.55 });
@@ -88,7 +88,7 @@ export default function Portfolio() {
   }, [safeLang]);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-[#fff9f0] text-[#1a0b0e] transition-colors duration-300 dark:bg-[#100708] dark:text-[#fff7eb]">
       {isAdminPreview && (
         <div className="sticky top-0 z-50 border-b border-[#be9537]/25 bg-[#fff9f0]/95 px-5 py-3 shadow backdrop-blur dark:bg-[#100708]/95">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2">
@@ -98,21 +98,31 @@ export default function Portfolio() {
         </div>
       )}
 
-      <header className="py-20 px-6 md:px-16 lg:px-24 bg-gray-50 dark:bg-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
-          {t.title1} <span className="text-[#00C2FF]">{t.titleHighlight}</span>
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">{t.subtitle}</p>
+      <header className="mx-auto max-w-7xl px-5 py-10 md:px-12 lg:px-24">
+        <div className="overflow-hidden rounded-[2.2rem] border border-[#ead9bd] bg-[#1a0b0e] p-6 text-white shadow-[0_18px_55px_rgba(26,11,14,0.14)] md:p-10 dark:border-[#4b2a1d]">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61]"><Sparkles className="h-4 w-4" /> App Gallery</div>
+          <h1 className="mt-5 text-4xl font-black leading-tight md:text-6xl">{t.title1} <span className="text-[#e3bc61]">{t.titleHighlight}</span></h1>
+          <p className="mt-4 max-w-3xl text-base font-medium leading-relaxed text-white/70 md:text-lg">{t.subtitle}</p>
+        </div>
       </header>
 
-      <main className="py-16 px-4 md:px-16 lg:px-24 max-w-7xl mx-auto">
-        <VideoGrid />
+      <main className="mx-auto max-w-7xl px-5 pb-12 md:px-12 lg:px-24">
+        <div className="rounded-[2rem] border border-[#ead9bd] bg-[#fffdf8] p-4 shadow-sm dark:border-[#4b2a1d] dark:bg-[#1a0b0e] md:p-6">
+          <div className="mb-5 flex items-center gap-3 px-1">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#911923] text-white"><PlaySquare className="h-6 w-6" /></div>
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#911923] dark:text-[#e3bc61]">Featured work</p>
+              <p className="text-sm font-bold text-[#79695d] dark:text-[#d8c4a3]">Tap a video to preview the style.</p>
+            </div>
+          </div>
+          <VideoGrid />
+        </div>
       </main>
 
-      <footer className="bg-gray-100 dark:bg-gray-900 py-16 px-6 border-t border-gray-200 dark:border-gray-800">
+      <footer className="border-t border-[#ead9bd] bg-[#fff3e3] px-6 py-12 dark:border-[#4b2a1d] dark:bg-[#100708]">
         <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="flex items-center gap-2 font-bold text-xl text-gray-900 dark:text-white"><Video className="text-[#00C2FF] w-6 h-6" />Burma AI Studio</div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t.footerText}</p>
+          <div className="flex items-center gap-2 font-black text-xl text-[#1a0b0e] dark:text-white"><PlaySquare className="h-6 w-6 text-[#911923] dark:text-[#e3bc61]" />Burma AI Studio</div>
+          <p className="text-sm text-[#79695d] dark:text-[#d8c4a3]">{t.footerText}</p>
         </div>
       </footer>
     </div>
