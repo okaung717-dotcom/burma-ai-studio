@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const iconUrl = "/burma-ai-icon.svg?v=6";
+const iconUrl = "/burma-ai-icon.svg?v=7";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
