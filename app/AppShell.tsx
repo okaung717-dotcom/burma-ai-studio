@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
 import AnalyticsTracker from "./AnalyticsTracker";
 import InstallAppPrompt from "./InstallAppPrompt";
+import AppBottomNav from "./AppBottomNav";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,11 +15,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <>
       <AnalyticsTracker />
       {!isAdminArea && <Navbar />}
-      <main className="w-full flex-grow">
+      <main className={`w-full flex-grow ${!isAdminArea ? "pb-24 md:pb-0" : ""}`}>
         {children}
       </main>
       {!isAdminArea && <InstallAppPrompt />}
       {!isAdminArea && <AIAssistant />}
+      {!isAdminArea && <AppBottomNav />}
     </>
   );
 }
