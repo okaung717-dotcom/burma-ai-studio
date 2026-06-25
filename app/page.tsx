@@ -31,7 +31,7 @@ const translations = {
   },
   MM: {
     badge: "BURMA AI STUDIO APP",
-    title1: "သင့် Brand ကို",
+    title1: "သင့်Brandကို",
     title2: "ပိုထင်းထွက်စေမယ့်",
     title3: "AI Video",
     desc: "လုပ်ငန်းကြော်ငြာ၊ product video၊ AI presenter၊ Reels/TikTok short video နဲ့ cinematic brand campaign တွေကို premium quality နဲ့ ဖန်တီးပေးပါတယ်။",
@@ -70,7 +70,7 @@ export default function Home() {
             </div>
             <div>
               <h1 className="text-[42px] font-black leading-[1.16] tracking-tight text-[#1a0b0e] sm:text-6xl lg:text-7xl dark:text-[#fff7eb]">
-                {t.title1}<br />{t.title2}<br /><span className="text-[#911923] dark:text-[#e3bc61]">{t.title3}</span>
+                <span className="inline-block whitespace-nowrap">{t.title1}</span><br />{t.title2}<br /><span className="text-[#911923] dark:text-[#e3bc61]">{t.title3}</span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#79695d] md:text-lg dark:text-[#d8c4a3]">{t.desc}</p>
             </div>
