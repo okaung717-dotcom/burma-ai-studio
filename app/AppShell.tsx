@@ -15,7 +15,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <>
       <AnalyticsTracker />
       {!isAdminArea && <Navbar />}
-      <main className={`w-full flex-grow ${!isAdminArea ? "pb-24 md:pb-0" : ""}`}>
+      <main className="w-full flex-grow">
         {children}
       </main>
       {!isAdminArea && <InstallAppPrompt />}
