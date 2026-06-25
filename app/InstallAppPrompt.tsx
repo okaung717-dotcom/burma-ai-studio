@@ -46,7 +46,7 @@ export default function InstallAppPrompt() {
     <>
       <button
         onClick={install}
-        className="bas-install-button fixed right-[20rem] top-[4.8rem] z-[60] hidden h-10 -translate-y-1/2 items-center gap-2 rounded-full border border-[#be9537]/45 bg-[#100708] px-4 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
+        className="bas-install-button fixed right-[20rem] top-[3.45rem] z-[60] hidden h-10 items-center gap-2 rounded-full border border-[#be9537]/45 bg-[#100708] px-4 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
         aria-label="Install Burma AI Studio app"
       >
         <span className="grid h-6 w-6 place-items-center rounded-full bg-[#be9537] text-xs font-black text-[#100708]">⌄</span>
