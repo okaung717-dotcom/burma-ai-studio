@@ -1,0 +1,18 @@
+{
+  "appId": "com.burmaaistudio.app",
+  "appName": "Burma AI Studio",
+  "webDir": "out",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://burmaaistudio.com",
+    "cleartext": false
+  },
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "scrollEnabled": true
+  }
+}
