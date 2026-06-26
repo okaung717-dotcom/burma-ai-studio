@@ -171,7 +171,7 @@ export default function AIAssistant() {
           </div>
         </div>
       )}
-      <button id="burma-ai-open-button" onClick={() => setIsOpen((current) => !current)} className="group flex items-center gap-3 rounded-full bg-[#911923] px-5 py-4 font-extrabold text-white shadow-[0_18px_45px_rgba(145,25,35,0.35)] transition-transform hover:scale-105" aria-label="Open Burma AI assistant"><span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] ring-2 ring-[#be9537]/35"><MessageCircle className="h-5 w-5" /><span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[#911923] bg-[#be9537]" /></span><span className="hidden sm:inline">Ask AI</span><Sparkles className="hidden h-4 w-4 text-[#f1d180] sm:block" /></button>
+      <button id="burma-ai-open-button" onClick={() => setIsOpen(true)} className="group flex items-center gap-3 rounded-full bg-[#911923] px-5 py-4 font-extrabold text-white shadow-[0_18px_45px_rgba(145,25,35,0.35)] transition-transform hover:scale-105" aria-label="Open Burma AI assistant"><span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] ring-2 ring-[#be9537]/35"><MessageCircle className="h-5 w-5" /><span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[#911923] bg-[#be9537]" /></span><span className="hidden sm:inline">Ask AI</span><Sparkles className="hidden h-4 w-4 text-[#f1d180] sm:block" /></button>
     </div>
   );
 }
