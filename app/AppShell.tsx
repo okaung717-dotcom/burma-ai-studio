@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import "./mobile-website-fixes.css";
 import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
 import AnalyticsTracker from "./AnalyticsTracker";
