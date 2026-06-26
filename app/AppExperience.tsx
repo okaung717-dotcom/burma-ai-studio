@@ -26,12 +26,7 @@ const copy = {
     ready: "Ready in 48h",
     premium: "Premium style",
     noShoot: "No filming cost",
-    serviceItems: [
-      ["AI Presenter Ad", "Presenter-style video for product or brand explanation."],
-      ["Product Video", "Clean cinematic product highlight for online sales."],
-      ["TikTok/Reels Short", "Short-form hook, script and visual direction."],
-      ["Cinematic Brand Ad", "Premium commercial storytelling for social media."],
-    ],
+    serviceItems: [["AI Presenter Ad", "Presenter-style video for product or brand explanation."], ["Product Video", "Clean cinematic product highlight for online sales."], ["TikTok/Reels Short", "Short-form hook, script and visual direction."], ["Cinematic Brand Ad", "Premium commercial storytelling for social media."]],
     flowItems: ["Share product info", "Get script and visual plan", "Review and receive final video"],
     contactActions: ["Telegram", "Viber", "Email"],
   },
@@ -54,12 +49,7 @@ const copy = {
     ready: "48h အတွင်း",
     premium: "Premium style",
     noShoot: "ရိုက်ကူးစရိတ်မလို",
-    serviceItems: [
-      ["AI Presenter Ad", "Product/brand ကို presenter style နဲ့ရှင်းပြပေးမယ်။"],
-      ["Product Video", "Online sales အတွက် cinematic product highlight ဖန်တီးပေးမယ်။"],
-      ["TikTok/Reels Short", "Hook, script, visual direction ပါ short video ဖန်တီးပေးမယ်။"],
-      ["Cinematic Brand Ad", "Social media အတွက် premium storytelling ဖန်တီးပေးမယ်။"],
-    ],
+    serviceItems: [["AI Presenter Ad", "Product/brand ကို presenter style နဲ့ရှင်းပြပေးမယ်။"], ["Product Video", "Online sales အတွက် cinematic product highlight ဖန်တီးပေးမယ်။"], ["TikTok/Reels Short", "Hook, script, visual direction ပါ short video ဖန်တီးပေးမယ်။"], ["Cinematic Brand Ad", "Social media အတွက် premium storytelling ဖန်တီးပေးမယ်။"]],
     flowItems: ["Product info ပို့ပါ", "Script / visual plan ပြင်ဆင်မယ်", "Review ပြီး final video ရယူပါ"],
     contactActions: ["Telegram", "Viber", "Email"],
   },
@@ -94,12 +84,19 @@ function useAppMode() {
 
 function AppLogo() {
   return (
-    <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-[#fffdf8] shadow-inner ring-1 ring-[#be9537]/45">
-      <svg viewBox="0 0 128 128" className="h-10 w-10" aria-hidden="true">
-        <rect width="128" height="128" rx="28" fill="#fffdf8" />
-        <path fill="#911923" d="M34.8 32.6c6.6 0 13.1-.2 19.7.1 8.5.4 14.5 5 16.1 12.4 1.3 6.4-1.2 11.5-6.8 15.1 8.1 3.2 12.6 9.1 12 18.2-.8 11.7-9.7 18.5-23.8 18.6H34.8V32.6Zm15.8 26.2c6.2 0 9.7-2.6 9.7-7.4s-3.4-7.3-9.8-7.3h-3.6v14.7h3.7Zm1.7 26.5c7.5 0 11.5-2.8 11.5-8.2 0-5.3-3.9-8.1-11.7-8.1h-5.2v16.3h5.4Z" />
-        <path fill="#911923" d="M82.8 32.2h15.1l24.1 64.8h-17.2l-4.1-12.4H80.4L76.2 97H59.7l23.1-64.8Zm13.6 39.6-5.5-17.1-5.9 17.1h11.4Z" />
-        <path fill="#be9537" d="M50.8 94.7c18.9-18.8 42.4-28.9 72.5-30.4-17.9 7.5-33.6 17.8-46.9 30.9-8.6 8.4-18.3 12.1-29.9 11.3-7.2-.5-14.2-2-20.9-4.4 8.9-1.1 17.3-3.6 25.2-7.4Z" />
+    <div className="flex h-14 w-[184px] shrink-0 items-center justify-start overflow-visible">
+      <svg viewBox="0 0 560 180" className="h-full w-full drop-shadow-sm" aria-label="Burma AI Studio logo">
+        <defs>
+          <linearGradient id="appWordmarkGold" x1="265" y1="10" x2="305" y2="85" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#f1d180" />
+            <stop offset="1" stopColor="#be9537" />
+          </linearGradient>
+        </defs>
+        <path d="M45 100c-18-2-27-15-28-29 12 12 26 13 39 4-17-7-21-24-11-38 5 15 16 22 33 20-6-13-2-28 13-38-2 23 12 32 26 42 16 11 24 25 20 43-5 23-27 34-52 31-17-2-31-9-40-35Z" fill="#911923" />
+        <path d="M120 133c23-35 51-56 87-65-21 17-38 36-51 59-7 12-19 16-36 6Z" fill="#be9537" />
+        <text x="92" y="116" fontFamily="Georgia, Times New Roman, serif" fontSize="76" fontWeight="700" fill="#911923">BurmaAiStudio</text>
+        <path d="M293 13l15 38 38 18-39 10-15 41-15-41-38-10 37-18 17-38Z" fill="url(#appWordmarkGold)" />
+        <path d="M293 29l8 22 23 11-23 6-8 23-8-23-23-6 22-11 9-22Z" fill="#911923" opacity="0.88" />
       </svg>
     </div>
   );
@@ -108,14 +105,11 @@ function AppLogo() {
 function Header({ title }: { title: string }) {
   return (
     <header className="flex shrink-0 items-center justify-between border-b border-[#ead9bd]/70 bg-[#fff9f0]/94 px-4 pb-3 pt-[calc(env(safe-area-inset-top,0px)+0.7rem)] backdrop-blur-2xl dark:border-[#4b2a1d] dark:bg-[#100708]/94">
-      <div className="flex min-w-0 items-center gap-3">
+      <div className="min-w-0">
         <AppLogo />
-        <div className="min-w-0">
-          <p className="truncate text-[11px] font-black uppercase tracking-[0.22em] text-[#be9537]">Burma AI Studio</p>
-          <h1 className="truncate text-xl font-black text-[#1a0b0e] dark:text-[#fff7eb]">{title}</h1>
-        </div>
+        <h1 className="-mt-1 truncate text-2xl font-black leading-none text-[#1a0b0e] dark:text-[#fff7eb]">{title}</h1>
       </div>
-      <button className="grid h-11 w-11 place-items-center rounded-2xl border border-[#ead9bd] bg-white text-[#911923] shadow-sm dark:border-[#4b2a1d] dark:bg-[#1a0b0e] dark:text-[#e3bc61]" aria-label="Notifications">
+      <button className="grid h-12 w-12 place-items-center rounded-2xl border border-[#ead9bd] bg-white text-[#911923] shadow-sm dark:border-[#4b2a1d] dark:bg-[#1a0b0e] dark:text-[#e3bc61]" aria-label="Notifications">
         <Bell className="h-5 w-5" />
       </button>
     </header>
@@ -148,7 +142,7 @@ export default function AppExperience() {
 
   if (!appMode) return null;
 
-  const openAssistant = () => document.getElementById("burma-ai-open-button")?.click();
+  const openAssistant = () => window.dispatchEvent(new CustomEvent("bas-open-assistant"));
 
   return (
     <div className="fixed inset-0 z-[9000] flex flex-col overflow-hidden bg-[#fff9f0] text-[#1a0b0e] dark:bg-[#100708] dark:text-[#fff7eb]">
