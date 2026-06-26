@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, BadgeCheck, Bell, Clapperboard, Clock3, Film, MessageCircle, PlayCircle, Send, Sparkles, Star } from "lucide-react";
+import { ArrowRight, BadgeCheck, Bell, Clapperboard, Clock3, Film, Mail, MessageCircle, PlayCircle, Send, Sparkles, Star } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 import Navbar from "./Navbar";
 
@@ -17,11 +17,23 @@ type PortfolioItem = {
   featured?: boolean;
 };
 
+type AppContactAction = {
+  label: "Telegram" | "Facebook" | "Email";
+  href: string;
+  type: "telegram" | "facebook" | "email";
+};
+
 const defaultAppPortfolio: PortfolioItem[] = [
   { id: "trailer", src: "DVM3o2Wqcys", titleEN: "Cinematic Trailers AI Video", descEN: "TikTok, YouTube, Facebook AI videos", titleMM: "Trailer AI Video", descMM: "TikTok, YouTube, Facebook AI videos", featured: true },
   { id: "architecture", src: "IrukbYGHhQs", titleEN: "Architecture AI Videos", descEN: "Advanced AI video production", titleMM: "Architecture AI Videos", descMM: "Advanced AI video production", featured: true },
   { id: "commercial", src: "T9p2lqcETCE", titleEN: "Cinematic Commercial", descEN: "High-end AI promotional video", titleMM: "Cinematic Commercial", descMM: "High-end AI promotional video", featured: true },
   { id: "presenter", src: "wJjyMQ3bjt4", titleEN: "Virtual Presenter Campaign", descEN: "Advanced AI virtual presenter production", titleMM: "AI Presenter Videos", descMM: "AI presenter video production", featured: true },
+];
+
+const appContactActions: AppContactAction[] = [
+  { label: "Telegram", href: `tg://resolve?phone=${["959", "671", "010", "011"].join("")}`, type: "telegram" },
+  { label: "Facebook", href: ["https://www.facebook.com", "BurmaAiaStudio"].join("/") + "/", type: "facebook" },
+  { label: "Email", href: `mailto:${["okaung717", "gmail.com"].join("@")}`, type: "email" },
 ];
 
 const copy = {
@@ -46,7 +58,6 @@ const copy = {
     noShoot: "No filming cost",
     serviceItems: [["AI Presenter Ad", "Presenter-style video for product or brand explanation."], ["Product Video", "Clean cinematic product highlight for online sales."], ["TikTok/Reels Short", "Short-form hook, script and visual direction."], ["Cinematic Brand Ad", "Premium commercial storytelling for social media."]],
     flowItems: ["Share product info", "Get script and visual plan", "Review and receive final video"],
-    contactActions: ["Telegram", "Viber", "Email"],
   },
   MM: {
     home: "Studio Home",
@@ -69,7 +80,6 @@ const copy = {
     noShoot: "ရိုက်ကူးစရိတ်မလို",
     serviceItems: [["AI Presenter Ad", "Product/brand ကို presenter style နဲ့ရှင်းပြပေးမယ်။"], ["Product Video", "Online sales အတွက် cinematic product highlight ဖန်တီးပေးမယ်။"], ["TikTok/Reels Short", "Hook, script, visual direction ပါ short video ဖန်တီးပေးမယ်။"], ["Cinematic Brand Ad", "Social media အတွက် premium storytelling ဖန်တီးပေးမယ်။"]],
     flowItems: ["Product info ပို့ပါ", "Script / visual plan ပြင်ဆင်မယ်", "Review ပြီး final video ရယူပါ"],
-    contactActions: ["Telegram", "Viber", "Email"],
   },
 } as const;
 
@@ -130,6 +140,12 @@ function StatCard({ icon: Icon, label, text }: { icon: typeof Sparkles; label: s
       <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#79695d] dark:text-[#d8c4a3]">{text}</p>
     </div>
   );
+}
+
+function ContactActionIcon({ type }: { type: AppContactAction["type"] }) {
+  if (type === "email") return <Mail className="h-6 w-6" />;
+  if (type === "facebook") return <MessageCircle className="h-6 w-6" />;
+  return <Send className="h-6 w-6" />;
 }
 
 function cleanYoutubeId(value: string) {
@@ -225,7 +241,7 @@ export default function AppExperience() {
         ) : pathname.startsWith("/contact") ? (
           <section className="space-y-4">
             <div className="rounded-[2rem] bg-[#1a0b0e] p-5 text-white shadow-[0_18px_45px_rgba(26,11,14,0.22)]"><p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61]">Contact</p><h2 className="mt-2 text-3xl font-black leading-tight">{t.contactTitle}</h2><p className="mt-3 text-sm leading-relaxed text-[#f3dfc1]">{t.contactText}</p></div>
-            {t.contactActions.map((action) => <Link key={action} href="/contact" className="flex items-center justify-between rounded-[1.55rem] border border-[#ead9bd] bg-[#fffdf8] p-4 font-black text-[#1a0b0e] shadow-sm dark:border-[#4b2a1d] dark:bg-[#1a0b0e] dark:text-[#fff7eb]"><span className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#fff3e3] text-[#911923] dark:bg-[#241113] dark:text-[#e3bc61]"><Send className="h-5 w-5" /></span>{action}</span><ArrowRight className="h-5 w-5 text-[#be9537]" /></Link>)}
+            {appContactActions.map((action) => <a key={action.label} href={action.href} target={action.type === "facebook" ? "_blank" : undefined} rel={action.type === "facebook" ? "noopener noreferrer" : undefined} className="flex items-center justify-between rounded-[1.55rem] border border-[#ead9bd] bg-[#fffdf8] p-4 font-black text-[#1a0b0e] shadow-sm transition-transform active:scale-[0.98] dark:border-[#4b2a1d] dark:bg-[#1a0b0e] dark:text-[#fff7eb]"><span className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#fff3e3] text-[#911923] dark:bg-[#241113] dark:text-[#e3bc61]"><ContactActionIcon type={action.type} /></span>{action.label}</span><ArrowRight className="h-5 w-5 text-[#be9537]" /></a>)}
             <button onClick={openAssistant} className="flex w-full items-center justify-between rounded-[1.55rem] bg-[#911923] p-4 text-left font-black text-white shadow-[0_16px_35px_rgba(145,25,35,0.24)]"><span className="flex items-center gap-3"><MessageCircle className="h-5 w-5" />{t.ai}</span><Sparkles className="h-5 w-5 text-[#f1d180]" /></button>
           </section>
         ) : (
