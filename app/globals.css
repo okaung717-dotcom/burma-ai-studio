@@ -68,6 +68,47 @@
     display: none !important;
   }
 
+  .bas-app-navbar-logo {
+    position: relative;
+    width: min(66vw, 238px);
+    height: 68px;
+    overflow: hidden;
+    pointer-events: none;
+    margin-left: -0.55rem;
+  }
+
+  .bas-app-navbar-logo nav {
+    position: static !important;
+    width: 390px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    z-index: auto !important;
+  }
+
+  .bas-app-navbar-logo nav > div {
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: 390px !important;
+  }
+
+  .bas-app-navbar-logo nav > div > :not(:first-child) {
+    display: none !important;
+  }
+
+  .bas-app-navbar-logo nav a:first-child {
+    margin: 0 !important;
+    transform: translate(-2px, -6px) scale(0.88);
+    transform-origin: left top;
+  }
+
+  .bas-app-navbar-logo nav a:first-child svg {
+    height: 76px !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
   body.bas-app-mode {
     overflow: hidden !important;
     padding-bottom: 0 !important;
