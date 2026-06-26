@@ -64,6 +64,8 @@ const copy = {
     dark: "Dark",
     english: "English",
     burmese: "Burmese",
+    example: "Example video",
+    discuss: "Start brief",
     serviceItems: [["AI Presenter Ad", "Presenter-style video for product or brand explanation."], ["Product Video", "Clean cinematic product highlight for online sales."], ["TikTok/Reels Short", "Short-form hook, script and visual direction."], ["Cinematic Brand Ad", "Premium commercial storytelling for social media."]],
     flowItems: ["Share product info", "Get script and visual plan", "Review and receive final video"],
   },
@@ -93,6 +95,8 @@ const copy = {
     dark: "Dark",
     english: "English",
     burmese: "မြန်မာ",
+    example: "Example Video ကြည့်ရန်",
+    discuss: "Project စတင်ရန်",
     serviceItems: [["AI Presenter Ad", "Product/brand ကို presenter style နဲ့ရှင်းပြပေးမယ်။"], ["Product Video", "Online sales အတွက် cinematic product highlight ဖန်တီးပေးမယ်။"], ["TikTok/Reels Short", "Hook, script, visual direction ပါ short video ဖန်တီးပေးမယ်။"], ["Cinematic Brand Ad", "Social media အတွက် premium storytelling ဖန်တီးပေးမယ်။"]],
     flowItems: ["Product info ပို့ပါ", "Script / visual plan ပြင်ဆင်မယ်", "Review ပြီး final video ရယူပါ"],
   },
@@ -287,8 +291,24 @@ export default function AppExperience() {
       <main className="min-h-0 flex-1 overflow-y-auto px-4 pb-[7.25rem] pt-4">
         {pathname.startsWith("/services") ? (
           <section className="space-y-4">
-            <div className="rounded-[2rem] bg-[#1a0b0e] p-5 text-white shadow-[0_18px_45px_rgba(26,11,14,0.22)] dark:bg-[#fff7eb] dark:text-[#100708]"><p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61] dark:text-[#911923]">Services</p><h2 className="mt-2 text-3xl font-black leading-tight">{t.servicesTitle}</h2></div>
-            <div className="grid gap-3">{t.serviceItems.map(([title, description], index) => <Link key={title} href="/contact" className="flex items-center gap-3 rounded-[1.55rem] border border-[#ead9bd] bg-[#fffdf8] p-4 text-[#1a0b0e] shadow-sm dark:border-[#6b4b2a] dark:bg-[#1a0b0e] dark:text-[#fff7eb]"><span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#911923] text-sm font-black text-white dark:bg-[#e3bc61] dark:text-[#100708]">{index + 1}</span><span className="min-w-0 flex-1"><span className="block text-base font-black">{title}</span><span className="mt-1 block text-sm leading-relaxed text-[#79695d] dark:text-[#d8c4a3]">{description}</span></span><ArrowRight className="h-5 w-5 shrink-0 text-[#be9537] dark:text-[#e3bc61]" /></Link>)}</div>
+            <div className="rounded-[2rem] bg-[#1a0b0e] p-5 text-white shadow-[0_18px_45px_rgba(26,11,14,0.22)] dark:border dark:border-[#6b4b2a] dark:bg-[#fff7eb] dark:text-[#100708]"><p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61] dark:text-[#911923]">Services</p><h2 className="mt-2 text-3xl font-black leading-tight">{t.servicesTitle}</h2></div>
+            <div className="grid gap-3">
+              {t.serviceItems.map(([title, description], index) => (
+                <article key={title} className="rounded-[1.55rem] border border-[#ead9bd] bg-[#fffdf8] p-4 text-[#1a0b0e] shadow-sm dark:border-[#6b4b2a] dark:bg-[#1a0b0e] dark:text-[#fff7eb]">
+                  <div className="flex items-start gap-3">
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#911923] text-sm font-black text-white dark:bg-[#e3bc61] dark:text-[#100708]">{index + 1}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-base font-black">{title}</span>
+                      <span className="mt-1 block text-sm leading-relaxed text-[#79695d] dark:text-[#d8c4a3]">{description}</span>
+                    </span>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-2 pl-14">
+                    <Link href="/portfolio" className="inline-flex items-center justify-center gap-1.5 rounded-2xl border border-[#be9537]/40 bg-[#fff3e3] px-3 py-2.5 text-[11px] font-black text-[#911923] shadow-sm transition-transform active:scale-[0.98] dark:border-[#e3bc61]/40 dark:bg-[#241113] dark:text-[#e3bc61]"><PlayCircle className="h-4 w-4" />{t.example}</Link>
+                    <Link href="/contact" className="inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#911923] px-3 py-2.5 text-[11px] font-black text-white shadow-sm transition-transform active:scale-[0.98] dark:bg-[#e3bc61] dark:text-[#100708]">{t.discuss}<ArrowRight className="h-4 w-4" /></Link>
+                  </div>
+                </article>
+              ))}
+            </div>
           </section>
         ) : pathname.startsWith("/portfolio") ? (
           <section className="space-y-4">
