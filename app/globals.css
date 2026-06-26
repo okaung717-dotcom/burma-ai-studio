@@ -68,6 +68,37 @@
     display: none !important;
   }
 
+  body.bas-app-mode {
+    overflow: hidden !important;
+    padding-bottom: 0 !important;
+  }
+
+  body.bas-app-mode > nav,
+  body.bas-app-mode .bas-website-content,
+  body.bas-app-mode .bas-install-button {
+    display: none !important;
+  }
+
+  body.bas-app-mode .bas-app-bottom-nav {
+    display: block !important;
+  }
+
+  body.bas-app-mode .fixed.bottom-5.right-5 > button {
+    display: none !important;
+  }
+
+  body.bas-app-mode .fixed.bottom-5.right-5 > div.mb-4 {
+    position: fixed !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 5.8rem) !important;
+    width: auto !important;
+    height: min(620px, calc(100vh - 8.75rem)) !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border-radius: 1.6rem !important;
+  }
+
   @media (display-mode: standalone) and (max-width: 767px) {
     .bas-app-bottom-nav {
       display: block !important;
