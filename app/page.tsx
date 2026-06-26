@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, Video, Sparkles, MessageCircle, Clock, BadgeCheck, Wand2, ArrowRight, PhoneCall } from "lucide-react";
+import { Play, Video, Sparkles, MessageCircle, Clock, BadgeCheck, Wand2, ArrowRight } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 import ContentStrip from "./ContentStrip";
 
@@ -138,7 +138,6 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2 font-black text-xl text-[#1a0b0e] dark:text-white"><Video className="h-6 w-6 text-[#911923] dark:text-[#e3bc61]" />Burma AI Studio</div>
           <p className="text-sm font-medium text-[#79695d] dark:text-[#d8c4a3]">{t.footerText}</p>
-          <a href="tel:09671010011" className="inline-flex w-fit items-center gap-2 rounded-full bg-[#911923] px-4 py-2 text-sm font-black text-white"><PhoneCall className="h-4 w-4" /> 09671010011</a>
         </div>
       </footer>
     </>
