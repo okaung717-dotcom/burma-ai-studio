@@ -1,16 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type InstallEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: string; platform: string }>;
 };
 
+type ButtonPosition = {
+  top: number;
+  left: number;
+};
+
 export default function InstallAppPrompt() {
   const [installEvent, setInstallEvent] = useState<InstallEvent | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [buttonPosition, setButtonPosition] = useState<ButtonPosition | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setIsStandalone(window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true);
@@ -20,8 +27,55 @@ export default function InstallAppPrompt() {
       setInstallEvent(event as InstallEvent);
     }
 
+    function alignWithNavbar() {
+      if (window.innerWidth < 768) {
+        setButtonPosition(null);
+        return;
+      }
+
+      const nav = document.querySelector("nav");
+      if (!nav) {
+        setButtonPosition(null);
+        return;
+      }
+
+      const contactLinks = Array.from(nav.querySelectorAll<HTMLAnchorElement>('a[href="/contact"]'));
+      const contactNavLink = contactLinks[0];
+      const languageButton = Array.from(nav.querySelectorAll<HTMLButtonElement>("button")).find((button) => {
+        const label = button.textContent?.trim();
+        return label === "EN" || label === "MM";
+      });
+
+      if (!contactNavLink || !languageButton) {
+        setButtonPosition(null);
+        return;
+      }
+
+      const contactRect = contactNavLink.getBoundingClientRect();
+      const langRect = languageButton.getBoundingClientRect();
+      const buttonWidth = buttonRef.current?.getBoundingClientRect().width ?? 156;
+      const leftNearLanguage = langRect.left - buttonWidth - 14;
+      const minLeftAfterContact = contactRect.right + 16;
+      const left = Math.max(minLeftAfterContact, leftNearLanguage);
+
+      setButtonPosition({
+        top: langRect.top + langRect.height / 2,
+        left,
+      });
+    }
+
     window.addEventListener("beforeinstallprompt", handleInstall);
-    return () => window.removeEventListener("beforeinstallprompt", handleInstall);
+    window.addEventListener("resize", alignWithNavbar);
+    window.addEventListener("scroll", alignWithNavbar, { passive: true });
+    const timer = window.setInterval(alignWithNavbar, 750);
+    requestAnimationFrame(alignWithNavbar);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleInstall);
+      window.removeEventListener("resize", alignWithNavbar);
+      window.removeEventListener("scroll", alignWithNavbar);
+      window.clearInterval(timer);
+    };
   }, []);
 
   if (isStandalone) return null;
@@ -40,15 +94,11 @@ export default function InstallAppPrompt() {
 
   return (
     <>
-      <style jsx global>{`
-        body:not(.bas-admin-route) nav > div > div.flex.items-center.gap-4 > a[href="/contact"] {
-          display: none !important;
-        }
-      `}</style>
-
       <button
+        ref={buttonRef}
         onClick={install}
-        className="bas-install-button fixed right-[19rem] top-[3.25rem] z-[60] hidden h-12 items-center gap-2 rounded-full border border-[#be9537]/45 bg-[#100708] px-5 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex xl:right-[21.5rem]"
+        className="fixed z-[60] hidden h-12 items-center gap-2 rounded-full border border-[#be9537]/45 bg-[#100708] px-5 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
+        style={buttonPosition ? { top: buttonPosition.top, left: buttonPosition.left, transform: "translateY(-50%)" } : { top: -9999, left: -9999 }}
         aria-label="Install Burma AI Studio app"
       >
         <span className="grid h-7 w-7 place-items-center rounded-full bg-[#be9537] text-xs font-black text-[#100708]">⌄</span>
