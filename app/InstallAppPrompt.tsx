@@ -1,25 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type InstallEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: string; platform: string }>;
 };
 
-type ButtonPosition = {
-  top: number;
-  left: number;
-};
-
 function AppIconMark() {
   return (
     <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-[0.72rem] bg-white ring-1 ring-[#be9537]/70">
-      <svg
-        viewBox="0 0 128 128"
-        aria-hidden="true"
-        className="h-8 w-8"
-      >
+      <svg viewBox="0 0 128 128" aria-hidden="true" className="h-8 w-8">
         <rect width="128" height="128" rx="30" fill="#fffdf8" />
         <path
           fill="#911923"
@@ -50,8 +42,7 @@ export default function InstallAppPrompt() {
   const [installEvent, setInstallEvent] = useState<InstallEvent | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState<ButtonPosition | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [navbarTarget, setNavbarTarget] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     setIsStandalone(window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true);
@@ -61,53 +52,30 @@ export default function InstallAppPrompt() {
       setInstallEvent(event as InstallEvent);
     }
 
-    function alignWithNavbar() {
+    function findNavbarControls() {
       if (window.innerWidth < 768) {
-        setButtonPosition(null);
+        setNavbarTarget(null);
         return;
       }
 
       const nav = document.querySelector("nav");
-      if (!nav) {
-        setButtonPosition(null);
-        return;
-      }
-
-      const contactLinks = Array.from(nav.querySelectorAll<HTMLAnchorElement>('a[href="/contact"]'));
-      const contactNavLink = contactLinks[0];
-      const languageButton = Array.from(nav.querySelectorAll<HTMLButtonElement>("button")).find((button) => {
+      const languageButton = Array.from(nav?.querySelectorAll<HTMLButtonElement>("button") ?? []).find((button) => {
         const label = button.textContent?.trim();
         return label === "EN" || label === "MM";
       });
 
-      if (!contactNavLink || !languageButton) {
-        setButtonPosition(null);
-        return;
-      }
-
-      const contactRect = contactNavLink.getBoundingClientRect();
-      const langRect = languageButton.getBoundingClientRect();
-      const buttonWidth = buttonRef.current?.getBoundingClientRect().width ?? 160;
-      const leftNearLanguage = langRect.left - buttonWidth - 14;
-      const minLeftAfterContact = contactRect.right + 16;
-      const left = Math.max(minLeftAfterContact, leftNearLanguage);
-
-      setButtonPosition({
-        top: langRect.top + langRect.height / 2,
-        left,
-      });
+      const controls = languageButton?.closest("div.flex.items-center.gap-4") as HTMLElement | null;
+      setNavbarTarget(controls);
     }
 
     window.addEventListener("beforeinstallprompt", handleInstall);
-    window.addEventListener("resize", alignWithNavbar);
-    window.addEventListener("scroll", alignWithNavbar, { passive: true });
-    const timer = window.setInterval(alignWithNavbar, 750);
-    requestAnimationFrame(alignWithNavbar);
+    window.addEventListener("resize", findNavbarControls);
+    requestAnimationFrame(findNavbarControls);
+    const timer = window.setInterval(findNavbarControls, 1000);
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleInstall);
-      window.removeEventListener("resize", alignWithNavbar);
-      window.removeEventListener("scroll", alignWithNavbar);
+      window.removeEventListener("resize", findNavbarControls);
       window.clearInterval(timer);
     };
   }, []);
@@ -126,18 +94,20 @@ export default function InstallAppPrompt() {
     setPanelOpen(false);
   }
 
+  const installButton = (
+    <button
+      onClick={install}
+      className="order-[-1] hidden h-12 shrink-0 items-center gap-2.5 rounded-full border border-[#be9537]/45 bg-[#100708] px-4 pr-5 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
+      aria-label="Install Burma AI Studio app"
+    >
+      <AppIconMark />
+      Install App
+    </button>
+  );
+
   return (
     <>
-      <button
-        ref={buttonRef}
-        onClick={install}
-        className="fixed z-[60] hidden h-12 items-center gap-2.5 rounded-full border border-[#be9537]/45 bg-[#100708] px-4 pr-5 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
-        style={buttonPosition ? { top: buttonPosition.top, left: buttonPosition.left, transform: "translateY(-50%)" } : { top: -9999, left: -9999 }}
-        aria-label="Install Burma AI Studio app"
-      >
-        <AppIconMark />
-        Install App
-      </button>
+      {navbarTarget ? createPortal(installButton, navbarTarget) : null}
 
       {panelOpen && (
         <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/45 p-4 backdrop-blur-sm md:items-center">
