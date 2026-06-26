@@ -7,6 +7,23 @@ import { ArrowRight, BadgeCheck, Bell, Clapperboard, Clock3, Film, MessageCircle
 import { useLanguage } from "./LanguageContext";
 import Navbar from "./Navbar";
 
+type PortfolioItem = {
+  id: string;
+  src: string;
+  titleEN: string;
+  descEN: string;
+  titleMM: string;
+  descMM: string;
+  featured?: boolean;
+};
+
+const defaultAppPortfolio: PortfolioItem[] = [
+  { id: "trailer", src: "DVM3o2Wqcys", titleEN: "Cinematic Trailers AI Video", descEN: "TikTok, YouTube, Facebook AI videos", titleMM: "Trailer AI Video", descMM: "TikTok, YouTube, Facebook AI videos", featured: true },
+  { id: "architecture", src: "IrukbYGHhQs", titleEN: "Architecture AI Videos", descEN: "Advanced AI video production", titleMM: "Architecture AI Videos", descMM: "Advanced AI video production", featured: true },
+  { id: "commercial", src: "T9p2lqcETCE", titleEN: "Cinematic Commercial", descEN: "High-end AI promotional video", titleMM: "Cinematic Commercial", descMM: "High-end AI promotional video", featured: true },
+  { id: "presenter", src: "wJjyMQ3bjt4", titleEN: "Virtual Presenter Campaign", descEN: "Advanced AI virtual presenter production", titleMM: "AI Presenter Videos", descMM: "AI presenter video production", featured: true },
+];
+
 const copy = {
   EN: {
     home: "Studio Home",
@@ -115,12 +132,70 @@ function StatCard({ icon: Icon, label, text }: { icon: typeof Sparkles; label: s
   );
 }
 
+function cleanYoutubeId(value: string) {
+  return value
+    .replace("https://youtu.be/", "")
+    .replace("https://www.youtube.com/watch?v=", "")
+    .replace("https://youtube.com/watch?v=", "")
+    .split("&")[0]
+    .split("?")[0]
+    .trim();
+}
+
+function PortfolioVideoCard({ item, index, activeLang }: { item: PortfolioItem; index: number; activeLang: "EN" | "MM" }) {
+  const videoId = cleanYoutubeId(item.src);
+  const title = activeLang === "MM" ? item.titleMM || item.titleEN : item.titleEN || item.titleMM;
+  const description = activeLang === "MM" ? item.descMM || item.descEN : item.descEN || item.descMM;
+
+  return (
+    <article className="overflow-hidden rounded-[1.7rem] border border-[#2f1418] bg-[#100708] p-3 text-white shadow-sm dark:border-[#4b2a1d]">
+      <div className="overflow-hidden rounded-[1.25rem] bg-[#1a0b0e]">
+        <iframe
+          title={title}
+          src={`https://www.youtube.com/embed/${videoId}?playsinline=1&rel=0&modestbranding=1`}
+          className="aspect-video w-full"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+      <div className="flex items-center justify-between gap-3 px-1 pt-3">
+        <div className="min-w-0">
+          <p className="truncate text-base font-black">{title}</p>
+          <p className="mt-1 line-clamp-2 text-xs font-bold leading-relaxed text-[#e3bc61]">{description}</p>
+        </div>
+        <span className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-xs font-black">{String(index + 1).padStart(2, "0")}</span>
+      </div>
+    </article>
+  );
+}
+
 export default function AppExperience() {
   const appMode = useAppMode();
   const pathname = usePathname() || "/";
   const { lang } = useLanguage();
   const activeLang = lang === "MM" ? "MM" : "EN";
   const t = copy[activeLang];
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>(defaultAppPortfolio);
+
+  useEffect(() => {
+    if (!appMode || !pathname.startsWith("/portfolio")) return;
+
+    let isAlive = true;
+    fetch("/api/portfolio", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((data: { items?: PortfolioItem[] }) => {
+        if (!isAlive || !Array.isArray(data.items) || !data.items.length) return;
+        setPortfolioItems(data.items.slice(0, 4));
+      })
+      .catch(() => {
+        if (isAlive) setPortfolioItems(defaultAppPortfolio);
+      });
+
+    return () => {
+      isAlive = false;
+    };
+  }, [appMode, pathname]);
 
   const currentTitle = useMemo(() => {
     if (pathname.startsWith("/services")) return t.services;
@@ -145,7 +220,7 @@ export default function AppExperience() {
         ) : pathname.startsWith("/portfolio") ? (
           <section className="space-y-4">
             <div className="rounded-[2rem] border border-[#ead9bd] bg-[#fffdf8] p-5 dark:border-[#4b2a1d] dark:bg-[#1a0b0e]"><p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#911923] dark:text-[#e3bc61]">Portfolio</p><h2 className="mt-2 text-3xl font-black leading-tight">{t.workTitle}</h2></div>
-            {['Cinematic Brand Ad', 'AI Presenter Video', 'Product Motion Ad'].map((title, index) => <div key={title} className="overflow-hidden rounded-[1.7rem] border border-[#ead9bd] bg-[#100708] p-3 text-white shadow-sm dark:border-[#4b2a1d]"><div className="flex aspect-video items-center justify-center rounded-[1.25rem] bg-gradient-to-br from-[#911923] via-[#1a0b0e] to-[#be9537]"><PlayCircle className="h-12 w-12 text-white/88" /></div><div className="flex items-center justify-between px-1 pt-3"><div><p className="text-base font-black">{title}</p><p className="text-xs font-bold text-[#e3bc61]">Ready for social media</p></div><span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black">0{index + 1}</span></div></div>)}
+            {portfolioItems.map((item, index) => <PortfolioVideoCard key={item.id || item.src} item={item} index={index} activeLang={activeLang} />)}
           </section>
         ) : pathname.startsWith("/contact") ? (
           <section className="space-y-4">
