@@ -135,9 +135,10 @@ export default function Home() {
       <ContentStrip type="home" />
 
       <footer className="border-t border-[#ead9bd] bg-[#fff3e3] px-6 py-12 transition-colors duration-300 dark:border-[#4b2a1d] dark:bg-[#100708] md:px-16 lg:px-24">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-2 font-black text-xl text-[#1a0b0e] dark:text-white"><Video className="h-6 w-6 text-[#911923] dark:text-[#e3bc61]" />Burma AI Studio</div>
-          <p className="text-sm font-medium text-[#79695d] dark:text-[#d8c4a3]">{t.footerText}</p>
+        <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-4 text-center md:grid-cols-[1fr_auto_1fr]">
+          <div className="flex items-center justify-center gap-2 font-black text-xl text-[#1a0b0e] dark:text-white md:justify-self-start"><Video className="h-6 w-6 text-[#911923] dark:text-[#e3bc61]" />Burma AI Studio</div>
+          <p className="text-center text-sm font-medium text-[#79695d] dark:text-[#d8c4a3] md:col-start-2 md:justify-self-center">{t.footerText}</p>
+          <div className="hidden md:block" aria-hidden="true" />
         </div>
       </footer>
     </>
