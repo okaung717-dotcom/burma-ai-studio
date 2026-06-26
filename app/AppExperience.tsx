@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, BadgeCheck, Bell, Clapperboard, Clock3, Film, MessageCircle, PlayCircle, Send, Sparkles, Star } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
+import Navbar from "./Navbar";
 
 const copy = {
   EN: {
@@ -84,20 +85,8 @@ function useAppMode() {
 
 function AppLogo() {
   return (
-    <div className="flex h-14 w-[184px] shrink-0 items-center justify-start overflow-visible">
-      <svg viewBox="0 0 560 180" className="h-full w-full drop-shadow-sm" aria-label="Burma AI Studio logo">
-        <defs>
-          <linearGradient id="appWordmarkGold" x1="265" y1="10" x2="305" y2="85" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#f1d180" />
-            <stop offset="1" stopColor="#be9537" />
-          </linearGradient>
-        </defs>
-        <path d="M45 100c-18-2-27-15-28-29 12 12 26 13 39 4-17-7-21-24-11-38 5 15 16 22 33 20-6-13-2-28 13-38-2 23 12 32 26 42 16 11 24 25 20 43-5 23-27 34-52 31-17-2-31-9-40-35Z" fill="#911923" />
-        <path d="M120 133c23-35 51-56 87-65-21 17-38 36-51 59-7 12-19 16-36 6Z" fill="#be9537" />
-        <text x="92" y="116" fontFamily="Georgia, Times New Roman, serif" fontSize="76" fontWeight="700" fill="#911923">BurmaAiStudio</text>
-        <path d="M293 13l15 38 38 18-39 10-15 41-15-41-38-10 37-18 17-38Z" fill="url(#appWordmarkGold)" />
-        <path d="M293 29l8 22 23 11-23 6-8 23-8-23-23-6 22-11 9-22Z" fill="#911923" opacity="0.88" />
-      </svg>
+    <div className="bas-app-navbar-logo" aria-label="Burma AI Studio website logo">
+      <Navbar />
     </div>
   );
 }
