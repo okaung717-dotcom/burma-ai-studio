@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AppShell from "./AppShell";
@@ -16,22 +16,35 @@ const geistMono = Geist_Mono({
 });
 
 const iconUrl = "/burma-ai-icon.svg?v=10";
+const appleIconUrl = "/apple-touch-icon.png?v=10";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#911923" },
+    { media: "(prefers-color-scheme: dark)", color: "#100708" },
+  ],
+};
 
 export const metadata: Metadata = {
   title: "Burma AI Studio",
   description: "AI video creation service for brands and businesses.",
   applicationName: "Burma AI Studio",
   manifest: "/manifest.webmanifest",
-  themeColor: "#911923",
   appleWebApp: {
     capable: true,
     title: "Burma AI Studio",
     statusBarStyle: "black-translucent",
   },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
     icon: [{ url: iconUrl, type: "image/svg+xml" }],
     shortcut: [{ url: iconUrl, type: "image/svg+xml" }],
-    apple: [{ url: iconUrl, type: "image/svg+xml" }],
+    apple: [{ url: appleIconUrl, sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     title: "Burma AI Studio",
@@ -49,17 +62,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="Burma AI Studio" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="application-name" content="Burma AI Studio" />
         <meta name="format-detection" content="telephone=no" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="icon" href={iconUrl} type="image/svg+xml" />
         <link rel="shortcut icon" href={iconUrl} type="image/svg+xml" />
-        <link rel="apple-touch-icon" href={iconUrl} />
-        <link rel="apple-touch-startup-image" href={iconUrl} />
+        <link rel="apple-touch-icon" sizes="180x180" href={appleIconUrl} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
