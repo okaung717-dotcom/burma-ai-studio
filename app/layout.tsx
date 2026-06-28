@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 const iconUrl = "/burma-ai-icon.svg?v=10";
-const appleIconUrl = "/apple-icon.png?v=11";
+const appleIconUrl = "/apple-touch-icon.png?v=10";
 
 export const viewport: Viewport = {
   width: "device-width",
