@@ -1,6 +1,6 @@
-import { createClient } from "redis";
 import { sendOwnerNotice } from "../../lib/notify";
 import { basicLimit } from "../../lib/guard";
+import { LEADS_KEY, withRedis } from "../../lib/redis";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,25 +13,8 @@ type LeadInput = {
   source?: string;
 };
 
-const LEADS_KEY = "burma-ai-studio:leads";
-
 function clean(value: unknown) {
   return typeof value === "string" ? value.trim().slice(0, 3000) : "";
-}
-
-async function withRedis<T>(callback: (client: ReturnType<typeof createClient>) => Promise<T>) {
-  const url = process.env.REDIS_URL;
-  if (!url) throw new Error("REDIS_URL is not configured.");
-
-  const client = createClient({ url });
-  client.on("error", (error) => console.error("Redis client error:", error));
-
-  await client.connect();
-  try {
-    return await callback(client);
-  } finally {
-    await client.quit();
-  }
 }
 
 export async function POST(request: Request) {

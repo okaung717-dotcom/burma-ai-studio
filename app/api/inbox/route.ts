@@ -1,25 +1,9 @@
-import { createClient } from "redis";
+import { LEADS_KEY, withRedis } from "../../lib/redis";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const KEY = "burma-ai-studio:leads";
 const STATUS_KEY = "burma-ai-studio:lead-status";
-
-async function withRedis<T>(callback: (client: ReturnType<typeof createClient>) => Promise<T>) {
-  const url = process.env.REDIS_URL;
-  if (!url) throw new Error("REDIS_URL is not configured.");
-
-  const client = createClient({ url });
-  client.on("error", (error) => console.error("Redis client error:", error));
-
-  await client.connect();
-  try {
-    return await callback(client);
-  } finally {
-    await client.quit();
-  }
-}
 
 function clean(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -56,7 +40,7 @@ export async function POST(request: Request) {
     if (!body?.code || body.code !== code) return Response.json({ ok: false, message: "Invalid code." }, { status: 401 });
 
     const { raw, statuses } = await withRedis(async (client) => ({
-      raw: await client.lRange(KEY, 0, 199),
+      raw: await client.lRange(LEADS_KEY, 0, 199),
       statuses: await client.hGetAll(STATUS_KEY),
     }));
 
