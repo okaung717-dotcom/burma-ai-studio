@@ -1,5 +1,5 @@
-const CACHE_VERSION = "burma-ai-studio-pwa-v1";
-const CORE_ASSETS = ["/", "/manifest.webmanifest", "/burma-ai-icon.svg?v=10"];
+const CACHE_VERSION = "burma-ai-studio-pwa-v2";
+const CORE_ASSETS = ["/", "/?source=pwa", "/manifest.webmanifest", "/burma-ai-icon.svg?v=10", "/apple-touch-icon.png?v=10"];
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
@@ -18,6 +18,6 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request).then((cached) => cached || caches.match("/")))
+    fetch(event.request).catch(() => caches.match(event.request).then((cached) => cached || caches.match("/?source=pwa") || caches.match("/")))
   );
 });
