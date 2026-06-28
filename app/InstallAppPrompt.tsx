@@ -21,6 +21,26 @@ function isAppleMobile() {
   return /iPhone|iPad|iPod/i.test(userAgent) || touchMac;
 }
 
+function isAppleSafari() {
+  if (typeof window === "undefined") return false;
+  const userAgent = navigator.userAgent || "";
+  const blockedBrowsers = /CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo|FBAN|FBAV|Instagram|Line/i;
+  return isAppleMobile() && /Safari/i.test(userAgent) && !blockedBrowsers.test(userAgent);
+}
+
+function configuredIosPwaUrl() {
+  if (typeof window === "undefined") return "/?source=pwa&platform=ios";
+  const url = new URL("/", window.location.origin);
+  url.searchParams.set("source", "pwa");
+  url.searchParams.set("platform", "ios");
+  return url.toString();
+}
+
+function prepareIosPwaUrl() {
+  if (typeof window === "undefined") return;
+  window.history.replaceState({ burmaAiStudioPwa: true }, "", configuredIosPwaUrl());
+}
+
 function AppIconMark({ small = false }: { small?: boolean }) {
   return (
     <span className={`grid shrink-0 place-items-center overflow-hidden rounded-[0.78rem] bg-white ring-1 ring-[#be9537]/70 ${small ? "h-8 w-8" : "h-9 w-9"}`}>
@@ -34,7 +54,13 @@ function AppIconMark({ small = false }: { small?: boolean }) {
   );
 }
 
-function IosInstallSheet({ onClose }: { onClose: () => void }) {
+function IosInstallSheet({ onClose, safariReady }: { onClose: () => void; safariReady: boolean }) {
+  const pwaUrl = configuredIosPwaUrl();
+
+  async function copyLink() {
+    await navigator.clipboard?.writeText(pwaUrl).catch(() => null);
+  }
+
   return createPortal(
     <div className="fixed inset-0 z-[100000] md:hidden" role="dialog" aria-modal="true" aria-label="Install Burma AI Studio on iPhone">
       <button aria-label="Close install guide" className="absolute inset-0 bg-[#100708]/45 backdrop-blur-sm" onClick={onClose} />
@@ -42,11 +68,23 @@ function IosInstallSheet({ onClose }: { onClose: () => void }) {
         <div className="flex items-center gap-3 border-b border-[#ead9bd] pb-3">
           <AppIconMark />
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#a51624]">iPhone / iPad Install</p>
+            <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#a51624]">iOS App Mode Config</p>
             <h2 className="text-lg font-black leading-tight">Burma AI Studio App ထည့်ရန်</h2>
           </div>
           <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full bg-[#100708] text-sm font-black text-white" aria-label="Close">×</button>
         </div>
+
+        <p className="mt-3 rounded-[1.15rem] bg-[#fff3e3] px-3 py-2 text-xs font-bold leading-relaxed text-[#5c3324]">
+          {safariReady
+            ? "အခု URL ကို App mode အတွက်ပြင်ပြီးပါပြီ။ Home Screen ကနေဖွင့်ရင် website shortcut မဟုတ်ဘဲ mobile app layout နဲ့ဖွင့်စေပါမယ်။"
+            : "iOS မှာ App mode အပြည့်ရဖို့ Safari နဲ့ဖွင့်ပြီး Add to Home Screen လုပ်ရပါမယ်။ အောက်က link ကို copy လုပ်ပြီး Safari မှာဖွင့်ပါ။"}
+        </p>
+
+        {!safariReady && (
+          <button onClick={copyLink} className="mt-3 h-11 w-full rounded-2xl border border-[#be9537]/45 bg-white text-sm font-black text-[#a51624]">
+            iOS App Mode Link Copy
+          </button>
+        )}
 
         <div className="mt-4 space-y-3">
           <div className="flex gap-3 rounded-[1.25rem] border border-[#ead9bd] bg-white p-3">
@@ -59,7 +97,7 @@ function IosInstallSheet({ onClose }: { onClose: () => void }) {
           </div>
           <div className="flex gap-3 rounded-[1.25rem] border border-[#ead9bd] bg-white p-3">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#be9537] text-sm font-black text-[#100708]">3</span>
-            <p className="text-sm font-bold leading-relaxed"><span className="font-black text-[#a51624]">Add</span> ကိုနှိပ်တာနဲ့ App icon က Home Screen ပေါ်တက်လာပါမယ်။</p>
+            <p className="text-sm font-bold leading-relaxed"><span className="font-black text-[#a51624]">Add</span> ကိုနှိပ်ပြီး Home Screen ကနေပြန်ဖွင့်ပါ။</p>
           </div>
         </div>
 
@@ -77,9 +115,11 @@ export default function InstallAppPrompt() {
   const [isInstalling, setIsInstalling] = useState(false);
   const [showIosGuide, setShowIosGuide] = useState(false);
   const [appleMobile, setAppleMobile] = useState(false);
+  const [appleSafari, setAppleSafari] = useState(false);
 
   useEffect(() => {
     setAppleMobile(isAppleMobile());
+    setAppleSafari(isAppleSafari());
     setIsStandalone(window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true);
 
     if ("serviceWorker" in navigator) {
@@ -137,6 +177,7 @@ export default function InstallAppPrompt() {
     }
 
     if (appleMobile) {
+      if (appleSafari) prepareIosPwaUrl();
       setShowIosGuide(true);
       setIsInstalling(false);
       return;
@@ -160,5 +201,5 @@ export default function InstallAppPrompt() {
     </button>
   );
 
-  return <>{navbarTarget ? createPortal(installButton, navbarTarget.node) : null}{showIosGuide && <IosInstallSheet onClose={() => setShowIosGuide(false)} />}</>;
+  return <>{navbarTarget ? createPortal(installButton, navbarTarget.node) : null}{showIosGuide && <IosInstallSheet safariReady={appleSafari} onClose={() => setShowIosGuide(false)} />}</>;
 }
