@@ -106,11 +106,13 @@ export async function selectRows<T>(table: string, query = "?select=*") {
 }
 
 export async function insertRows<T extends JsonRecord>(table: string, rows: T | T[]) {
-  return supabaseRequest<T[]>(table, {
+  await supabaseRequest<null>(table, {
     method: "POST",
-    headers: { Prefer: "return=representation" },
+    headers: { Prefer: "return=minimal" },
     body: JSON.stringify(Array.isArray(rows) ? rows : [rows]),
   });
+
+  return [] as T[];
 }
 
 export async function upsertRows<T extends JsonRecord>(table: string, rows: T | T[], onConflict: string) {
