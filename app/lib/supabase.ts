@@ -2,25 +2,56 @@ export type JsonRecord = Record<string, unknown>;
 
 type SupabaseConfig = { url: string; key: string };
 
+function stripEnvAssignment(value: string) {
+  return value
+    .trim()
+    .replace(/^SUPABASE_URL\s*=\s*/i, "")
+    .replace(/^NEXT_PUBLIC_SUPABASE_URL\s*=\s*/i, "")
+    .replace(/^["']|["']$/g, "")
+    .trim();
+}
+
 function cleanUrl(value: string) {
-  return value.replace(/\/+$/, "");
+  const raw = stripEnvAssignment(value).split(/\s+/)[0].replace(/\/+$/, "");
+
+  try {
+    const parsed = new URL(raw);
+    return `${parsed.protocol}//${parsed.host}`;
+  } catch {
+    return raw
+      .replace(/\/rest\/v1\/?$/i, "")
+      .replace(/\/+$/, "");
+  }
+}
+
+function cleanKey(value: string) {
+  return value
+    .trim()
+    .replace(/^SUPABASE_SERVER_KEY\s*=\s*/i, "")
+    .replace(/^SUPABASE_SECRET_KEY\s*=\s*/i, "")
+    .replace(/^SUPABASE_SERVICE_ROLE_KEY\s*=\s*/i, "")
+    .replace(/^SUPABASE_ANON_KEY\s*=\s*/i, "")
+    .replace(/^NEXT_PUBLIC_SUPABASE_ANON_KEY\s*=\s*/i, "")
+    .replace(/^["']|["']$/g, "")
+    .trim();
 }
 
 function getSupabaseConfig(): SupabaseConfig {
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-  const key =
+  const url = cleanUrl(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "");
+  const key = cleanKey(
     process.env.SUPABASE_SERVER_KEY ||
-    process.env.SUPABASE_SECRET_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    "";
+      process.env.SUPABASE_SECRET_KEY ||
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      ""
+  );
 
   if (!url || !key) {
     throw new Error("Supabase is not configured. Add SUPABASE_URL and SUPABASE_SERVER_KEY in Vercel.");
   }
 
-  return { url: cleanUrl(url), key };
+  return { url, key };
 }
 
 function errorMessage(data: unknown) {
@@ -47,16 +78,16 @@ export async function supabaseRequest<T>(path: string, init: RequestInit = {}) {
   headers.set("apikey", key);
   headers.set("Content-Type", "application/json");
 
-  // New Supabase API keys such as sb_secret_... and sb_publishable_... are not JWTs.
-  // For REST database calls, send them as the apikey header only.
-  // Legacy JWT service_role/anon keys can still use Authorization Bearer.
   if (!isNewSupabaseKey(key)) {
     headers.set("Authorization", `Bearer ${key}`);
   } else {
     headers.delete("Authorization");
   }
 
-  const response = await fetch(`${url}/rest/v1/${path}`, {
+  const cleanPath = path.replace(/^\/+/, "");
+  const requestUrl = `${url}/rest/v1/${cleanPath}`;
+
+  const response = await fetch(requestUrl, {
     ...init,
     headers,
     cache: "no-store",
