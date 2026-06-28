@@ -17,10 +17,16 @@ function clean(value: unknown) {
   return typeof value === "string" ? value.trim().slice(0, 3000) : "";
 }
 
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export async function POST(request: Request) {
   try {
     const allowed = await basicLimit(request, "lead", 6, 60);
-    if (!allowed) return Response.json({ ok: false, message: "Too many requests." }, { status: 429 });
+    if (!allowed) {
+      return Response.json({ ok: false, message: "Too many requests." }, { status: 429 });
+    }
 
     const body = (await request.json().catch(() => null)) as LeadInput | null;
 
@@ -59,11 +65,14 @@ export async function POST(request: Request) {
 
     return Response.json({ ok: true, leadId: lead.id });
   } catch (error) {
-    console.error("Lead save error:", error);
+    const detail = getErrorMessage(error);
+    console.error("Lead save error:", detail);
+
     return Response.json(
       {
         ok: false,
-        message: "Message storage is not configured yet, but the email/Telegram/Viber contact options still work.",
+        message: "Lead save failed.",
+        detail,
       },
       { status: 503 }
     );
