@@ -6,22 +6,23 @@
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "display_override": ["standalone", "fullscreen", "minimal-ui", "browser"],
   "orientation": "portrait",
   "background_color": "#FFFCF5",
   "theme_color": "#911923",
+  "categories": ["business", "productivity", "photo", "video"],
   "icons": [
     {
       "src": "/burma-ai-icon.svg?v=10",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/apple-touch-icon.png?v=10",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
+      "src": "/burma-ai-icon.svg?v=10",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ]
 }
