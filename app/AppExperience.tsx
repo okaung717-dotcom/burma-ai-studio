@@ -110,7 +110,27 @@ function useAppMode() {
 
     const check = () => {
       const search = new URLSearchParams(window.location.search);
-      const enabled = window.innerWidth < 768 && (media.matches || search.get("source") === "pwa");
+      const userAgent = navigator.userAgent || "";
+      const hasCapacitor = typeof (window as Window & { Capacitor?: unknown }).Capacitor !== "undefined";
+      const isAndroidWebView =
+        /Android/i.test(userAgent) &&
+        (/; wv\)/i.test(userAgent) || /Version\/\d+(\.\d+)?/i.test(userAgent));
+
+      const explicitAppMode =
+        search.get("source") === "pwa" ||
+        search.get("source") === "app" ||
+        search.get("source") === "native" ||
+        search.get("platform") === "android" ||
+        localStorage.getItem("bas-app-mode") === "native";
+
+      if (hasCapacitor || isAndroidWebView || explicitAppMode) {
+        localStorage.setItem("bas-app-mode", "native");
+      }
+
+      const enabled =
+        window.innerWidth < 768 &&
+        (media.matches || hasCapacitor || isAndroidWebView || explicitAppMode);
+
       setAppMode(enabled);
       document.body.classList.toggle("bas-app-mode", enabled);
     };
