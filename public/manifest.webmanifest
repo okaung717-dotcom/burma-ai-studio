@@ -1,10 +1,13 @@
 {
+  "id": "/?source=pwa",
   "name": "Burma AI Studio",
   "short_name": "Burma AI",
   "description": "AI video creation service for brands and businesses.",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "orientation": "portrait",
   "background_color": "#FFFCF5",
   "theme_color": "#911923",
   "icons": [
@@ -13,6 +16,12 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png?v=10",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
