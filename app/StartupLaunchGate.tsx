@@ -58,7 +58,7 @@ export default function StartupLaunchGate() {
     <div className="fixed inset-0 z-[99999] bg-white">
       <div className="relative h-full w-full">
         <Image
-          src="/burma-ai-startup-ad.webp"
+          src="/burma-ai-startup-ad.png"
           alt="Burma AI Studio Startup Ad"
           fill
           priority
