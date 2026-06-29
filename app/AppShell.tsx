@@ -54,14 +54,14 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <main className="bas-website-content w-full flex-grow">
         {children}
       </main>
-      {!isAdminArea && <AppExperience />}
-      {!isAdminArea && <InstallAppPrompt />}
-      {!isAdminArea && <AIAssistant />}
       {!isAdminArea && (
         <AppOnly>
+          <AppExperience />
           <AppBottomNav />
         </AppOnly>
       )}
+      {!isAdminArea && <InstallAppPrompt />}
+      {!isAdminArea && <AIAssistant />}
     </>
   );
 }
