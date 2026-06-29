@@ -4,15 +4,18 @@ import { useEffect, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 
 const DISPLAY_MS = 3000;
+const STARTUP_AD_SRC = "/burma-ai-startup-ad.webp?v=10";
 
 function isAppLikeContext() {
   if (typeof window === "undefined") return false;
 
   const nav = navigator as Navigator & { standalone?: boolean };
   const search = new URLSearchParams(window.location.search);
+
   const isNative = Capacitor.isNativePlatform();
   const isStandalone = window.matchMedia?.("(display-mode: standalone)")?.matches;
   const isIOSHomeScreen = nav.standalone === true;
+
   const explicitAppMode =
     search.get("source") === "pwa" ||
     search.get("source") === "app" ||
@@ -27,7 +30,6 @@ function isAppLikeContext() {
 export default function StartupLaunchGate() {
   const [show, setShow] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(3);
-  const [imageSrc, setImageSrc] = useState("/burma-ai-startup-ad.png?v=3");
 
   useEffect(() => {
     if (!isAppLikeContext()) {
@@ -36,6 +38,7 @@ export default function StartupLaunchGate() {
     }
 
     const startedAt = Date.now();
+
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
 
@@ -60,20 +63,22 @@ export default function StartupLaunchGate() {
   if (!show) return null;
 
   return (
-    <section className="fixed inset-0 z-[2147483647] bg-white" aria-label="Burma AI Studio startup ad">
+    <section
+      className="fixed inset-0 z-[2147483647] bg-white"
+      aria-label="Burma AI Studio startup ad"
+    >
       <img
-        src={imageSrc}
+        src={STARTUP_AD_SRC}
         alt="Burma AI Studio Startup Ad"
         className="h-full w-full object-cover"
         draggable={false}
-        onError={() => {
-          if (imageSrc.includes(".png")) setImageSrc("/burma-ai-startup-ad.webp?v=3");
-        }}
+        onError={() => setShow(false)}
       />
+
       <button
         type="button"
         onClick={() => setShow(false)}
-        className="absolute right-5 top-5 rounded-full bg-black/35 px-5 py-2 text-base font-bold text-white backdrop-blur-md"
+        className="absolute right-5 top-[calc(env(safe-area-inset-top,0px)+1.25rem)] rounded-full bg-black/35 px-5 py-2 text-base font-bold text-white backdrop-blur-md"
         aria-label={`Skip startup ad in ${secondsLeft} seconds`}
       >
         Skip {secondsLeft}
