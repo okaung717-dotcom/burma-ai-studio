@@ -21,17 +21,18 @@ const mobileInstallOptions = [
   },
   {
     title: "iOS Mobile Config",
-    label: "iPhone / iPad",
+    label: "iPhone / iPad Safari Only",
     description:
-      "For iOS users. Download the Mobile Config profile, install it from Settings, then use the Burma AI Studio icon from the Home Screen.",
+      "For iOS users. Open this page in Safari, download the Mobile Config profile, install it from Settings, then open Burma AI Studio from the Home Screen icon.",
     href: "/downloads/burma-ai-studio-ios.mobileconfig",
     cta: "Install iOS Config",
     icon: "📱",
     steps: [
-      "Open this page in Safari.",
+      "Open this install page in Safari, not Chrome, Facebook, Telegram, or Messenger browser.",
       "Tap Install iOS Config and allow the profile download.",
-      "Open Settings and tap Profile Downloaded.",
-      "Install Burma AI Studio iOS Config.",
+      "Open iPhone Settings and tap Profile Downloaded. If you do not see it, go to General > VPN & Device Management.",
+      "Tap Burma AI Studio iOS Config > Install > enter passcode > Install.",
+      "Open the Burma AI Studio icon from the Home Screen.",
     ],
   },
 ];
@@ -44,8 +45,8 @@ const browserInstallSteps = [
   },
   {
     title: "iPhone Safari Shortcut",
-    label: "Safari",
-    detail: "Open burmaaistudio.com in Safari, tap Share, then choose Add to Home Screen. Mobile Config above is the cleaner iOS option.",
+    label: "Safari Backup",
+    detail: "If Mobile Config does not install on a specific iPhone, open burmaaistudio.com in Safari, tap Share, then choose Add to Home Screen.",
   },
   {
     title: "Desktop Shortcut",
@@ -62,7 +63,7 @@ export default function InstallPage() {
           <p className="text-xs font-black uppercase tracking-[0.25em] text-[#e3bc61]">Mobile App Install</p>
           <h1 className="mt-3 text-3xl font-black md:text-5xl">Install Burma AI Studio on Your Phone</h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#f3dfc1]">
-            Android users can install the native APK. iPhone and iPad users can install the iOS Mobile Config profile to add Burma AI Studio to the Home Screen in app mode.
+            Android users can install the native APK. iPhone and iPad users must open this page in Safari to install the iOS Mobile Config profile.
           </p>
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
@@ -114,7 +115,7 @@ export default function InstallPage() {
         <div className="rounded-[1.5rem] border border-[#be9537]/25 bg-white p-5 text-sm leading-relaxed text-[#6b7280] dark:bg-[#1a0b0e] dark:text-[#d8c4a3]">
           <h2 className="font-black text-[#911923] dark:text-[#e3bc61]">Important Note</h2>
           <p className="mt-2">
-            Android APK is a native Android install. iOS Mobile Config is not an App Store native app; it adds a Home Screen app icon and opens Burma AI Studio in full-screen app mode without Xcode, TestFlight, or an Apple Developer account.
+            iOS Mobile Config can only be installed properly from Safari. If the profile installs successfully, it adds a Burma AI Studio Home Screen icon and opens the site in full-screen app mode. If a phone blocks profiles, use the Safari Backup option.
           </p>
         </div>
 
