@@ -77,6 +77,27 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
+                var search = new URLSearchParams(window.location.search);
+                var ua = navigator.userAgent || '';
+                var standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+                var iosStandalone = 'standalone' in navigator && !!navigator.standalone;
+                var androidWebView = /Android/i.test(ua) && /; wv\\)/i.test(ua);
+                var explicitApp = search.get('source') === 'pwa' || search.get('source') === 'app' || search.get('source') === 'native' || search.get('platform') === 'ios' || search.get('platform') === 'android';
+                var nativeBridge = typeof window.Capacitor !== 'undefined';
+                var realApp = standalone || iosStandalone || androidWebView || explicitApp || nativeBridge;
+
+                if (!realApp) {
+                  localStorage.removeItem('bas-app-mode');
+                  document.documentElement.classList.remove('bas-app-mode');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
                 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                   document.documentElement.classList.add('dark');
                 } else {
