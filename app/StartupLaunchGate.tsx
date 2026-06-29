@@ -4,25 +4,26 @@ import { useEffect, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 
 const DISPLAY_MS = 3000;
-const STARTUP_AD_SRC = "/burma-ai-startup-ad.webp?v=11";
+const STARTUP_AD_SRC = "/burma-ai-startup-ad.webp?v=12";
 
 function isAppLikeContext() {
   if (typeof window === "undefined") return false;
 
   const nav = navigator as Navigator & { standalone?: boolean };
   const search = new URLSearchParams(window.location.search);
+  const userAgent = navigator.userAgent || "";
   const isNative = Capacitor.isNativePlatform();
   const isStandalone = window.matchMedia?.("(display-mode: standalone)")?.matches;
   const isIOSHomeScreen = nav.standalone === true;
+  const isAndroidWebView = /Android/i.test(userAgent) && /; wv\)/i.test(userAgent);
   const explicitAppMode =
     search.get("source") === "pwa" ||
     search.get("source") === "app" ||
     search.get("source") === "native" ||
     search.get("platform") === "ios" ||
-    search.get("platform") === "android" ||
-    localStorage.getItem("bas-app-mode") === "native";
+    search.get("platform") === "android";
 
-  return Boolean(isNative || isStandalone || isIOSHomeScreen || explicitAppMode);
+  return Boolean(isNative || isStandalone || isIOSHomeScreen || isAndroidWebView || explicitAppMode);
 }
 
 export default function StartupLaunchGate() {
