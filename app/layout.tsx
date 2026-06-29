@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AppShell from "./AppShell";
+import StartupLaunchGate from "./StartupLaunchGate";
 import { LanguageProvider } from "./LanguageContext";
 import { ThemeProvider } from "./ThemeProvider";
 
@@ -87,6 +88,8 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col w-full overflow-x-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}>
+        <StartupLaunchGate />
+
         <ThemeProvider>
           <LanguageProvider>
             <AppShell>{children}</AppShell>
