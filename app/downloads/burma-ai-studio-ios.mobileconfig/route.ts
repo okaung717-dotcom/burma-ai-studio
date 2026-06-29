@@ -9,10 +9,12 @@ const profile = `<?xml version="1.0" encoding="UTF-8"?>
       <true/>
       <key>IsPrecomposed</key>
       <true/>
+      <key>IsRemovable</key>
+      <true/>
       <key>Label</key>
       <string>Burma AI Studio</string>
       <key>PayloadDescription</key>
-      <string>Adds Burma AI Studio app mode to the iPhone Home Screen.</string>
+      <string>Adds Burma AI Studio to the iPhone Home Screen in app mode.</string>
       <key>PayloadDisplayName</key>
       <string>Burma AI Studio</string>
       <key>PayloadIdentifier</key>
@@ -23,14 +25,12 @@ const profile = `<?xml version="1.0" encoding="UTF-8"?>
       <string>9C80EFD7-515D-46F3-91BF-72E7CBEC14B4</string>
       <key>PayloadVersion</key>
       <integer>1</integer>
-      <key>Removable</key>
-      <true/>
       <key>URL</key>
       <string>https://burmaaistudio.com/?source=pwa&amp;platform=ios</string>
     </dict>
   </array>
   <key>PayloadDescription</key>
-  <string>Burma AI Studio iOS mobile web app configuration.</string>
+  <string>Install Burma AI Studio as an iOS Home Screen app icon.</string>
   <key>PayloadDisplayName</key>
   <string>Burma AI Studio iOS Config</string>
   <key>PayloadIdentifier</key>
@@ -51,10 +51,9 @@ const profile = `<?xml version="1.0" encoding="UTF-8"?>
 export function GET() {
   return new Response(profile, {
     headers: {
-      "Content-Type": "application/x-apple-aspen-config; charset=utf-8",
-      "Content-Disposition": 'attachment; filename="burma-ai-studio-ios.mobileconfig"',
-      "Cache-Control": "public, max-age=3600",
-      "X-Content-Type-Options": "nosniff",
+      "Content-Type": "application/x-apple-aspen-config",
+      "Content-Disposition": 'inline; filename="burma-ai-studio-ios.mobileconfig"',
+      "Cache-Control": "no-store, max-age=0",
     },
   });
 }
