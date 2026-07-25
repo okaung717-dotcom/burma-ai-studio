@@ -1,131 +1,222 @@
 "use client";
 
-import { Play, Video, Sparkles, MessageCircle, Clock, BadgeCheck, Wand2, ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Clock3,
+  Film,
+  MessageCircle,
+  Play,
+  Sparkles,
+  WandSparkles,
+} from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 import ContentStrip from "./ContentStrip";
+import "./premium-home.css";
 
 const heroVideoId = "T9p2lqcETCE";
 
 const translations = {
   EN: {
-    badge: "BURMA AI STUDIO APP",
+    eyebrow: "AI FILMMAKING · BRAND SYSTEMS",
     title1: "AI Videos That",
     title2: "Make Your Brand",
-    title3: "Stand Out",
-    desc: "A premium AI video creation service for business ads, product videos, AI presenters, Reels, TikTok and cinematic brand campaigns.",
-    btn1: "Start Project",
-    btn2: "Watch Work",
-    quickTitle: "What do you need today?",
-    q1: "AI presenter ad",
-    q2: "Product video",
-    q3: "TikTok/Reels short",
-    q4: "Script idea",
-    heroLabel: "Live preview",
-    heroTitle: "Cinematic brand video",
-    heroCaption: "Muted autoplay • Ready for social media",
-    flowTitle: "Simple project flow",
-    f1: "Tell us your product, platform and duration.",
-    f2: "We prepare direction, script and visual style.",
-    f3: "You review, request revisions and receive final video.",
-    footerText: "© 2026 Burma AI Studio. All rights reserved."
+    title3: "Unforgettable.",
+    desc: "Premium AI video direction for brands that want cinematic quality, faster production and a visual identity people actually remember.",
+    btn1: "Start a Project",
+    btn2: "Explore Our Work",
+    heroLabel: "NOW PLAYING",
+    heroTitle: "Cinematic brand storytelling",
+    heroCaption: "AI-crafted · Human-directed · Social-ready",
+    floatingKicker: "Creative advantage",
+    floatingTitle: "Studio-grade visuals without studio-sized delays.",
+    stat1Label: "100+",
+    stat1Text: "Videos crafted",
+    stat2Label: "48h",
+    stat2Text: "Fast turnaround",
+    stat3Label: "Pro",
+    stat3Text: "Creative direction",
+    stat4Label: "AI",
+    stat4Text: "Production engine",
+    quickKicker: "Creative concierge",
+    quickTitle: "What should we create next?",
+    quickDesc: "Choose a direction and we’ll take you straight into the right project flow.",
+    q1: "AI presenter campaign",
+    q2: "Product launch video",
+    q3: "TikTok / Reels short",
+    q4: "Script & concept direction",
+    flowKicker: "Premium workflow",
+    flowTitle: "From brief to final, without the usual production friction.",
+    flowDesc: "A clear three-step production system designed for businesses that need speed without sacrificing visual quality.",
+    f1Title: "Tell us the goal",
+    f1: "Share your product, platform, audience and duration. We shape the creative brief around the result you need.",
+    f2Title: "We build the world",
+    f2: "Direction, script, visual language and AI production are developed into a cohesive premium video system.",
+    f3Title: "Review. Refine. Launch.",
+    f3: "You review, request revisions and receive a polished final video ready for the platforms that matter.",
+    footerText: "© 2026 Burma AI Studio. All rights reserved.",
   },
   MM: {
-    badge: "BURMA AI STUDIO APP",
-    title1: "သင့်Brandကို",
-    title2: "ပိုထင်းထွက်စေမယ့်",
-    title3: "AI Video",
-    desc: "လုပ်ငန်းကြော်ငြာ၊ product video၊ AI presenter၊ Reels/TikTok short video နဲ့ cinematic brand campaign တွေကို premium quality နဲ့ ဖန်တီးပေးပါတယ်။",
+    eyebrow: "AI FILMMAKING · BRAND SYSTEMS",
+    title1: "သင့် Brand ကို",
+    title2: "လူတွေမှတ်မိသွားစေမယ့်",
+    title3: "AI Video.",
+    desc: "Cinematic quality၊ မြန်ဆန်တဲ့ production နဲ့ မှတ်မိလွယ်တဲ့ visual identity ကို ပေါင်းစပ်ပြီး Brand တွေအတွက် premium AI video direction ဖန်တီးပေးပါတယ်။",
     btn1: "Project စတင်ရန်",
-    btn2: "လက်ရာကြည့်ရန်",
-    quickTitle: "ဒီနေ့ ဘာလိုချင်လဲ?",
-    q1: "AI presenter ad",
-    q2: "Product video",
-    q3: "TikTok/Reels short",
-    q4: "Script idea",
-    heroLabel: "Live preview",
-    heroTitle: "Cinematic brand video",
-    heroCaption: "အသံပိတ် autoplay • Social media အတွက်အသင့်",
-    flowTitle: "လုပ်ဆောင်ပုံ အလွယ်ချုပ်",
-    f1: "Product, platform, duration ကိုပြောပါ။",
-    f2: "Direction, script, visual style ကိုပြင်ဆင်ပေးပါမယ်။",
-    f3: "Review / revision ပြီး final video ရယူပါ။",
-    footerText: "© 2026 Burma AI Studio. မူပိုင်ခွင့်များအားလုံး ရယူထားပြီးဖြစ်ပါသည်။"
-  }
+    btn2: "လက်ရာများကြည့်ရန်",
+    heroLabel: "NOW PLAYING",
+    heroTitle: "Cinematic brand storytelling",
+    heroCaption: "AI-crafted · Human-directed · Social-ready",
+    floatingKicker: "Creative advantage",
+    floatingTitle: "Studio quality ကို production delay အများကြီးမရှိဘဲ ရယူပါ။",
+    stat1Label: "100+",
+    stat1Text: "ဖန်တီးပြီး Video",
+    stat2Label: "48h",
+    stat2Text: "Fast turnaround",
+    stat3Label: "Pro",
+    stat3Text: "Creative direction",
+    stat4Label: "AI",
+    stat4Text: "Production engine",
+    quickKicker: "Creative concierge",
+    quickTitle: "နောက်တစ်ခု ဘာဖန်တီးမလဲ?",
+    quickDesc: "လိုချင်တဲ့ direction ကိုရွေးလိုက်ပါ။ သင့် Project အတွက် အလိုက်ဖက်ဆုံး workflow ကို တန်းပို့ပေးမယ်။",
+    q1: "AI presenter campaign",
+    q2: "Product launch video",
+    q3: "TikTok / Reels short",
+    q4: "Script & concept direction",
+    flowKicker: "Premium workflow",
+    flowTitle: "Brief ကနေ Final အထိ ရှင်းလင်းပြီး မြန်ဆန်တဲ့ Production Flow.",
+    flowDesc: "Speed ကိုလိုချင်ပေမယ့် visual quality မလျော့ချင်တဲ့ Business တွေအတွက် သုံးဆင့်တည်းနဲ့ လုပ်ဆောင်နိုင်အောင် တည်ဆောက်ထားပါတယ်။",
+    f1Title: "Goal ကိုပြောပါ",
+    f1: "Product၊ platform၊ audience နဲ့ duration ကိုပြောပါ။ လိုချင်တဲ့ result ကိုအခြေခံပြီး creative brief ဖန်တီးပေးမယ်။",
+    f2Title: "Visual world ကိုဖန်တီးမယ်",
+    f2: "Direction၊ script၊ visual language နဲ့ AI production ကို cohesive premium video system တစ်ခုအဖြစ် တည်ဆောက်ပေးမယ်။",
+    f3Title: "Review. Refine. Launch.",
+    f3: "Review လုပ်ပြီး revision တောင်းနိုင်ပါတယ်။ ပြီးရင် platform-ready final video ကို ရယူနိုင်ပါတယ်။",
+    footerText: "© 2026 Burma AI Studio. မူပိုင်ခွင့်များအားလုံး ရယူထားပြီးဖြစ်ပါသည်။",
+  },
 } as const;
 
 export default function Home() {
   const { lang } = useLanguage();
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
+
+  const stats = [
+    { icon: Film, value: t.stat1Label, label: t.stat1Text },
+    { icon: Clock3, value: t.stat2Label, label: t.stat2Text },
+    { icon: BadgeCheck, value: t.stat3Label, label: t.stat3Text },
+    { icon: WandSparkles, value: t.stat4Label, label: t.stat4Text },
+  ];
+
   const quickActions = [t.q1, t.q2, t.q3, t.q4];
-  const flow = [t.f1, t.f2, t.f3];
+  const flow = [
+    { title: t.f1Title, text: t.f1 },
+    { title: t.f2Title, text: t.f2 },
+    { title: t.f3Title, text: t.f3 },
+  ];
 
   return (
     <>
-      <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 md:px-12 lg:px-24 lg:py-14">
-        <section className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="space-y-6 rounded-[2.2rem] border border-[#ead9bd] bg-[#fffdf8]/82 p-5 shadow-[0_18px_55px_rgba(26,11,14,0.08)] backdrop-blur md:p-8 dark:border-[#4b2a1d] dark:bg-[#1a0b0e]/80">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#be9537]/35 bg-[#fff3e3] px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#911923] dark:bg-white/5 dark:text-[#e3bc61]">
-              <Sparkles className="h-4 w-4" /> {t.badge}
+      <main className="bas-home-shell">
+        <section className="bas-home-hero" aria-label="Burma AI Studio premium AI video production">
+          <div className="bas-home-glow bas-home-glow-a" aria-hidden="true" />
+          <div className="bas-home-glow bas-home-glow-b" aria-hidden="true" />
+
+          <div className="bas-home-copy">
+            <div className="bas-home-eyebrow">
+              <Sparkles className="h-4 w-4" />
+              <span>{t.eyebrow}</span>
             </div>
-            <div>
-              <h1 className={`text-[42px] font-black tracking-tight text-[#1a0b0e] sm:text-6xl lg:text-7xl dark:text-[#fff7eb] ${safeLang === "MM" ? "leading-[1.38] sm:leading-[1.34] lg:leading-[1.3]" : "leading-[1.16]"}`}>
-                <span className="inline-block whitespace-nowrap">{t.title1}</span><br />{t.title2}<br /><span className="text-[#911923] dark:text-[#e3bc61]">{t.title3}</span>
-              </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#79695d] md:text-lg dark:text-[#d8c4a3]">{t.desc}</p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <a href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full bg-[#911923] px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-[#911923]/20 transition hover:bg-[#7a141e]">
-                <MessageCircle className="h-5 w-5" /> {t.btn1}
+
+            <h1 className={`bas-home-title ${safeLang === "MM" ? "bas-home-title-mm" : ""}`}>
+              <span>{t.title1}</span>
+              <span>{t.title2}</span>
+              <em>{t.title3}</em>
+            </h1>
+
+            <p className="bas-home-description">{t.desc}</p>
+
+            <div className="bas-home-cta-row">
+              <a href="/contact" className="bas-home-primary-cta">
+                <MessageCircle className="h-5 w-5" />
+                <span>{t.btn1}</span>
+                <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="/portfolio" className="inline-flex items-center justify-center gap-2 rounded-full border border-[#be9537]/45 bg-white/70 px-6 py-3.5 text-sm font-black text-[#1a0b0e] transition hover:border-[#911923]/50 dark:bg-white/5 dark:text-white">
-                <Play className="h-5 w-5" /> {t.btn2}
+              <a href="/portfolio" className="bas-home-secondary-cta">
+                <span className="bas-home-play"><Play className="h-4 w-4 fill-current" /></span>
+                <span>{t.btn2}</span>
               </a>
-            </div>
-            <div className="grid grid-cols-2 gap-3 pt-2 sm:grid-cols-4">
-              {[{ icon: Video, label: "100+", text: "Videos" }, { icon: Clock, label: "48h", text: "Fast" }, { icon: BadgeCheck, label: "Pro", text: "Quality" }, { icon: Wand2, label: "AI", text: "Creative" }].map((item) => (
-                <div key={item.text} className="rounded-3xl border border-[#ead9bd] bg-white/60 p-4 dark:border-white/10 dark:bg-white/5">
-                  <item.icon className="mb-3 h-5 w-5 text-[#be9537]" />
-                  <p className="text-2xl font-black text-[#1a0b0e] dark:text-white">{item.label}</p>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#79695d] dark:text-[#d8c4a3]">{item.text}</p>
-                </div>
-              ))}
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[2.4rem] border border-[#ead9bd] bg-[#100708] p-3 shadow-[0_26px_90px_rgba(145,25,35,0.22)] dark:border-[#4b2a1d]">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-[#100708] md:aspect-video lg:aspect-[4/5] xl:aspect-video">
-              <iframe className="absolute inset-0 h-full w-full scale-[1.03]" src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&playlist=${heroVideoId}&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`} title="Burma AI Studio cinematic commercial autoplay preview" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowFullScreen />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#100708]/90 via-transparent to-[#100708]/25" />
+          <div className="bas-home-media-zone">
+            <div className="bas-home-media-frame">
+              <iframe
+                className="bas-home-video"
+                src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&playlist=${heroVideoId}&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
+                title="Burma AI Studio cinematic commercial autoplay preview"
+                allow="autoplay; encrypted-media; picture-in-picture; web-share"
+                allowFullScreen
+              />
+              <div className="bas-home-media-vignette" aria-hidden="true" />
+              <div className="bas-home-media-caption">
+                <div className="bas-home-now-playing"><Sparkles className="h-3.5 w-3.5" /> {t.heroLabel}</div>
+                <h2>{t.heroTitle}</h2>
+                <p>{t.heroCaption}</p>
+              </div>
             </div>
-            <div className="absolute bottom-7 left-7 right-7 rounded-[1.6rem] border border-white/10 bg-[#100708]/82 p-4 text-white backdrop-blur-xl">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white/80"><Sparkles className="h-3.5 w-3.5 text-[#e3bc61]" /> {t.heroLabel}</div>
-              <h2 className="text-xl font-black md:text-2xl">{t.heroTitle}</h2>
-              <p className="mt-1 text-sm text-white/70">{t.heroCaption}</p>
+
+            <div className="bas-home-floating-card">
+              <span>{t.floatingKicker}</span>
+              <strong>{t.floatingTitle}</strong>
             </div>
+          </div>
+
+          <div className="bas-home-stat-rail">
+            {stats.map((item) => (
+              <div className="bas-home-stat" key={item.label}>
+                <item.icon className="h-5 w-5" />
+                <div>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
-        <section className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-          <div className="rounded-[2rem] border border-[#ead9bd] bg-[#1a0b0e] p-6 text-white shadow-[0_18px_55px_rgba(26,11,14,0.12)] dark:border-[#4b2a1d]">
-            <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61]">Quick actions</p>
-            <h2 className="mt-3 text-2xl font-black">{t.quickTitle}</h2>
-            <div className="mt-5 grid gap-3">
-              {quickActions.map((action) => (
-                <a key={action} href="/contact" className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/7 px-4 py-3 text-sm font-bold text-white/88 hover:bg-white/12">
-                  {action}<ArrowRight className="h-4 w-4 text-[#e3bc61]" />
+        <section className="bas-home-below-grid">
+          <div className="bas-home-concierge">
+            <div>
+              <p className="bas-home-section-kicker">{t.quickKicker}</p>
+              <h2>{t.quickTitle}</h2>
+              <p className="bas-home-section-copy">{t.quickDesc}</p>
+            </div>
+            <div className="bas-home-action-list">
+              {quickActions.map((action, index) => (
+                <a href="/contact" key={action}>
+                  <span className="bas-home-action-index">0{index + 1}</span>
+                  <span>{action}</span>
+                  <ArrowRight className="h-4 w-4" />
                 </a>
               ))}
             </div>
           </div>
-          <div className="rounded-[2rem] border border-[#ead9bd] bg-[#fffdf8] p-6 shadow-sm dark:border-[#4b2a1d] dark:bg-[#1a0b0e]">
-            <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#911923] dark:text-[#e3bc61]">{t.flowTitle}</p>
-            <div className="mt-5 grid gap-4 md:grid-cols-3">
-              {flow.map((text, index) => (
-                <div key={text} className="rounded-[1.6rem] border border-[#ead9bd] bg-[#fff9f0] p-5 dark:border-[#4b2a1d] dark:bg-[#241113]">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#be9537] text-sm font-black text-[#100708]">{index + 1}</span>
-                  <p className="mt-4 text-sm font-bold leading-relaxed text-[#1a0b0e] dark:text-[#fff7eb]">{text}</p>
-                </div>
+
+          <div className="bas-home-flow-card">
+            <div className="bas-home-flow-heading">
+              <p className="bas-home-section-kicker">{t.flowKicker}</p>
+              <h2>{t.flowTitle}</h2>
+              <p className="bas-home-section-copy">{t.flowDesc}</p>
+            </div>
+            <div className="bas-home-flow-grid">
+              {flow.map((step, index) => (
+                <article key={step.title} className="bas-home-flow-step">
+                  <span className="bas-home-step-number">0{index + 1}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </article>
               ))}
             </div>
           </div>
@@ -134,11 +225,11 @@ export default function Home() {
 
       <ContentStrip type="home" />
 
-      <footer className="border-t border-[#ead9bd] bg-[#fff3e3] px-6 py-12 transition-colors duration-300 dark:border-[#4b2a1d] dark:bg-[#100708] md:px-16 lg:px-24">
-        <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-4 text-center md:grid-cols-[1fr_auto_1fr]">
-          <div className="flex items-center justify-center gap-2 font-black text-xl text-[#1a0b0e] dark:text-white md:justify-self-start"><Video className="h-6 w-6 text-[#911923] dark:text-[#e3bc61]" />Burma AI Studio</div>
-          <p className="text-center text-sm font-medium text-[#79695d] dark:text-[#d8c4a3] md:col-start-2 md:justify-self-center">{t.footerText}</p>
-          <div className="hidden md:block" aria-hidden="true" />
+      <footer className="bas-home-footer">
+        <div className="bas-home-footer-inner">
+          <div className="bas-home-footer-brand"><Film className="h-5 w-5" /> Burma AI Studio</div>
+          <p>{t.footerText}</p>
+          <span className="bas-home-footer-mark">AI · VIDEO · BRAND</span>
         </div>
       </footer>
     </>
