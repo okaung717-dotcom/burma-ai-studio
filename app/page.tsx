@@ -16,6 +16,7 @@ import {
 import { useLanguage } from "./LanguageContext";
 import ContentStrip from "./ContentStrip";
 import "./premium-home-v2.css";
+import "./home-video-cleanup-mm.css";
 
 const heroVideoId = "DVM3o2Wqcys";
 
@@ -112,6 +113,7 @@ export default function Home() {
   const { lang } = useLanguage();
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
   const t = translations[safeLang];
+  const isMyanmar = safeLang === "MM";
 
   const services = [t.service1, t.service2, t.service3, t.service4];
   const flow = [
@@ -157,16 +159,17 @@ export default function Home() {
             <div className="bas-command-media">
               <iframe
                 className="bas-command-video"
-                src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&playlist=${heroVideoId}&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
+                src={`https://www.youtube-nocookie.com/embed/${heroVideoId}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&showinfo=0&cc_load_policy=0`}
                 title="Burma AI Studio featured cinematic trailer"
-                allow="autoplay; encrypted-media; picture-in-picture; web-share"
-                allowFullScreen
+                allow="autoplay; encrypted-media; picture-in-picture"
+                tabIndex={-1}
+                aria-hidden="true"
               />
               <div className="bas-command-media-shade" aria-hidden="true" />
 
               <div className="bas-command-copy">
                 <p className="bas-command-eyebrow"><Sparkles className="h-4 w-4" /> {t.eyebrow}</p>
-                <h1 className={safeLang === "MM" ? "is-mm" : ""}>
+                <h1 className={isMyanmar ? "is-mm" : ""}>
                   <span>{t.title1}</span>
                   <em>{t.title2}</em>
                 </h1>
@@ -215,7 +218,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bas-home-v2-services">
+        <section className={`bas-home-v2-services${isMyanmar ? " is-mm" : ""}`}>
           <div className="bas-home-v2-section-head">
             <p>{t.servicesKicker}</p>
             <h2>{t.servicesTitle}</h2>
@@ -231,7 +234,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bas-home-v2-flow">
+        <section className={`bas-home-v2-flow${isMyanmar ? " is-mm" : ""}`}>
           <div className="bas-home-v2-flow-copy">
             <p>{t.flowKicker}</p>
             <h2>{t.flowTitle}</h2>
