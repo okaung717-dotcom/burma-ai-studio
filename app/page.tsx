@@ -14,7 +14,7 @@ import { useLanguage } from "./LanguageContext";
 import ContentStrip from "./ContentStrip";
 import "./premium-home.css";
 
-const heroVideoId = "T9p2lqcETCE";
+const heroVideoId = "DVM3o2Wqcys";
 
 const translations = {
   EN: {
