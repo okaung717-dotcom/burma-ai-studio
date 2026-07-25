@@ -1,0 +1,59 @@
+/* Website-only correction: restore the existing Burma AI Studio wordmark inside the desktop liquid-glass navbar. Native/PWA app mode and sub-1024px layouts are intentionally untouched. */
+
+@media (min-width: 1024px) {
+  body:not(.bas-app-mode) > nav > div > a:first-child {
+    display: flex !important;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 0 8px 0 6px;
+    border: 0 !important;
+    border-radius: 999px;
+    background: transparent !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > a:first-child > svg {
+    display: block !important;
+    width: auto !important;
+    height: 52px !important;
+    max-width: 182px;
+    flex: 0 0 auto;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    filter: drop-shadow(0 5px 14px rgba(26, 11, 14, 0.08));
+    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 220ms ease;
+  }
+
+  body:not(.bas-app-mode) > nav > div > a:first-child:hover > svg,
+  body:not(.bas-app-mode) > nav > div > a:first-child:focus-visible > svg {
+    transform: translateY(-1px) scale(1.015) !important;
+    filter: drop-shadow(0 8px 18px rgba(145, 25, 35, 0.14));
+  }
+
+  body:not(.bas-app-mode) > nav > div > a:first-child:focus-visible {
+    outline: 2px solid rgba(190, 149, 55, 0.58);
+    outline-offset: 3px;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav > div > a:first-child > svg {
+    filter: brightness(1.12) drop-shadow(0 6px 16px rgba(0, 0, 0, 0.22));
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1260px) {
+  body:not(.bas-app-mode) > nav > div > a:first-child {
+    padding-left: 2px;
+    padding-right: 4px;
+  }
+
+  body:not(.bas-app-mode) > nav > div > a:first-child > svg {
+    height: 44px !important;
+    max-width: 126px;
+  }
+}
