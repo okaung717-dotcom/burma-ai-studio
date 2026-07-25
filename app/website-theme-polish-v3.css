@@ -1,0 +1,323 @@
+/* Burma AI Studio — final public-website color + navigation typography polish.
+   Website only: app/PWA/native and admin surfaces are excluded. */
+
+@media (min-width: 768px) {
+  body:not(.bas-app-mode):not(.bas-admin-route) {
+    --bas-v3-light-bg: #f7f1e9;
+    --bas-v3-light-bg-2: #fffaf4;
+    --bas-v3-light-surface: #fffdf9;
+    --bas-v3-light-surface-soft: #f2e7dd;
+    --bas-v3-light-ink: #251317;
+    --bas-v3-light-muted: #725f56;
+    --bas-v3-light-burgundy: #981b28;
+    --bas-v3-light-burgundy-deep: #67101a;
+    --bas-v3-light-gold: #c89b3d;
+    --bas-v3-light-gold-soft: #e7c875;
+    --bas-v3-light-line: rgba(91, 49, 54, 0.13);
+
+    --bas-v3-dark-bg: #050609;
+    --bas-v3-dark-bg-2: #09080b;
+    --bas-v3-dark-surface: #110b0e;
+    --bas-v3-dark-surface-soft: #1a0e12;
+    --bas-v3-dark-ink: #fff6ec;
+    --bas-v3-dark-muted: #c7b4aa;
+    --bas-v3-dark-burgundy: #b92536;
+    --bas-v3-dark-burgundy-deep: #71121d;
+    --bas-v3-dark-gold: #e3bc61;
+    --bas-v3-dark-gold-soft: #f1d78c;
+    --bas-v3-dark-line: rgba(227, 188, 97, 0.16);
+  }
+
+  /* ------------------------------------------------------------------
+     NAVIGATION TYPOGRAPHY
+     Match the premium Sora display language used by the Home hero while
+     retaining the approved navbar geometry and hover-glass interaction.
+     ------------------------------------------------------------------ */
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a,
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type {
+    font-family: "Sora", "Noto Sans Myanmar", "Myanmar Text", sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.025em !important;
+    line-height: 1 !important;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    text-rendering: geometricPrecision;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a {
+    color: #624e45 !important;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type {
+    color: #665148 !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type {
+    color: rgba(255, 246, 236, 0.80) !important;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a:hover,
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a:focus-visible,
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type:hover,
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type:focus-visible {
+    color: var(--bas-v3-light-burgundy) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a:hover,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a:focus-visible,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type:hover,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type:focus-visible {
+    color: var(--bas-v3-dark-gold) !important;
+  }
+
+  /* Theme icon remains an icon control, but shares the refined color system. */
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:nth-of-type(2) {
+    color: #765f52 !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:nth-of-type(2) {
+    color: rgba(255, 246, 236, 0.78) !important;
+  }
+
+  /* ------------------------------------------------------------------
+     GLOBAL LIGHT / DARK COLOR BALANCE
+     ------------------------------------------------------------------ */
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content {
+    color: var(--bas-v3-light-ink) !important;
+    background:
+      radial-gradient(circle at 12% 4%, rgba(200, 155, 61, 0.095), transparent 30rem),
+      radial-gradient(circle at 89% 14%, rgba(152, 27, 40, 0.065), transparent 34rem),
+      linear-gradient(180deg, var(--bas-v3-light-bg-2) 0%, var(--bas-v3-light-bg) 100%) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content {
+    color: var(--bas-v3-dark-ink) !important;
+    background:
+      radial-gradient(circle at 12% 3%, rgba(227, 188, 97, 0.075), transparent 31rem),
+      radial-gradient(circle at 87% 15%, rgba(185, 37, 54, 0.11), transparent 36rem),
+      linear-gradient(180deg, var(--bas-v3-dark-bg-2) 0%, var(--bas-v3-dark-bg) 100%) !important;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav {
+    border-bottom-color: rgba(91, 49, 54, 0.105) !important;
+    background: rgba(255, 252, 247, 0.965) !important;
+    box-shadow: 0 16px 44px rgba(56, 28, 32, 0.065) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) > nav {
+    border-bottom-color: rgba(227, 188, 97, 0.115) !important;
+    background: rgba(9, 7, 9, 0.975) !important;
+    box-shadow: 0 18px 52px rgba(0, 0, 0, 0.38) !important;
+  }
+
+  /* Generic text tone calibration across public pages. */
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services p,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio p,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact p,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal p,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal li {
+    color: var(--bas-v3-light-muted) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services p,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio p,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact p,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal p,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal li {
+    color: var(--bas-v3-dark-muted) !important;
+  }
+
+  /* ------------------------------------------------------------------
+     HOME — metric cards / light-dark hierarchy
+     ------------------------------------------------------------------ */
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-stage {
+    background:
+      radial-gradient(circle at 82% 15%, rgba(152, 27, 40, 0.10), transparent 25rem),
+      radial-gradient(circle at 34% 78%, rgba(200, 155, 61, 0.12), transparent 28rem),
+      linear-gradient(135deg, #eee2d8 0%, #e4d2c9 54%, #d6b9b5 100%) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-stage {
+    background:
+      radial-gradient(circle at 78% 15%, rgba(185, 37, 54, 0.17), transparent 29rem),
+      radial-gradient(circle at 36% 78%, rgba(227, 188, 97, 0.075), transparent 30rem),
+      linear-gradient(135deg, #120c10 0%, #241016 56%, #3a1520 100%) !important;
+  }
+
+  /* 100+ card: high-contrast brand anchor instead of pale-on-pale text. */
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric.is-primary {
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    background: linear-gradient(145deg, #9f1d2c 0%, #6c111b 100%) !important;
+    color: #fff8ef !important;
+    box-shadow:
+      0 18px 40px rgba(112, 17, 28, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.13) !important;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric.is-primary > span {
+    color: #fff8ef !important;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric.is-primary > p {
+    color: rgba(255, 248, 239, 0.70) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric.is-primary {
+    border-color: rgba(227, 188, 97, 0.20) !important;
+    background: linear-gradient(145deg, #a82031 0%, #66101a 100%) !important;
+    box-shadow:
+      0 20px 48px rgba(0, 0, 0, 0.30),
+      0 8px 24px rgba(152, 27, 40, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Supporting metric cards: warm paper in light mode, rich near-black in dark mode. */
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary),
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-quote {
+    border-color: rgba(103, 58, 63, 0.13) !important;
+    background: rgba(255, 249, 242, 0.72) !important;
+    color: #2b171b !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+  }
+
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary) > span {
+    color: #2a171b !important;
+  }
+
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary) > p,
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-quote > p {
+    color: #705d55 !important;
+  }
+
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary) > svg,
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-quote > svg {
+    color: #b98931 !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary),
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-quote {
+    border-color: rgba(227, 188, 97, 0.13) !important;
+    background: rgba(18, 10, 13, 0.78) !important;
+    color: var(--bas-v3-dark-ink) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary) > span {
+    color: #fff5e9 !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary) > p,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-quote > p {
+    color: #bfaea4 !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-metric:not(.is-primary) > svg,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-command-quote > svg {
+    color: var(--bas-v3-dark-gold) !important;
+  }
+
+  /* Home support sections: cleaner hierarchy in both themes. */
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-home-v2-services,
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-home-v2-flow,
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-cms-strip-home {
+    border-color: rgba(96, 53, 59, 0.12) !important;
+    background: rgba(255, 252, 247, 0.82) !important;
+    box-shadow: 0 20px 58px rgba(57, 29, 33, 0.065) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-home-v2-services,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-home-v2-flow,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-cms-strip-home {
+    border-color: rgba(227, 188, 97, 0.12) !important;
+    background: rgba(15, 9, 12, 0.84) !important;
+    box-shadow: 0 24px 68px rgba(0, 0, 0, 0.26) !important;
+  }
+
+  /* ------------------------------------------------------------------
+     SERVICES / PORTFOLIO / CONTACT / LEGAL SURFACES
+     ------------------------------------------------------------------ */
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services > div > main > div > div,
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio > div > main > div,
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact > div > main > section:first-child > div:nth-child(2),
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact > div > main > section:nth-child(2),
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal section {
+    border-color: var(--bas-v3-light-line) !important;
+    background: rgba(255, 253, 249, 0.86) !important;
+    color: var(--bas-v3-light-ink) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services > div > main > div > div,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio > div > main > div,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact > div > main > section:first-child > div:nth-child(2),
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact > div > main > section:nth-child(2),
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal section {
+    border-color: var(--bas-v3-dark-line) !important;
+    background: rgba(17, 11, 14, 0.90) !important;
+    color: var(--bas-v3-dark-ink) !important;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services h2,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services h3,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio h2,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio h3,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact h2,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact h3,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal h2 {
+    color: var(--bas-v3-light-ink) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services h2,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-services h3,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio h2,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-portfolio h3,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact h2,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact h3,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-legal h2 {
+    color: var(--bas-v3-dark-ink) !important;
+  }
+
+  /* Forms: high legibility and restrained brand accents. */
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact input,
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact textarea {
+    border-color: rgba(98, 56, 61, 0.14) !important;
+    background: rgba(255, 252, 247, 0.90) !important;
+    color: #28171b !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact input,
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) .bas-route-contact textarea {
+    border-color: rgba(227, 188, 97, 0.14) !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    color: #fff6ec !important;
+  }
+
+  /* Profile popover + floating assistant are part of the website visual system. */
+  html:not(.dark) body:not(.bas-app-mode):not(.bas-admin-route) #bas-profile-menu {
+    border-color: rgba(99, 55, 60, 0.14) !important;
+    background: rgba(255, 252, 247, 0.975) !important;
+    color: var(--bas-v3-light-ink) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) #bas-profile-menu {
+    border-color: rgba(227, 188, 97, 0.17) !important;
+    background: rgba(15, 9, 12, 0.985) !important;
+    color: var(--bas-v3-dark-ink) !important;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) #burma-ai-open-button {
+    background: linear-gradient(135deg, #a21c2b 0%, #72111b 100%) !important;
+  }
+
+  html.dark body:not(.bas-app-mode):not(.bas-admin-route) #burma-ai-open-button {
+    border-color: rgba(227, 188, 97, 0.18) !important;
+    background: linear-gradient(135deg, #ae2132 0%, #681019 100%) !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1260px) {
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(1) > a,
+  body:not(.bas-app-mode):not(.bas-admin-route) > nav > div > div:nth-of-type(2) > button:first-of-type {
+    font-size: 13.5px !important;
+  }
+}
