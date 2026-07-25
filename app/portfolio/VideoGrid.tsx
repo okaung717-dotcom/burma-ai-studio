@@ -4,12 +4,21 @@ import { useEffect, useState } from "react";
 
 type VideoItem = { src: string; titleEN?: string; descEN?: string; titleMM?: string; descMM?: string };
 
+/* Website portfolio curation: keep the approved cinematic trailer and hide the three retired samples.
+   The API/admin portfolio data is intentionally left untouched so app/admin workflows are not changed. */
+const RETIRED_WEBSITE_VIDEO_IDS = new Set([
+  "IrukbYGHhQs", // Architecture AI Videos
+  "T9p2lqcETCE", // Cinematic Commercial
+  "wJjyMQ3bjt4", // Virtual Presenter Campaign
+]);
+
 const fallback: VideoItem[] = [
-  { src: "DVM3o2Wqcys", titleEN: "Cinematic AI Video", descEN: "AI video portfolio" },
-  { src: "IrukbYGHhQs", titleEN: "Architecture AI Video", descEN: "AI video portfolio" },
-  { src: "T9p2lqcETCE", titleEN: "Commercial AI Video", descEN: "AI video portfolio" },
-  { src: "wJjyMQ3bjt4", titleEN: "AI Presenter Video", descEN: "AI video portfolio" },
+  { src: "DVM3o2Wqcys", titleEN: "Cinematic Trailers AI Video", descEN: "TikTok, YouTube, Facebook AI videos", titleMM: "Cinematic Trailers AI Video", descMM: "TikTok, YouTube, Facebook AI videos" },
 ];
+
+function websiteItems(items: VideoItem[]) {
+  return items.filter((item) => !RETIRED_WEBSITE_VIDEO_IDS.has(item.src));
+}
 
 export default function VideoGrid() {
   const [items, setItems] = useState<VideoItem[]>(fallback);
@@ -18,7 +27,9 @@ export default function VideoGrid() {
     fetch("/api/portfolio", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data?.items) && data.items.length) setItems(data.items);
+        if (!Array.isArray(data?.items)) return;
+        const curated = websiteItems(data.items);
+        setItems(curated.length ? curated : fallback);
       })
       .catch(() => undefined);
   }, []);
