@@ -1,33 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap');
 
-/* Website-only typography system. App/PWA/native presentation is intentionally excluded. */
+/* Website-only premium typography system. App/PWA/native presentation is intentionally excluded. */
 @media (min-width: 768px) {
-  body:not(.bas-app-mode),
-  body:not(.bas-app-mode) button,
-  body:not(.bas-app-mode) input,
-  body:not(.bas-app-mode) textarea,
-  body:not(.bas-app-mode) select {
+  body:not(.bas-app-mode):not(.bas-admin-route),
+  body:not(.bas-app-mode):not(.bas-admin-route) button,
+  body:not(.bas-app-mode):not(.bas-admin-route) input,
+  body:not(.bas-app-mode):not(.bas-admin-route) textarea,
+  body:not(.bas-app-mode):not(.bas-admin-route) select {
     font-family: "Manrope", "Noto Sans Myanmar", "Myanmar Text", "Padauk", Arial, sans-serif;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    text-rendering: geometricPrecision;
   }
 
-  body:not(.bas-app-mode) .bas-website-content h1,
-  body:not(.bas-app-mode) .bas-website-content h2,
-  body:not(.bas-app-mode) .bas-website-content h3,
-  body:not(.bas-app-mode) .bas-website-content h4 {
-    letter-spacing: -0.025em;
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content h1,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content h2,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content h3,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content h4 {
+    font-family: "Sora", "Noto Sans Myanmar", "Myanmar Text", sans-serif;
+    letter-spacing: -0.045em;
     text-wrap: balance;
   }
 
-  body:not(.bas-app-mode) .bas-website-content p,
-  body:not(.bas-app-mode) .bas-website-content li {
-    letter-spacing: -0.006em;
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content h1 {
+    font-weight: 700;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content h2,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content h3 {
+    font-weight: 700;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content p,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content li {
+    letter-spacing: -0.012em;
+  }
+
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content a,
+  body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content button {
+    letter-spacing: -0.014em;
   }
 
   body:not(.bas-app-mode) > nav a,
   body:not(.bas-app-mode) > nav button {
     font-family: "Manrope", "Noto Sans Myanmar", sans-serif !important;
     font-weight: 800;
+    letter-spacing: 0.07em;
   }
 
   body:not(.bas-app-mode) #bas-profile-menu,
