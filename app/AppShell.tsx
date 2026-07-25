@@ -7,6 +7,7 @@ import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { usePathname } from "next/navigation";
 import "./mobile-website-fixes.css";
 import "./liquid-glass-navbar.css";
+import "./liquid-glass-navbar-logo-fix.css";
 import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
