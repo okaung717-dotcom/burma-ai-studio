@@ -78,7 +78,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname() || "/";
   const isAdminArea = pathname.startsWith("/admin6996") || pathname.startsWith("/admin");
   const isLegalArea = LEGAL_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
-  const routeClass = getWebsiteRouteClass(pathname, isLegalArea);
+  const routeClass = isAdminArea ? "bas-route-admin" : getWebsiteRouteClass(pathname, isLegalArea);
+
+  useEffect(() => {
+    document.body.classList.toggle("bas-admin-route", isAdminArea);
+    return () => document.body.classList.remove("bas-admin-route");
+  }, [isAdminArea]);
 
   return (
     <>
