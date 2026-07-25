@@ -6,10 +6,11 @@ import { usePathname } from "next/navigation";
 import "./mobile-website-fixes.css";
 import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
-import AnalyticsTracker from "./AnalyticsTracker";
 import InstallAppPrompt from "./InstallAppPrompt";
 import AppBottomNav from "./AppBottomNav";
 import AppExperience from "./AppExperience";
+import PrivacyConsent from "./PrivacyConsent";
+import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -49,7 +50,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <AnalyticsTracker />
+      <ConsentAwareAnalytics />
       {!isAdminArea && <Navbar />}
       <main className="bas-website-content w-full flex-grow">
         {children}
@@ -62,6 +63,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       )}
       {!isAdminArea && <InstallAppPrompt />}
       {!isAdminArea && <AIAssistant />}
+      {!isAdminArea && <PrivacyConsent />}
     </>
   );
 }
