@@ -11,6 +11,7 @@ import "./liquid-glass-navbar-logo-fix.css";
 import "./desktop-navbar-header-band.css";
 import "./website-profile-dark-fix.css";
 import "./website-typography.css";
+import "./premium-site-system-v2.css";
 import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
@@ -64,17 +65,27 @@ const LEGAL_PATHS = [
   "/privacy-choices",
 ];
 
+function getWebsiteRouteClass(pathname: string, isLegalArea: boolean) {
+  if (pathname === "/") return "bas-route-home";
+  if (pathname.startsWith("/services")) return "bas-route-services";
+  if (pathname.startsWith("/portfolio")) return "bas-route-portfolio";
+  if (pathname.startsWith("/contact")) return "bas-route-contact";
+  if (isLegalArea) return "bas-route-legal";
+  return "bas-route-public";
+}
+
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname() || "/";
   const isAdminArea = pathname.startsWith("/admin6996") || pathname.startsWith("/admin");
   const isLegalArea = LEGAL_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  const routeClass = getWebsiteRouteClass(pathname, isLegalArea);
 
   return (
     <>
       <ConsentAwareAnalytics />
       {!isAdminArea && <Navbar />}
       {!isAdminArea && <WebsiteNavbarProfile />}
-      <main className="bas-website-content w-full flex-grow">
+      <main className={`bas-website-content ${routeClass} w-full flex-grow`}>
         {children}
       </main>
       {!isAdminArea && <LegalQuickLinks />}
