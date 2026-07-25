@@ -8,26 +8,34 @@
     width: min(calc(100% - 40px), 1680px);
     margin: 18px auto 0;
     padding: 10px 12px !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
+    border: 1px solid rgba(190, 149, 55, 0.30) !important;
+    border-radius: 20px !important;
+    background: linear-gradient(135deg, rgba(255, 253, 248, 0.965), rgba(255, 250, 242, 0.935)) !important;
+    box-shadow:
+      0 16px 46px rgba(26, 11, 14, 0.10),
+      0 4px 16px rgba(145, 25, 35, 0.045),
+      inset 0 1px 0 rgba(255, 255, 255, 0.96),
+      inset 0 -1px 0 rgba(190, 149, 55, 0.10) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(165%) !important;
+    backdrop-filter: blur(24px) saturate(165%) !important;
     isolation: isolate;
     overflow: visible;
   }
 
   html.dark body:not(.bas-app-mode) > nav {
-    border: 0 !important;
-    border-color: transparent !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
+    border: 1px solid rgba(227, 188, 97, 0.24) !important;
+    border-color: rgba(227, 188, 97, 0.24) !important;
+    background: linear-gradient(135deg, rgba(16, 7, 8, 0.965), rgba(28, 12, 15, 0.945)) !important;
+    box-shadow:
+      0 18px 52px rgba(0, 0, 0, 0.34),
+      0 5px 18px rgba(145, 25, 35, 0.10),
+      inset 0 1px 0 rgba(255, 247, 235, 0.08),
+      inset 0 -1px 0 rgba(227, 188, 97, 0.08) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(165%) !important;
+    backdrop-filter: blur(24px) saturate(165%) !important;
   }
 
-  /* Keep the navbar itself completely frameless. Glass only appears on individual hover targets. */
+  /* The persistent outer frame above is the only navbar holder. Glass still appears on individual hover targets. */
   body:not(.bas-app-mode) > nav::before,
   body:not(.bas-app-mode) > nav::after,
   html.dark body:not(.bas-app-mode) > nav::before,
