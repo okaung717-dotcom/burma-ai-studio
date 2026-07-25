@@ -10,27 +10,27 @@ const viberDirectLink = "viber://chat?number=%2B959671010011";
 
 const translations = {
   EN: {
-    title: "Project Intake",
-    subtitle: "Tell Burma AI Studio what kind of AI video you need. We will guide your direction, script, style and delivery clearly.",
-    contactTitle: "Direct contact",
+    title: "Start Something Remarkable.",
+    subtitle: "Share the idea, the platform and the result you want. Burma AI Studio will shape the creative direction, script, visual language and delivery into one premium production plan.",
+    contactTitle: "Studio Direct",
     emailLabel: "Email",
     phoneLabel: "Call",
     telegramLabel: "Telegram",
     viberLabel: "Viber",
     facebookLabel: "Facebook",
-    formTitle: "Send project brief",
-    formSubtitle: "Your message goes to the admin inbox for follow-up.",
+    formTitle: "Build Your Creative Brief",
+    formSubtitle: "Give us the essentials. Your brief goes directly to the studio inbox for a focused project follow-up.",
     firstName: "First name",
     lastName: "Last name",
-    emailAddress: "Email address",
-    projectDetails: "Project details",
+    emailAddress: "Work email",
+    projectDetails: "Project direction",
     firstNamePlaceholder: "John",
     lastNamePlaceholder: "Doe",
     emailPlaceholder: "john@company.com",
-    projectPlaceholder: "Video type, platform, duration, product/service, style, deadline, reference...",
-    sendButton: "Send brief",
-    sending: "Sending...",
-    saved: "Message saved. Opening email backup...",
+    projectPlaceholder: "Tell us the video type, platform, duration, product or service, visual style, deadline and references...",
+    sendButton: "Send Project Brief",
+    sending: "Sending brief...",
+    saved: "Brief saved. Opening email backup...",
     fallback: "Email backup is opening. Admin inbox storage may need setup.",
     legalTitle: "Project confirmations",
     rights: "I confirm that I own or have sufficient permission to use the photos, videos, logos, voices, music, trademarks and other materials I provide for this project.",
@@ -130,7 +130,7 @@ export default function Contact() {
       <main className="mx-auto grid max-w-7xl gap-6 px-5 py-10 md:grid-cols-[0.9fr_1.1fr] md:px-12 lg:px-24">
         <section className="space-y-6">
           <div className="rounded-[2.2rem] border border-[#ead9bd] bg-[#1a0b0e] p-7 text-white shadow-[0_18px_55px_rgba(26,11,14,0.14)] dark:border-[#4b2a1d] md:p-10">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61]"><Sparkles className="h-4 w-4" /> Contact App</div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61]"><Sparkles className="h-4 w-4" /> Project Concierge</div>
             <h1 className="mt-5 text-4xl font-black leading-tight md:text-6xl">{t.title}</h1>
             <p className="mt-4 text-base font-medium leading-relaxed text-white/70 md:text-lg">{t.subtitle}</p>
           </div>
@@ -152,7 +152,7 @@ export default function Contact() {
           <div className="mb-7 flex items-start gap-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#be9537] text-[#100708]"><ClipboardList className="h-7 w-7" /></div>
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#911923] dark:text-[#e3bc61]">Brief Form</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#911923] dark:text-[#e3bc61]">Creative Brief</p>
               <h2 className="mt-2 text-2xl font-black leading-snug md:text-3xl">{t.formTitle}</h2>
               <p className="mt-2 text-sm font-medium leading-relaxed text-[#79695d] dark:text-[#d8c4a3]">{t.formSubtitle}</p>
             </div>
