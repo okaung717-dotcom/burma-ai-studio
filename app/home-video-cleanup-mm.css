@@ -1,25 +1,30 @@
-/* Website-only Home refinements: keep the embedded film visually clean and give Burmese headings safe vertical rhythm. */
+/* Website-only Home refinements: clean cinematic video crop + safe Burmese heading rhythm. */
 
+/* The Home hero film is presentation-only. Keep YouTube interaction/UI from appearing on hover/click. */
 body:not(.bas-app-mode) .bas-command-video {
   pointer-events: none;
   user-select: none;
+  position: absolute;
+  inset: 50% auto auto 50% !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  border: 0;
+  transform: translate(-50%, -50%) scale(1.18);
+  transform-origin: center center;
 }
 
-/* The YouTube iframe is presentation-only on Home. The surrounding UI provides all navigation/CTA interaction. */
+/* Crop the embedded player itself instead of drawing dark masks over it. */
 body:not(.bas-app-mode) .bas-command-media {
   isolation: isolate;
+  overflow: hidden;
+  background: transparent !important;
 }
 
 body:not(.bas-app-mode) .bas-command-media::before {
-  content: "";
-  position: absolute;
-  z-index: 4;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 58px;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(7, 5, 6, 0.70) 0%, rgba(7, 5, 6, 0.34) 52%, transparent 100%);
+  content: none !important;
+  display: none !important;
 }
 
 body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head h2,
@@ -47,6 +52,10 @@ body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head > 
 }
 
 @media (max-width: 1240px) {
+  body:not(.bas-app-mode) .bas-command-video {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
   body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head h2,
   body:not(.bas-app-mode) .bas-home-v2-flow.is-mm .bas-home-v2-flow-copy h2 {
     font-size: clamp(28px, 3vw, 37px);
@@ -55,8 +64,8 @@ body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head > 
 }
 
 @media (max-width: 767px) {
-  body:not(.bas-app-mode) .bas-command-media::before {
-    height: 46px;
+  body:not(.bas-app-mode) .bas-command-video {
+    transform: translate(-50%, -50%) scale(1.25);
   }
 
   body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head h2,
