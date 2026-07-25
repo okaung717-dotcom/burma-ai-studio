@@ -1,8 +1,9 @@
-/* Website-only refinement: keep the original Burma AI Studio wordmark visually separate from the desktop liquid-glass navigation shell. Native/PWA app mode and layouts below 1024px remain untouched. */
+/* Website-only navbar refinement. The Burma AI Studio logo itself is intentionally unchanged. Native/PWA app mode and layouts below 1024px remain untouched. */
 
 @media (min-width: 1024px) {
   body:not(.bas-app-mode) > nav {
-    --bas-nav-shell-start: clamp(300px, 21.5vw, 340px);
+    --bas-nav-shell-start: clamp(500px, 42vw, 640px);
+    --bas-nav-row-shift: 13px;
     position: sticky !important;
     top: 18px;
     width: min(calc(100% - 40px), 1680px);
@@ -18,10 +19,14 @@
     overflow: visible;
   }
 
+  /* One unified glass shell: starts at the user's marked boundary and contains nav links + language + theme + profile. */
   body:not(.bas-app-mode) > nav::before {
     content: "" !important;
     position: absolute;
-    inset: 0 0 0 var(--bas-nav-shell-start) !important;
+    top: var(--bas-nav-row-shift) !important;
+    right: 0 !important;
+    bottom: calc(var(--bas-nav-row-shift) * -1) !important;
+    left: var(--bas-nav-shell-start) !important;
     z-index: -1;
     border: 1px solid rgba(190, 149, 55, 0.34);
     border-radius: 999px;
@@ -50,9 +55,9 @@
   body:not(.bas-app-mode) > nav::after {
     content: "" !important;
     position: absolute;
-    top: 14px;
-    left: calc(var(--bas-nav-shell-start) + 6%);
-    right: 7%;
+    top: calc(14px + var(--bas-nav-row-shift));
+    left: calc(var(--bas-nav-shell-start) + 5%);
+    right: 6%;
     height: 1px;
     border-radius: 999px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent) !important;
@@ -64,10 +69,11 @@
     display: grid !important;
     grid-template-columns: calc(var(--bas-nav-shell-start) - 18px) auto minmax(0, 1fr);
     align-items: center;
-    gap: clamp(12px, 1.4vw, 24px) !important;
+    gap: 8px !important;
     min-width: 0;
   }
 
+  /* Logo: deliberately kept exactly as before. */
   body:not(.bas-app-mode) > nav > div > a:first-child {
     display: flex !important;
     align-items: center;
@@ -112,12 +118,41 @@
     filter: brightness(1.12) drop-shadow(0 7px 18px rgba(0, 0, 0, 0.24));
   }
 
+  /* Shift only navbar content downward so its visual text row aligns with the BurmaAiStudio wordmark baseline. */
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1),
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
+    transform: translateY(var(--bas-nav-row-shift));
+  }
+
+  /* Merge the two old inner pills into one clean outer navbar shell. */
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1),
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+  }
+
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) {
     justify-self: start;
+    gap: 2px !important;
   }
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
     justify-self: end;
+    gap: 2px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  /* Website desktop only: remove Download APK from the navbar. App/native behavior is untouched. */
+  body:not(.bas-app-mode) > nav .bas-install-button {
+    display: none !important;
   }
 
   /* Visually replace the old desktop Message Us CTA immediately, before hydration, with a compact profile control. */
@@ -183,17 +218,29 @@
 
 @media (min-width: 1024px) and (max-width: 1260px) {
   body:not(.bas-app-mode) > nav {
-    --bas-nav-shell-start: 270px;
+    --bas-nav-shell-start: clamp(340px, 34vw, 420px);
+    --bas-nav-row-shift: 11px;
   }
 
   body:not(.bas-app-mode) > nav > div {
-    grid-template-columns: 250px auto minmax(0, 1fr);
-    gap: 10px !important;
+    grid-template-columns: calc(var(--bas-nav-shell-start) - 16px) auto minmax(0, 1fr);
+    gap: 4px !important;
   }
 
   body:not(.bas-app-mode) > nav > div > a:first-child > svg {
     width: 210px !important;
     height: 66px !important;
     max-width: 210px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
 }
