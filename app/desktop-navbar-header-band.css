@@ -1,0 +1,65 @@
+/* Website desktop only: turn the navbar into a clean full-width sticky header band.
+   This intentionally does not change the logo artwork, mobile layouts, PWA mode or native app mode. */
+
+@media (min-width: 1024px) {
+  body:not(.bas-app-mode) > nav {
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 132px !important;
+    margin: 0 !important;
+    padding: 0 clamp(28px, 4.4vw, 72px) !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(190, 149, 55, 0.22) !important;
+    border-radius: 0 !important;
+    background: rgba(255, 253, 248, 0.965) !important;
+    box-shadow:
+      0 14px 34px rgba(26, 11, 14, 0.075),
+      0 2px 10px rgba(145, 25, 35, 0.035) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+    backdrop-filter: blur(24px) saturate(160%) !important;
+    overflow: visible;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav {
+    border: 0 !important;
+    border-bottom: 1px solid rgba(227, 188, 97, 0.18) !important;
+    background: rgba(16, 7, 8, 0.965) !important;
+    box-shadow:
+      0 16px 38px rgba(0, 0, 0, 0.30),
+      0 3px 12px rgba(145, 25, 35, 0.08) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+    backdrop-filter: blur(24px) saturate(160%) !important;
+  }
+
+  /* Keep the header surface rectangular and uninterrupted from the page top to its lower edge. */
+  body:not(.bas-app-mode) > nav::before,
+  body:not(.bas-app-mode) > nav::after,
+  html.dark body:not(.bas-app-mode) > nav::before,
+  html.dark body:not(.bas-app-mode) > nav::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* Raise the complete navigation composition slightly while preserving all existing horizontal spacing. */
+  body:not(.bas-app-mode) > nav > div {
+    min-height: 132px !important;
+    height: 132px !important;
+    transform: translateY(-8px);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1260px) {
+  body:not(.bas-app-mode) > nav {
+    min-height: 118px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div {
+    min-height: 118px !important;
+    height: 118px !important;
+    transform: translateY(-6px);
+  }
+}
