@@ -1,0 +1,67 @@
+/* Website-only Home refinements: keep the embedded film visually clean and give Burmese headings safe vertical rhythm. */
+
+body:not(.bas-app-mode) .bas-command-video {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The YouTube iframe is presentation-only on Home. The surrounding UI provides all navigation/CTA interaction. */
+body:not(.bas-app-mode) .bas-command-media {
+  isolation: isolate;
+}
+
+body:not(.bas-app-mode) .bas-command-media::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(7, 5, 6, 0.70) 0%, rgba(7, 5, 6, 0.34) 52%, transparent 100%);
+}
+
+body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head h2,
+body:not(.bas-app-mode) .bas-home-v2-flow.is-mm .bas-home-v2-flow-copy h2 {
+  max-width: 640px;
+  font-family: "Noto Sans Myanmar", "Manrope", "Myanmar Text", "Padauk", sans-serif;
+  font-size: clamp(29px, 2.75vw, 41px);
+  font-weight: 800;
+  letter-spacing: -0.018em;
+  line-height: 1.48;
+  text-wrap: pretty;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head,
+body:not(.bas-app-mode) .bas-home-v2-flow.is-mm .bas-home-v2-flow-copy {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+body:not(.bas-app-mode) .bas-home-v2-flow.is-mm .bas-home-v2-flow-copy > p,
+body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head > p {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1240px) {
+  body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head h2,
+  body:not(.bas-app-mode) .bas-home-v2-flow.is-mm .bas-home-v2-flow-copy h2 {
+    font-size: clamp(28px, 3vw, 37px);
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 767px) {
+  body:not(.bas-app-mode) .bas-command-media::before {
+    height: 46px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-v2-services.is-mm .bas-home-v2-section-head h2,
+  body:not(.bas-app-mode) .bas-home-v2-flow.is-mm .bas-home-v2-flow-copy h2 {
+    font-size: 29px;
+    line-height: 1.52;
+  }
+}
