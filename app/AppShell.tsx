@@ -12,6 +12,7 @@ import "./desktop-navbar-header-band.css";
 import "./website-profile-dark-fix.css";
 import "./website-typography.css";
 import "./premium-site-system-v2.css";
+import "./website-theme-polish-v3.css";
 import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
