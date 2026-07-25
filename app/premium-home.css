@@ -1,0 +1,782 @@
+/* Website-only premium home composition. App/PWA surfaces remain untouched because the website content is hidden in app mode. */
+
+@media (min-width: 768px) {
+  body:not(.bas-app-mode) .bas-home-shell {
+    width: min(100% - 44px, 1480px);
+    margin: 0 auto;
+    padding: 34px 0 44px;
+  }
+}
+
+body:not(.bas-app-mode) .bas-home-shell {
+  position: relative;
+}
+
+body:not(.bas-app-mode) .bas-home-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-rows: minmax(590px, auto) auto;
+  overflow: hidden;
+  border: 1px solid rgba(190, 149, 55, 0.23);
+  border-radius: 42px;
+  background:
+    radial-gradient(circle at 13% 5%, rgba(190, 149, 55, 0.17), transparent 25rem),
+    linear-gradient(115deg, #fffdf8 0%, #fffaf3 47%, #efe0d6 47.1%, #dbc5b8 100%);
+  box-shadow:
+    0 38px 110px rgba(67, 35, 30, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+  isolation: isolate;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-hero {
+  border-color: rgba(227, 188, 97, 0.2);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(227, 188, 97, 0.11), transparent 24rem),
+    linear-gradient(115deg, #13090b 0%, #1a0b0e 47%, #291417 47.1%, #4a2925 100%);
+  box-shadow: 0 42px 120px rgba(0, 0, 0, 0.42);
+}
+
+body:not(.bas-app-mode) .bas-home-hero::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -8%;
+  left: 39.5%;
+  width: 23%;
+  height: 87%;
+  border-radius: 50% 0 0 56%;
+  background: #fffaf3;
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-hero::after {
+  background: #1a0b0e;
+}
+
+body:not(.bas-app-mode) .bas-home-glow {
+  position: absolute;
+  z-index: 0;
+  width: 330px;
+  height: 330px;
+  border-radius: 999px;
+  filter: blur(32px);
+  pointer-events: none;
+}
+
+body:not(.bas-app-mode) .bas-home-glow-a {
+  left: -150px;
+  bottom: 140px;
+  background: rgba(190, 149, 55, 0.09);
+}
+
+body:not(.bas-app-mode) .bas-home-glow-b {
+  right: -90px;
+  top: 100px;
+  background: rgba(145, 25, 35, 0.13);
+}
+
+body:not(.bas-app-mode) .bas-home-copy {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: clamp(54px, 6vw, 94px) clamp(34px, 5vw, 76px) 48px;
+}
+
+body:not(.bas-app-mode) .bas-home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  margin-bottom: 28px;
+  color: #9a6e42;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-eyebrow {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-home-title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  max-width: 720px;
+  color: #261417;
+  font-family: "Cormorant Garamond", "Noto Sans Myanmar", serif;
+  font-size: clamp(58px, 5.35vw, 92px);
+  font-weight: 700;
+  letter-spacing: -0.052em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+body:not(.bas-app-mode) .bas-home-title span,
+body:not(.bas-app-mode) .bas-home-title em {
+  display: block;
+}
+
+body:not(.bas-app-mode) .bas-home-title em {
+  color: #911923;
+  font-style: italic;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+}
+
+body:not(.bas-app-mode) .bas-home-title-mm {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  font-size: clamp(46px, 4.6vw, 74px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.22;
+}
+
+body:not(.bas-app-mode) .bas-home-title-mm em {
+  font-style: normal;
+  letter-spacing: -0.02em;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-title {
+  color: #fff7eb;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-title em {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-home-description {
+  max-width: 650px;
+  margin-top: 28px;
+  color: #756257;
+  font-size: clamp(16px, 1.2vw, 19px);
+  font-weight: 500;
+  line-height: 1.72;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-description {
+  color: #d8c4b7;
+}
+
+body:not(.bas-app-mode) .bas-home-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+body:not(.bas-app-mode) .bas-home-primary-cta,
+body:not(.bas-app-mode) .bas-home-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 56px;
+  border-radius: 999px;
+  padding: 0 22px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+body:not(.bas-app-mode) .bas-home-primary-cta {
+  background: linear-gradient(135deg, #9d202c, #7f131d);
+  color: white;
+  box-shadow: 0 16px 34px rgba(145, 25, 35, 0.25);
+}
+
+body:not(.bas-app-mode) .bas-home-secondary-cta {
+  border: 1px solid rgba(156, 112, 67, 0.28);
+  background: rgba(255, 255, 255, 0.6);
+  color: #2a171a;
+  backdrop-filter: blur(16px);
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-secondary-cta {
+  border-color: rgba(227, 188, 97, 0.22);
+  background: rgba(255, 255, 255, 0.055);
+  color: #fff7eb;
+}
+
+body:not(.bas-app-mode) .bas-home-primary-cta:hover,
+body:not(.bas-app-mode) .bas-home-secondary-cta:hover {
+  transform: translateY(-2px);
+}
+
+body:not(.bas-app-mode) .bas-home-primary-cta:hover {
+  box-shadow: 0 20px 44px rgba(145, 25, 35, 0.34);
+}
+
+body:not(.bas-app-mode) .bas-home-play {
+  display: grid;
+  width: 33px;
+  height: 33px;
+  place-items: center;
+  border: 1px solid rgba(145, 25, 35, 0.23);
+  border-radius: 999px;
+  color: #911923;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-play {
+  border-color: rgba(227, 188, 97, 0.28);
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-home-media-zone {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  padding: 42px 44px 44px 14px;
+}
+
+body:not(.bas-app-mode) .bas-home-media-frame {
+  position: relative;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 34px;
+  background: #12080a;
+  box-shadow: 0 30px 78px rgba(70, 35, 30, 0.24);
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-media-frame {
+  border-color: rgba(255, 247, 235, 0.1);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.42);
+}
+
+body:not(.bas-app-mode) .bas-home-video {
+  position: absolute;
+  inset: -2%;
+  width: 104%;
+  height: 104%;
+  border: 0;
+}
+
+body:not(.bas-app-mode) .bas-home-media-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(18, 8, 10, 0.78), transparent 54%),
+    linear-gradient(to right, rgba(18, 8, 10, 0.12), transparent 42%);
+  pointer-events: none;
+}
+
+body:not(.bas-app-mode) .bas-home-media-caption {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  bottom: 24px;
+  padding: 22px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  background: rgba(16, 7, 8, 0.68);
+  color: white;
+  backdrop-filter: blur(22px) saturate(150%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+body:not(.bas-app-mode) .bas-home-now-playing {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #f1d180;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.21em;
+}
+
+body:not(.bas-app-mode) .bas-home-media-caption h2 {
+  margin-top: 10px;
+  font-size: clamp(22px, 2vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+body:not(.bas-app-mode) .bas-home-media-caption p {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+body:not(.bas-app-mode) .bas-home-floating-card {
+  position: absolute;
+  z-index: 4;
+  right: 15px;
+  top: 68px;
+  width: min(245px, 32%);
+  padding: 17px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 22px;
+  background: rgba(255, 252, 247, 0.82);
+  color: #321b1e;
+  backdrop-filter: blur(22px);
+  box-shadow: 0 16px 48px rgba(53, 27, 24, 0.17);
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-floating-card {
+  border-color: rgba(227, 188, 97, 0.18);
+  background: rgba(26, 11, 14, 0.82);
+  color: #fff7eb;
+}
+
+body:not(.bas-app-mode) .bas-home-floating-card span {
+  display: block;
+  color: #a47242;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+body:not(.bas-app-mode) .bas-home-floating-card strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-floating-card span {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-home-stat-rail {
+  position: relative;
+  z-index: 5;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  background: linear-gradient(90deg, #8f2630 0%, #7e2028 40%, #8a534e 100%);
+  color: white;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-stat-rail {
+  border-top-color: rgba(227, 188, 97, 0.14);
+  background: linear-gradient(90deg, #54141c 0%, #321116 48%, #3d2624 100%);
+}
+
+body:not(.bas-app-mode) .bas-home-stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 96px;
+  padding: 18px 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body:not(.bas-app-mode) .bas-home-stat:last-child {
+  border-right: 0;
+}
+
+body:not(.bas-app-mode) .bas-home-stat svg {
+  color: #f1d180;
+}
+
+body:not(.bas-app-mode) .bas-home-stat strong,
+body:not(.bas-app-mode) .bas-home-stat span {
+  display: block;
+}
+
+body:not(.bas-app-mode) .bas-home-stat strong {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+body:not(.bas-app-mode) .bas-home-stat span {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body:not(.bas-app-mode) .bas-home-below-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  gap: 22px;
+  margin-top: 24px;
+}
+
+body:not(.bas-app-mode) .bas-home-concierge,
+body:not(.bas-app-mode) .bas-home-flow-card {
+  border: 1px solid rgba(190, 149, 55, 0.22);
+  border-radius: 34px;
+  box-shadow: 0 24px 70px rgba(56, 31, 27, 0.08);
+}
+
+body:not(.bas-app-mode) .bas-home-concierge {
+  padding: 32px;
+  background:
+    radial-gradient(circle at top right, rgba(227, 188, 97, 0.11), transparent 15rem),
+    #1c0b0e;
+  color: #fff7eb;
+}
+
+body:not(.bas-app-mode) .bas-home-flow-card {
+  padding: 34px;
+  background:
+    linear-gradient(140deg, rgba(255, 253, 248, 0.98), rgba(255, 247, 239, 0.96));
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-flow-card {
+  background: linear-gradient(140deg, rgba(26, 11, 14, 0.98), rgba(35, 16, 19, 0.96));
+}
+
+body:not(.bas-app-mode) .bas-home-section-kicker {
+  color: #be9537;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+body:not(.bas-app-mode) .bas-home-concierge .bas-home-section-kicker {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-home-concierge h2,
+body:not(.bas-app-mode) .bas-home-flow-heading h2 {
+  margin-top: 12px;
+  font-size: clamp(28px, 2.5vw, 43px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+body:not(.bas-app-mode) .bas-home-section-copy {
+  margin-top: 12px;
+  color: #7d685c;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+body:not(.bas-app-mode) .bas-home-concierge .bas-home-section-copy {
+  color: rgba(255, 247, 235, 0.58);
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-flow-heading h2 {
+  color: #fff7eb;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-flow-heading .bas-home-section-copy {
+  color: #cdb9ac;
+}
+
+body:not(.bas-app-mode) .bas-home-action-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+body:not(.bas-app-mode) .bas-home-action-list a {
+  display: grid;
+  grid-template-columns: 35px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #fff7eb;
+  font-size: 13px;
+  font-weight: 700;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+body:not(.bas-app-mode) .bas-home-action-list a:hover {
+  transform: translateX(4px);
+  border-color: rgba(227, 188, 97, 0.24);
+  background: rgba(255, 255, 255, 0.075);
+}
+
+body:not(.bas-app-mode) .bas-home-action-index,
+body:not(.bas-app-mode) .bas-home-step-number {
+  color: #e3bc61;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+body:not(.bas-app-mode) .bas-home-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+body:not(.bas-app-mode) .bas-home-flow-step {
+  min-height: 236px;
+  padding: 23px;
+  border: 1px solid rgba(190, 149, 55, 0.18);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+body:not(.bas-app-mode) .bas-home-flow-step:hover {
+  transform: translateY(-4px);
+  border-color: rgba(190, 149, 55, 0.36);
+  box-shadow: 0 18px 42px rgba(60, 31, 27, 0.08);
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-flow-step {
+  border-color: rgba(227, 188, 97, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+body:not(.bas-app-mode) .bas-home-flow-step h3 {
+  margin-top: 48px;
+  color: #2b171a;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-flow-step h3 {
+  color: #fff7eb;
+}
+
+body:not(.bas-app-mode) .bas-home-flow-step p {
+  margin-top: 10px;
+  color: #7a675c;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.62;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-flow-step p {
+  color: #cbb8aa;
+}
+
+body:not(.bas-app-mode) .bas-home-footer {
+  margin-top: 0;
+  border-top: 1px solid rgba(190, 149, 55, 0.18);
+  background: linear-gradient(90deg, #fff6e9, #fffaf3, #f8eee5);
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-footer {
+  border-top-color: rgba(227, 188, 97, 0.14);
+  background: #12080a;
+}
+
+body:not(.bas-app-mode) .bas-home-footer-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  width: min(100% - 44px, 1480px);
+  min-height: 126px;
+  margin: 0 auto;
+  color: #766459;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+body:not(.bas-app-mode) .bas-home-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #271519;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+body:not(.bas-app-mode) .bas-home-footer-brand svg {
+  color: #911923;
+}
+
+body:not(.bas-app-mode) .bas-home-footer-mark {
+  justify-self: end;
+  color: #a38465;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-footer-inner {
+  color: #c6b4a8;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-footer-brand {
+  color: #fff7eb;
+}
+
+html.dark body:not(.bas-app-mode) .bas-home-footer-brand svg,
+html.dark body:not(.bas-app-mode) .bas-home-footer-mark {
+  color: #e3bc61;
+}
+
+@media (max-width: 1180px) {
+  body:not(.bas-app-mode) .bas-home-hero {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body:not(.bas-app-mode) .bas-home-title {
+    font-size: clamp(52px, 5.6vw, 70px);
+  }
+
+  body:not(.bas-app-mode) .bas-home-floating-card {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  body:not(.bas-app-mode) .bas-home-shell {
+    width: min(100% - 28px, 900px);
+    margin: 0 auto;
+    padding: 22px 0 34px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    border-radius: 30px;
+    background: linear-gradient(180deg, #fffdf8 0%, #fffaf3 55%, #eadad0 100%);
+  }
+
+  html.dark body:not(.bas-app-mode) .bas-home-hero {
+    background: linear-gradient(180deg, #13090b 0%, #1a0b0e 58%, #281417 100%);
+  }
+
+  body:not(.bas-app-mode) .bas-home-hero::after {
+    display: none;
+  }
+
+  body:not(.bas-app-mode) .bas-home-copy {
+    padding: 42px 30px 26px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-media-zone {
+    padding: 0 22px 22px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-media-frame {
+    min-height: 420px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-stat-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body:not(.bas-app-mode) .bas-home-stat:nth-child(2) {
+    border-right: 0;
+  }
+
+  body:not(.bas-app-mode) .bas-home-stat:nth-child(-n+2) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  body:not(.bas-app-mode) .bas-home-below-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  body:not(.bas-app-mode) .bas-home-shell {
+    width: min(100% - 18px, 700px);
+    padding-top: 12px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-copy {
+    padding: 34px 22px 22px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-eyebrow {
+    margin-bottom: 20px;
+    font-size: 9px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-title {
+    font-size: clamp(46px, 14vw, 66px);
+  }
+
+  body:not(.bas-app-mode) .bas-home-title-mm {
+    font-size: clamp(36px, 9vw, 52px);
+  }
+
+  body:not(.bas-app-mode) .bas-home-description {
+    margin-top: 20px;
+    font-size: 15px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-cta-row {
+    margin-top: 26px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-primary-cta,
+  body:not(.bas-app-mode) .bas-home-secondary-cta {
+    width: 100%;
+  }
+
+  body:not(.bas-app-mode) .bas-home-media-zone {
+    padding: 0 14px 14px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-media-frame {
+    min-height: 410px;
+    border-radius: 24px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-media-caption {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    padding: 17px;
+    border-radius: 18px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-stat {
+    min-height: 84px;
+    justify-content: flex-start;
+    padding: 16px 18px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-stat strong {
+    font-size: 20px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-concierge,
+  body:not(.bas-app-mode) .bas-home-flow-card {
+    padding: 24px;
+    border-radius: 26px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-flow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body:not(.bas-app-mode) .bas-home-flow-step {
+    min-height: 0;
+  }
+
+  body:not(.bas-app-mode) .bas-home-flow-step h3 {
+    margin-top: 26px;
+  }
+
+  body:not(.bas-app-mode) .bas-home-footer-inner {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    min-height: 150px;
+    padding: 24px 0;
+    text-align: center;
+  }
+
+  body:not(.bas-app-mode) .bas-home-footer-brand,
+  body:not(.bas-app-mode) .bas-home-footer-mark {
+    justify-self: center;
+  }
+}
