@@ -7,15 +7,19 @@ import VideoGrid from "./VideoGrid";
 
 const translations = {
   EN: {
-    title1: "Video",
-    titleHighlight: "Portfolio",
-    subtitle: "A real app-style gallery of Burma AI Studio work: cinematic ads, product videos and short-form social media samples.",
-    footerText: "© 2026 Burma AI Studio. All rights reserved."
+    title1: "Selected",
+    titleHighlight: "AI Films",
+    subtitle: "A curated showreel of Burma AI Studio work — cinematic trailers, campaign-ready visuals and premium AI filmmaking built to make brands feel larger than the screen.",
+    featuredLabel: "Selected work",
+    featuredHint: "Open the film to experience the direction, pacing and visual finish.",
+    footerText: "© 2026 Burma AI Studio. Premium AI video production for ambitious brands."
   },
   MM: {
     title1: "Video",
     titleHighlight: "လက်ရာပြခန်း",
     subtitle: "Burma AI Studio ရဲ့ cinematic ad, product video, short-form social media sample တွေကို app gallery တစ်ခုလို ကြည့်ရှုနိုင်အောင်ပြင်ထားပါတယ်။",
+    featuredLabel: "Featured work",
+    featuredHint: "Video ကိုနှိပ်ပြီး visual style ကိုကြည့်နိုင်ပါတယ်။",
     footerText: "© 2026 Burma AI Studio. မူပိုင်ခွင့်များအားလုံး ရယူထားပြီးဖြစ်ပါသည်။"
   }
 } as const;
@@ -100,7 +104,7 @@ export default function Portfolio() {
 
       <header className="mx-auto max-w-7xl px-5 py-10 md:px-12 lg:px-24">
         <div className="overflow-hidden rounded-[2.2rem] border border-[#ead9bd] bg-[#1a0b0e] p-6 text-white shadow-[0_18px_55px_rgba(26,11,14,0.14)] md:p-10 dark:border-[#4b2a1d]">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61]"><Sparkles className="h-4 w-4" /> App Gallery</div>
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#e3bc61]"><Sparkles className="h-4 w-4" /> Curated Showreel</div>
           <h1 className="mt-5 text-4xl font-black leading-tight md:text-6xl">{t.title1} <span className="text-[#e3bc61]">{t.titleHighlight}</span></h1>
           <p className="mt-4 max-w-3xl text-base font-medium leading-relaxed text-white/70 md:text-lg">{t.subtitle}</p>
         </div>
@@ -111,8 +115,8 @@ export default function Portfolio() {
           <div className="mb-5 flex items-center gap-3 px-1">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#911923] text-white"><PlaySquare className="h-6 w-6" /></div>
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#911923] dark:text-[#e3bc61]">Featured work</p>
-              <p className="text-sm font-bold text-[#79695d] dark:text-[#d8c4a3]">Tap a video to preview the style.</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#911923] dark:text-[#e3bc61]">{t.featuredLabel}</p>
+              <p className="text-sm font-bold text-[#79695d] dark:text-[#d8c4a3]">{t.featuredHint}</p>
             </div>
           </div>
           <VideoGrid />
