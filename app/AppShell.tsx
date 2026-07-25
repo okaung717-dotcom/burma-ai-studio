@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { usePathname } from "next/navigation";
 import "./mobile-website-fixes.css";
 import Navbar from "./Navbar";
@@ -11,6 +13,7 @@ import AppBottomNav from "./AppBottomNav";
 import AppExperience from "./AppExperience";
 import PrivacyConsent from "./PrivacyConsent";
 import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
+import LegalQuickLinks from "./LegalQuickLinks";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -44,9 +47,21 @@ function AppOnly({ children }: { children: ReactNode }) {
   return enabled ? <>{children}</> : null;
 }
 
+const LEGAL_PATHS = [
+  "/legal",
+  "/privacy",
+  "/terms",
+  "/project-policy",
+  "/ai-ip-policy",
+  "/acceptable-use",
+  "/copyright",
+  "/privacy-choices",
+];
+
 export default function AppShell({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const isAdminArea = pathname?.startsWith("/admin6996") || pathname?.startsWith("/admin");
+  const pathname = usePathname() || "/";
+  const isAdminArea = pathname.startsWith("/admin6996") || pathname.startsWith("/admin");
+  const isLegalArea = LEGAL_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 
   return (
     <>
@@ -55,9 +70,27 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <main className="bas-website-content w-full flex-grow">
         {children}
       </main>
+      {!isAdminArea && <LegalQuickLinks />}
       {!isAdminArea && (
         <AppOnly>
-          <AppExperience />
+          {isLegalArea ? (
+            <div className="fixed inset-0 z-[9000] flex flex-col overflow-hidden bg-[#fff9f0] text-[#1a0b0e] dark:bg-[#100708] dark:text-[#fff7eb]">
+              <header className="flex shrink-0 items-center justify-between border-b border-[#ead9bd] bg-[#fffdf8]/95 px-4 pb-3 pt-[calc(env(safe-area-inset-top,0px)+0.7rem)] backdrop-blur-2xl dark:border-[#4b2a1d] dark:bg-[#100708]/95">
+                <Link href="/" className="grid h-11 w-11 place-items-center rounded-2xl border border-[#ead9bd] bg-white text-[#911923] dark:border-[#6b4b2a] dark:bg-[#1a0b0e] dark:text-[#e3bc61]" aria-label="Back to Burma AI Studio">
+                  <ArrowLeft className="h-5 w-5" />
+                </Link>
+                <div className="flex items-center gap-2 text-sm font-black">
+                  <ShieldCheck className="h-5 w-5 text-[#be9537]" /> Legal & Privacy
+                </div>
+                <div className="h-11 w-11" aria-hidden="true" />
+              </header>
+              <div className="min-h-0 flex-1 overflow-y-auto pb-[6.5rem]">
+                {children}
+              </div>
+            </div>
+          ) : (
+            <AppExperience />
+          )}
           <AppBottomNav />
         </AppOnly>
       )}
