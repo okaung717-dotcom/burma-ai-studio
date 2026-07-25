@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { FormEvent, PointerEvent as ReactPointerEvent } from "react";
 import { Bot, Mail, MessageCircle, Phone, Send, Sparkles, X } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
 type ChatMessage = { role: "assistant" | "user"; content: string };
 type AdminReply = { id?: string; content?: string; createdAt?: string };
+type DragPoint = { x: number; y: number };
+
+const ASK_AI_POSITION_KEY = "bas_ask_ai_position";
+const DRAG_EDGE_GAP = 12;
 
 const contactLinks = {
   email: "mailto:okaung717@gmail.com",
@@ -60,9 +65,29 @@ export default function AIAssistant() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([{ role: "assistant", content: websiteFacts[activeLang].welcome }]);
+  const [buttonPosition, setButtonPosition] = useState<DragPoint | null>(null);
+  const [canDragButton, setCanDragButton] = useState(false);
+  const [isDraggingButton, setIsDraggingButton] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const visitorIdRef = useRef<string>("");
   const seenAdminReplies = useRef<Set<string>>(new Set());
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const suppressOpenRef = useRef(false);
+  const dragStateRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    originX: number;
+    originY: number;
+    width: number;
+    height: number;
+    dragged: boolean;
+  } | null>(null);
+
+  const clampPoint = (x: number, y: number, width: number, height: number): DragPoint => ({
+    x: Math.min(Math.max(DRAG_EDGE_GAP, x), Math.max(DRAG_EDGE_GAP, window.innerWidth - width - DRAG_EDGE_GAP)),
+    y: Math.min(Math.max(DRAG_EDGE_GAP, y), Math.max(DRAG_EDGE_GAP, window.innerHeight - height - DRAG_EDGE_GAP)),
+  });
 
   useEffect(() => {
     visitorIdRef.current = getVisitorId();
@@ -83,6 +108,36 @@ export default function AIAssistant() {
       window.removeEventListener("resize", check);
       media.removeEventListener?.("change", check);
     };
+  }, []);
+
+  useEffect(() => {
+    const syncDragMode = () => {
+      const enabled = window.innerWidth >= 1024 && !document.body.classList.contains("bas-app-mode");
+      setCanDragButton(enabled);
+
+      if (!enabled) {
+        setButtonPosition(null);
+        return;
+      }
+
+      const button = buttonRef.current;
+      const width = button?.offsetWidth || 170;
+      const height = button?.offsetHeight || 72;
+
+      try {
+        const raw = window.localStorage.getItem(ASK_AI_POSITION_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw) as Partial<DragPoint>;
+        if (typeof parsed.x !== "number" || typeof parsed.y !== "number" || !Number.isFinite(parsed.x) || !Number.isFinite(parsed.y)) return;
+        setButtonPosition(clampPoint(parsed.x, parsed.y, width, height));
+      } catch {
+        window.localStorage.removeItem(ASK_AI_POSITION_KEY);
+      }
+    };
+
+    syncDragMode();
+    window.addEventListener("resize", syncDragMode);
+    return () => window.removeEventListener("resize", syncDragMode);
   }, []);
 
   useEffect(() => {
@@ -166,6 +221,69 @@ export default function AIAssistant() {
     void sendMessage(input);
   };
 
+  const handleAskPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (!canDragButton || event.button !== 0) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: rect.left,
+      originY: rect.top,
+      width: rect.width,
+      height: rect.height,
+      dragged: false,
+    };
+    suppressOpenRef.current = false;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handleAskPointerMove = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const drag = dragStateRef.current;
+    if (!drag || drag.pointerId !== event.pointerId || !canDragButton) return;
+
+    const dx = event.clientX - drag.startX;
+    const dy = event.clientY - drag.startY;
+    if (!drag.dragged && Math.hypot(dx, dy) < 5) return;
+
+    drag.dragged = true;
+    suppressOpenRef.current = true;
+    setIsDraggingButton(true);
+    event.preventDefault();
+    setButtonPosition(clampPoint(drag.originX + dx, drag.originY + dy, drag.width, drag.height));
+  };
+
+  const finishAskDrag = (event: ReactPointerEvent<HTMLButtonElement>, cancelled = false) => {
+    const drag = dragStateRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    try {
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      // Pointer capture may already be released by the browser.
+    }
+
+    if (!cancelled && drag.dragged) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const point = clampPoint(rect.left, rect.top, rect.width, rect.height);
+      setButtonPosition(point);
+      window.localStorage.setItem(ASK_AI_POSITION_KEY, JSON.stringify(point));
+    }
+
+    dragStateRef.current = null;
+    setIsDraggingButton(false);
+    if (cancelled) suppressOpenRef.current = false;
+  };
+
+  const handleAskClick = () => {
+    if (suppressOpenRef.current) {
+      suppressOpenRef.current = false;
+      return;
+    }
+    setIsOpen(true);
+  };
+
   const messageList = (
     <div className="min-h-0 flex-1 space-y-4 overflow-y-auto scroll-smooth bg-[#fffdf8] px-5 py-5 pb-8 dark:bg-[#100708]">
       {messages.map((message, index) => <div key={`${message.role}-${index}`} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}><div className={`max-w-[86%] whitespace-pre-wrap break-words rounded-3xl px-4 py-3 text-sm leading-relaxed shadow-sm ${message.role === "user" ? "bg-[#911923] text-white" : "border border-[#be9537]/20 bg-white text-gray-700 dark:bg-[#1a0b0e] dark:text-[#fff7eb]"}`}>{message.content}</div></div>)}
@@ -197,20 +315,42 @@ export default function AIAssistant() {
     );
   }
 
+  const dragStyle = canDragButton && buttonPosition
+    ? { left: `${buttonPosition.x}px`, top: `${buttonPosition.y}px`, right: "auto", bottom: "auto", touchAction: "none" as const }
+    : { right: "1.25rem", bottom: "1.25rem", left: "auto", top: "auto", touchAction: "none" as const };
+
   return (
-    <div className="fixed bottom-5 right-5 z-[10000] font-sans">
+    <>
       {isOpen && (
-        <div className="mb-4 flex h-[620px] max-h-[calc(100vh-7rem)] w-[calc(100vw-2.5rem)] max-w-[420px] flex-col overflow-hidden rounded-[2rem] border border-[#be9537]/30 bg-white shadow-[0_24px_80px_rgba(145,25,35,0.22)] dark:border-[#be9537]/20 dark:bg-[#100708]">
-          <div className="flex shrink-0 items-center justify-between bg-[#911923] px-5 py-4 text-white">
-            <div className="flex min-w-0 items-center gap-3"><div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] shadow-inner ring-2 ring-[#be9537]/45 dark:bg-[#e3bc61] dark:text-[#100708]"><Bot className="h-6 w-6" strokeWidth={2.4} /></div><div className="min-w-0"><p className="truncate text-base font-extrabold">Burma AI Assistant</p><p className="truncate text-xs text-white/75">AI Agent • Admin monitored</p></div></div>
-            <button onClick={() => setIsOpen(false)} className="ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] shadow-sm transition-transform hover:scale-105" aria-label="Close AI assistant"><X className="h-5 w-5" strokeWidth={2.6} /></button>
+        <div className="fixed bottom-5 right-5 z-[10000] font-sans">
+          <div className="flex h-[620px] max-h-[calc(100vh-7rem)] w-[calc(100vw-2.5rem)] max-w-[420px] flex-col overflow-hidden rounded-[2rem] border border-[#be9537]/30 bg-white shadow-[0_24px_80px_rgba(145,25,35,0.22)] dark:border-[#be9537]/20 dark:bg-[#100708]">
+            <div className="flex shrink-0 items-center justify-between bg-[#911923] px-5 py-4 text-white">
+              <div className="flex min-w-0 items-center gap-3"><div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] shadow-inner ring-2 ring-[#be9537]/45 dark:bg-[#e3bc61] dark:text-[#100708]"><Bot className="h-6 w-6" strokeWidth={2.4} /></div><div className="min-w-0"><p className="truncate text-base font-extrabold">Burma AI Assistant</p><p className="truncate text-xs text-white/75">AI Agent • Admin monitored</p></div></div>
+              <button onClick={() => setIsOpen(false)} className="ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] shadow-sm transition-transform hover:scale-105" aria-label="Close AI assistant"><X className="h-5 w-5" strokeWidth={2.6} /></button>
+            </div>
+            <div className="shrink-0 border-b border-[#be9537]/20 bg-[#fff9f0] px-5 py-3 dark:bg-[#1a0b0e]"><div className="flex flex-wrap gap-2">{quick[activeLang].map((prompt) => <button key={prompt} disabled={isLoading} onClick={() => void sendMessage(prompt)} className="rounded-full border border-[#be9537]/30 bg-white px-3 py-1.5 text-xs font-bold text-[#911923] transition-colors hover:bg-[#fff3e3] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[#241113] dark:text-[#e3bc61] dark:hover:bg-[#331719]">{prompt}</button>)}</div></div>
+            {messageList}
+            {inputBar}
           </div>
-          <div className="shrink-0 border-b border-[#be9537]/20 bg-[#fff9f0] px-5 py-3 dark:bg-[#1a0b0e]"><div className="flex flex-wrap gap-2">{quick[activeLang].map((prompt) => <button key={prompt} disabled={isLoading} onClick={() => void sendMessage(prompt)} className="rounded-full border border-[#be9537]/30 bg-white px-3 py-1.5 text-xs font-bold text-[#911923] transition-colors hover:bg-[#fff3e3] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[#241113] dark:text-[#e3bc61] dark:hover:bg-[#331719]">{prompt}</button>)}</div></div>
-          {messageList}
-          {inputBar}
         </div>
       )}
-      <button id="burma-ai-open-button" onClick={() => setIsOpen(true)} className="group flex items-center gap-3 rounded-full bg-[#911923] px-5 py-4 font-extrabold text-white shadow-[0_18px_45px_rgba(145,25,35,0.35)] transition-transform hover:scale-105" aria-label="Open Burma AI assistant"><span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] ring-2 ring-[#be9537]/35"><MessageCircle className="h-5 w-5" /><span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[#911923] bg-[#be9537]" /></span><span className="hidden sm:inline">Ask AI</span><Sparkles className="hidden h-4 w-4 text-[#f1d180] sm:block" /></button>
-    </div>
+
+      <button
+        ref={buttonRef}
+        id="burma-ai-open-button"
+        type="button"
+        style={dragStyle}
+        onClick={handleAskClick}
+        onPointerDown={handleAskPointerDown}
+        onPointerMove={handleAskPointerMove}
+        onPointerUp={(event) => finishAskDrag(event)}
+        onPointerCancel={(event) => finishAskDrag(event, true)}
+        className={`group fixed z-[10001] flex select-none items-center gap-3 rounded-full bg-[#911923] px-5 py-4 font-extrabold text-white shadow-[0_18px_45px_rgba(145,25,35,0.35)] ${canDragButton ? "cursor-grab active:cursor-grabbing" : ""} ${isDraggingButton ? "scale-[1.02] transition-none" : "transition-transform hover:scale-105"}`}
+        aria-label={canDragButton ? "Open or drag Burma AI assistant" : "Open Burma AI assistant"}
+        title={canDragButton ? "Click to open · Drag to move" : "Open Burma AI assistant"}
+      >
+        <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#fff9f0] text-[#911923] ring-2 ring-[#be9537]/35"><MessageCircle className="h-5 w-5" /><span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[#911923] bg-[#be9537]" /></span><span className="hidden sm:inline">Ask AI</span><Sparkles className="hidden h-4 w-4 text-[#f1d180] sm:block" />
+      </button>
+    </>
   );
 }
