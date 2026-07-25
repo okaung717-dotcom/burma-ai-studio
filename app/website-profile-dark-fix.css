@@ -1,0 +1,27 @@
+/* Website desktop only: enforce a true dark surface for the profile popover.
+   The profile component already switches its text palette in dark mode; this layer
+   guarantees the panel surface cannot remain light because of competing utility styles. */
+
+@media (min-width: 1024px) {
+  html.dark body:not(.bas-app-mode) #bas-profile-menu {
+    background: rgba(22, 11, 13, 0.985) !important;
+    color: #fff7eb !important;
+    border-color: rgba(227, 188, 97, 0.26) !important;
+    box-shadow:
+      0 32px 96px rgba(0, 0, 0, 0.58),
+      0 10px 34px rgba(145, 25, 35, 0.18),
+      inset 0 1px 0 rgba(255, 247, 235, 0.055) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(155%) !important;
+    backdrop-filter: blur(28px) saturate(155%) !important;
+  }
+
+  html.dark body:not(.bas-app-mode) #bas-profile-menu input {
+    background: rgba(255, 255, 255, 0.055) !important;
+    color: #fff7eb !important;
+    border-color: rgba(227, 188, 97, 0.22) !important;
+  }
+
+  html.dark body:not(.bas-app-mode) #bas-profile-menu input::placeholder {
+    color: rgba(255, 247, 235, 0.46) !important;
+  }
+}
