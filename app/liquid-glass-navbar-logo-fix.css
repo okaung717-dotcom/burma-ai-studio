@@ -19,6 +19,16 @@
     overflow: visible;
   }
 
+  /* Remove the old full-width dark navbar surface in dark mode so the logo has no frame/background around it. */
+  html.dark body:not(.bas-app-mode) > nav {
+    border: 0 !important;
+    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
   /* One unified glass shell: starts at the user's marked boundary and contains nav links + language + theme + profile. */
   body:not(.bas-app-mode) > nav::before {
     content: "" !important;
@@ -67,7 +77,8 @@
 
   body:not(.bas-app-mode) > nav > div {
     display: grid !important;
-    grid-template-columns: calc(var(--bas-nav-shell-start) - 18px) auto minmax(0, 1fr);
+    grid-template-columns: calc(var(--bas-nav-shell-start) - 18px) auto auto;
+    justify-content: start;
     align-items: center;
     gap: 8px !important;
     min-width: 0;
@@ -140,14 +151,21 @@
     gap: 2px !important;
   }
 
+  /* Keep EN, theme and profile directly after Contact instead of pinning them to the far-right edge. */
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
-    justify-self: end;
-    gap: 2px !important;
+    justify-self: start;
+    margin-left: 10px;
+    gap: 8px !important;
   }
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
     padding-left: 14px !important;
     padding-right: 14px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 
   /* Website desktop only: remove Download APK from the navbar. App/native behavior is untouched. */
@@ -223,7 +241,8 @@
   }
 
   body:not(.bas-app-mode) > nav > div {
-    grid-template-columns: calc(var(--bas-nav-shell-start) - 16px) auto minmax(0, 1fr);
+    grid-template-columns: calc(var(--bas-nav-shell-start) - 16px) auto auto;
+    justify-content: start;
     gap: 4px !important;
   }
 
@@ -237,6 +256,11 @@
     padding-left: 10px !important;
     padding-right: 10px !important;
     letter-spacing: 0.08em !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
+    margin-left: 6px;
+    gap: 4px !important;
   }
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
