@@ -159,7 +159,7 @@ export default function Home() {
             <div className="bas-command-media">
               <iframe
                 className="bas-command-video"
-                src={`https://www.youtube-nocookie.com/embed/${heroVideoId}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&showinfo=0&cc_load_policy=0`}
+                src={`https://www.youtube-nocookie.com/embed/${heroVideoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroVideoId}&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&showinfo=0&cc_load_policy=0`}
                 title="Burma AI Studio featured cinematic trailer"
                 allow="autoplay; encrypted-media; picture-in-picture"
                 tabIndex={-1}
