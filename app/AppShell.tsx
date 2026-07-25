@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import "./mobile-website-fixes.css";
 import "./liquid-glass-navbar.css";
 import "./liquid-glass-navbar-logo-fix.css";
+import "./desktop-navbar-header-band.css";
 import Navbar from "./Navbar";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
