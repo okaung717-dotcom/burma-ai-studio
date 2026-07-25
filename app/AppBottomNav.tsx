@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Grid2X2, PlaySquare, MessageCircle, Sparkles } from "lucide-react";
+import { Home, Grid2X2, PlaySquare, MessageCircle, Sparkles, ShieldCheck } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
 type NavItem =
@@ -27,8 +27,17 @@ export default function AppBottomNav() {
     document.getElementById("burma-ai-open-button")?.click();
   };
 
+  const isLegal = ["/legal", "/privacy", "/terms", "/project-policy", "/ai-ip-policy", "/acceptable-use", "/copyright", "/privacy-choices"].some((path) => pathname === path || pathname.startsWith(`${path}/`));
+
   return (
     <div className="bas-app-bottom-nav fixed inset-x-0 bottom-0 z-[9998] px-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.65rem)] md:hidden">
+      {!isLegal && (
+        <div className="mx-auto mb-2 flex max-w-[430px] justify-end px-2">
+          <Link href="/legal" className="inline-flex items-center gap-1.5 rounded-full border border-[#e7d4ad] bg-[#fffaf1] px-3 py-1.5 text-[10px] font-black text-[#911923] shadow-sm dark:border-[#e7d4ad] dark:bg-[#fffaf1] dark:text-[#911923]">
+            <ShieldCheck className="h-3.5 w-3.5" /> {isMm ? "Legal" : "Legal & Privacy"}
+          </Link>
+        </div>
+      )}
       <nav className="isolate mx-auto grid max-w-[430px] grid-cols-5 items-center justify-items-center rounded-[2rem] border border-[#e7d4ad] bg-[#fffaf1] px-2 py-2 shadow-[0_18px_55px_rgba(26,11,14,0.24)] ring-1 ring-white/90 dark:border-[#e7d4ad] dark:bg-[#fffaf1] dark:shadow-[0_18px_60px_rgba(0,0,0,0.45)]">
         {items.map((item) => {
           const Icon = item.Icon;
