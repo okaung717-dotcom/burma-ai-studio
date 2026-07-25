@@ -16,6 +16,7 @@ import AppExperience from "./AppExperience";
 import PrivacyConsent from "./PrivacyConsent";
 import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 import LegalQuickLinks from "./LegalQuickLinks";
+import WebsiteNavbarProfile from "./WebsiteNavbarProfile";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -69,6 +70,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     <>
       <ConsentAwareAnalytics />
       {!isAdminArea && <Navbar />}
+      {!isAdminArea && <WebsiteNavbarProfile />}
       <main className="bas-website-content w-full flex-grow">
         {children}
       </main>
