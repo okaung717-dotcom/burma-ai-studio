@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Mail, Phone, Globe, Send, MessageCircle, Sparkles, ClipboardList } from "lucide-react";
+import { Mail, Phone, Globe, Send, MessageCircle, Sparkles, ClipboardList, ShieldCheck } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
 
 const telegramDirectLink = "tg://resolve?phone=959671010011";
@@ -30,7 +31,12 @@ const translations = {
     sendButton: "Send brief",
     sending: "Sending...",
     saved: "Message saved. Opening email backup...",
-    fallback: "Email backup is opening. Admin inbox storage may need setup."
+    fallback: "Email backup is opening. Admin inbox storage may need setup.",
+    legalTitle: "Project confirmations",
+    rights: "I confirm that I own or have sufficient permission to use the photos, videos, logos, voices, music, trademarks and other materials I provide for this project.",
+    terms: "I agree to the Terms of Service and acknowledge the Privacy Policy.",
+    portfolio: "Optional: Burma AI Studio may display the completed work in its public portfolio and social channels.",
+    legalRequired: "Please confirm the required rights and legal terms before sending your brief.",
   },
   MM: {
     title: "Project Intake",
@@ -54,7 +60,12 @@ const translations = {
     sendButton: "Brief ပို့ရန်",
     sending: "ပို့နေပါတယ်...",
     saved: "Message သိမ်းပြီးပါပြီ။ Email backup ဖွင့်နေပါတယ်...",
-    fallback: "Email backup ဖွင့်နေပါတယ်။ Admin inbox storage ကို setup လုပ်ဖို့လိုနိုင်ပါတယ်။"
+    fallback: "Email backup ဖွင့်နေပါတယ်။ Admin inbox storage ကို setup လုပ်ဖို့လိုနိုင်ပါတယ်။",
+    legalTitle: "Project အတည်ပြုချက်များ",
+    rights: "ဒီ project အတွက် ပေးမယ့် photo၊ video၊ logo၊ voice၊ music၊ trademark နဲ့ အခြား material တွေကို အသုံးပြုခွင့် ကျွန်တော်/ကျွန်မမှာ ရှိကြောင်း အတည်ပြုပါတယ်။",
+    terms: "Terms of Service ကို သဘောတူပြီး Privacy Policy ကို ဖတ်ရှုနားလည်ထားပါတယ်။",
+    portfolio: "Optional: Final work ကို Burma AI Studio portfolio နဲ့ social channels မှာ ပြသခွင့်ပေးပါတယ်။",
+    legalRequired: "Brief မပို့ခင် လိုအပ်တဲ့ rights နဲ့ legal confirmations နှစ်ခုကို အတည်ပြုပေးပါ။",
   }
 } as const;
 
@@ -69,6 +80,7 @@ const contactLinks = [
 export default function Contact() {
   const { lang } = useLanguage();
   const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", projectDetails: "" });
+  const [legal, setLegal] = useState({ rightsConfirmed: false, termsAccepted: false, portfolioOptIn: false });
   const [status, setStatus] = useState("");
   const [isSending, setIsSending] = useState(false);
   const safeLang = (lang === "MM" ? "MM" : "EN") as keyof typeof translations;
@@ -81,12 +93,18 @@ export default function Contact() {
   const openEmailBackup = () => {
     const fullName = `${formData.firstName} ${formData.lastName}`.trim() || "New Client";
     const subject = encodeURIComponent(`New AI Video Project Inquiry - ${fullName}`);
-    const body = encodeURIComponent(`Hello Burma AI Studio,\n\nI want to discuss an AI video project.\n\nName: ${fullName}\nEmail: ${formData.email || "Not provided"}\n\nProject Details:\n${formData.projectDetails || "Please contact me for more details."}\n\nThank you.`);
+    const body = encodeURIComponent(`Hello Burma AI Studio,\n\nI want to discuss an AI video project.\n\nName: ${fullName}\nEmail: ${formData.email || "Not provided"}\n\nProject Details:\n${formData.projectDetails || "Please contact me for more details."}\n\nRights confirmed: Yes\nTerms accepted: Yes\nPortfolio permission: ${legal.portfolioOptIn ? "Yes" : "No"}\n\nThank you.`);
     window.location.href = `mailto:okaung717@gmail.com?subject=${subject}&body=${body}`;
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!legal.rightsConfirmed || !legal.termsAccepted) {
+      setStatus(t.legalRequired);
+      return;
+    }
+
     setIsSending(true);
     setStatus(t.sending);
 
@@ -94,7 +112,7 @@ export default function Contact() {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, source: "contact-page" }),
+        body: JSON.stringify({ ...formData, ...legal, source: "contact-page" }),
       });
       setStatus(response.ok ? t.saved : t.fallback);
     } catch {
@@ -147,6 +165,30 @@ export default function Contact() {
             </div>
             <div><label className="text-sm font-black text-[#1a0b0e] dark:text-white">{t.emailAddress}</label><input value={formData.email} onChange={updateField("email")} type="email" className="mt-2 w-full rounded-2xl border border-[#ead9bd] bg-[#fff9f0] px-4 py-3 text-[#1a0b0e] outline-none focus:ring-2 focus:ring-[#911923]/30 dark:border-white/10 dark:bg-white/5 dark:text-white" placeholder={t.emailPlaceholder} /></div>
             <div><label className="text-sm font-black text-[#1a0b0e] dark:text-white">{t.projectDetails}</label><textarea value={formData.projectDetails} onChange={updateField("projectDetails")} rows={7} className="mt-2 w-full resize-none rounded-2xl border border-[#ead9bd] bg-[#fff9f0] px-4 py-3 text-[#1a0b0e] outline-none focus:ring-2 focus:ring-[#911923]/30 dark:border-white/10 dark:bg-white/5 dark:text-white" placeholder={t.projectPlaceholder} /></div>
+
+            <div className="rounded-[1.6rem] border border-[#be9537]/35 bg-[#fff3e3] p-4 dark:border-[#6b4b2a] dark:bg-[#241113]">
+              <div className="flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-[#911923] dark:text-[#e3bc61]" /><h3 className="text-sm font-black">{t.legalTitle}</h3></div>
+              <div className="mt-4 space-y-3">
+                <label className="flex cursor-pointer items-start gap-3 text-xs font-bold leading-6 text-[#5f4d42] dark:text-[#e7d7c6]">
+                  <input required type="checkbox" checked={legal.rightsConfirmed} onChange={(event) => setLegal((current) => ({ ...current, rightsConfirmed: event.target.checked }))} className="mt-1.5 h-4 w-4 accent-[#911923]" />
+                  <span>{t.rights}</span>
+                </label>
+                <label className="flex cursor-pointer items-start gap-3 text-xs font-bold leading-6 text-[#5f4d42] dark:text-[#e7d7c6]">
+                  <input required type="checkbox" checked={legal.termsAccepted} onChange={(event) => setLegal((current) => ({ ...current, termsAccepted: event.target.checked }))} className="mt-1.5 h-4 w-4 accent-[#911923]" />
+                  <span>{t.terms} <Link href="/terms" target="_blank" className="text-[#911923] underline underline-offset-2 dark:text-[#e3bc61]">Terms</Link> · <Link href="/privacy" target="_blank" className="text-[#911923] underline underline-offset-2 dark:text-[#e3bc61]">Privacy</Link></span>
+                </label>
+                <label className="flex cursor-pointer items-start gap-3 text-xs font-bold leading-6 text-[#5f4d42] dark:text-[#e7d7c6]">
+                  <input type="checkbox" checked={legal.portfolioOptIn} onChange={(event) => setLegal((current) => ({ ...current, portfolioOptIn: event.target.checked }))} className="mt-1.5 h-4 w-4 accent-[#911923]" />
+                  <span>{t.portfolio}</span>
+                </label>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-3 text-[11px] font-black">
+                <Link href="/legal" target="_blank" className="text-[#911923] underline underline-offset-4 dark:text-[#e3bc61]">Legal Center</Link>
+                <Link href="/ai-ip-policy" target="_blank" className="text-[#911923] underline underline-offset-4 dark:text-[#e3bc61]">AI & IP</Link>
+                <Link href="/project-policy" target="_blank" className="text-[#911923] underline underline-offset-4 dark:text-[#e3bc61]">Project & Payment</Link>
+              </div>
+            </div>
+
             <button type="submit" disabled={isSending} className="flex w-full items-center justify-center gap-2 rounded-full bg-[#911923] px-6 py-4 text-base font-black text-white shadow-lg shadow-[#911923]/20 transition hover:bg-[#7a141e] disabled:opacity-60"><Send className="h-5 w-5" /> {isSending ? t.sending : t.sendButton}</button>
             {status && <p className="rounded-2xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-white/5 dark:text-[#e3bc61]">{status}</p>}
           </form>
