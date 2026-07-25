@@ -27,7 +27,7 @@
     backdrop-filter: none !important;
   }
 
-  /* Remove the entire framed/glass pill around Home through Profile. */
+  /* Keep the navbar itself completely frameless. Glass only appears on individual hover targets. */
   body:not(.bas-app-mode) > nav::before,
   body:not(.bas-app-mode) > nav::after,
   html.dark body:not(.bas-app-mode) > nav::before,
@@ -44,12 +44,13 @@
   /*
      Desktop composition:
      - first column is reserved for the unchanged Burma AI Studio logo
-     - the seven remaining equal columns place Home, Services, Portfolio,
-       Contact, EN, Theme and Profile on mathematically even centers
+     - Home / Services / Portfolio / Contact use four equal columns
+     - one intentional spacer column preserves the visual gap shown in the reference
+     - EN / Theme / Profile occupy the final three equal columns
   */
   body:not(.bas-app-mode) > nav > div {
     display: grid !important;
-    grid-template-columns: clamp(250px, 24vw, 360px) repeat(7, minmax(0, 1fr));
+    grid-template-columns: clamp(250px, 24vw, 360px) repeat(8, minmax(0, 1fr));
     align-items: center;
     gap: 0 !important;
     min-width: 0;
@@ -59,6 +60,7 @@
   /* Logo is deliberately kept exactly as before. */
   body:not(.bas-app-mode) > nav > div > a:first-child {
     display: flex !important;
+    grid-column: 1;
     align-items: center;
     justify-content: flex-start;
     align-self: stretch;
@@ -101,13 +103,32 @@
     filter: brightness(1.12) drop-shadow(0 7px 18px rgba(0, 0, 0, 0.24));
   }
 
-  /* Flatten the two legacy groups so all seven controls participate in one evenly-spaced grid. */
+  /* Flatten the two legacy groups so every item can be placed precisely in the desktop grid. */
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1),
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
     display: contents !important;
   }
 
-  /* Shared alignment for Home, Services, Portfolio, Contact, EN, Theme and Profile. */
+  /* Precise horizontal placement. Column 6 is intentionally empty. */
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:nth-child(1) { grid-column: 2; }
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:nth-child(2) { grid-column: 3; }
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:nth-child(3) { grid-column: 4; }
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:nth-child(4) { grid-column: 5; }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:first-of-type {
+    grid-column: 7;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:nth-of-type(2) {
+    grid-column: 8;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button),
+  body:not(.bas-app-mode) > nav a.bas-navbar-profile {
+    grid-column: 9;
+  }
+
+  /* Shared baseline: align all desktop navigation controls with the BurmaAiStudio wordmark line. */
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a,
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button,
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a:not(.bas-install-button) {
@@ -117,18 +138,23 @@
     transform: translateY(var(--bas-nav-row-shift));
   }
 
-  /* Navigation text: no pill, no border, no background. */
+  /* Home / Services / Portfolio / Contact: frameless at rest, premium glass holder on hover/focus. */
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
-    min-height: 32px !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
+    min-height: 40px !important;
+    padding: 0 14px !important;
+    border: 1px solid transparent !important;
+    border-radius: 999px !important;
     background: transparent !important;
     box-shadow: none !important;
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
     color: #6f5948 !important;
-    transition: color 180ms ease, transform 180ms ease !important;
+    transition:
+      color 180ms ease,
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
   }
 
   html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
@@ -137,34 +163,48 @@
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:hover,
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:focus-visible {
-    border: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    color: #be9537 !important;
+    border-color: rgba(190, 149, 55, 0.34) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 245, 231, 0.36)) !important;
+    box-shadow:
+      0 10px 28px rgba(26, 11, 14, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92),
+      inset 0 -1px 0 rgba(190, 149, 55, 0.12) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(175%);
+    backdrop-filter: blur(18px) saturate(175%);
+    color: #911923 !important;
     outline: none;
-    transform: translateY(calc(var(--bas-nav-row-shift) - 1px)) !important;
+    transform: translateY(calc(var(--bas-nav-row-shift) - 1px)) scale(1.025) !important;
   }
 
   html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:hover,
   html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:focus-visible {
+    border-color: rgba(227, 188, 97, 0.30) !important;
+    background: linear-gradient(135deg, rgba(255, 247, 235, 0.095), rgba(145, 25, 35, 0.14)) !important;
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 247, 235, 0.11) !important;
     color: #e3bc61 !important;
-    background: transparent !important;
-    box-shadow: none !important;
   }
 
-  /* Language + theme controls: same clean, frameless visual language as the text links. */
+  /* EN + Theme: positioned in the two marked slots, frameless at rest, same glass holder on hover/focus. */
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
-    min-height: 32px !important;
-    height: 32px !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
+    min-height: 40px !important;
+    height: 40px !important;
+    min-width: 48px;
+    padding: 0 12px !important;
+    border: 1px solid transparent !important;
+    border-radius: 999px !important;
     background: transparent !important;
     box-shadow: none !important;
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
     color: #7b634e !important;
-    transition: color 180ms ease, transform 180ms ease !important;
+    transition:
+      color 180ms ease,
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
   }
 
   html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
@@ -173,19 +213,27 @@
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:hover,
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:focus-visible {
-    border: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    color: #be9537 !important;
+    border-color: rgba(190, 149, 55, 0.34) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 245, 231, 0.36)) !important;
+    box-shadow:
+      0 10px 28px rgba(26, 11, 14, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92),
+      inset 0 -1px 0 rgba(190, 149, 55, 0.12) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(175%);
+    backdrop-filter: blur(18px) saturate(175%);
+    color: #911923 !important;
     outline: none;
-    transform: translateY(calc(var(--bas-nav-row-shift) - 1px)) !important;
+    transform: translateY(calc(var(--bas-nav-row-shift) - 1px)) scale(1.04) !important;
   }
 
   html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:hover,
   html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:focus-visible {
+    border-color: rgba(227, 188, 97, 0.30) !important;
+    background: linear-gradient(135deg, rgba(255, 247, 235, 0.095), rgba(145, 25, 35, 0.14)) !important;
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 247, 235, 0.11) !important;
     color: #e3bc61 !important;
-    background: transparent !important;
-    box-shadow: none !important;
   }
 
   /* Website desktop only: Download APK remains removed. Native/app behavior is untouched. */
@@ -193,41 +241,43 @@
     display: none !important;
   }
 
-  /* Profile: keep the user glyph, remove the circular gold button/frame entirely. */
+  /* Profile is deliberately more prominent than the other controls and does not use the glass-hover treatment. */
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button),
   body:not(.bas-app-mode) > nav a.bas-navbar-profile {
     position: relative;
     display: inline-flex !important;
-    width: 32px !important;
-    min-width: 32px !important;
-    height: 32px !important;
-    min-height: 32px !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
     padding: 0 !important;
     align-items: center;
     justify-content: center;
     overflow: visible;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.36) !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #e3bc61, #be9537) !important;
     color: transparent !important;
     font-size: 0 !important;
     line-height: 0 !important;
-    box-shadow: none !important;
+    box-shadow:
+      0 10px 28px rgba(190, 149, 55, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.60) !important;
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    transition: transform 180ms ease !important;
+    transition: transform 180ms ease, box-shadow 180ms ease !important;
   }
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button)::before,
   body:not(.bas-app-mode) > nav a.bas-navbar-profile::before {
     content: "";
     position: absolute;
-    top: 4px;
+    top: 8px;
     left: 50%;
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
     transform: translateX(-50%);
-    border: 2px solid #be9537;
+    border: 2.4px solid #261216;
     border-radius: 999px;
   }
 
@@ -236,31 +286,25 @@
     content: "";
     position: absolute;
     left: 50%;
-    bottom: 4px;
-    width: 19px;
-    height: 10px;
+    bottom: 8px;
+    width: 22px;
+    height: 12px;
     transform: translateX(-50%);
-    border: 2px solid #be9537;
+    border: 2.4px solid #261216;
     border-bottom: 0;
-    border-radius: 14px 14px 0 0;
-  }
-
-  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button)::before,
-  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button)::after,
-  html.dark body:not(.bas-app-mode) > nav a.bas-navbar-profile::before,
-  html.dark body:not(.bas-app-mode) > nav a.bas-navbar-profile::after {
-    border-color: #e3bc61;
+    border-radius: 16px 16px 0 0;
   }
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button):hover,
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button):focus-visible,
   body:not(.bas-app-mode) > nav a.bas-navbar-profile:hover,
   body:not(.bas-app-mode) > nav a.bas-navbar-profile:focus-visible {
-    border: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
+    background: linear-gradient(135deg, #edc96e, #c79b39) !important;
+    box-shadow:
+      0 14px 34px rgba(190, 149, 55, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.68) !important;
     outline: none;
-    transform: translateY(calc(var(--bas-nav-row-shift) - 1px)) scale(1.04) !important;
+    transform: translateY(calc(var(--bas-nav-row-shift) - 1px)) scale(1.06) !important;
   }
 }
 
@@ -270,7 +314,7 @@
   }
 
   body:not(.bas-app-mode) > nav > div {
-    grid-template-columns: clamp(230px, 23vw, 290px) repeat(7, minmax(0, 1fr));
+    grid-template-columns: clamp(230px, 23vw, 290px) repeat(8, minmax(0, 1fr));
   }
 
   body:not(.bas-app-mode) > nav > div > a:first-child > svg {
@@ -280,11 +324,24 @@
   }
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
     font-size: 11px !important;
     letter-spacing: 0.07em !important;
   }
 
   body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
+    min-width: 42px;
+    padding-left: 7px !important;
+    padding-right: 7px !important;
     font-size: 12px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button),
+  body:not(.bas-app-mode) > nav a.bas-navbar-profile {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
   }
 }
