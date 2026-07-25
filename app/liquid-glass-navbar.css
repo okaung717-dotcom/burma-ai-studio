@@ -1,0 +1,305 @@
+/* Burma AI Studio — desktop website liquid-glass navbar.
+   Intentionally scoped away from native/PWA app mode and mobile/tablet layouts. */
+
+@media (min-width: 1024px) {
+  body:not(.bas-app-mode) > nav {
+    position: sticky !important;
+    top: 18px;
+    z-index: 9999 !important;
+    width: min(calc(100% - 40px), 1680px);
+    margin: 18px auto 0;
+    padding: 10px 12px !important;
+    border: 1px solid rgba(190, 149, 55, 0.34) !important;
+    border-radius: 999px;
+    background:
+      linear-gradient(135deg, rgba(255, 253, 248, 0.72), rgba(255, 248, 237, 0.42)) !important;
+    box-shadow:
+      0 20px 60px rgba(26, 11, 14, 0.13),
+      0 6px 22px rgba(145, 25, 35, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.96),
+      inset 0 -1px 0 rgba(190, 149, 55, 0.16) !important;
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    backdrop-filter: blur(26px) saturate(185%);
+    isolation: isolate;
+    overflow: visible;
+    transition:
+      background 320ms ease,
+      border-color 320ms ease,
+      box-shadow 320ms ease,
+      transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav {
+    border-color: rgba(227, 188, 97, 0.28) !important;
+    background:
+      linear-gradient(135deg, rgba(24, 11, 14, 0.78), rgba(57, 19, 26, 0.46)) !important;
+    box-shadow:
+      0 22px 72px rgba(0, 0, 0, 0.42),
+      0 8px 26px rgba(145, 25, 35, 0.16),
+      inset 0 1px 0 rgba(255, 247, 235, 0.11),
+      inset 0 -1px 0 rgba(227, 188, 97, 0.11) !important;
+  }
+
+  body:not(.bas-app-mode) > nav::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.62), transparent 28%),
+      linear-gradient(112deg, rgba(255, 255, 255, 0.20), transparent 34%, transparent 70%, rgba(227, 188, 97, 0.12));
+    opacity: 0.72;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav::before {
+    background:
+      radial-gradient(circle at 16% 0%, rgba(255, 247, 235, 0.15), transparent 30%),
+      linear-gradient(112deg, rgba(255, 255, 255, 0.06), transparent 36%, transparent 72%, rgba(227, 188, 97, 0.10));
+    opacity: 1;
+  }
+
+  body:not(.bas-app-mode) > nav::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 7%;
+    right: 7%;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.92), transparent);
+    pointer-events: none;
+    opacity: 0.78;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav::after {
+    background: linear-gradient(90deg, transparent, rgba(255,247,235,0.25), transparent);
+  }
+
+  body:not(.bas-app-mode) > nav > div {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    gap: 12px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > a:first-child {
+    display: none !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) {
+    display: flex !important;
+    align-items: center;
+    gap: 4px !important;
+    padding: 5px;
+    border: 1px solid rgba(190, 149, 55, 0.20);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.30);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.78),
+      inset 0 -1px 0 rgba(145,25,35,0.05);
+    -webkit-backdrop-filter: blur(16px) saturate(170%);
+    backdrop-filter: blur(16px) saturate(170%);
+  }
+
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) {
+    border-color: rgba(227, 188, 97, 0.18);
+    background: rgba(255, 247, 235, 0.055);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: #6f5948 !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.15em !important;
+    text-decoration: none;
+    white-space: nowrap;
+    transform: translateZ(0);
+    transition:
+      color 190ms ease,
+      background 190ms ease,
+      border-color 190ms ease,
+      box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
+    color: rgba(255, 247, 235, 0.72) !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:hover,
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:focus-visible {
+    color: #911923 !important;
+    border-color: rgba(190, 149, 55, 0.30);
+    background: linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,243,227,0.56));
+    box-shadow:
+      0 8px 22px rgba(145, 25, 35, 0.10),
+      inset 0 1px 0 rgba(255,255,255,0.96),
+      inset 0 -1px 0 rgba(190,149,55,0.13);
+    transform: translateY(-1px) scale(1.015);
+    outline: none;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:hover,
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:focus-visible {
+    color: #fff7eb !important;
+    border-color: rgba(227, 188, 97, 0.28);
+    background: linear-gradient(135deg, rgba(145,25,35,0.34), rgba(227,188,97,0.10));
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.24),
+      inset 0 1px 0 rgba(255,247,235,0.12);
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
+    display: flex !important;
+    align-items: center;
+    gap: 5px !important;
+    padding: 5px;
+    border: 1px solid rgba(190, 149, 55, 0.20);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.74);
+    -webkit-backdrop-filter: blur(16px) saturate(170%);
+    backdrop-filter: blur(16px) saturate(170%);
+  }
+
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
+    border-color: rgba(227, 188, 97, 0.18);
+    background: rgba(255, 247, 235, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button,
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a {
+    min-height: 44px;
+    border-radius: 999px !important;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
+    color: #7b634e !important;
+    background: transparent;
+    border: 1px solid transparent;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button {
+    color: rgba(255,247,235,0.76) !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:hover,
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:focus-visible {
+    color: #911923 !important;
+    border-color: rgba(190,149,55,0.28);
+    background: rgba(255,255,255,0.52);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.90);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:hover,
+  html.dark body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:focus-visible {
+    color: #e3bc61 !important;
+    border-color: rgba(227,188,97,0.24);
+    background: rgba(255,247,235,0.07);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  body:not(.bas-app-mode) > nav .bas-install-button {
+    min-height: 46px !important;
+    height: 46px !important;
+    border-color: rgba(190,149,55,0.38) !important;
+    background: linear-gradient(135deg, rgba(255,255,255,0.58), rgba(255,243,227,0.34)) !important;
+    color: #261216 !important;
+    box-shadow:
+      0 8px 22px rgba(26,11,14,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.94) !important;
+  }
+
+  html.dark body:not(.bas-app-mode) > nav .bas-install-button {
+    border-color: rgba(227,188,97,0.34) !important;
+    background: linear-gradient(135deg, rgba(145,25,35,0.22), rgba(255,247,235,0.06)) !important;
+    color: #fff7eb !important;
+    box-shadow:
+      0 8px 26px rgba(0,0,0,0.22),
+      inset 0 1px 0 rgba(255,247,235,0.09) !important;
+  }
+
+  body:not(.bas-app-mode) > nav .bas-install-button:hover {
+    border-color: rgba(145,25,35,0.42) !important;
+    background: linear-gradient(135deg, rgba(255,255,255,0.86), rgba(227,188,97,0.22)) !important;
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  html.dark body:not(.bas-app-mode) > nav .bas-install-button:hover {
+    border-color: rgba(227,188,97,0.52) !important;
+    background: linear-gradient(135deg, rgba(145,25,35,0.42), rgba(227,188,97,0.12)) !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button) {
+    min-height: 46px;
+    padding: 0 20px !important;
+    border: 1px solid rgba(255,255,255,0.34) !important;
+    background: linear-gradient(135deg, rgba(190,149,55,0.96), rgba(227,188,97,0.92)) !important;
+    color: #261216 !important;
+    box-shadow:
+      0 10px 28px rgba(190,149,55,0.22),
+      inset 0 1px 0 rgba(255,255,255,0.58) !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button):hover {
+    background: linear-gradient(135deg, rgba(227,188,97,1), rgba(203,157,58,1)) !important;
+    box-shadow:
+      0 12px 32px rgba(190,149,55,0.28),
+      inset 0 1px 0 rgba(255,255,255,0.68) !important;
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > button:active,
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a:active {
+    transform: translateY(0) scale(0.97) !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1260px) {
+  body:not(.bas-app-mode) > nav {
+    width: calc(100% - 24px);
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
+    padding-left: 12px;
+    padding-right: 12px;
+    letter-spacing: 0.10em !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) {
+    gap: 3px !important;
+  }
+
+  body:not(.bas-app-mode) > nav > div > div:nth-of-type(2) > a[href="/contact"]:not(.bas-install-button) {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
