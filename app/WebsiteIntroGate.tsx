@@ -20,6 +20,18 @@ import "./website-intro-gate.css";
 
 const PROFILE_STORAGE_KEY = "bas_website_profile";
 const INTRO_UI_REVEAL_MS = 2800;
+const ACCOUNT_GATE_EXEMPT_PATHS = [
+  "/legal",
+  "/privacy",
+  "/terms",
+  "/project-policy",
+  "/ai-ip-policy",
+  "/acceptable-use",
+  "/copyright",
+  "/privacy-choices",
+  "/admin",
+  "/admin6996",
+];
 
 type AuthMode = "signin" | "signup" | null;
 type AccountUser = { id?: string; email?: string; displayName?: string } | null;
@@ -100,6 +112,12 @@ function isAppExperience() {
   );
 }
 
+function isAccountGateExempt(pathname: string) {
+  return ACCOUNT_GATE_EXEMPT_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+}
+
 export default function WebsiteIntroGate() {
   const pathname = usePathname() || "/";
   const { lang, toggleLang } = useLanguage();
@@ -118,9 +136,10 @@ export default function WebsiteIntroGate() {
   const [error, setError] = useState("");
 
   const isMyanmar = lang === "MM";
+  const gateExempt = isAccountGateExempt(pathname);
 
   useEffect(() => {
-    if (pathname !== "/" || isAppExperience()) {
+    if (isAccountGateExempt(pathname) || isAppExperience()) {
       setVisible(false);
       return;
     }
@@ -138,7 +157,7 @@ export default function WebsiteIntroGate() {
           return;
         }
 
-        // Fail closed for unauthenticated visitors: the Intro remains the account gate.
+        // Fail closed: every unauthenticated public-site visitor stays behind the account gate.
         document.documentElement.classList.remove("bas-intro-skip");
         setVisible(true);
       })
@@ -154,7 +173,7 @@ export default function WebsiteIntroGate() {
   }, [pathname]);
 
   useEffect(() => {
-    if (!visible || pathname !== "/") {
+    if (!visible || gateExempt) {
       setUiReady(false);
       return;
     }
@@ -162,13 +181,13 @@ export default function WebsiteIntroGate() {
     setUiReady(false);
     const revealTimer = window.setTimeout(() => setUiReady(true), INTRO_UI_REVEAL_MS);
     return () => window.clearTimeout(revealTimer);
-  }, [visible, pathname]);
+  }, [visible, gateExempt]);
 
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || gateExempt) return;
     document.body.classList.add("bas-intro-open");
     return () => document.body.classList.remove("bas-intro-open");
-  }, [visible]);
+  }, [visible, gateExempt]);
 
   const persistProfile = (user: AccountUser) => {
     if (!user) return;
@@ -252,7 +271,7 @@ export default function WebsiteIntroGate() {
     }
   };
 
-  if (!visible || pathname !== "/") return null;
+  if (!visible || gateExempt) return null;
 
   return (
     <section
