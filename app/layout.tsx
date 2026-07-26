@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://burmaaistudio.com";
 const iconUrl = "/burma-ai-icon.svg?v=10";
 const appleIconUrl = "/apple-touch-icon.png?v=10";
 
@@ -31,10 +32,26 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Burma AI Studio",
-  description: "AI video creation service for brands and businesses.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Burma AI Studio | AI Video Production for Brands",
+    template: "%s | Burma AI Studio",
+  },
+  description:
+    "Burma AI Studio creates premium AI video ads, cinematic brand films, AI presenter campaigns, product videos, Reels and TikTok content for brands in Myanmar.",
   applicationName: "Burma AI Studio",
   manifest: "/manifest.webmanifest",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   appleWebApp: {
     capable: true,
     title: "Burma AI Studio",
@@ -49,10 +66,48 @@ export const metadata: Metadata = {
     apple: [{ url: appleIconUrl, sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
-    title: "Burma AI Studio",
-    description: "High-quality AI promotional videos for brands and businesses.",
+    title: "Burma AI Studio | AI Video Production for Brands",
+    description:
+      "Premium AI video ads, cinematic brand films, AI presenters, product stories and social campaigns for brands in Myanmar.",
+    url: siteUrl,
     siteName: "Burma AI Studio",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Burma AI Studio | AI Video Production for Brands",
+    description:
+      "Premium AI video ads, cinematic brand films, AI presenters, product stories and social campaigns for brands in Myanmar.",
+  },
+};
+
+const websiteStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
+  url: `${siteUrl}/`,
+  name: "Burma AI Studio",
+  alternateName: "BurmaAiStudio",
+  description:
+    "Premium AI video production, cinematic brand films, AI presenter campaigns and social video content for brands in Myanmar.",
+  publisher: {
+    "@id": `${siteUrl}/#organization`,
+  },
+};
+
+const organizationStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${siteUrl}/#organization`,
+  name: "Burma AI Studio",
+  alternateName: "BurmaAiStudio",
+  url: `${siteUrl}/`,
+  logo: `${siteUrl}/apple-touch-icon.png?v=10`,
+  description:
+    "AI video production studio creating cinematic brand films, AI presenter campaigns, product videos and short-form social content.",
+  areaServed: {
+    "@type": "Country",
+    name: "Myanmar",
   },
 };
 
@@ -79,6 +134,14 @@ export default async function RootLayout({
         <link rel="icon" href={iconUrl} type="image/svg+xml" />
         <link rel="shortcut icon" href={iconUrl} type="image/svg+xml" />
         <link rel="apple-touch-icon" sizes="180x180" href={appleIconUrl} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationStructuredData) }}
+        />
         <style>{`
           html.bas-website-context .bas-startup-launch-gate { display: none !important; }
           html.bas-real-app-context .bas-intro,
