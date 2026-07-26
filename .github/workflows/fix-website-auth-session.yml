@@ -1,0 +1,67 @@
+name: Fix website auth session
+
+on:
+  push:
+    paths:
+      - ".github/workflows/fix-website-auth-session.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Make website profile logout clear the secure auth session
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("app/WebsiteNavbarProfile.tsx")
+          text = path.read_text()
+          old = '''  const logOut = () => {
+    window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+    setProfile({ displayName: "Burma AI Studio Client", email: "", company: "" });
+    setOpen(false);
+    setView("menu");
+    showToast(t.sessionCleared);
+    router.push("/");
+  };'''
+          new = '''  const logOut = async () => {
+    try {
+      await fetch("/api/account/sign-out", { method: "POST", cache: "no-store" });
+    } catch {
+      // Continue with the local cleanup; the Intro gate will verify the session again.
+    }
+    window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+    document.documentElement.classList.remove("bas-intro-skip");
+    setProfile({ displayName: "Burma AI Studio Client", email: "", company: "" });
+    setOpen(false);
+    setView("menu");
+    showToast(t.sessionCleared);
+    window.location.assign("/");
+  };'''
+          if old not in text:
+              raise SystemExit("Expected website logout block was not found")
+          path.write_text(text.replace(old, new, 1))
+          PY
+
+          rm -f .github/workflows/fix-website-auth-session.yml
+
+      - name: Commit account-session fix
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/WebsiteNavbarProfile.tsx .github/workflows/fix-website-auth-session.yml
+          git commit -m "Make website logout clear secure account session"
+          git push origin HEAD:main
