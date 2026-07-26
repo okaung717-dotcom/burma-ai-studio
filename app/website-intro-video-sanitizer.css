@@ -8,6 +8,14 @@ html.bas-website-context .bas-intro-media iframe {
   user-select: none !important;
   -webkit-user-select: none !important;
   touch-action: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 160ms ease !important;
+}
+
+html.bas-website-context .bas-intro-media iframe.bas-intro-video-ready {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 html.bas-website-context .bas-intro-video-input-shield {
