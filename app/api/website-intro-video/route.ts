@@ -4,8 +4,8 @@ export const maxDuration = 60;
 
 const BUCKET = "website-media";
 const OBJECT_PATH = "burma-ai-studio-intro-2026-07-26.mp4";
-const SEED_TOKEN = "bas-intro-seed-20260726-6c3e7f9a";
 const MAX_SOURCE_BYTES = 50 * 1024 * 1024;
+const PREPARED_SOURCE_URL = "https://walnut-prod-va6.walnut-cdn.adobe.io/walnut-compute-results/v2/417a051f78800f31578cd873eec7f46ef3243d63664371ab07b1c5a0c850bc65/result?x-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODUwNzgwMDAsIm5iZiI6MTc4NTA2NzIwMCwia2V5VmVyc2lvbiI6MTc4MzAxMjIyMzEzNCwicGF0aCI6Ii93YWxudXQtY29tcHV0ZS1yZXN1bHRzL3YyLzQxN2EwNTFmNzg4MDBmMzE1NzhjZDg3M2VlYzdmNDZlZjMyNDNkNjM2NjQzNzFhYjA3YjFjNWEwYzg1MGJjNjUvcmVzdWx0In0.vz2HTzmIFTkcRE1_5SziX5ucTB_JrJwXztRWB49Hjro";
 
 function stripAssignment(value: string) {
   return value
@@ -74,20 +74,12 @@ async function objectExists(baseUrl: string, key: string) {
   return response.ok;
 }
 
-function validateAdobeSource(raw: string) {
-  const source = new URL(raw);
-  const validHost = source.protocol === "https:" && source.hostname.endsWith(".adobe.io");
-  const validPath = source.pathname.includes("/walnut-compute-results/");
-  if (!validHost || !validPath) throw new Error("Invalid website intro video source.");
-  return source.toString();
-}
-
-async function seedVideo(sourceUrl: string) {
+async function ensureVideoStored() {
   const { url, key } = getStorageConfig();
   await ensureBucket(url, key);
   if (await objectExists(url, key)) return publicObjectUrl(url);
 
-  const source = await fetch(sourceUrl, { cache: "no-store" });
+  const source = await fetch(PREPARED_SOURCE_URL, { cache: "no-store" });
   if (!source.ok) throw new Error(`Could not fetch the prepared intro video (${source.status}).`);
 
   const declaredLength = Number(source.headers.get("content-length") || 0);
@@ -101,7 +93,7 @@ async function seedVideo(sourceUrl: string) {
     headers: authHeaders(key, {
       "Content-Type": "video/mp4",
       "x-upsert": "true",
-      "Cache-Control": "3600",
+      "Cache-Control": "31536000",
     }),
     body: bytes,
     cache: "no-store",
@@ -115,24 +107,13 @@ async function seedVideo(sourceUrl: string) {
   return publicObjectUrl(url);
 }
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const seed = searchParams.get("seed");
-
-    if (seed) {
-      if (seed !== SEED_TOKEN) return Response.json({ ok: false }, { status: 404 });
-      const rawSource = searchParams.get("source") || "";
-      const source = validateAdobeSource(rawSource);
-      await seedVideo(source);
-      return Response.json({ ok: true });
-    }
-
-    const { url } = getStorageConfig();
+    const target = await ensureVideoStored();
     return new Response(null, {
       status: 307,
       headers: {
-        Location: publicObjectUrl(url),
+        Location: target,
         "Cache-Control": "public, max-age=3600, s-maxage=86400",
       },
     });
