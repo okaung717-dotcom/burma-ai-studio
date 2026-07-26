@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AppShell from "./AppShell";
@@ -55,11 +56,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const hasWebsiteAuthCookie = Boolean(
+    cookieStore.get("bas_account_access")?.value || cookieStore.get("bas_account_refresh")?.value
+  );
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -114,10 +120,8 @@ export default function RootLayout({
                   html.classList.remove('bas-app-mode');
 
                   var isHome = window.location.pathname === '/';
-                  var forceIntro = search.get('intro') === '1';
-                  var introSeen = false;
-                  try { introSeen = sessionStorage.getItem('bas_website_intro_seen_v1') === '1'; } catch (e) {}
-                  html.classList.toggle('bas-intro-skip', !isHome || (introSeen && !forceIntro));
+                  var hasAccountSession = ${hasWebsiteAuthCookie ? "true" : "false"};
+                  html.classList.toggle('bas-intro-skip', !isHome || hasAccountSession);
                 } else {
                   html.classList.add('bas-intro-skip');
                 }
