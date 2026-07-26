@@ -1,11 +1,10 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   ArrowRight,
-  CheckCircle2,
   Eye,
   EyeOff,
   Film,
@@ -19,7 +18,6 @@ import {
 import { useLanguage } from "./LanguageContext";
 import "./website-intro-gate.css";
 
-const INTRO_SESSION_KEY = "bas_website_intro_seen_v1";
 const PROFILE_STORAGE_KEY = "bas_website_profile";
 const INTRO_UI_REVEAL_MS = 2800;
 
@@ -40,15 +38,12 @@ const copy = {
     title1: "Make Every Frame",
     title2: "Feel Expensive.",
     desc: "Premium AI films, cinematic campaigns and original stories — shaped with human creative direction for brands that want to be remembered.",
-    enter: "Enter Studio",
     create: "Create account",
     signIn: "Sign in",
-    signedIn: "Signed in",
-    guestNote: "Public website access is free. An account is optional for now.",
     authSignInTitle: "Welcome back.",
-    authSignInCopy: "Sign in to continue with your Burma AI Studio account.",
+    authSignInCopy: "Sign in with your Burma AI Studio account to continue.",
     authSignUpTitle: "Create your studio account.",
-    authSignUpCopy: "Create an account for a more personal client experience as account features expand.",
+    authSignUpCopy: "Create an account to enter Burma AI Studio. Your secure session will keep returning visits fast and seamless.",
     name: "Your name",
     email: "Email address",
     password: "Password",
@@ -59,7 +54,7 @@ const copy = {
     switchToSignUp: "New here? Create an account",
     switchToSignIn: "Already have an account? Sign in",
     emailConfirmation: "Account created. Check your email to confirm it, then sign in.",
-    accountReady: "You're signed in. Entering the studio…",
+    accountReady: "Account verified. Entering the studio…",
     legal: "By continuing, you agree to our Terms and Privacy Policy.",
   },
   MM: {
@@ -67,15 +62,12 @@ const copy = {
     title1: "Brand ကို ပိုထင်ရှားစေမယ့်",
     title2: "AI Marketing Visuals.",
     desc: "Premium AI Film, Cinematic Campaign နဲ့ Original Stories တွေကို Human Creative Direction နဲ့ပေါင်းစပ်ပြီး Brand ကို ပိုထင်ရှားအောင်ဖန်တီးပေးပါတယ်။",
-    enter: "Studio ထဲဝင်ရန်",
     create: "Account ဖွင့်ရန်",
     signIn: "Sign in",
-    signedIn: "Signed in",
-    guestNote: "Public Website ကို လူတိုင်းအခမဲ့သုံးနိုင်ပါတယ်။ လက်ရှိအချိန်မှာ Account မရှိလည်းဝင်ကြည့်နိုင်ပါတယ်။",
     authSignInTitle: "ပြန်လည်ကြိုဆိုပါတယ်။",
-    authSignInCopy: "Burma AI Studio Account နဲ့ ဆက်သုံးဖို့ Sign in ဝင်ပါ။",
+    authSignInCopy: "Burma AI Studio Account နဲ့ Website ကို ဆက်သုံးဖို့ Sign in ဝင်ပါ။",
     authSignUpTitle: "Studio Account ဖွင့်ပါ။",
-    authSignUpCopy: "နောက်ပိုင်း Client features တွေတိုးလာတဲ့အခါ ပိုကိုယ်ပိုင်ဆန်တဲ့ experience ရဖို့ Account ဖွင့်ထားနိုင်ပါတယ်။",
+    authSignUpCopy: "Burma AI Studio Website ထဲဝင်ရန် Account ဖွင့်ပါ။ Secure session ကြောင့် နောက်တစ်ခါပြန်ဝင်တဲ့အခါ ပိုမြန်ပြီး တိုက်ရိုက်အသုံးပြုနိုင်ပါတယ်။",
     name: "အမည်",
     email: "Email လိပ်စာ",
     password: "Password",
@@ -86,7 +78,7 @@ const copy = {
     switchToSignUp: "Account မရှိသေးဘူးလား? Account ဖွင့်ရန်",
     switchToSignIn: "Account ရှိပြီးသားလား? Sign in ဝင်ရန်",
     emailConfirmation: "Account ဖွင့်ပြီးပါပြီ။ Email ကို Confirm လုပ်ပြီး Sign in ပြန်ဝင်ပါ။",
-    accountReady: "Sign in အောင်မြင်ပါပြီ။ Studio ထဲဝင်နေပါတယ်…",
+    accountReady: "Account အတည်ပြုပြီးပါပြီ။ Studio ထဲဝင်နေပါတယ်…",
     legal: "ဆက်လုပ်ခြင်းဖြင့် Terms နဲ့ Privacy Policy ကို သဘောတူပြီးဖြစ်ပါတယ်။",
   },
 } as const;
@@ -117,7 +109,6 @@ export default function WebsiteIntroGate() {
   const [uiReady, setUiReady] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>(null);
-  const [account, setAccount] = useState<AccountUser>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -127,10 +118,6 @@ export default function WebsiteIntroGate() {
   const [error, setError] = useState("");
 
   const isMyanmar = lang === "MM";
-  const signedInLabel = useMemo(() => {
-    if (!account?.email) return t.signedIn;
-    return account.email.length > 28 ? `${account.email.slice(0, 25)}…` : account.email;
-  }, [account?.email, t.signedIn]);
 
   useEffect(() => {
     if (pathname !== "/" || isAppExperience()) {
@@ -138,21 +125,32 @@ export default function WebsiteIntroGate() {
       return;
     }
 
-    const forceIntro = new URLSearchParams(window.location.search).get("intro") === "1";
-    let alreadySeen = false;
-    try {
-      alreadySeen = window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1";
-    } catch {
-      alreadySeen = false;
-    }
-    setVisible(forceIntro || !alreadySeen);
+    let cancelled = false;
 
     fetch("/api/account/session", { cache: "no-store" })
       .then((response) => response.json())
       .then((data: { authenticated?: boolean; user?: AccountUser }) => {
-        if (data.authenticated && data.user) setAccount(data.user);
+        if (cancelled) return;
+
+        if (data.authenticated && data.user) {
+          document.documentElement.classList.add("bas-intro-skip");
+          setVisible(false);
+          return;
+        }
+
+        // Fail closed for unauthenticated visitors: the Intro remains the account gate.
+        document.documentElement.classList.remove("bas-intro-skip");
+        setVisible(true);
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (cancelled) return;
+        document.documentElement.classList.remove("bas-intro-skip");
+        setVisible(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -186,17 +184,13 @@ export default function WebsiteIntroGate() {
         })
       );
     } catch {
-      // Account entry remains usable even when browser storage is unavailable.
+      // Authentication remains valid even when local profile storage is unavailable.
     }
   };
 
-  const enterStudio = (user?: AccountUser) => {
-    if (user) persistProfile(user);
-    try {
-      window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
-    } catch {
-      // The Intro can still close when session storage is unavailable.
-    }
+  const finishAuthenticatedEntry = (user: AccountUser) => {
+    if (!user) return;
+    persistProfile(user);
     setLeaving(true);
     window.setTimeout(() => {
       document.documentElement.classList.add("bas-intro-skip");
@@ -217,16 +211,17 @@ export default function WebsiteIntroGate() {
     event.preventDefault();
     if (!authMode || submitting) return;
 
+    const submittingMode = authMode;
     setSubmitting(true);
     setError("");
     setMessage("");
 
     try {
-      const endpoint = authMode === "signin" ? "/api/account/sign-in" : "/api/account/sign-up";
+      const endpoint = submittingMode === "signin" ? "/api/account/sign-in" : "/api/account/sign-up";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(authMode === "signin" ? { email, password } : { name, email, password }),
+        body: JSON.stringify(submittingMode === "signin" ? { email, password } : { name, email, password }),
       });
       const data = (await response.json().catch(() => null)) as AuthResponse | null;
 
@@ -242,11 +237,14 @@ export default function WebsiteIntroGate() {
         return;
       }
 
-      if (data.user) {
-        setAccount(data.user);
+      const authenticated = submittingMode === "signin" || data.authenticated === true;
+      if (authenticated && data.user) {
         setMessage(t.accountReady);
-        window.setTimeout(() => enterStudio(data.user), 560);
+        window.setTimeout(() => finishAuthenticatedEntry(data.user || null), 420);
+        return;
       }
+
+      setError("Account verification was not completed. Please sign in to continue.");
     } catch {
       setError("Connection problem. Please try again.");
     } finally {
@@ -261,7 +259,7 @@ export default function WebsiteIntroGate() {
       className={`bas-intro${uiReady ? " is-ui-ready" : ""}${leaving ? " is-leaving" : ""}${isMyanmar ? " is-mm" : ""}`}
       role="dialog"
       aria-modal="true"
-      aria-label="Burma AI Studio introduction"
+      aria-label="Burma AI Studio account introduction"
     >
       <div className="bas-intro-media" aria-hidden="true">
         <video
@@ -293,25 +291,17 @@ export default function WebsiteIntroGate() {
       <div className="bas-intro-grain" aria-hidden="true" />
 
       <header className="bas-intro-header">
-        <button type="button" className="bas-intro-brand" onClick={() => enterStudio()} aria-label="Enter Burma AI Studio">
+        <div className="bas-intro-brand bas-intro-brand-static" aria-label="Burma AI Studio">
           <span className="bas-intro-brand-mark">BA</span>
           <span><b>Burma AI Studio</b><small>Cinematic AI Production</small></span>
-        </button>
+        </div>
 
         <div className="bas-intro-header-actions">
           <button type="button" className="bas-intro-icon-button" onClick={toggleLang} aria-label="Change language">
             <Globe2 className="h-4 w-4" /> <span>{lang === "MM" ? "MM" : "EN"}</span>
           </button>
-          {account ? (
-            <button type="button" className="bas-intro-account-chip" onClick={() => enterStudio(account)}>
-              <CheckCircle2 className="h-4 w-4" /> {signedInLabel}
-            </button>
-          ) : (
-            <>
-              <button type="button" className="bas-intro-signin" onClick={() => openAuth("signin")}>{t.signIn}</button>
-              <button type="button" className="bas-intro-signup" onClick={() => openAuth("signup")}>{t.create}</button>
-            </>
-          )}
+          <button type="button" className="bas-intro-signin" onClick={() => openAuth("signin")}>{t.signIn}</button>
+          <button type="button" className="bas-intro-signup" onClick={() => openAuth("signup")}>{t.create}</button>
         </div>
       </header>
 
@@ -319,13 +309,6 @@ export default function WebsiteIntroGate() {
         <p className="bas-intro-eyebrow"><Sparkles className="h-4 w-4" /> {t.eyebrow}</p>
         <h1><span>{t.title1}</span><em>{t.title2}</em></h1>
         <p className="bas-intro-desc">{t.desc}</p>
-
-        <div className="bas-intro-cta-row">
-          <button type="button" className="bas-intro-enter" onClick={() => enterStudio(account)}>
-            {t.enter} <ArrowRight className="h-5 w-5" />
-          </button>
-        </div>
-        <p className="bas-intro-guest-note">{t.guestNote}</p>
       </div>
 
       <div className="bas-intro-film-chip" aria-hidden="true"><Film className="h-4 w-4" /> ORIGINAL VISUALS</div>
