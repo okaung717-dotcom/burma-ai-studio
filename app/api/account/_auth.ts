@@ -6,6 +6,7 @@ export const REFRESH_COOKIE = "bas_account_refresh";
 export type AuthUser = {
   id?: string;
   email?: string;
+  identities?: Array<Record<string, unknown>>;
   user_metadata?: Record<string, unknown>;
 } | null;
 
@@ -86,6 +87,15 @@ export function getSupabaseAdminAuthConfig() {
   return { url, apiKey };
 }
 
+export function hasSupabaseAdminAuthConfig() {
+  try {
+    getSupabaseAdminAuthConfig();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function authRequest(path: string, init: RequestInit = {}) {
   const { url, apiKey } = getSupabaseAuthConfig();
   return fetch(`${url}/auth/v1${path}`, {
@@ -102,11 +112,6 @@ export async function authRequest(path: string, init: RequestInit = {}) {
 export async function authAdminRequest(path: string, init: RequestInit = {}) {
   const { url, apiKey } = getSupabaseAdminAuthConfig();
   const headers = new Headers(init.headers);
-
-  // Supabase Auth Admin endpoints require the elevated server credential in the
-  // Authorization channel. For current sb_secret_* keys, Supabase permits the
-  // same secret value in both `apikey` and `Authorization`; legacy service_role
-  // JWTs use the same shape. This stays server-only and is never exposed client-side.
   headers.set("apikey", apiKey);
   headers.set("Authorization", `Bearer ${apiKey}`);
   headers.set("Content-Type", "application/json");
@@ -130,13 +135,13 @@ export function authErrorMessage(payload: AuthPayload | null, status: number) {
     return "Please confirm your email before signing in.";
   }
   if (raw.includes("already registered") || raw.includes("already exists") || raw.includes("email_exists")) {
-    return "An account with this email already exists.";
+    return "An account with this email already exists. Please sign in instead.";
   }
   if (raw.includes("password")) {
     return "Please use a stronger password with at least 8 characters.";
   }
   if (status === 429 || raw.includes("rate limit")) {
-    return "Account service is temporarily busy. Please try again shortly.";
+    return "New-account email confirmation is temporarily rate-limited. Existing users can use Sign in.";
   }
   return "We could not complete that request. Please try again.";
 }
