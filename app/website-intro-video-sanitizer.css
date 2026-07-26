@@ -1,8 +1,9 @@
-/* Website-only protection around the Intro's third-party video surface. */
+/* Website-only protection around the Intro video surface. */
 html.bas-website-context .bas-intro-media {
   isolation: isolate;
 }
 
+/* Legacy iframe protection remains inert when the native video player is used. */
 html.bas-website-context .bas-intro-media iframe {
   pointer-events: none !important;
   user-select: none !important;
@@ -16,6 +17,43 @@ html.bas-website-context .bas-intro-media iframe {
 html.bas-website-context .bas-intro-media iframe.bas-intro-video-ready {
   opacity: 1 !important;
   visibility: visible !important;
+}
+
+/* Native HTML5 intro: background film only, never an interactive media player. */
+html.bas-website-context .bas-intro-media video {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: none !important;
+  -webkit-appearance: none !important;
+}
+
+html.bas-website-context .bas-intro-media video::-webkit-media-controls,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-enclosure,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-panel,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-overlay-enclosure,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-overlay-play-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-start-playback-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-play-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-timeline-container,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-timeline,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-seek-back-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-seek-forward-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-rewind-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-return-to-realtime-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-current-time-display,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-time-remaining-display,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-mute-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-volume-slider,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-fullscreen-button,
+html.bas-website-context .bas-intro-media video::-webkit-media-controls-toggle-closed-captions-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 html.bas-website-context .bas-intro-video-input-shield {
