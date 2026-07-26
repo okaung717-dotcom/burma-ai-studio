@@ -3,7 +3,9 @@ import { basicLimit } from "../../../lib/guard";
 import {
   attachSessionCookies,
   authAdminRequest,
+  authErrorMessage,
   authRequest,
+  hasSupabaseAdminAuthConfig,
   type AuthPayload,
   type AuthUser,
 } from "../_auth";
@@ -35,6 +37,13 @@ function rawAuthError(payload: AuthPayload | null) {
   ).toLowerCase();
 }
 
+function existingAccountResponse() {
+  return NextResponse.json(
+    { ok: false, error: "An account with this email already exists. Please sign in instead." },
+    { status: 409 }
+  );
+}
+
 async function passwordSession(email: string, password: string) {
   const response = await authRequest("/token?grant_type=password", {
     method: "POST",
@@ -56,7 +65,6 @@ async function listAdminUsers(page: number) {
 }
 
 async function findAdminUserByEmail(email: string) {
-  // A few pages are enough for the current studio scale while keeping the lookup bounded.
   for (let page = 1; page <= 5; page += 1) {
     const users = await listAdminUsers(page);
     const match = users.find((user) => String(user?.email || "").toLowerCase() === email);
@@ -72,9 +80,6 @@ async function confirmExistingUnconfirmedAccount(
   email: string,
   password: string
 ) {
-  // We never overwrite an existing password. The password grant must first prove
-  // the visitor knows the account password. Supabase returns "email not confirmed"
-  // only after the submitted credentials have passed the password check.
   const attemptedSignIn = await passwordSession(email, password);
   if (attemptedSignIn.response.ok && attemptedSignIn.payload?.access_token) {
     return attemptedSignIn.payload;
@@ -116,6 +121,47 @@ function authenticatedResponse(payload: AuthPayload, email: string, name: string
   return attachSessionCookies(response, payload);
 }
 
+async function publicSignup(name: string, email: string, password: string) {
+  const upstream = await authRequest("/signup", {
+    method: "POST",
+    body: JSON.stringify({
+      email,
+      password,
+      data: { display_name: name },
+    }),
+  });
+  const payload = (await upstream.json().catch(() => null)) as AuthPayload | null;
+
+  if (!upstream.ok) {
+    return NextResponse.json(
+      { ok: false, error: authErrorMessage(payload, upstream.status) },
+      { status: upstream.status === 429 ? 429 : 400 }
+    );
+  }
+
+  if (payload?.access_token) {
+    return authenticatedResponse(payload, email, name);
+  }
+
+  // Supabase intentionally returns an obfuscated user for an already-confirmed
+  // email when email confirmation is enabled. An empty identities list is the
+  // documented signal that no new identity was created.
+  if (Array.isArray(payload?.user?.identities) && payload?.user?.identities?.length === 0) {
+    return existingAccountResponse();
+  }
+
+  return NextResponse.json({
+    ok: true,
+    authenticated: false,
+    requiresEmailConfirmation: true,
+    user: {
+      id: payload?.user?.id || "",
+      email: payload?.user?.email || email,
+      displayName: name,
+    },
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as SignUpBody | null;
@@ -141,71 +187,84 @@ export async function POST(request: Request) {
       );
     }
 
-    // Website signup intentionally does not depend on Supabase's confirmation-email
-    // sender. The server creates a confirmed Auth user directly, then establishes a
-    // normal password session. This removes SMTP/rate-limit failures from signup.
-    const existingUser = await findAdminUserByEmail(email);
+    // First check whether the visitor is actually submitting credentials for an
+    // existing confirmed account. This avoids misreporting a backend setup issue
+    // as an account-creation failure and keeps one email mapped to one Auth user.
+    const existingSession = await passwordSession(email, password);
+    if (existingSession.response.ok && existingSession.payload?.access_token) {
+      return existingAccountResponse();
+    }
 
-    if (existingUser) {
-      const recovered = await confirmExistingUnconfirmedAccount(existingUser, name, email, password);
-      if (recovered?.access_token) {
-        return authenticatedResponse(recovered, email, name);
-      }
-
+    const existingSessionError = rawAuthError(existingSession.payload);
+    if (existingSessionError.includes("email not confirmed")) {
       return NextResponse.json(
-        { ok: false, error: "An account with this email already exists. Please sign in instead." },
+        {
+          ok: false,
+          error: "An account with this email already exists but is not confirmed yet. Please use Sign in after confirmation.",
+        },
         { status: 409 }
       );
     }
 
-    const adminCreate = await authAdminRequest("/admin/users", {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: { display_name: name },
-      }),
-    });
-    const adminPayload = (await adminCreate.json().catch(() => null)) as AuthPayload | null;
+    // Preferred path: if a real server-side Auth admin key is configured, create
+    // a confirmed user without depending on confirmation-email delivery.
+    if (hasSupabaseAdminAuthConfig()) {
+      try {
+        const existingUser = await findAdminUserByEmail(email);
+        if (existingUser) {
+          const recovered = await confirmExistingUnconfirmedAccount(existingUser, name, email, password);
+          if (recovered?.access_token) return existingAccountResponse();
+          return existingAccountResponse();
+        }
 
-    if (!adminCreate.ok) {
-      const raw = rawAuthError(adminPayload);
-      const duplicate =
-        adminCreate.status === 422 ||
-        raw.includes("already registered") ||
-        raw.includes("already exists") ||
-        raw.includes("email_exists") ||
-        raw.includes("user already registered");
+        const adminCreate = await authAdminRequest("/admin/users", {
+          method: "POST",
+          body: JSON.stringify({
+            email,
+            password,
+            email_confirm: true,
+            user_metadata: { display_name: name },
+          }),
+        });
+        const adminPayload = (await adminCreate.json().catch(() => null)) as AuthPayload | null;
 
-      if (duplicate) {
+        if (!adminCreate.ok) {
+          const raw = rawAuthError(adminPayload);
+          const duplicate =
+            adminCreate.status === 422 ||
+            raw.includes("already registered") ||
+            raw.includes("already exists") ||
+            raw.includes("email_exists") ||
+            raw.includes("user already registered");
+
+          if (duplicate) return existingAccountResponse();
+          console.error("Website admin signup failed; falling back to public signup:", raw || adminCreate.status);
+          return publicSignup(name, email, password);
+        }
+
+        const signedIn = await passwordSession(email, password);
+        if (signedIn.response.ok && signedIn.payload?.access_token) {
+          return authenticatedResponse(signedIn.payload, email, name);
+        }
+
         return NextResponse.json(
-          { ok: false, error: "An account with this email already exists. Please sign in instead." },
-          { status: 409 }
+          { ok: false, error: "Your account was created, but sign-in could not start. Please use Sign in." },
+          { status: 503 }
         );
+      } catch (error) {
+        console.error("Website admin signup path unavailable; using public signup:", error);
+        return publicSignup(name, email, password);
       }
-
-      console.error("Website admin signup failed:", raw || adminCreate.status);
-      return NextResponse.json(
-        { ok: false, error: "Account creation is temporarily unavailable. Please try again shortly." },
-        { status: 503 }
-      );
     }
 
-    const signedIn = await passwordSession(email, password);
-    if (!signedIn.response.ok || !signedIn.payload?.access_token) {
-      console.error("Website account created but session creation failed:", rawAuthError(signedIn.payload));
-      return NextResponse.json(
-        { ok: false, error: "Your account was created, but sign-in could not start. Please use Sign in." },
-        { status: 503 }
-      );
-    }
-
-    return authenticatedResponse(signedIn.payload, email, name);
+    // Current production fallback: the project has a public/anon Auth key but no
+    // service-role/secret admin key. Use Supabase's normal signup path and surface
+    // its real duplicate/rate-limit state instead of a misleading generic 503.
+    return publicSignup(name, email, password);
   } catch (error) {
     console.error("Website sign-up error:", error);
     return NextResponse.json(
-      { ok: false, error: "Account creation is temporarily unavailable. Please try again shortly." },
+      { ok: false, error: "Account creation could not be completed. Please try again or use Sign in if you already have an account." },
       { status: 503 }
     );
   }
