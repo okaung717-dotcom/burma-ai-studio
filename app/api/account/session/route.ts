@@ -11,14 +11,8 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type AccountUser = {
-  id?: string;
-  email?: string;
-  user_metadata?: Record<string, unknown>;
-} | null;
-
-function sessionResponse(user: AccountUser) {
-  return NextResponse.json({
+function accountJson(user: AuthPayload["user"]) {
+  return {
     authenticated: Boolean(user?.id),
     user: user?.id
       ? {
@@ -27,23 +21,17 @@ function sessionResponse(user: AccountUser) {
           displayName: String(user.user_metadata?.display_name || ""),
         }
       : null,
-  });
+  };
 }
 
-async function getUser(accessToken: string) {
+async function readUser(accessToken: string): Promise<AuthPayload["user"]> {
   if (!accessToken) return null;
   const upstream = await authRequest("/user", {
     method: "GET",
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!upstream.ok) return null;
-  return (await upstream.json().catch(() => null)) as AccountUser;
-}
-
-function clearStaleSession(response: NextResponse) {
-  response.cookies.delete(ACCESS_COOKIE);
-  response.cookies.delete(REFRESH_COOKIE);
-  return response;
+  return (await upstream.json().catch(() => null)) as AuthPayload["user"];
 }
 
 export async function GET() {
@@ -52,33 +40,35 @@ export async function GET() {
     const accessToken = cookieStore.get(ACCESS_COOKIE)?.value || "";
     const refreshToken = cookieStore.get(REFRESH_COOKIE)?.value || "";
 
-    const currentUser = await getUser(accessToken);
-    if (currentUser?.id) return sessionResponse(currentUser);
-
-    // Access tokens are short-lived. A valid refresh cookie keeps returning users
-    // signed in so they can go directly to Home without seeing the Intro again.
-    if (refreshToken) {
-      const refreshUpstream = await authRequest("/token?grant_type=refresh_token", {
-        method: "POST",
-        body: JSON.stringify({ refresh_token: refreshToken }),
-      });
-      const refreshed = (await refreshUpstream.json().catch(() => null)) as AuthPayload | null;
-
-      if (refreshUpstream.ok && refreshed?.access_token) {
-        const refreshedUser = refreshed.user?.id
-          ? refreshed.user
-          : await getUser(refreshed.access_token);
-
-        if (refreshedUser?.id) {
-          const response = sessionResponse(refreshedUser);
-          return attachSessionCookies(response, refreshed);
-        }
-      }
-
-      return clearStaleSession(NextResponse.json({ authenticated: false, user: null }));
+    const currentUser = await readUser(accessToken);
+    if (currentUser?.id) {
+      return NextResponse.json(accountJson(currentUser));
     }
 
-    return NextResponse.json({ authenticated: false, user: null });
+    if (!refreshToken) {
+      return NextResponse.json({ authenticated: false, user: null });
+    }
+
+    const refreshUpstream = await authRequest("/token?grant_type=refresh_token", {
+      method: "POST",
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+    const refreshed = (await refreshUpstream.json().catch(() => null)) as AuthPayload | null;
+
+    if (!refreshUpstream.ok || !refreshed?.access_token) {
+      return NextResponse.json({ authenticated: false, user: null });
+    }
+
+    const refreshedUser = refreshed.user?.id
+      ? refreshed.user
+      : await readUser(refreshed.access_token);
+
+    if (!refreshedUser?.id) {
+      return NextResponse.json({ authenticated: false, user: null });
+    }
+
+    const response = NextResponse.json(accountJson(refreshedUser));
+    return attachSessionCookies(response, refreshed);
   } catch {
     return NextResponse.json({ authenticated: false, user: null });
   }
