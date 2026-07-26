@@ -1,0 +1,595 @@
+/* Website-only Studio Plans. Native/PWA app mode is intentionally untouched. */
+
+body:not(.bas-app-mode) .bas-plans-page {
+  --plans-ink: #251417;
+  --plans-muted: #756259;
+  --plans-red: #991c2b;
+  --plans-red-deep: #65131d;
+  --plans-gold: #d4ab51;
+  --plans-surface: rgba(255, 251, 245, 0.92);
+  --plans-line: rgba(155, 92, 67, 0.15);
+  width: min(calc(100% - 40px), 1480px);
+  margin: 30px auto 80px;
+  color: var(--plans-ink);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-page {
+  --plans-ink: #fff7eb;
+  --plans-muted: #cbb9aa;
+  --plans-surface: rgba(24, 11, 13, 0.90);
+  --plans-line: rgba(227, 188, 97, 0.14);
+}
+
+body:not(.bas-app-mode) .bas-plans-hero {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 42px;
+  align-items: end;
+  min-height: 500px;
+  padding: clamp(52px, 6vw, 92px);
+  border: 1px solid var(--plans-line);
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(212, 171, 81, 0.22), transparent 26%),
+    radial-gradient(circle at 78% 86%, rgba(153, 28, 43, 0.14), transparent 34%),
+    linear-gradient(135deg, #fffaf3 0%, #f8eee7 58%, #f3dfd8 100%);
+  box-shadow: 0 30px 90px rgba(55, 24, 26, 0.10);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-hero {
+  border-color: rgba(227, 188, 97, 0.16);
+  background:
+    radial-gradient(circle at 88% 18%, rgba(227, 188, 97, 0.14), transparent 26%),
+    radial-gradient(circle at 78% 86%, rgba(153, 28, 43, 0.22), transparent 34%),
+    linear-gradient(135deg, #12090b 0%, #1a0d10 58%, #211012 100%);
+  box-shadow: 0 34px 110px rgba(0, 0, 0, 0.28);
+}
+
+body:not(.bas-app-mode) .bas-plans-hero-copy {
+  max-width: 900px;
+}
+
+body:not(.bas-app-mode) .bas-plans-kicker,
+body:not(.bas-app-mode) .bas-plans-section-head > span {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 9px;
+  color: #a17a2b;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-kicker,
+html.dark body:not(.bas-app-mode) .bas-plans-section-head > span {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-plans-hero h1 {
+  max-width: 910px;
+  margin: 19px 0 19px;
+  font-family: "Sora", "Noto Sans Myanmar", sans-serif;
+  color: var(--plans-ink);
+  font-size: clamp(48px, 5.8vw, 82px);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.99;
+  text-wrap: balance;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-hero h1 {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  font-size: clamp(40px, 4.7vw, 66px);
+  letter-spacing: -0.018em;
+  line-height: 1.36;
+  text-wrap: pretty;
+}
+
+body:not(.bas-app-mode) .bas-plans-hero-copy > p {
+  max-width: 780px;
+  margin: 0;
+  color: var(--plans-muted);
+  font-size: clamp(16px, 1.3vw, 19px);
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-hero-copy > p {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  line-height: 1.92;
+}
+
+body:not(.bas-app-mode) .bas-plans-access-note {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 22px;
+  border: 1px solid rgba(190, 149, 55, 0.24);
+  border-radius: 24px;
+  background: rgba(255, 253, 249, 0.70);
+  box-shadow: 0 16px 44px rgba(52, 22, 24, 0.07);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-access-note {
+  background: rgba(14, 7, 8, 0.50);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+}
+
+body:not(.bas-app-mode) .bas-plans-access-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(190, 149, 55, 0.12);
+  color: #9e7627;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-access-icon {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-plans-access-note strong {
+  display: block;
+  color: var(--plans-ink);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+body:not(.bas-app-mode) .bas-plans-access-note p {
+  margin: 7px 0 0;
+  color: var(--plans-muted);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.65;
+}
+
+body:not(.bas-app-mode) .bas-plans-section,
+body:not(.bas-app-mode) .bas-plans-process {
+  margin-top: clamp(78px, 8vw, 118px);
+}
+
+body:not(.bas-app-mode) .bas-plans-section-head {
+  max-width: 860px;
+  margin-bottom: 30px;
+}
+
+body:not(.bas-app-mode) .bas-plans-section-head-compact {
+  max-width: 920px;
+}
+
+body:not(.bas-app-mode) .bas-plans-section-head h2 {
+  margin: 12px 0 13px;
+  font-family: "Sora", "Noto Sans Myanmar", sans-serif;
+  color: var(--plans-ink);
+  font-size: clamp(36px, 4.5vw, 62px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-section-head h2 {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  font-size: clamp(34px, 4vw, 54px);
+  letter-spacing: -0.016em;
+  line-height: 1.42;
+  text-wrap: pretty;
+}
+
+body:not(.bas-app-mode) .bas-plans-section-head > p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--plans-muted);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-section-head > p {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  line-height: 1.92;
+}
+
+body:not(.bas-app-mode) .bas-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+body:not(.bas-app-mode) .bas-plan-card {
+  position: relative;
+  display: flex;
+  min-height: 580px;
+  flex-direction: column;
+  padding: 30px;
+  border: 1px solid var(--plans-line);
+  border-radius: 30px;
+  background: var(--plans-surface);
+  box-shadow: 0 18px 56px rgba(52, 22, 24, 0.07);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-card {
+  box-shadow: 0 22px 66px rgba(0, 0, 0, 0.22);
+}
+
+body:not(.bas-app-mode) .bas-plan-card.is-recommended {
+  border-color: rgba(153, 28, 43, 0.46);
+  background:
+    radial-gradient(circle at 88% 10%, rgba(212, 171, 81, 0.15), transparent 30%),
+    linear-gradient(180deg, rgba(255, 248, 239, 0.98), rgba(255, 252, 247, 0.94));
+  box-shadow: 0 26px 76px rgba(105, 23, 32, 0.13);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-card.is-recommended {
+  border-color: rgba(227, 188, 97, 0.30);
+  background:
+    radial-gradient(circle at 88% 10%, rgba(227, 188, 97, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(34, 14, 18, 0.96), rgba(21, 9, 11, 0.94));
+}
+
+body:not(.bas-app-mode) .bas-plan-recommended {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #991c2b;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-recommended {
+  background: #e3bc61;
+  color: #160b0d;
+}
+
+body:not(.bas-app-mode) .bas-plan-card-top {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 12px;
+}
+
+body:not(.bas-app-mode) .bas-plan-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  place-items: center;
+  border: 1px solid rgba(190, 149, 55, 0.22);
+  border-radius: 15px;
+  background: rgba(190, 149, 55, 0.10);
+  color: var(--plans-red);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-icon {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-plan-label {
+  max-width: 150px;
+  color: #a17a2b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-label {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-plan-card h3 {
+  margin: 24px 0 9px;
+  font-family: "Sora", "Noto Sans Myanmar", sans-serif;
+  color: var(--plans-ink);
+  font-size: 31px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plan-card h3 {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  letter-spacing: -0.012em;
+  line-height: 1.35;
+}
+
+body:not(.bas-app-mode) .bas-plan-audience {
+  min-height: 52px;
+  margin: 0;
+  color: var(--plans-muted);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plan-audience {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  line-height: 1.85;
+}
+
+body:not(.bas-app-mode) .bas-plan-price {
+  margin: 22px 0 0;
+  color: var(--plans-ink);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+body:not(.bas-app-mode) .bas-plan-divider {
+  height: 1px;
+  margin: 22px 0;
+  background: var(--plans-line);
+}
+
+body:not(.bas-app-mode) .bas-plan-card ul {
+  display: grid;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body:not(.bas-app-mode) .bas-plan-card li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--plans-muted);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.65;
+}
+
+body:not(.bas-app-mode) .bas-plan-card li svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: #a17a2b;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-card li svg {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-plan-cta {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: auto;
+  padding: 0 18px;
+  border: 1px solid rgba(153, 28, 43, 0.18);
+  border-radius: 15px;
+  background: #991c2b;
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(145, 25, 35, 0.17);
+  font-size: 13px;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+body:not(.bas-app-mode) .bas-plan-cta:hover {
+  transform: translateY(-2px);
+  background: #831622;
+  box-shadow: 0 16px 36px rgba(145, 25, 35, 0.24);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-cta {
+  border-color: rgba(227, 188, 97, 0.20);
+  background: #e3bc61;
+  color: #160b0d;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plan-cta:hover {
+  background: #efca72;
+}
+
+body:not(.bas-app-mode) .bas-plans-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+body:not(.bas-app-mode) .bas-plans-process-grid article {
+  position: relative;
+  min-height: 260px;
+  padding: 28px;
+  border: 1px solid var(--plans-line);
+  border-radius: 28px;
+  background: var(--plans-surface);
+  box-shadow: 0 16px 48px rgba(52, 22, 24, 0.06);
+}
+
+body:not(.bas-app-mode) .bas-plans-process-grid article > b {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  color: rgba(153, 28, 43, 0.14);
+  font-family: "Sora", sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-process-grid article > b {
+  color: rgba(227, 188, 97, 0.10);
+}
+
+body:not(.bas-app-mode) .bas-plans-process-grid article > span {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(190, 149, 55, 0.11);
+  color: var(--plans-red);
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-process-grid article > span {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-plans-process-grid h3 {
+  margin: 24px 0 10px;
+  font-family: "Sora", "Noto Sans Myanmar", sans-serif;
+  color: var(--plans-ink);
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-process-grid h3 {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+body:not(.bas-app-mode) .bas-plans-process-grid p {
+  margin: 0;
+  color: var(--plans-muted);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.72;
+}
+
+body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-process-grid p {
+  font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+  line-height: 1.88;
+}
+
+body:not(.bas-app-mode) .bas-plans-final-note {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding: 24px;
+  border: 1px solid rgba(190, 149, 55, 0.22);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(190, 149, 55, 0.08), rgba(145, 25, 35, 0.04));
+  color: var(--plans-ink);
+}
+
+body:not(.bas-app-mode) .bas-plans-final-note > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #a17a2b;
+}
+
+html.dark body:not(.bas-app-mode) .bas-plans-final-note > svg {
+  color: #e3bc61;
+}
+
+body:not(.bas-app-mode) .bas-plans-final-note strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+body:not(.bas-app-mode) .bas-plans-final-note p {
+  margin: 7px 0 0;
+  color: var(--plans-muted);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+@media (max-width: 1120px) {
+  body:not(.bas-app-mode) .bas-plans-hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-access-note {
+    max-width: 620px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body:not(.bas-app-mode) .bas-plan-card {
+    min-height: auto;
+  }
+
+  body:not(.bas-app-mode) .bas-plan-cta {
+    margin-top: 28px;
+  }
+}
+
+@media (max-width: 800px) {
+  body:not(.bas-app-mode) .bas-plans-page {
+    width: min(calc(100% - 28px), 1480px);
+    margin-top: 20px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-hero {
+    padding: 46px 34px;
+    border-radius: 28px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-process-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  body:not(.bas-app-mode) .bas-plans-page {
+    width: min(calc(100% - 20px), 1480px);
+    margin: 12px auto 58px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-hero {
+    padding: 38px 24px;
+    border-radius: 24px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-hero h1 {
+    font-size: 43px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-hero h1 {
+    font-size: 35px;
+    line-height: 1.44;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-section,
+  body:not(.bas-app-mode) .bas-plans-process {
+    margin-top: 64px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-section-head h2 {
+    font-size: 36px;
+  }
+
+  body:not(.bas-app-mode) .bas-plans-page.is-mm .bas-plans-section-head h2 {
+    font-size: 31px;
+    line-height: 1.5;
+  }
+
+  body:not(.bas-app-mode) .bas-plan-card,
+  body:not(.bas-app-mode) .bas-plans-process-grid article {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  body:not(.bas-app-mode) .bas-plan-recommended {
+    position: static;
+    width: fit-content;
+    margin-bottom: 16px;
+  }
+}
