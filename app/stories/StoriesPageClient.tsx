@@ -1,194 +1,94 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, BookOpen, Film, Layers3, Play, Sparkles } from "lucide-react";
+import { ArrowDown, Film, Sparkles } from "lucide-react";
 import { useLanguage } from "../LanguageContext";
-
-const previewVideoId = "DVM3o2Wqcys";
 
 const copy = {
   EN: {
     eyebrow: "BURMA AI STUDIO ORIGINALS",
-    title: "Stories Worth Returning To.",
+    title: "Watch Our Stories, One Episode at a Time.",
     subtitle:
-      "A public home for Burma AI Studio original films, cinematic series and episodic stories — designed to grow into a real viewing library, not a portfolio page.",
-    watchPreview: "Watch Studio Preview",
-    explore: "Explore the Library",
-    publicLabel: "PUBLIC ACCESS",
-    publicText: "Original stories are designed for everyone to watch without an upgrade plan.",
-    seriesLabel: "SERIES-FIRST",
-    seriesText: "Each story can grow into seasons, episodes and a clean long-form archive.",
-    episodeLabel: "EPISODE-READY",
-    episodeText: "The layout is prepared for episode cards, release dates, durations and watch progression.",
-    featuredEyebrow: "FEATURED PREVIEW",
-    featuredTitle: "The visual world begins here.",
-    featuredText:
-      "This cinematic trailer is being used as the first public preview while the Originals library is prepared for full series and episode releases.",
-    libraryEyebrow: "ORIGINALS LIBRARY",
-    libraryTitle: "Built for the stories that come next.",
+      "Original films and series from Burma AI Studio. New episodes will appear here as they are released — free for everyone to watch.",
+    browse: "Browse stories",
+    free: "Free to watch",
+    noAccount: "No account needed",
+    libraryEyebrow: "STORIES & SERIES",
+    libraryTitle: "Your next story starts here.",
     libraryText:
-      "No public series has been published yet. When the first series goes live, this section will become the permanent home for seasons, episodes and latest releases.",
-    emptyTitle: "First original series coming soon",
-    emptyText: "The library is ready for the first official Burma AI Studio episodic release.",
-    structureEyebrow: "CONTENT ARCHITECTURE",
-    structureTitle: "One clean path from series to episode.",
-    series: "Series",
-    seriesDesc: "Poster, title, genre, synopsis, status and season overview.",
-    seasons: "Seasons",
-    seasonsDesc: "Organized releases that keep long-running stories easy to browse.",
-    episodes: "Episodes",
-    episodesDesc: "Dedicated watch pages with episode number, duration, description and next episode flow.",
-    footerTitle: "Public entertainment. Studio-grade presentation.",
-    footerText:
-      "Stories will remain separate from Portfolio so client work and original entertainment never compete for attention.",
-    portfolio: "View Portfolio",
+      "There are no published series yet. When the first story arrives, you will be able to open a series, choose an episode and keep watching from one simple place.",
+    coming: "COMING SOON",
+    comingTitle: "New original stories are on the way.",
+    comingText:
+      "Check back for the first Burma AI Studio Original series and episode releases.",
   },
   MM: {
     eyebrow: "BURMA AI STUDIO ORIGINALS",
-    title: "ပြန်ကြည့်ချင်စေမယ့် ဇာတ်လမ်းတွေ။",
+    title: "ဇာတ်လမ်းတွေကို အပိုင်းလိုက် အေးအေးဆေးဆေး ကြည့်ပါ။",
     subtitle:
-      "Burma AI Studio ရဲ့ Original Film, Cinematic Series နဲ့ Episode အလိုက် ဇာတ်လမ်းတွေကို လူတိုင်းကြည့်နိုင်မယ့် public viewing library တစ်ခုအဖြစ် တည်ဆောက်ထားပါတယ်။ Portfolio နဲ့ မရောဘဲ သီးသန့် entertainment experience ဖြစ်ပါတယ်။",
-    watchPreview: "Studio Preview ကြည့်ရန်",
-    explore: "Library ကိုကြည့်ရန်",
-    publicLabel: "PUBLIC ACCESS",
-    publicText: "Original Stories တွေကို Upgrade Plan မလိုဘဲ လူတိုင်းကြည့်နိုင်အောင်ထားမယ်။",
-    seriesLabel: "SERIES-FIRST",
-    seriesText: "ဇာတ်လမ်းတစ်ခုချင်းစီကို Season နဲ့ Episode အလိုက် ရှင်းရှင်းလင်းလင်းတိုးချဲ့နိုင်မယ်။",
-    episodeLabel: "EPISODE-READY",
-    episodeText: "Episode card, release date, duration နဲ့ watch progression အတွက် layout ကိုအဆင်သင့်တည်ဆောက်ထားမယ်။",
-    featuredEyebrow: "FEATURED PREVIEW",
-    featuredTitle: "ဒီနေရာကနေ Burma AI Studio Originals ရဲ့ visual world စတင်မယ်။",
-    featuredText:
-      "Full Series နဲ့ Episodes မတင်ခင် အခု Cinematic Trailer ကို public preview အဖြစ်သုံးထားပါတယ်။",
-    libraryEyebrow: "ORIGINALS LIBRARY",
-    libraryTitle: "နောက်လာမယ့် ဇာတ်လမ်းတွေအတွက် အခုကတည်းက အဆင်သင့်။",
+      "Burma AI Studio ရဲ့ Original Film နဲ့ Series တွေကို ဒီနေရာမှာ တစ်စုတစ်စည်းတည်း ကြည့်နိုင်မယ်။ Episode အသစ်တင်တိုင်း ဒီမှာပေါ်လာပြီး လူတိုင်း အခမဲ့ကြည့်နိုင်မယ်။",
+    browse: "ဇာတ်လမ်းများကြည့်ရန်",
+    free: "လူတိုင်း အခမဲ့ကြည့်နိုင်သည်",
+    noAccount: "Account မလိုဘဲ ကြည့်နိုင်သည်",
+    libraryEyebrow: "ဇာတ်လမ်းများနှင့် SERIES များ",
+    libraryTitle: "နောက်ထပ်ကြည့်မယ့် ဇာတ်လမ်းကို ဒီမှာရှာပါ။",
     libraryText:
-      "Public Series မတင်ရသေးပါဘူး။ ပထမဆုံး Series တင်တဲ့အချိန်ကစပြီး ဒီနေရာက Seasons, Episodes နဲ့ Latest Releases တွေရဲ့ အမြဲတမ်း Home ဖြစ်သွားမယ်။",
-    emptyTitle: "ပထမဆုံး Original Series မကြာမီလာမယ်",
-    emptyText: "Burma AI Studio ရဲ့ ပထမဆုံး episodic release ကို လက်ခံဖို့ Library structure အဆင်သင့်ဖြစ်နေပြီ။",
-    structureEyebrow: "CONTENT ARCHITECTURE",
-    structureTitle: "Series ကနေ Episode အထိ တစ်လမ်းတည်းနဲ့ရှင်းနေမယ့် structure။",
-    series: "Series",
-    seriesDesc: "Poster, Title, Genre, Synopsis, Status နဲ့ Season overview။",
-    seasons: "Seasons",
-    seasonsDesc: "ရှည်လျားတဲ့ဇာတ်လမ်းတွေကိုလည်း မရှုပ်ဘဲ အပိုင်းလိုက် browse လုပ်နိုင်မယ်။",
-    episodes: "Episodes",
-    episodesDesc: "Episode number, duration, description နဲ့ Next Episode flow ပါတဲ့ dedicated watch pages။",
-    footerTitle: "Public entertainment. Studio-grade presentation.",
-    footerText:
-      "Stories ကို Portfolio နဲ့ သီးသန့်ခွဲထားလို့ Client work နဲ့ Original entertainment နှစ်မျိုးလုံးကို professional ကျကျပြနိုင်မယ်။",
-    portfolio: "Portfolio ကြည့်ရန်",
+      "လက်ရှိမှာ ထုတ်လွှင့်ထားတဲ့ Series မရှိသေးပါဘူး။ ပထမဆုံး Series တင်လာတဲ့အခါ Series ကိုဖွင့်ပြီး Episode တစ်ပိုင်းချင်းစီကို ဒီနေရာကနေ တိုက်ရိုက်ကြည့်နိုင်မယ်။",
+    coming: "မကြာမီလာမည်",
+    comingTitle: "Original ဇာတ်လမ်းအသစ်တွေ မကြာမီလာမယ်။",
+    comingText:
+      "Burma AI Studio ရဲ့ ပထမဆုံး Series နဲ့ Episodes တွေကို ဒီနေရာမှာ အရင်ဆုံးကြည့်နိုင်မယ်။",
   },
 } as const;
 
 export default function StoriesPageClient() {
   const { lang } = useLanguage();
-  const t = copy[lang === "MM" ? "MM" : "EN"];
+  const isMyanmar = lang === "MM";
+  const t = copy[isMyanmar ? "MM" : "EN"];
 
   return (
-    <div className="bas-stories-page">
+    <div className={`bas-stories-page${isMyanmar ? " is-mm" : ""}`}>
       <section className="bas-stories-hero" aria-labelledby="stories-title">
-        <img
-          className="bas-stories-hero-image"
-          src={`https://i.ytimg.com/vi/${previewVideoId}/maxresdefault.jpg`}
-          alt="Burma AI Studio cinematic original preview"
-        />
-        <div className="bas-stories-hero-shade" />
-        <div className="bas-stories-hero-glow" />
+        <div className="bas-stories-hero-inner">
+          <div className="bas-stories-kicker">
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+            {t.eyebrow}
+          </div>
 
-        <div className="bas-stories-hero-content">
-          <div className="bas-stories-kicker"><Sparkles className="h-4 w-4" /> {t.eyebrow}</div>
           <h1 id="stories-title">{t.title}</h1>
-          <p>{t.subtitle}</p>
-          <div className="bas-stories-actions">
-            <a className="bas-stories-primary" href="#featured">
-              <Play className="h-4 w-4 fill-current" /> {t.watchPreview}
+          <p className="bas-stories-hero-copy">{t.subtitle}</p>
+
+          <div className="bas-stories-hero-actions">
+            <a href="#stories-library" className="bas-stories-primary">
+              {t.browse}
+              <ArrowDown className="h-4 w-4" aria-hidden="true" />
             </a>
-            <a className="bas-stories-secondary" href="#library">
-              {t.explore} <ArrowRight className="h-4 w-4" />
-            </a>
+          </div>
+
+          <div className="bas-stories-trust" aria-label="Viewing access">
+            <span>{t.free}</span>
+            <span aria-hidden="true" className="bas-stories-dot" />
+            <span>{t.noAccount}</span>
           </div>
         </div>
       </section>
 
-      <section className="bas-stories-principles" aria-label="Stories platform principles">
-        <article>
-          <span className="bas-stories-principle-icon"><Film className="h-5 w-5" /></span>
-          <div><strong>{t.publicLabel}</strong><p>{t.publicText}</p></div>
-        </article>
-        <article>
-          <span className="bas-stories-principle-icon"><Layers3 className="h-5 w-5" /></span>
-          <div><strong>{t.seriesLabel}</strong><p>{t.seriesText}</p></div>
-        </article>
-        <article>
-          <span className="bas-stories-principle-icon"><BookOpen className="h-5 w-5" /></span>
-          <div><strong>{t.episodeLabel}</strong><p>{t.episodeText}</p></div>
-        </article>
-      </section>
-
-      <section id="featured" className="bas-stories-featured">
-        <div className="bas-stories-section-copy">
-          <span>{t.featuredEyebrow}</span>
-          <h2>{t.featuredTitle}</h2>
-          <p>{t.featuredText}</p>
-        </div>
-
-        <div className="bas-stories-player-shell">
-          <div className="bas-stories-player-frame">
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${previewVideoId}?rel=0&modestbranding=1&playsinline=1`}
-              title="Burma AI Studio Originals cinematic preview"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
-          <div className="bas-stories-player-meta">
-            <span>BURMA AI STUDIO ORIGINALS</span>
-            <strong>Cinematic Preview</strong>
-            <small>Public preview · Full original series library coming next</small>
-          </div>
-        </div>
-      </section>
-
-      <section id="library" className="bas-stories-library">
-        <div className="bas-stories-section-copy bas-stories-section-copy-wide">
+      <section id="stories-library" className="bas-stories-library" aria-labelledby="stories-library-title">
+        <div className="bas-stories-library-head">
           <span>{t.libraryEyebrow}</span>
-          <h2>{t.libraryTitle}</h2>
+          <h2 id="stories-library-title">{t.libraryTitle}</h2>
           <p>{t.libraryText}</p>
         </div>
 
-        <div className="bas-stories-empty-state">
-          <div className="bas-stories-empty-mark"><Film className="h-7 w-7" /></div>
-          <div>
-            <strong>{t.emptyTitle}</strong>
-            <p>{t.emptyText}</p>
+        <article className="bas-stories-coming-card">
+          <div className="bas-stories-coming-icon" aria-hidden="true">
+            <Film className="h-6 w-6" />
           </div>
-          <span className="bas-stories-coming-pill">COMING SOON</span>
-        </div>
-      </section>
-
-      <section className="bas-stories-structure">
-        <div className="bas-stories-section-copy bas-stories-section-copy-wide">
-          <span>{t.structureEyebrow}</span>
-          <h2>{t.structureTitle}</h2>
-        </div>
-
-        <div className="bas-stories-structure-grid">
-          <article><b>01</b><h3>{t.series}</h3><p>{t.seriesDesc}</p></article>
-          <article><b>02</b><h3>{t.seasons}</h3><p>{t.seasonsDesc}</p></article>
-          <article><b>03</b><h3>{t.episodes}</h3><p>{t.episodesDesc}</p></article>
-        </div>
-      </section>
-
-      <section className="bas-stories-footer-cta">
-        <div>
-          <span>BURMA AI STUDIO · ORIGINALS</span>
-          <h2>{t.footerTitle}</h2>
-          <p>{t.footerText}</p>
-        </div>
-        <Link href="/portfolio" className="bas-stories-secondary bas-stories-footer-link">
-          {t.portfolio} <ArrowRight className="h-4 w-4" />
-        </Link>
+          <div className="bas-stories-coming-copy">
+            <span>{t.coming}</span>
+            <h3>{t.comingTitle}</h3>
+            <p>{t.comingText}</p>
+          </div>
+        </article>
       </section>
     </div>
   );
