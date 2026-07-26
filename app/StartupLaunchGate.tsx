@@ -59,7 +59,7 @@ export default function StartupLaunchGate() {
   if (!show) return null;
 
   return (
-    <section className="fixed inset-0 z-[2147483647] overflow-hidden bg-white" aria-label="Burma AI Studio startup ad">
+    <section className="bas-startup-launch-gate fixed inset-0 z-[2147483647] overflow-hidden bg-white" aria-label="Burma AI Studio startup ad">
       <img src={STARTUP_AD_SRC} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-45" draggable={false} />
       <div className="absolute inset-0 bg-white/45" />
       <img src={STARTUP_AD_SRC} alt="Burma AI Studio Startup Ad" className="relative z-10 h-full w-full object-contain" draggable={false} onError={() => setShow(false)} />
