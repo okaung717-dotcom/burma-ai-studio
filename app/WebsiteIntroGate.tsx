@@ -12,14 +12,11 @@ import {
   Globe2,
   LockKeyhole,
   Mail,
-  Moon,
   Sparkles,
-  Sun,
   UserRound,
   X,
 } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
-import { useTheme } from "./ThemeProvider";
 import "./website-intro-gate.css";
 
 const INTRO_SESSION_KEY = "bas_website_intro_seen_v1";
@@ -67,8 +64,8 @@ const copy = {
   },
   MM: {
     eyebrow: "BURMA AI STUDIO · CINEMATIC AI PRODUCTION",
-    title1: "မြင်တာနဲ့ မှတ်မိစေမယ့်",
-    title2: "AI Visual Experience.",
+    title1: "စိတ်ကူးတိုင်းကို အသက်ဝင်စေမယ့်",
+    title2: "Cinematic AI Storytelling.",
     desc: "Premium AI Film, Cinematic Campaign နဲ့ Original Stories တွေကို Human Creative Direction နဲ့ပေါင်းစပ်ပြီး Brand ကို ပိုထင်ရှားအောင်ဖန်တီးပေးပါတယ်။",
     enter: "Studio ထဲဝင်ရန်",
     create: "Account ဖွင့်ရန်",
@@ -114,7 +111,6 @@ function isAppExperience() {
 export default function WebsiteIntroGate() {
   const pathname = usePathname() || "/";
   const { lang, toggleLang } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
   const t = copy[lang === "MM" ? "MM" : "EN"];
 
   const [visible, setVisible] = useState(true);
@@ -306,9 +302,6 @@ export default function WebsiteIntroGate() {
           <button type="button" className="bas-intro-icon-button" onClick={toggleLang} aria-label="Change language">
             <Globe2 className="h-4 w-4" /> <span>{lang === "MM" ? "MM" : "EN"}</span>
           </button>
-          <button type="button" className="bas-intro-icon-only" onClick={toggleTheme} aria-label="Change theme">
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
           {account ? (
             <button type="button" className="bas-intro-account-chip" onClick={() => enterStudio(account)}>
               <CheckCircle2 className="h-4 w-4" /> {signedInLabel}
@@ -331,11 +324,6 @@ export default function WebsiteIntroGate() {
           <button type="button" className="bas-intro-enter" onClick={() => enterStudio(account)}>
             {t.enter} <ArrowRight className="h-5 w-5" />
           </button>
-          {!account ? (
-            <button type="button" className="bas-intro-create" onClick={() => openAuth("signup")}>
-              <UserRound className="h-5 w-5" /> {t.create}
-            </button>
-          ) : null}
         </div>
         <p className="bas-intro-guest-note">{t.guestNote}</p>
       </div>
