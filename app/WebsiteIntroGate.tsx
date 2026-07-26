@@ -24,6 +24,7 @@ import "./website-intro-gate.css";
 
 const INTRO_SESSION_KEY = "bas_website_intro_seen_v1";
 const PROFILE_STORAGE_KEY = "bas_website_profile";
+const INTRO_UI_REVEAL_MS = 2800;
 const heroVideoId = "DVM3o2Wqcys";
 
 type AuthMode = "signin" | "signup" | null;
@@ -48,9 +49,6 @@ const copy = {
     signIn: "Sign in",
     signedIn: "Signed in",
     guestNote: "Public website access is free. An account is optional for now.",
-    featureLabel: "BURMA AI STUDIO",
-    featureTitle: "Cinematic AI. Human Direction.",
-    featureMeta: "Brand films · Presenter campaigns · Original stories",
     authSignInTitle: "Welcome back.",
     authSignInCopy: "Sign in to continue with your Burma AI Studio account.",
     authSignUpTitle: "Create your studio account.",
@@ -78,9 +76,6 @@ const copy = {
     signIn: "Sign in",
     signedIn: "Signed in",
     guestNote: "Public Website ကို လူတိုင်းအခမဲ့သုံးနိုင်ပါတယ်။ လက်ရှိအချိန်မှာ Account မရှိလည်းဝင်ကြည့်နိုင်ပါတယ်။",
-    featureLabel: "BURMA AI STUDIO",
-    featureTitle: "Cinematic AI. Human Direction.",
-    featureMeta: "Brand Films · Presenter Campaigns · Original Stories",
     authSignInTitle: "ပြန်လည်ကြိုဆိုပါတယ်။",
     authSignInCopy: "Burma AI Studio Account နဲ့ ဆက်သုံးဖို့ Sign in ဝင်ပါ။",
     authSignUpTitle: "Studio Account ဖွင့်ပါ။",
@@ -123,11 +118,8 @@ export default function WebsiteIntroGate() {
   const { theme, toggleTheme } = useTheme();
   const t = copy[lang === "MM" ? "MM" : "EN"];
 
-  // Render the cinematic shell in the server response so a first-time website visitor
-  // never sees the old startup artwork or the Home page before the Intro.
-  // A tiny pre-paint script in layout.tsx suppresses this shell for App/PWA/native
-  // contexts and for website sessions that have already entered the studio.
   const [visible, setVisible] = useState(true);
+  const [uiReady, setUiReady] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>(null);
   const [account, setAccount] = useState<AccountUser>(null);
@@ -167,6 +159,17 @@ export default function WebsiteIntroGate() {
       })
       .catch(() => undefined);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!visible || pathname !== "/") {
+      setUiReady(false);
+      return;
+    }
+
+    setUiReady(false);
+    const revealTimer = window.setTimeout(() => setUiReady(true), INTRO_UI_REVEAL_MS);
+    return () => window.clearTimeout(revealTimer);
+  }, [visible, pathname]);
 
   useEffect(() => {
     if (!visible) return;
@@ -260,7 +263,7 @@ export default function WebsiteIntroGate() {
 
   return (
     <section
-      className={`bas-intro${leaving ? " is-leaving" : ""}${isMyanmar ? " is-mm" : ""}`}
+      className={`bas-intro${uiReady ? " is-ui-ready" : ""}${leaving ? " is-leaving" : ""}${isMyanmar ? " is-mm" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label="Burma AI Studio introduction"
@@ -319,12 +322,6 @@ export default function WebsiteIntroGate() {
         </div>
         <p className="bas-intro-guest-note">{t.guestNote}</p>
       </div>
-
-      <aside className="bas-intro-feature">
-        <span>{t.featureLabel}</span>
-        <strong>{t.featureTitle}</strong>
-        <p>{t.featureMeta}</p>
-      </aside>
 
       <div className="bas-intro-film-chip" aria-hidden="true"><Film className="h-4 w-4" /> ORIGINAL VISUALS</div>
 
