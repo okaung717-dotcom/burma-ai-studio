@@ -1,0 +1,42 @@
+name: Diagnose website build
+
+on:
+  push:
+    paths:
+      - ".github/workflows/diagnose-website-build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Build and capture diagnostics
+        shell: bash
+        run: |
+          set +e
+          npm run build > BUILD_DIAG.txt 2>&1
+          code=$?
+          echo "" >> BUILD_DIAG.txt
+          echo "BUILD_EXIT_CODE=$code" >> BUILD_DIAG.txt
+          exit 0
+      - name: Commit diagnostics and remove temporary workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .github/workflows/diagnose-website-build.yml
+          git add BUILD_DIAG.txt .github/workflows/diagnose-website-build.yml
+          git commit -m "Capture website build diagnostics"
+          git push origin HEAD:main
