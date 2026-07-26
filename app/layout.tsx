@@ -78,6 +78,19 @@ export default function RootLayout({
           html.bas-real-app-context .bas-intro,
           html.bas-intro-skip .bas-intro { display: none !important; }
           html.bas-website-context:not(.bas-intro-skip) body { background: #090506; }
+
+          /* Critical first-paint guard: the public website intro's third-party
+             player is never allowed to paint native transport chrome before
+             the sanitizer removes playlist controls and marks it ready. */
+          html.bas-website-context .bas-intro-media iframe:not(.bas-intro-video-ready) {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+          }
+
+          html.bas-website-context .bas-intro-media iframe.bas-intro-video-ready {
+            visibility: visible !important;
+          }
         `}</style>
         <script
           dangerouslySetInnerHTML={{
