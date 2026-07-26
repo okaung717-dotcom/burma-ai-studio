@@ -1,0 +1,45 @@
+name: Check account diagnostic 2
+
+on:
+  push:
+    paths:
+      - ".github/workflows/check-account-diagnostic-2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Capture production response
+        shell: bash
+        run: |
+          set +e
+          body=$(mktemp)
+          status=$(curl -sS --max-time 25 -o "$body" -w '%{http_code}' https://burmaaistudio.com/api/account/_diag-20260727)
+          rc=$?
+          printf '{"curl_exit":%s,"http_status":"%s","body":' "$rc" "$status" > ACCOUNT_DIAG_RESULT_2.json
+          python - "$body" >> ACCOUNT_DIAG_RESULT_2.json <<'PY'
+          import json, sys
+          try:
+              text=open(sys.argv[1], 'r', errors='replace').read()
+          except Exception as e:
+              text=str(e)
+          print(json.dumps(text), end='')
+          PY
+          printf '}\n' >> ACCOUNT_DIAG_RESULT_2.json
+          exit 0
+      - name: Commit diagnostic and remove workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .github/workflows/check-account-diagnostic-2.yml
+          git add ACCOUNT_DIAG_RESULT_2.json .github/workflows/check-account-diagnostic-2.yml
+          git commit -m "Capture detailed production account diagnostic"
+          git push origin HEAD:main
