@@ -22,6 +22,7 @@ import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
 import WebsiteIntroGate from "./WebsiteIntroGate";
 import WebsiteIntroVideoSanitizer from "./WebsiteIntroVideoSanitizer";
+import WebsiteLogoutRedirect from "./WebsiteLogoutRedirect";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
 import AppBottomNav from "./AppBottomNav";
@@ -101,6 +102,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <ConsentAwareAnalytics />
       {!isAdminArea && <WebsiteIntroGate />}
       {!isAdminArea && <WebsiteIntroVideoSanitizer />}
+      {!isAdminArea && <WebsiteLogoutRedirect />}
       {!isAdminArea && <Navbar />}
       {!isAdminArea && <WebsiteStoriesNav />}
       {!isAdminArea && <WebsitePlansBridge />}
