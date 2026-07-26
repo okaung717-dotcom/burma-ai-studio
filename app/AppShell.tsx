@@ -16,6 +16,7 @@ import "./website-theme-polish-v3.css";
 import Navbar from "./Navbar";
 import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
+import WebsiteIntroGate from "./WebsiteIntroGate";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
 import AppBottomNav from "./AppBottomNav";
@@ -93,6 +94,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   return (
     <>
       <ConsentAwareAnalytics />
+      {!isAdminArea && <WebsiteIntroGate />}
       {!isAdminArea && <Navbar />}
       {!isAdminArea && <WebsiteStoriesNav />}
       {!isAdminArea && <WebsitePlansBridge />}
