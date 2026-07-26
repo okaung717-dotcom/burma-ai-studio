@@ -73,6 +73,12 @@ export default function RootLayout({
         <link rel="icon" href={iconUrl} type="image/svg+xml" />
         <link rel="shortcut icon" href={iconUrl} type="image/svg+xml" />
         <link rel="apple-touch-icon" sizes="180x180" href={appleIconUrl} />
+        <style>{`
+          html.bas-website-context .bas-startup-launch-gate { display: none !important; }
+          html.bas-real-app-context .bas-intro,
+          html.bas-intro-skip .bas-intro { display: none !important; }
+          html.bas-website-context:not(.bas-intro-skip) body { background: #090506; }
+        `}</style>
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -83,12 +89,24 @@ export default function RootLayout({
                 var iosStandalone = 'standalone' in navigator && !!navigator.standalone;
                 var androidWebView = /Android/i.test(ua) && /; wv\\)/i.test(ua);
                 var explicitApp = search.get('source') === 'pwa' || search.get('source') === 'app' || search.get('source') === 'native' || search.get('platform') === 'ios' || search.get('platform') === 'android';
-                var nativeBridge = typeof window.Capacitor !== 'undefined';
+                var nativeBridge = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
                 var realApp = standalone || iosStandalone || androidWebView || explicitApp || nativeBridge;
+                var html = document.documentElement;
+
+                html.classList.toggle('bas-real-app-context', !!realApp);
+                html.classList.toggle('bas-website-context', !realApp);
 
                 if (!realApp) {
                   localStorage.removeItem('bas-app-mode');
-                  document.documentElement.classList.remove('bas-app-mode');
+                  html.classList.remove('bas-app-mode');
+
+                  var isHome = window.location.pathname === '/';
+                  var forceIntro = search.get('intro') === '1';
+                  var introSeen = false;
+                  try { introSeen = sessionStorage.getItem('bas_website_intro_seen_v1') === '1'; } catch (e) {}
+                  html.classList.toggle('bas-intro-skip', !isHome || (introSeen && !forceIntro));
+                } else {
+                  html.classList.add('bas-intro-skip');
                 }
               } catch (e) {}
             `,
