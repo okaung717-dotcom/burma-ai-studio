@@ -15,10 +15,12 @@ import "./premium-site-system-v2.css";
 import "./website-theme-polish-v3.css";
 import "./website-intro-sequence-v2.css";
 import "./website-intro-timing-216.css";
+import "./website-intro-video-sanitizer.css";
 import Navbar from "./Navbar";
 import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
 import WebsiteIntroGate from "./WebsiteIntroGate";
+import WebsiteIntroVideoSanitizer from "./WebsiteIntroVideoSanitizer";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
 import AppBottomNav from "./AppBottomNav";
@@ -97,6 +99,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     <>
       <ConsentAwareAnalytics />
       {!isAdminArea && <WebsiteIntroGate />}
+      {!isAdminArea && <WebsiteIntroVideoSanitizer />}
       {!isAdminArea && <Navbar />}
       {!isAdminArea && <WebsiteStoriesNav />}
       {!isAdminArea && <WebsitePlansBridge />}
