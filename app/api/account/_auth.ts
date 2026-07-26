@@ -25,13 +25,13 @@ export type AuthPayload = {
 };
 
 function cleanBaseUrl(value: string | undefined) {
-  const raw = (value || "").trim().replace(/^['\"]|['\"]$/g, "").replace(/\/+$/, "");
+  const raw = (value || "").trim().replace(/^[\'\"]|[\'\"]$/g, "").replace(/\/+$/, "");
   if (!/^https:\/\//i.test(raw)) return "";
   return raw;
 }
 
 function cleanApiKey(value: string | undefined) {
-  return (value || "").trim().replace(/^['\"]|['\"]$/g, "");
+  return (value || "").trim().replace(/^[\'\"]|[\'\"]$/g, "");
 }
 
 function decodeLegacyRole(key: string) {
@@ -102,14 +102,14 @@ export async function authRequest(path: string, init: RequestInit = {}) {
 export async function authAdminRequest(path: string, init: RequestInit = {}) {
   const { url, apiKey } = getSupabaseAdminAuthConfig();
   const headers = new Headers(init.headers);
-  headers.set("apikey", apiKey);
-  headers.set("Content-Type", "application/json");
 
-  // Legacy service_role JWTs are accepted as bearer tokens by GoTrue. New
-  // sb_secret_ keys are API keys and must not be placed in Authorization.
-  if (!apiKey.startsWith("sb_secret_")) {
-    headers.set("Authorization", `Bearer ${apiKey}`);
-  }
+  // Supabase Auth Admin endpoints require the elevated server credential in the
+  // Authorization channel. For current sb_secret_* keys, Supabase permits the
+  // same secret value in both `apikey` and `Authorization`; legacy service_role
+  // JWTs use the same shape. This stays server-only and is never exposed client-side.
+  headers.set("apikey", apiKey);
+  headers.set("Authorization", `Bearer ${apiKey}`);
+  headers.set("Content-Type", "application/json");
 
   return fetch(`${url}/auth/v1${path}`, {
     ...init,
@@ -129,14 +129,14 @@ export function authErrorMessage(payload: AuthPayload | null, status: number) {
   if (raw.includes("email not confirmed")) {
     return "Please confirm your email before signing in.";
   }
-  if (raw.includes("already registered") || raw.includes("already exists")) {
+  if (raw.includes("already registered") || raw.includes("already exists") || raw.includes("email_exists")) {
     return "An account with this email already exists.";
   }
   if (raw.includes("password")) {
     return "Please use a stronger password with at least 8 characters.";
   }
   if (status === 429 || raw.includes("rate limit")) {
-    return "Account email service is temporarily rate-limited. Please try again shortly.";
+    return "Account service is temporarily busy. Please try again shortly.";
   }
   return "We could not complete that request. Please try again.";
 }
