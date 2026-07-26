@@ -1,0 +1,53 @@
+name: Import website intro video
+
+on:
+  push:
+    paths:
+      - ".github/workflows/import-website-intro-video.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-video:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download prepared MP4
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public
+          curl --fail --location --retry 3 --retry-delay 2 \
+            'https://walnut-prod-va6.walnut-cdn.adobe.io/walnut-compute-results/v2/417a051f78800f31578cd873eec7f46ef3243d63664371ab07b1c5a0c850bc65/result?x-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODUwNzgwMDAsIm5iZiI6MTc4NTA2NzIwMCwia2V5VmVyc2lvbiI6MTc4MzAxMjIyMzEzNCwicGF0aCI6Ii93YWxudXQtY29tcHV0ZS1yZXN1bHRzL3YyLzQxN2EwNTFmNzg4MDBmMzE1NzhjZDg3M2VlYzdmNDZlZjMyNDNkNjM2NjQzNzFhYjA3YjFjNWEwYzg1MGJjNjUvcmVzdWx0In0.vz2HTzmIFTkcRE1_5SziX5ucTB_JrJwXztRWB49Hjro' \
+            --output public/burma-ai-studio-intro.mp4
+
+          size=$(stat -c%s public/burma-ai-studio-intro.mp4)
+          echo "Downloaded ${size} bytes"
+          if [ "$size" -le 1024 ]; then
+            echo "Downloaded file is unexpectedly small" >&2
+            exit 1
+          fi
+          if [ "$size" -ge 99000000 ]; then
+            echo "Video exceeds GitHub's normal single-file limit" >&2
+            exit 1
+          fi
+
+      - name: Commit local intro video
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/burma-ai-studio-intro.mp4
+          if git diff --cached --quiet; then
+            echo "Intro video is already current"
+            exit 0
+          fi
+          git commit -m "Add local website intro video"
+          git push origin HEAD:main
