@@ -18,7 +18,7 @@ jobs:
         with:
           ref: main
 
-      - name: Make website profile logout clear the secure auth session
+      - name: Align the website profile with mandatory account access
         shell: bash
         run: |
           set -euo pipefail
@@ -27,6 +27,7 @@ jobs:
 
           path = Path("app/WebsiteNavbarProfile.tsx")
           text = path.read_text()
+
           old = '''  const logOut = () => {
     window.localStorage.removeItem(PROFILE_STORAGE_KEY);
     setProfile({ displayName: "Burma AI Studio Client", email: "", company: "" });
@@ -39,7 +40,7 @@ jobs:
     try {
       await fetch("/api/account/sign-out", { method: "POST", cache: "no-store" });
     } catch {
-      // Continue with the local cleanup; the Intro gate will verify the session again.
+      // Continue with local cleanup; the Intro gate verifies the session on reload.
     }
     window.localStorage.removeItem(PROFILE_STORAGE_KEY);
     document.documentElement.classList.remove("bas-intro-skip");
@@ -49,9 +50,20 @@ jobs:
     showToast(t.sessionCleared);
     window.location.assign("/");
   };'''
-          if old not in text:
+          if old in text:
+              text = text.replace(old, new, 1)
+          elif 'const logOut = async () =>' not in text:
               raise SystemExit("Expected website logout block was not found")
-          path.write_text(text.replace(old, new, 1))
+
+          replacements = {
+              'guest: "Guest access · Website"': 'guest: "Website account"',
+              'guestAccess: "Guest website access"': 'guestAccess: "Website account access"',
+              'guest: "Guest access · Website"': 'guest: "Website account"',
+          }
+          for before, after in replacements.items():
+              text = text.replace(before, after)
+
+          path.write_text(text)
           PY
 
           rm -f .github/workflows/fix-website-auth-session.yml
@@ -63,5 +75,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add app/WebsiteNavbarProfile.tsx .github/workflows/fix-website-auth-session.yml
-          git commit -m "Make website logout clear secure account session"
+          git commit -m "Finish mandatory website account session flow"
           git push origin HEAD:main
