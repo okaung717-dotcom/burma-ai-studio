@@ -123,7 +123,11 @@ export default function WebsiteIntroGate() {
   const { theme, toggleTheme } = useTheme();
   const t = copy[lang === "MM" ? "MM" : "EN"];
 
-  const [visible, setVisible] = useState(false);
+  // Render the cinematic shell in the server response so a first-time website visitor
+  // never sees the old startup artwork or the Home page before the Intro.
+  // A tiny pre-paint script in layout.tsx suppresses this shell for App/PWA/native
+  // contexts and for website sessions that have already entered the studio.
+  const [visible, setVisible] = useState(true);
   const [leaving, setLeaving] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>(null);
   const [account, setAccount] = useState<AccountUser>(null);
@@ -148,7 +152,12 @@ export default function WebsiteIntroGate() {
     }
 
     const forceIntro = new URLSearchParams(window.location.search).get("intro") === "1";
-    const alreadySeen = window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1";
+    let alreadySeen = false;
+    try {
+      alreadySeen = window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1";
+    } catch {
+      alreadySeen = false;
+    }
     setVisible(forceIntro || !alreadySeen);
 
     fetch("/api/account/session", { cache: "no-store" })
@@ -185,9 +194,14 @@ export default function WebsiteIntroGate() {
 
   const enterStudio = (user?: AccountUser) => {
     if (user) persistProfile(user);
-    window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
+    try {
+      window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
+    } catch {
+      // The Intro can still close when session storage is unavailable.
+    }
     setLeaving(true);
     window.setTimeout(() => {
+      document.documentElement.classList.add("bas-intro-skip");
       setVisible(false);
       setLeaving(false);
       setAuthMode(null);
