@@ -85,6 +85,28 @@ export default async function RootLayout({
           html.bas-intro-skip .bas-intro { display: none !important; }
           html.bas-website-context:not(.bas-intro-skip) body { background: #090506; }
 
+          /* First-paint account-gate protection.
+             The Intro itself must be fully opaque from the very first browser paint.
+             Its previous whole-screen fade-in exposed Home underneath for ~520ms.
+             UI elements inside the Intro still keep their existing 3.03s cinematic reveal. */
+          html.bas-website-context:not(.bas-intro-skip) .bas-intro {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 20000 !important;
+            overflow: hidden !important;
+            isolation: isolate !important;
+            background: #090506 !important;
+            opacity: 1 !important;
+            transform: none !important;
+            animation: none !important;
+          }
+
+          /* Even if a browser paints descendants while CSS chunks are settling,
+             the protected Home surface cannot show through an unauthenticated Intro. */
+          html.bas-website-context:not(.bas-intro-skip) .bas-intro-media {
+            background: #080405 !important;
+          }
+
           /* Critical first-paint guard: the public website intro's third-party
              player is never allowed to paint native transport chrome before
              the sanitizer removes playlist controls and marks it ready. */
