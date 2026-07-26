@@ -1,0 +1,50 @@
+/* Website-only Myanmar Intro headline refinement.
+   Keeps the short brand-marketing line compact, single-line, and safely below the header. */
+
+@media (min-width: 861px) {
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content {
+    bottom: clamp(70px, 8.8vh, 108px);
+    width: min(980px, 66vw);
+  }
+
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content h1 {
+    max-width: 980px;
+    margin: 16px 0 20px;
+    line-height: 1;
+  }
+
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content h1 span {
+    display: block;
+    font-family: "Noto Sans Myanmar", "Manrope", sans-serif;
+    font-size: clamp(30px, 3vw, 46px);
+    font-weight: 800;
+    line-height: 1.36;
+    letter-spacing: -.018em;
+    white-space: nowrap;
+  }
+
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content h1 em {
+    display: block;
+    margin-top: 7px;
+    font-family: "Sora", "Noto Sans Myanmar", sans-serif;
+    font-size: clamp(50px, 5.2vw, 80px);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -.055em;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1180px) {
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content {
+    width: min(900px, 70vw);
+  }
+
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content h1 span {
+    font-size: clamp(27px, 2.8vw, 38px);
+  }
+
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content h1 em {
+    font-size: clamp(46px, 4.8vw, 66px);
+  }
+}
