@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { usePathname } from "next/navigation";
 
 const VIDEO_RESTART_MS = 41400;
+const VIDEO_REVEAL_FALLBACK_MS = 1800;
 
 function isWebsiteHome(pathname: string) {
   if (pathname !== "/" || typeof window === "undefined") return false;
@@ -48,11 +49,17 @@ function cleanPlayerUrl(src: string) {
 export default function WebsiteIntroVideoSanitizer() {
   const pathname = usePathname() || "/";
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isWebsiteHome(pathname)) return;
 
     let currentIframe: HTMLIFrameElement | null = null;
     let restartTimer: number | null = null;
+    let revealTimer: number | null = null;
+
+    const reveal = (iframe: HTMLIFrameElement) => {
+      if (!iframe.isConnected) return;
+      iframe.classList.add("bas-intro-video-ready");
+    };
 
     const scheduleRestart = () => {
       if (restartTimer) window.clearInterval(restartTimer);
@@ -80,12 +87,32 @@ export default function WebsiteIntroVideoSanitizer() {
 
       if (iframe !== currentIframe) {
         currentIframe = iframe;
+        iframe.classList.remove("bas-intro-video-ready");
+
+        let sourceChanged = false;
         try {
           const nextSrc = cleanPlayerUrl(iframe.src).toString();
-          if (iframe.src !== nextSrc) iframe.src = nextSrc;
+          if (iframe.src !== nextSrc) {
+            sourceChanged = true;
+            iframe.src = nextSrc;
+          }
         } catch {
           // Leave the existing player source untouched if it cannot be parsed.
         }
+
+        if (revealTimer) window.clearTimeout(revealTimer);
+
+        if (sourceChanged) {
+          const handleLoad = () => {
+            iframe.removeEventListener("load", handleLoad);
+            reveal(iframe);
+          };
+          iframe.addEventListener("load", handleLoad);
+          revealTimer = window.setTimeout(() => reveal(iframe), VIDEO_REVEAL_FALLBACK_MS);
+        } else {
+          window.requestAnimationFrame(() => reveal(iframe));
+        }
+
         scheduleRestart();
       }
 
@@ -105,6 +132,7 @@ export default function WebsiteIntroVideoSanitizer() {
     return () => {
       observer.disconnect();
       if (restartTimer) window.clearInterval(restartTimer);
+      if (revealTimer) window.clearTimeout(revealTimer);
     };
   }, [pathname]);
 
