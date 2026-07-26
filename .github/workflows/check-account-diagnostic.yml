@@ -1,0 +1,33 @@
+name: Check account diagnostic
+
+on:
+  push:
+    paths:
+      - ".github/workflows/check-account-diagnostic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Read production diagnostic
+        shell: bash
+        run: |
+          set -euo pipefail
+          sleep 5
+          curl --fail --silent --show-error --max-time 20 https://burmaaistudio.com/api/account/_diag-20260727 > ACCOUNT_DIAG_RESULT.json || echo '{"curl_failed":true}' > ACCOUNT_DIAG_RESULT.json
+      - name: Commit diagnostic and remove workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .github/workflows/check-account-diagnostic.yml
+          git add ACCOUNT_DIAG_RESULT.json .github/workflows/check-account-diagnostic.yml
+          git commit -m "Capture production account diagnostic"
+          git push origin HEAD:main
