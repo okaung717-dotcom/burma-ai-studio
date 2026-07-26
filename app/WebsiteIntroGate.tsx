@@ -25,7 +25,6 @@ import "./website-intro-gate.css";
 const INTRO_SESSION_KEY = "bas_website_intro_seen_v1";
 const PROFILE_STORAGE_KEY = "bas_website_profile";
 const INTRO_UI_REVEAL_MS = 2800;
-const heroVideoId = "DVM3o2Wqcys";
 
 type AuthMode = "signin" | "signup" | null;
 type AccountUser = { id?: string; email?: string; displayName?: string } | null;
@@ -269,11 +268,27 @@ export default function WebsiteIntroGate() {
       aria-label="Burma AI Studio introduction"
     >
       <div className="bas-intro-media" aria-hidden="true">
-        <iframe
-          src={`https://www.youtube-nocookie.com/embed/${heroVideoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroVideoId}&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&showinfo=0&cc_load_policy=0`}
-          title=""
+        <video
+          src="/api/website-intro-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          controls={false}
+          disablePictureInPicture
           tabIndex={-1}
-          allow="autoplay; encrypted-media"
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: "scale(1.035)",
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
         />
       </div>
       <div className="bas-intro-shade" aria-hidden="true" />
