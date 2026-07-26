@@ -269,7 +269,7 @@ export default function WebsiteIntroGate() {
     >
       <div className="bas-intro-media" aria-hidden="true">
         <video
-          src="/api/website-intro-video"
+          src="/burma-ai-studio-intro.mp4"
           autoPlay
           muted
           loop
@@ -277,6 +277,8 @@ export default function WebsiteIntroGate() {
           preload="auto"
           controls={false}
           disablePictureInPicture
+          disableRemotePlayback
+          controlsList="nodownload nofullscreen noremoteplayback"
           tabIndex={-1}
           aria-hidden="true"
           style={{
