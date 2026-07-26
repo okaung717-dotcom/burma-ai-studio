@@ -16,6 +16,7 @@ import "./website-theme-polish-v3.css";
 import "./website-intro-sequence-v2.css";
 import "./website-intro-timing-216.css";
 import "./website-intro-video-sanitizer.css";
+import "./website-intro-mm-headline-fix.css";
 import Navbar from "./Navbar";
 import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
