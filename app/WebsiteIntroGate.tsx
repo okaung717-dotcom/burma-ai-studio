@@ -64,8 +64,8 @@ const copy = {
   },
   MM: {
     eyebrow: "BURMA AI STUDIO · CINEMATIC AI PRODUCTION",
-    title1: "စိတ်ကူးတိုင်းကို အသက်ဝင်စေမယ့်",
-    title2: "Cinematic AI Storytelling.",
+    title1: "Brand ကို ပိုထင်ရှားစေမယ့်",
+    title2: "AI Marketing Visuals.",
     desc: "Premium AI Film, Cinematic Campaign နဲ့ Original Stories တွေကို Human Creative Direction နဲ့ပေါင်းစပ်ပြီး Brand ကို ပိုထင်ရှားအောင်ဖန်တီးပေးပါတယ်။",
     enter: "Studio ထဲဝင်ရန်",
     create: "Account ဖွင့်ရန်",
