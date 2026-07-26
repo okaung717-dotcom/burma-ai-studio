@@ -119,9 +119,13 @@ export default async function RootLayout({
                   localStorage.removeItem('bas-app-mode');
                   html.classList.remove('bas-app-mode');
 
-                  var isHome = window.location.pathname === '/';
+                  var pathname = window.location.pathname || '/';
+                  var exemptPrefixes = ['/legal', '/privacy', '/terms', '/project-policy', '/ai-ip-policy', '/acceptable-use', '/copyright', '/privacy-choices', '/admin', '/admin6996'];
+                  var accountGateExempt = exemptPrefixes.some(function (path) {
+                    return pathname === path || pathname.indexOf(path + '/') === 0;
+                  });
                   var hasAccountSession = ${hasWebsiteAuthCookie ? "true" : "false"};
-                  html.classList.toggle('bas-intro-skip', !isHome || hasAccountSession);
+                  html.classList.toggle('bas-intro-skip', accountGateExempt || hasAccountSession);
                 } else {
                   html.classList.add('bas-intro-skip');
                 }
