@@ -1,0 +1,57 @@
+name: Replace website intro video
+
+on:
+  push:
+    paths:
+      - ".github/workflows/replace-website-intro-video.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  replace-intro-video:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download latest uploaded intro video
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public
+          curl --fail --location --retry 3 --retry-delay 2 \
+            'https://walnut-prod-va6.walnut-cdn.adobe.io/walnut-compute-results/v2/bc0a4078ab68778ad697a58b9b5751068b26950ec2df565ed33dc53c3a998d7b/result?x-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODUwODg4MDAsIm5iZiI6MTc4NTA3ODAwMCwia2V5VmVyc2lvbiI6MTc4MzAxMjIyMzEzNCwicGF0aCI6Ii93YWxudXQtY29tcHV0ZS1yZXN1bHRzL3YyL2JjMGE0MDc4YWI2ODc3OGFkNjk3YTU4YjliNTc1MTA2OGIyNjk1MGVjMmRmNTY1ZWQzM2RjNTNjM2E5OThkN2IvcmVzdWx0In0.1r4p3n7RcU_OvGASMZ3Is4RqOmxj-tFWMABikHRgllU' \
+            --output public/burma-ai-studio-intro.mp4
+
+          size=$(stat -c%s public/burma-ai-studio-intro.mp4)
+          echo "Downloaded ${size} bytes"
+          if [ "$size" -le 1024 ]; then
+            echo "Downloaded video is unexpectedly small" >&2
+            exit 1
+          fi
+          if [ "$size" -ge 99000000 ]; then
+            echo "Prepared MP4 exceeds GitHub's normal single-file limit" >&2
+            exit 1
+          fi
+
+          signature=$(head -c 32 public/burma-ai-studio-intro.mp4 | strings || true)
+          echo "Container signature: ${signature}"
+          if ! printf '%s' "$signature" | grep -q 'ftyp'; then
+            echo "Downloaded file does not look like an MP4 container" >&2
+            exit 1
+          fi
+
+      - name: Commit replacement and remove one-time workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/replace-website-intro-video.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/burma-ai-studio-intro.mp4 .github/workflows/replace-website-intro-video.yml
+          git commit -m "Replace website intro video with latest upload"
+          git push origin HEAD:main
