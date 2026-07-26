@@ -13,6 +13,7 @@ import "./website-profile-dark-fix.css";
 import "./website-typography.css";
 import "./premium-site-system-v2.css";
 import "./website-theme-polish-v3.css";
+import "./website-intro-sequence-v2.css";
 import Navbar from "./Navbar";
 import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
