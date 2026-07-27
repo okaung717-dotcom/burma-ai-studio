@@ -1,0 +1,123 @@
+/* Website-only brand alignment for the account Intro.
+   Keeps layout, timing, copy, auth behavior, and app/PWA experience untouched. */
+
+html.bas-website-context .bas-intro {
+  --bas-brand-red: #911923;
+  --bas-brand-red-strong: #b82034;
+  --bas-brand-red-bright: #d54a58;
+  --bas-brand-red-soft: #e18b93;
+  --bas-brand-cream: #fff8ef;
+  --bas-brand-gold: #be9537;
+}
+
+/* Replace the temporary BA monogram with the same icon used by the installed app/site metadata. */
+html.bas-website-context .bas-intro .bas-intro-brand-mark {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .18) !important;
+  border-radius: 13px !important;
+  background-color: #fff !important;
+  background-image: url("/burma-ai-icon.svg?v=10") !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, .22),
+    0 0 0 1px rgba(145, 25, 35, .10) !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+/* Shift the cinematic grade from gold-led to Burma AI Studio crimson-led. */
+html.bas-website-context .bas-intro .bas-intro-shade {
+  background:
+    radial-gradient(circle at 77% 36%, rgba(145, 25, 35, .18), transparent 30%),
+    linear-gradient(90deg, rgba(6, 3, 4, .94) 0%, rgba(11, 4, 6, .87) 26%, rgba(14, 5, 7, .54) 53%, rgba(12, 4, 6, .18) 78%, rgba(9, 4, 5, .40) 100%),
+    linear-gradient(0deg, rgba(7, 3, 4, .78) 0%, transparent 48%) !important;
+}
+
+html.bas-website-context .bas-intro::after {
+  border-color: rgba(145, 25, 35, .32) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .018);
+}
+
+/* Keep cream as the neutral foreground and make red the dominant accent. */
+html.bas-website-context .bas-intro .bas-intro-eyebrow {
+  color: var(--bas-brand-red-soft) !important;
+}
+
+html.bas-website-context .bas-intro .bas-intro-content h1 em {
+  color: var(--bas-brand-red-bright) !important;
+  text-shadow: 0 12px 42px rgba(145, 25, 35, .20);
+}
+
+html.bas-website-context .bas-intro .bas-intro-film-chip {
+  color: rgba(255, 248, 239, .58) !important;
+}
+
+/* Primary account action now matches the website's red identity. */
+html.bas-website-context .bas-intro .bas-intro-signup {
+  border-color: rgba(255, 255, 255, .14) !important;
+  background: linear-gradient(135deg, #c52e40 0%, #a71f30 44%, #911923 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    0 14px 36px rgba(145, 25, 35, .34),
+    inset 0 1px 0 rgba(255, 255, 255, .18) !important;
+}
+
+html.bas-website-context .bas-intro .bas-intro-signup:hover {
+  border-color: rgba(255, 255, 255, .20) !important;
+  background: linear-gradient(135deg, #d33849 0%, #b82436 48%, #971a25 100%) !important;
+  box-shadow:
+    0 18px 42px rgba(145, 25, 35, .42),
+    inset 0 1px 0 rgba(255, 255, 255, .20) !important;
+}
+
+html.bas-website-context .bas-intro .bas-intro-signup:focus-visible,
+html.bas-website-context .bas-intro .bas-intro-signin:focus-visible,
+html.bas-website-context .bas-intro .bas-intro-icon-button:focus-visible {
+  outline: 2px solid rgba(224, 99, 111, .95);
+  outline-offset: 3px;
+}
+
+/* Auth modal follows the same crimson hierarchy while retaining gold only as a restrained luxury secondary. */
+html.bas-website-context .bas-intro .bas-auth-card {
+  border-color: rgba(145, 25, 35, .38) !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(145, 25, 35, .16), transparent 34%),
+    linear-gradient(160deg, rgba(29, 12, 15, .985), rgba(13, 6, 7, .99)) !important;
+}
+
+html.bas-website-context .bas-intro .bas-auth-mark {
+  border-color: rgba(145, 25, 35, .42) !important;
+  background: rgba(145, 25, 35, .16) !important;
+  color: #dc6671 !important;
+}
+
+html.bas-website-context .bas-intro .bas-auth-kicker,
+html.bas-website-context .bas-intro .bas-auth-switch {
+  color: #dc6671 !important;
+}
+
+html.bas-website-context .bas-intro .bas-auth-input:focus-within {
+  border-color: rgba(197, 46, 64, .72) !important;
+  box-shadow: 0 0 0 3px rgba(145, 25, 35, .14) !important;
+}
+
+html.bas-website-context .bas-intro .bas-auth-submit {
+  border-color: rgba(255, 255, 255, .13) !important;
+  background: linear-gradient(135deg, #c52e40 0%, #a71f30 46%, #911923 100%) !important;
+  box-shadow: 0 16px 38px rgba(145, 25, 35, .30) !important;
+}
+
+@media (max-width: 560px) {
+  html.bas-website-context .bas-intro .bas-intro-brand-mark {
+    width: 40px !important;
+    height: 40px !important;
+    flex-basis: 40px;
+    border-radius: 12px !important;
+  }
+}
