@@ -44,14 +44,14 @@ html.bas-website-context .bas-intro::after {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .018);
 }
 
-/* Keep cream as the neutral foreground and make red the dominant accent. */
+/* Keep cream as the neutral foreground; preserve the original luxury gold for the second headline line. */
 html.bas-website-context .bas-intro .bas-intro-eyebrow {
   color: var(--bas-brand-red-soft) !important;
 }
 
 html.bas-website-context .bas-intro .bas-intro-content h1 em {
-  color: var(--bas-brand-red-bright) !important;
-  text-shadow: 0 12px 42px rgba(145, 25, 35, .20);
+  color: #e3bc61 !important;
+  text-shadow: none;
 }
 
 html.bas-website-context .bas-intro .bas-intro-film-chip {
