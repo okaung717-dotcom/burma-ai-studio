@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect } from "react";
 import { usePathname } from "next/navigation";
+import "./website-navbar-utility-controls.css";
 
 const DESKTOP_CHAT_CTA = 'body:not(.bas-app-mode) > nav a[href="/chat"].hidden.md\\:inline-flex';
 const CHAT_PAGE_SELECTOR = ".bas-chat-page";
