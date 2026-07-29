@@ -31,45 +31,12 @@ import WebsiteIntroVideoSanitizer from "./WebsiteIntroVideoSanitizer";
 import WebsiteLogoutRedirect from "./WebsiteLogoutRedirect";
 import AIAssistant from "./AIAssistant";
 import InstallAppPrompt from "./InstallAppPrompt";
-import AppBottomNav from "./AppBottomNav";
-import AppExperience from "./AppExperience";
 import PrivacyConsent from "./PrivacyConsent";
 import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 import LegalQuickLinks from "./LegalQuickLinks";
 import WebsiteNavbarProfile from "./WebsiteNavbarProfile";
 import MobileWebsiteProfileBridge from "./MobileWebsiteProfileBridge";
-
-function shouldShowAppOnlyParts() {
-  if (typeof window === "undefined") return false;
-
-  const nav = navigator as Navigator & { standalone?: boolean };
-  const search = new URLSearchParams(window.location.search);
-  const userAgent = navigator.userAgent || "";
-  const standalone = window.matchMedia?.("(display-mode: standalone)")?.matches;
-  const iosHomeScreen = nav.standalone === true;
-  const androidWebView = userAgent.includes("Android") && userAgent.includes("; wv");
-  const explicitApp =
-    search.get("source") === "pwa" ||
-    search.get("source") === "app" ||
-    search.get("source") === "native" ||
-    search.get("platform") === "ios" ||
-    search.get("platform") === "android";
-
-  return Boolean(standalone || iosHomeScreen || androidWebView || explicitApp);
-}
-
-function AppOnly({ children }: { children: ReactNode }) {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const check = () => setEnabled(shouldShowAppOnlyParts());
-    check();
-    window.addEventListener("resize", check, { passive: true });
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  return enabled ? <>{children}</> : null;
-}
+import ApkV2Experience from "./ApkV2Experience";
 
 const LEGAL_PATHS = [
   "/legal",
@@ -82,6 +49,48 @@ const LEGAL_PATHS = [
   "/privacy-choices",
 ];
 
+function detectApkV2Context() {
+  if (typeof window === "undefined") return false;
+
+  const search = new URLSearchParams(window.location.search);
+  const capacitor = (window as Window & {
+    Capacitor?: { isNativePlatform?: () => boolean };
+  }).Capacitor;
+  const nativeBridge = Boolean(
+    capacitor &&
+      typeof capacitor.isNativePlatform === "function" &&
+      capacitor.isNativePlatform()
+  );
+  const explicitApkV2 = search.get("source") === "native" && search.get("apk") === "v2";
+
+  // A regular desktop, phone or tablet browser can never activate this shell.
+  // Only a verified Capacitor bridge or the private APK v2 preview marker is accepted.
+  return nativeBridge || explicitApkV2;
+}
+
+function useApkV2Context() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const next = detectApkV2Context();
+      setEnabled(next);
+      document.body.classList.toggle("bas-apk-v2-mode", next);
+    };
+
+    check();
+    window.addEventListener("pageshow", check);
+    window.addEventListener("popstate", check);
+    return () => {
+      window.removeEventListener("pageshow", check);
+      window.removeEventListener("popstate", check);
+      document.body.classList.remove("bas-apk-v2-mode");
+    };
+  }, []);
+
+  return enabled;
+}
+
 function getWebsiteRouteClass(pathname: string, isLegalArea: boolean) {
   if (pathname === "/") return "bas-route-home";
   if (pathname.startsWith("/services")) return "bas-route-services";
@@ -93,24 +102,54 @@ function getWebsiteRouteClass(pathname: string, isLegalArea: boolean) {
   return "bas-route-public";
 }
 
+function ApkLegalView({ children }: { children: ReactNode }) {
+  return (
+    <div className="fixed inset-0 z-[60000] flex flex-col overflow-hidden bg-[#fff9f0] text-[#1a0b0e] dark:bg-[#100708] dark:text-[#fff7eb]">
+      <header className="flex shrink-0 items-center justify-between border-b border-[#ead9bd] bg-[#fffdf8]/95 px-4 pb-3 pt-[calc(env(safe-area-inset-top,0px)+0.7rem)] backdrop-blur-2xl dark:border-[#4b2a1d] dark:bg-[#100708]/95">
+        <Link href="/?source=native&apk=v2" className="grid h-11 w-11 place-items-center rounded-2xl border border-[#ead9bd] bg-white text-[#911923] dark:border-[#6b4b2a] dark:bg-[#1a0b0e] dark:text-[#e3bc61]" aria-label="Back to Burma AI Studio APK">
+          <ArrowLeft className="h-5 w-5" />
+        </Link>
+        <div className="flex items-center gap-2 text-sm font-black">
+          <ShieldCheck className="h-5 w-5 text-[#be9537]" /> Legal & Privacy
+        </div>
+        <div className="h-11 w-11" aria-hidden="true" />
+      </header>
+      <div className="min-h-0 flex-1 overflow-y-auto pb-[calc(2rem+env(safe-area-inset-bottom,0px))]">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname() || "/";
   const isAdminArea = pathname.startsWith("/admin6996") || pathname.startsWith("/admin");
   const isLegalArea = LEGAL_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
   const isChatArea = pathname === "/chat" || pathname.startsWith("/chat/");
   const routeClass = isAdminArea ? "bas-route-admin" : getWebsiteRouteClass(pathname, isLegalArea);
+  const apkV2 = useApkV2Context();
 
   useEffect(() => {
     document.body.classList.toggle("bas-admin-route", isAdminArea);
-    document.body.classList.toggle("bas-chat-viewport-lock", !isAdminArea && isChatArea);
+    document.body.classList.toggle("bas-chat-viewport-lock", !isAdminArea && isChatArea && !apkV2);
 
-    if (!isAdminArea && isChatArea) window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    if (!isAdminArea && isChatArea && !apkV2) window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
     return () => {
       document.body.classList.remove("bas-admin-route");
       document.body.classList.remove("bas-chat-viewport-lock");
     };
-  }, [isAdminArea, isChatArea]);
+  }, [isAdminArea, isChatArea, apkV2]);
+
+  if (!isAdminArea && apkV2) {
+    return (
+      <>
+        <ConsentAwareAnalytics />
+        {isLegalArea ? <ApkLegalView>{children}</ApkLegalView> : <ApkV2Experience />}
+        {!isLegalArea && <AIAssistant />}
+      </>
+    );
+  }
 
   return (
     <>
@@ -127,30 +166,6 @@ export default function AppShell({ children }: { children: ReactNode }) {
         {children}
       </main>
       {!isAdminArea && <LegalQuickLinks />}
-      {!isAdminArea && (
-        <AppOnly>
-          {isLegalArea ? (
-            <div className="fixed inset-0 z-[9000] flex flex-col overflow-hidden bg-[#fff9f0] text-[#1a0b0e] dark:bg-[#100708] dark:text-[#fff7eb]">
-              <header className="flex shrink-0 items-center justify-between border-b border-[#ead9bd] bg-[#fffdf8]/95 px-4 pb-3 pt-[calc(env(safe-area-inset-top,0px)+0.7rem)] backdrop-blur-2xl dark:border-[#4b2a1d] dark:bg-[#100708]/95">
-                <Link href="/" className="grid h-11 w-11 place-items-center rounded-2xl border border-[#ead9bd] bg-white text-[#911923] dark:border-[#6b4b2a] dark:bg-[#1a0b0e] dark:text-[#e3bc61]" aria-label="Back to Burma AI Studio">
-                  <ArrowLeft className="h-5 w-5" />
-                </Link>
-                <div className="flex items-center gap-2 text-sm font-black">
-                  <ShieldCheck className="h-5 w-5 text-[#be9537]" /> Legal & Privacy
-                </div>
-                <div className="h-11 w-11" aria-hidden="true" />
-              </header>
-              <div className="min-h-0 flex-1 overflow-y-auto pb-[6.5rem]">
-                {children}
-              </div>
-            </div>
-          ) : (
-            <AppExperience />
-          )}
-          <AppBottomNav />
-          <AIAssistant />
-        </AppOnly>
-      )}
       {!isAdminArea && <InstallAppPrompt />}
       {!isAdminArea && <PrivacyConsent />}
     </>
