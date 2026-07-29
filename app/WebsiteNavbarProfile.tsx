@@ -375,7 +375,6 @@ export default function WebsiteNavbarProfile() {
 
                 <div className="h-px bg-[#be9537]/20 dark:bg-white/10" />
                 <div className="space-y-0.5 py-2">
-                  <MenuRow icon={<Sparkles className="h-5 w-5" />} title={t.upgrade} hint={t.upgradeHint} onClick={() => setView("upgrade")} />
                   <MenuRow icon={<UserRound className="h-5 w-5" />} title={t.profile} hint={t.profileHint} onClick={() => setView("profile")} />
                   <MenuRow icon={<BriefcaseBusiness className="h-5 w-5" />} title={t.projects} hint={t.projectsHint} onClick={() => setView("projects")} />
                   <MenuRow icon={<Palette className="h-5 w-5" />} title={t.personalization} hint={t.personalizationHint} onClick={() => setView("personalization")} />
