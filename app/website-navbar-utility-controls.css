@@ -5,10 +5,10 @@
 
 @media (min-width: 1024px) {
   /* Keep the utility controls near Profile, then nudge only the Language control
-     toward Theme so the two related controls read as one intentional pair. */
+     slightly closer toward Theme so the two related controls read as one intentional pair. */
   html.bas-website-context body:not(.bas-app-mode) > nav {
     --bas-navbar-utility-shift-x: 48px;
-    --bas-navbar-language-nudge-x: 24px;
+    --bas-navbar-language-nudge-x: 32px;
   }
 
   /* The legacy controls wrapper must remain flattened. Making it flex turns the
@@ -126,7 +126,7 @@
 @media (min-width: 1024px) and (max-width: 1260px) {
   html.bas-website-context body:not(.bas-app-mode) > nav {
     --bas-navbar-utility-shift-x: 24px;
-    --bas-navbar-language-nudge-x: 14px;
+    --bas-navbar-language-nudge-x: 18px;
   }
 
   html.bas-website-context body:not(.bas-app-mode) > nav > div > div:last-child > button.hidden.md\:flex {
