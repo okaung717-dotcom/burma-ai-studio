@@ -8,6 +8,10 @@ type PortalTarget = {
   mobile: boolean;
 };
 
+const PHONE_APK_V2_URL =
+  "https://github.com/okaung717-dotcom/burma-ai-studio/releases/download/apk-v2.0.0/Burma-AI-Studio-v2.0.0.apk";
+const EXISTING_DESKTOP_APK_URL = "/downloads/burma-ai-studio.apk";
+
 function AppIconMark({ small = false }: { small?: boolean }) {
   return (
     <span
@@ -60,17 +64,22 @@ export default function InstallAppPrompt() {
   }, []);
 
   const targetIsMobile = navbarTarget?.mobile ?? false;
+  const apkHref = targetIsMobile ? PHONE_APK_V2_URL : EXISTING_DESKTOP_APK_URL;
 
   const installButton = (
     <a
-      href="/downloads/burma-ai-studio.apk"
-      download
+      href={apkHref}
+      download={targetIsMobile ? undefined : true}
       className={
         targetIsMobile
           ? "bas-install-button order-[-1] inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-[#be9537]/45 bg-[#100708] px-2.5 pr-3 text-[11px] font-black text-[#fff7eb] shadow-md shadow-black/10 transition active:scale-95 md:hidden"
           : "bas-install-button order-[-1] hidden h-12 shrink-0 items-center gap-2.5 rounded-full border border-[#be9537]/45 bg-[#100708] px-4 pr-5 text-sm font-black text-[#fff7eb] shadow-md shadow-black/10 transition hover:bg-[#911923] md:inline-flex"
       }
-      aria-label="Download Burma AI Studio Android APK"
+      aria-label={
+        targetIsMobile
+          ? "Download Burma AI Studio Android APK version 2.0.0"
+          : "Download Burma AI Studio Android APK"
+      }
     >
       <AppIconMark small={targetIsMobile} />
       <span>{targetIsMobile ? "APK" : "Download APK"}</span>
