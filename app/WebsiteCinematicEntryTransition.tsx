@@ -5,6 +5,8 @@ import { useEffect } from "react";
 const ACTIVE_CLASS = "bas-depth-portal-active";
 const REVEAL_CLASS = "bas-depth-portal-reveal";
 const SETTLED_CLASS = "bas-depth-portal-settled";
+const INTRO_TRIGGER_CLASS = "bas-intro-transitioning";
+const CYCLE_LOCK_ATTRIBUTE = "data-bas-depth-portal-cycle";
 
 export default function WebsiteCinematicEntryTransition() {
   useEffect(() => {
@@ -26,6 +28,10 @@ export default function WebsiteCinematicEntryTransition() {
       running = false;
       body.classList.remove(ACTIVE_CLASS, REVEAL_CLASS, SETTLED_CLASS);
       document.querySelectorAll("[data-bas-depth-portal-stage]").forEach((node) => node.remove());
+
+      // Do not clear the cycle lock here. IntroGate removes its trigger slightly
+      // after the visual transition finishes. Keeping the lock until that falling
+      // edge prevents our own cleanup class mutations from starting a second run.
     };
 
     const later = (callback: () => void, delay: number) => {
@@ -38,7 +44,7 @@ export default function WebsiteCinematicEntryTransition() {
         body.classList.contains("bas-app-mode") ||
         !html.classList.contains("bas-website-context")
       ) {
-        return;
+        return false;
       }
 
       running = true;
@@ -81,25 +87,54 @@ export default function WebsiteCinematicEntryTransition() {
         later(() => body.classList.add(REVEAL_CLASS, SETTLED_CLASS), 20);
         later(() => stage?.remove(), 220);
         later(clearTransition, 360);
-        return;
+        return true;
       }
 
       later(() => body.classList.add(REVEAL_CLASS), 590);
       later(() => body.classList.add(SETTLED_CLASS), 1570);
       later(() => stage?.remove(), 2080);
       later(clearTransition, 2240);
+      return true;
     };
 
-    const observer = new MutationObserver(() => {
-      if (body.classList.contains("bas-intro-transitioning")) launch();
-    });
+    const syncTrigger = () => {
+      const triggerActive = body.classList.contains(INTRO_TRIGGER_CLASS);
 
+      if (!triggerActive) {
+        // Falling edge: arm the controller for the next genuine authentication entry.
+        body.removeAttribute(CYCLE_LOCK_ATTRIBUTE);
+        return;
+      }
+
+      // One persistent lock per IntroGate trigger cycle. It survives the animation's
+      // own cleanup mutations and React effect remounts, but is reset once the source
+      // trigger class is actually removed.
+      if (body.hasAttribute(CYCLE_LOCK_ATTRIBUTE)) return;
+      if (
+        body.classList.contains("bas-app-mode") ||
+        !html.classList.contains("bas-website-context")
+      ) {
+        return;
+      }
+
+      body.setAttribute(CYCLE_LOCK_ATTRIBUTE, "consumed");
+      if (!launch()) {
+        body.removeAttribute(CYCLE_LOCK_ATTRIBUTE);
+      }
+    };
+
+    const observer = new MutationObserver(syncTrigger);
     observer.observe(body, { attributes: true, attributeFilter: ["class"] });
-    if (body.classList.contains("bas-intro-transitioning")) launch();
+    syncTrigger();
 
     return () => {
       observer.disconnect();
       clearTransition();
+      // Intentionally preserve the cycle lock while IntroGate's trigger remains
+      // active, so a development/StrictMode remount cannot replay the transition.
+      if (!body.classList.contains(INTRO_TRIGGER_CLASS)) {
+        body.removeAttribute(CYCLE_LOCK_ATTRIBUTE);
+      }
     };
   }, []);
 
