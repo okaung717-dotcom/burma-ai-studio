@@ -167,13 +167,17 @@ export default function MobileWebsiteProfileBridge() {
         return;
       }
 
-      candidate.classList.add("bas-mobile-profile-trigger");
-      candidate.setAttribute("href", "#profile");
-      candidate.setAttribute("role", "button");
-      candidate.setAttribute("aria-haspopup", "dialog");
-      candidate.setAttribute("aria-controls", "bas-mobile-profile-panel");
-      candidate.setAttribute("aria-label", t.profile);
-      candidate.textContent = t.profile;
+      if (!candidate.classList.contains("bas-mobile-profile-trigger")) {
+        candidate.classList.add("bas-mobile-profile-trigger");
+      }
+      if (candidate.getAttribute("href") !== "#profile") candidate.setAttribute("href", "#profile");
+      if (candidate.getAttribute("role") !== "button") candidate.setAttribute("role", "button");
+      if (candidate.getAttribute("aria-haspopup") !== "dialog") candidate.setAttribute("aria-haspopup", "dialog");
+      if (candidate.getAttribute("aria-controls") !== "bas-mobile-profile-panel") {
+        candidate.setAttribute("aria-controls", "bas-mobile-profile-panel");
+      }
+      if (candidate.getAttribute("aria-label") !== t.profile) candidate.setAttribute("aria-label", t.profile);
+      if ((candidate.textContent || "").trim() !== t.profile) candidate.textContent = t.profile;
 
       if (candidate === activeTarget) return;
       detach();
