@@ -38,26 +38,27 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Validate Next.js APK interface
+      - name: Validate website source without publishing it
         run: npm run build
 
-      - name: Verify isolated APK web deployment
+      - name: Validate bundled APK interface
         run: |
-          APP_URL="https://burma-ai-studio-git-apk-v2-masterpiece-okkar-s-projects.vercel.app/?source=native&apk=v2"
-          for attempt in $(seq 1 18); do
-            echo "Deployment check ${attempt}/18"
-            if curl --fail --location --silent --show-error --max-time 30 "$APP_URL" > /tmp/apk-v2.html; then
-              test -s /tmp/apk-v2.html
-              echo "Isolated APK deployment is reachable."
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "APK deployment could not be reached."
-          exit 1
+          test -s apk-web/index.html
+          test -s apk-web/app.css
+          test -s apk-web/app.js
+          grep -q "Burma AI Studio" apk-web/index.html
+          grep -q "bas_apk_v201_intro" apk-web/app.js
 
-      - name: Synchronize Capacitor Android project
+      - name: Synchronize bundled Capacitor Android project
         run: npx cap sync android
+
+      - name: Verify Vercel is not configured as APK server
+        run: |
+          if grep -q "vercel.app" capacitor.config.ts; then
+            echo "APK must not depend on a protected Vercel preview."
+            exit 1
+          fi
+          grep -q 'webDir: "apk-web"' capacitor.config.ts
 
       - name: Build installable debug APK
         working-directory: android
@@ -68,13 +69,13 @@ jobs:
       - name: Rename APK artifact
         run: |
           mkdir -p dist-apk
-          cp android/app/build/outputs/apk/debug/app-debug.apk dist-apk/Burma-AI-Studio-v2.0.0.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist-apk/Burma-AI-Studio-v2.0.1.apk
 
       - name: Upload APK workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Burma-AI-Studio-v2.0.0-APK
-          path: dist-apk/Burma-AI-Studio-v2.0.0.apk
+          name: Burma-AI-Studio-v2.0.1-APK
+          path: dist-apk/Burma-AI-Studio-v2.0.1.apk
           if-no-files-found: error
           retention-days: 30
 
@@ -82,10 +83,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          RELEASE_TAG="apk-v2.0.0"
-          APK_PATH="dist-apk/Burma-AI-Studio-v2.0.0.apk"
-          RELEASE_TITLE="Burma AI Studio APK v2.0.0"
-          RELEASE_NOTES="Burma AI Studio Android APK v2.0.0. Built from the isolated apk-v2-masterpiece branch. The production desktop, phone and tablet website is not included in this release."
+          RELEASE_TAG="apk-v2.0.1"
+          APK_PATH="dist-apk/Burma-AI-Studio-v2.0.1.apk"
+          RELEASE_TITLE="Burma AI Studio APK v2.0.1"
+          RELEASE_NOTES="Self-contained Burma AI Studio Android APK v2.0.1. The application interface is bundled inside the APK and no longer opens a protected Vercel preview. Desktop, phone and tablet website production remains untouched."
 
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" "$APK_PATH" --clobber
