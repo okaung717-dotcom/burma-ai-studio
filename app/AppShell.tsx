@@ -18,6 +18,7 @@ import "./website-intro-timing-216.css";
 import "./website-intro-video-sanitizer.css";
 import "./website-intro-mm-headline-fix.css";
 import "./website-intro-brand-theme-fix.css";
+import "./website-chat-route-fixes.css";
 import Navbar from "./Navbar";
 import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
@@ -34,6 +35,7 @@ import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 import LegalQuickLinks from "./LegalQuickLinks";
 import WebsiteNavbarProfile from "./WebsiteNavbarProfile";
 import WebsiteProfileSingleClickGuard from "./WebsiteProfileSingleClickGuard";
+import WebsiteChatRouteFixes from "./WebsiteChatRouteFixes";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -110,6 +112,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       {!isAdminArea && <WebsiteChatNav />}
       {!isAdminArea && <WebsiteStoriesNav />}
       {!isAdminArea && <WebsitePlansBridge />}
+      {!isAdminArea && <WebsiteChatRouteFixes />}
       {!isAdminArea && <WebsiteProfileSingleClickGuard />}
       {!isAdminArea && <WebsiteNavbarProfile />}
       <main className={`bas-website-content ${routeClass} w-full flex-grow`}>
