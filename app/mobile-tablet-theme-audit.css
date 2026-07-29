@@ -1,0 +1,403 @@
+/* Burma AI Studio — final phone/tablet website theme and contrast audit.
+   Compact website only. Desktop (1024px+), app/PWA/native and admin surfaces are untouched. */
+
+@media (max-width: 1023px) {
+  html.bas-website-context body:not(.bas-app-mode):not(.bas-admin-route) {
+    --bas-compact-red: #911923;
+    --bas-compact-red-deep: #6f1019;
+    --bas-compact-red-soft: #f4dfe0;
+    --bas-compact-gold: #b48831;
+    --bas-compact-gold-bright: #d8ad4b;
+    --bas-compact-paper: #fffaf3;
+    --bas-compact-paper-strong: #fffdf9;
+    --bas-compact-paper-muted: #f7ede4;
+    --bas-compact-ink: #241317;
+    --bas-compact-muted: #705f56;
+    --bas-compact-line: rgba(145, 25, 35, 0.14);
+    color: var(--bas-compact-ink);
+    background: var(--bas-compact-paper);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode):not(.bas-admin-route) {
+    --bas-compact-red: #d44654;
+    --bas-compact-red-deep: #8e1723;
+    --bas-compact-red-soft: rgba(145, 25, 35, 0.20);
+    --bas-compact-gold: #e3bc61;
+    --bas-compact-gold-bright: #f0d184;
+    --bas-compact-paper: #090506;
+    --bas-compact-paper-strong: #14090b;
+    --bas-compact-paper-muted: #1a0c0f;
+    --bas-compact-ink: #fff7eb;
+    --bas-compact-muted: #c9b8aa;
+    --bas-compact-line: rgba(227, 188, 97, 0.15);
+    color: var(--bas-compact-ink);
+    background: var(--bas-compact-paper);
+  }
+
+  /* Global compact website canvas and text hierarchy. */
+  html.bas-website-context body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content {
+    color: var(--bas-compact-ink) !important;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(190, 149, 55, 0.075), transparent 22rem),
+      radial-gradient(circle at 92% 12%, rgba(145, 25, 35, 0.055), transparent 24rem),
+      linear-gradient(180deg, #fffdf9 0%, #f8eee5 100%) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode):not(.bas-admin-route) .bas-website-content {
+    background:
+      radial-gradient(circle at 12% 0%, rgba(227, 188, 97, 0.055), transparent 24rem),
+      radial-gradient(circle at 92% 12%, rgba(145, 25, 35, 0.14), transparent 26rem),
+      linear-gradient(180deg, #090506 0%, #050304 100%) !important;
+  }
+
+  /* NAVBAR ------------------------------------------------------------ */
+  html.bas-website-context body:not(.bas-app-mode) > nav {
+    border-bottom-color: var(--bas-compact-line) !important;
+    background: rgba(255, 253, 249, 0.965) !important;
+    color: var(--bas-compact-ink) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav {
+    background: rgba(9, 5, 6, 0.97) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav .bas-install-button {
+    border-color: rgba(145, 25, 35, 0.22) !important;
+    background: linear-gradient(145deg, #fffdf9, #fff4e8) !important;
+    color: var(--bas-compact-red) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav .bas-install-button {
+    border-color: rgba(227, 188, 97, 0.28) !important;
+    background: linear-gradient(145deg, #1a0c0f, #0d0708) !important;
+    color: #fff7eb !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav button[class*="md:hidden"] {
+    border-color: rgba(145, 25, 35, 0.18) !important;
+    background: #fff9f1 !important;
+    color: var(--bas-compact-red) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav button[class*="md:hidden"] {
+    border-color: rgba(227, 188, 97, 0.22) !important;
+    background: #1a0c0f !important;
+    color: var(--bas-compact-gold) !important;
+  }
+
+  /* HOME HERO --------------------------------------------------------- */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-hero {
+    border-color: rgba(145, 25, 35, 0.20) !important;
+    background: #f0d9d0 !important;
+    box-shadow: 0 25px 68px rgba(76, 31, 37, 0.13) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-hero {
+    border-color: rgba(227, 188, 97, 0.16) !important;
+    background: #0c0708 !important;
+    box-shadow: 0 30px 78px rgba(0, 0, 0, 0.42) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-stage {
+    background:
+      radial-gradient(circle at 82% 15%, rgba(145, 25, 35, 0.10), transparent 22rem),
+      radial-gradient(circle at 24% 80%, rgba(190, 149, 55, 0.10), transparent 22rem),
+      linear-gradient(145deg, #f7ebe3 0%, #ecd5ca 56%, #e5c3bd 100%) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-stage {
+    background:
+      radial-gradient(circle at 80% 14%, rgba(145, 25, 35, 0.18), transparent 24rem),
+      radial-gradient(circle at 24% 82%, rgba(227, 188, 97, 0.07), transparent 24rem),
+      linear-gradient(145deg, #10090b 0%, #241015 58%, #3a151d 100%) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-pills span {
+    border-color: rgba(70, 34, 39, 0.12) !important;
+    background: rgba(255, 253, 249, 0.64) !important;
+    color: #675259 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-pills span.is-active {
+    border-color: rgba(145, 25, 35, 0.24) !important;
+    background: rgba(145, 25, 35, 0.08) !important;
+    color: var(--bas-compact-red) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-pills span {
+    border-color: rgba(227, 188, 97, 0.13) !important;
+    background: rgba(15, 8, 10, 0.48) !important;
+    color: #cbb9ac !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-pills span.is-active {
+    border-color: rgba(227, 188, 97, 0.34) !important;
+    background: rgba(227, 188, 97, 0.10) !important;
+    color: var(--bas-compact-gold-bright) !important;
+  }
+
+  /* Metric cards: explicitly correct the light-mode contrast regression.
+     The former desktop primary-card rule forced white text onto a pale mobile surface. */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-quote {
+    border-color: rgba(145, 25, 35, 0.13) !important;
+    background: rgba(255, 250, 244, 0.72) !important;
+    color: var(--bas-compact-ink) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.72),
+      0 12px 28px rgba(82, 38, 42, 0.055) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric.is-primary {
+    border-color: rgba(145, 25, 35, 0.18) !important;
+    background:
+      radial-gradient(circle at 85% 10%, rgba(190, 149, 55, 0.13), transparent 7rem),
+      linear-gradient(145deg, #fff9f1 0%, #f2dcd8 100%) !important;
+    color: var(--bas-compact-red) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric span,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric.is-primary span {
+    color: var(--bas-compact-ink) !important;
+    text-shadow: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric.is-primary span {
+    color: var(--bas-compact-red) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric p,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric.is-primary p {
+    color: #6e5951 !important;
+    text-shadow: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric svg {
+    color: var(--bas-compact-gold) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-quote {
+    border-color: rgba(227, 188, 97, 0.14) !important;
+    background: rgba(13, 7, 8, 0.54) !important;
+    color: #fff7eb !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric.is-primary {
+    border-color: rgba(255, 255, 255, 0.10) !important;
+    background: linear-gradient(145deg, #b22233 0%, #73111c 100%) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric span,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric.is-primary span {
+    color: #fff7eb !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric p,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric.is-primary p {
+    color: rgba(255, 247, 235, 0.62) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-metric svg {
+    color: var(--bas-compact-gold-bright) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-dock {
+    border-color: rgba(145, 25, 35, 0.13) !important;
+    background: rgba(255, 250, 244, 0.74) !important;
+    color: var(--bas-compact-ink) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-dock > div:first-child span {
+    color: var(--bas-compact-gold) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-dock > div:first-child strong {
+    color: var(--bas-compact-ink) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-dock-action {
+    background: #fff4df !important;
+    color: var(--bas-compact-red) !important;
+    box-shadow: inset 0 0 0 1px rgba(145, 25, 35, 0.07);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-dock {
+    border-color: rgba(227, 188, 97, 0.14) !important;
+    background: rgba(10, 6, 7, 0.60) !important;
+    color: #fff7eb !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-dock > div:first-child strong {
+    color: #fff7eb !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-command-dock-action {
+    background: var(--bas-compact-gold) !important;
+    color: #16090c !important;
+  }
+
+  /* HOME CONTENT CARDS ------------------------------------------------ */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home :is(.bas-home-v2-services, .bas-home-v2-flow) {
+    border-color: var(--bas-compact-line) !important;
+    background: rgba(255, 253, 249, 0.88) !important;
+    color: var(--bas-compact-ink) !important;
+    box-shadow: 0 18px 50px rgba(70, 30, 35, 0.07) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home :is(.bas-home-v2-services, .bas-home-v2-flow) {
+    border-color: rgba(227, 188, 97, 0.13) !important;
+    background: rgba(20, 9, 11, 0.88) !important;
+    color: #fff7eb !important;
+    box-shadow: 0 22px 58px rgba(0, 0, 0, 0.28) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home :is(.bas-home-v2-section-head, .bas-home-v2-flow-copy) > p {
+    color: var(--bas-compact-gold) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home :is(.bas-home-v2-section-head, .bas-home-v2-flow-copy) h2,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-service-list a > strong,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-flow-grid h3 {
+    color: var(--bas-compact-ink) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home :is(.bas-home-v2-section-head, .bas-home-v2-flow-copy) h2,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-service-list a > strong,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-flow-grid h3 {
+    color: #fff7eb !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-service-list a,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-flow-grid article {
+    border-color: rgba(145, 25, 35, 0.12) !important;
+    background: linear-gradient(145deg, #fffdf9, #fbf5ef) !important;
+    color: var(--bas-compact-ink) !important;
+    box-shadow: 0 10px 28px rgba(67, 29, 34, 0.045) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-service-list a,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-flow-grid article {
+    border-color: rgba(227, 188, 97, 0.12) !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(145, 25, 35, 0.04)) !important;
+    color: #fff7eb !important;
+    box-shadow: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-service-list a > span,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-flow-grid article > span {
+    color: var(--bas-compact-gold) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-service-list a > svg {
+    color: var(--bas-compact-red) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-service-list a > svg {
+    color: var(--bas-compact-gold) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-flow-grid p {
+    color: var(--bas-compact-muted) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-home .bas-home-v2-flow-grid p {
+    color: var(--bas-compact-muted) !important;
+  }
+
+  /* CHAT -------------------------------------------------------------- */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-header h2,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-bubble,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-input-wrap textarea {
+    color: var(--bas-compact-ink) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-header p,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-bubble footer,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-input-wrap textarea::placeholder {
+    color: var(--bas-compact-muted) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-bubble {
+    border-color: rgba(145, 25, 35, 0.13) !important;
+    background: rgba(255, 253, 249, 0.97) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .is-user .bas-chat-bubble {
+    border-color: rgba(145, 25, 35, 0.24) !important;
+    background: linear-gradient(145deg, #b32335, #801520) !important;
+    color: #fffaf3 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .is-user .bas-chat-bubble > p,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .is-user .bas-chat-bubble footer {
+    color: #fffaf3 !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-header h2,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-bubble,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-input-wrap textarea {
+    color: #fff7eb !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-bubble {
+    border-color: rgba(227, 188, 97, 0.13) !important;
+    background: rgba(29, 13, 16, 0.97) !important;
+  }
+
+  /* SHARED PUBLIC ROUTES --------------------------------------------- */
+  html.bas-website-context body:not(.bas-app-mode) :is(
+    .bas-route-services,
+    .bas-route-portfolio,
+    .bas-route-stories,
+    .bas-route-plans,
+    .bas-route-public,
+    .bas-route-legal
+  ) > div {
+    color: var(--bas-compact-ink) !important;
+    background: transparent !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) :is(
+    .bas-route-services,
+    .bas-route-portfolio,
+    .bas-route-stories,
+    .bas-route-plans,
+    .bas-route-public,
+    .bas-route-legal
+  ) :is(h1, h2, h3, h4, strong, b) {
+    color: var(--bas-compact-ink);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) :is(
+    .bas-route-services,
+    .bas-route-portfolio,
+    .bas-route-stories,
+    .bas-route-plans,
+    .bas-route-public,
+    .bas-route-legal
+  ) :is(h1, h2, h3, h4, strong, b) {
+    color: #fff7eb;
+  }
+
+  /* Preserve intentional white text inside dark promotional hero/CTA panels. */
+  html.bas-website-context body:not(.bas-app-mode) :is(
+    .bas-route-services,
+    .bas-route-portfolio,
+    .bas-route-stories,
+    .bas-route-plans
+  ) :is([class*="bg-[#100708]"], [class*="bg-[#1a0b0e]"], [class*="bg-[#911923]"]) :is(h1, h2, h3, strong, b) {
+    color: #fff7eb !important;
+  }
+
+  /* Accessible compact focus treatment across both themes. */
+  html.bas-website-context body:not(.bas-app-mode) :where(a, button, input, textarea, select):focus-visible {
+    outline: 2px solid rgba(145, 25, 35, 0.72);
+    outline-offset: 3px;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) :where(a, button, input, textarea, select):focus-visible {
+    outline-color: rgba(227, 188, 97, 0.82);
+  }
+}
