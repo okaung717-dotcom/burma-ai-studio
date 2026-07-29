@@ -4,6 +4,12 @@
    Native/PWA and mobile navigation remain untouched. */
 
 @media (min-width: 1024px) {
+  /* A restrained horizontal nudge keeps Language and Theme visually grouped with
+     the account control without changing the underlying desktop grid. */
+  html.bas-website-context body:not(.bas-app-mode) > nav {
+    --bas-navbar-utility-shift-x: 12px;
+  }
+
   /* The legacy controls wrapper must remain flattened. Making it flex turns the
      complete control set into one grid item and causes it to overlap Stories. */
   html.bas-website-context body:not(.bas-app-mode) > nav > div > div:last-child {
@@ -49,7 +55,7 @@
     color: #8c1a25 !important;
     background: rgba(255, 253, 248, 0.94) !important;
     box-shadow: 0 7px 20px rgba(75, 35, 23, 0.06) !important;
-    transform: translateY(var(--bas-nav-row-shift, 18px)) !important;
+    transform: translate(var(--bas-navbar-utility-shift-x), var(--bas-nav-row-shift, 18px)) !important;
     font-size: 0.82rem !important;
     font-weight: 900 !important;
     line-height: 1 !important;
@@ -75,7 +81,7 @@
     color: #6d5448 !important;
     background: rgba(255, 253, 248, 0.94) !important;
     box-shadow: 0 7px 20px rgba(75, 35, 23, 0.06) !important;
-    transform: translateY(var(--bas-nav-row-shift, 18px)) !important;
+    transform: translate(var(--bas-navbar-utility-shift-x), var(--bas-nav-row-shift, 18px)) !important;
   }
 
   html.bas-website-context body:not(.bas-app-mode) > nav > div > div:last-child > button.hidden.md\:flex:hover,
@@ -84,7 +90,7 @@
     color: #911923 !important;
     background: #fff6e9 !important;
     box-shadow: 0 9px 24px rgba(145, 25, 35, 0.10) !important;
-    transform: translateY(calc(var(--bas-nav-row-shift, 18px) - 1px)) !important;
+    transform: translate(var(--bas-navbar-utility-shift-x), calc(var(--bas-nav-row-shift, 18px) - 1px)) !important;
   }
 
   html.bas-website-context body:not(.bas-app-mode) > nav > div > div:last-child > button svg {
@@ -110,13 +116,17 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1260px) {
+  html.bas-website-context body:not(.bas-app-mode) > nav {
+    --bas-navbar-utility-shift-x: 7px;
+  }
+
   html.bas-website-context body:not(.bas-app-mode) > nav > div > div:last-child > button.hidden.md\:flex {
     min-width: 68px !important;
     height: 40px !important;
     min-height: 40px !important;
     padding: 0 0.62rem !important;
     font-size: 0.76rem !important;
-    transform: translateY(var(--bas-nav-row-shift, 15px)) !important;
+    transform: translate(var(--bas-navbar-utility-shift-x), var(--bas-nav-row-shift, 15px)) !important;
   }
 
   html.bas-website-context body:not(.bas-app-mode) > nav > div > div:last-child > button.hidden.md\:block {
@@ -125,6 +135,6 @@
     max-width: 40px !important;
     height: 40px !important;
     min-height: 40px !important;
-    transform: translateY(var(--bas-nav-row-shift, 15px)) !important;
+    transform: translate(var(--bas-navbar-utility-shift-x), var(--bas-nav-row-shift, 15px)) !important;
   }
 }
