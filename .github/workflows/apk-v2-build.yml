@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-apk:
@@ -70,10 +70,27 @@ jobs:
           mkdir -p dist-apk
           cp android/app/build/outputs/apk/debug/app-debug.apk dist-apk/Burma-AI-Studio-v2.0.0.apk
 
-      - name: Upload APK
+      - name: Upload APK workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: Burma-AI-Studio-v2.0.0-APK
           path: dist-apk/Burma-AI-Studio-v2.0.0.apk
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish stable APK download release
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RELEASE_TAG="apk-v2.0.0"
+          APK_PATH="dist-apk/Burma-AI-Studio-v2.0.0.apk"
+          RELEASE_TITLE="Burma AI Studio APK v2.0.0"
+          RELEASE_NOTES="Burma AI Studio Android APK v2.0.0. Built from the isolated apk-v2-masterpiece branch. The production desktop, phone and tablet website is not included in this release."
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$APK_PATH" --clobber
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_TITLE" --notes "$RELEASE_NOTES"
+          else
+            gh release create "$RELEASE_TAG" "$APK_PATH" --title "$RELEASE_TITLE" --notes "$RELEASE_NOTES"
+          fi
