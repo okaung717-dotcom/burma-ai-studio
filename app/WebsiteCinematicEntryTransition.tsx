@@ -26,12 +26,8 @@ export default function WebsiteCinematicEntryTransition() {
       stage?.remove();
       stage = null;
       running = false;
-      body.classList.remove(ACTIVE_CLASS, REVEAL_CLASS, SETTLED_CLASS);
+      body.classList.remove(ACTIVE_CLASS, REVEAL_CLASS, SETTLED_CLASS, "bas-home-arriving");
       document.querySelectorAll("[data-bas-depth-portal-stage]").forEach((node) => node.remove());
-
-      // Do not clear the cycle lock here. IntroGate removes its trigger slightly
-      // after the visual transition finishes. Keeping the lock until that falling
-      // edge prevents our own cleanup class mutations from starting a second run.
     };
 
     const later = (callback: () => void, delay: number) => {
@@ -50,14 +46,14 @@ export default function WebsiteCinematicEntryTransition() {
       running = true;
       document.querySelectorAll("[data-bas-depth-portal-stage]").forEach((node) => node.remove());
 
-      // Remove state from every retired transition so only the current choreography can own the handoff.
       body.classList.remove(
         "bas-logo-flight-active",
         "bas-logo-flight-arrived",
         "bas-home-elements-reveal",
         "bas-cinematic-entry-active",
         "bas-cinematic-home-reveal",
-        "bas-cinematic-home-settled"
+        "bas-cinematic-home-settled",
+        "bas-home-arriving"
       );
       body.classList.add(ACTIVE_CLASS);
 
@@ -84,16 +80,26 @@ export default function WebsiteCinematicEntryTransition() {
       });
 
       if (reducedMotion) {
-        later(() => body.classList.add(REVEAL_CLASS, SETTLED_CLASS), 20);
-        later(() => stage?.remove(), 220);
-        later(clearTransition, 360);
+        later(() => {
+          body.classList.remove(INTRO_TRIGGER_CLASS, "bas-home-arriving");
+          body.classList.add(REVEAL_CLASS, SETTLED_CLASS);
+        }, 20);
+        later(() => stage?.remove(), 180);
+        later(clearTransition, 280);
         return true;
       }
 
-      later(() => body.classList.add(REVEAL_CLASS), 590);
-      later(() => body.classList.add(SETTLED_CLASS), 1570);
-      later(() => stage?.remove(), 2080);
-      later(clearTransition, 2240);
+      // Reveal Home while the dark portal field is still covering the frame.
+      // Removing the retired trigger class here prevents the old hidden-page state
+      // from surviving after the portal disappears and producing a white screen.
+      later(() => {
+        body.classList.remove(INTRO_TRIGGER_CLASS, "bas-home-arriving");
+        body.classList.add(REVEAL_CLASS);
+      }, 320);
+
+      later(() => body.classList.add(SETTLED_CLASS), 980);
+      later(() => stage?.remove(), 1240);
+      later(clearTransition, 1380);
       return true;
     };
 
@@ -101,14 +107,10 @@ export default function WebsiteCinematicEntryTransition() {
       const triggerActive = body.classList.contains(INTRO_TRIGGER_CLASS);
 
       if (!triggerActive) {
-        // Falling edge: arm the controller for the next genuine authentication entry.
         body.removeAttribute(CYCLE_LOCK_ATTRIBUTE);
         return;
       }
 
-      // One persistent lock per IntroGate trigger cycle. It survives the animation's
-      // own cleanup mutations and React effect remounts, but is reset once the source
-      // trigger class is actually removed.
       if (body.hasAttribute(CYCLE_LOCK_ATTRIBUTE)) return;
       if (
         body.classList.contains("bas-app-mode") ||
@@ -130,8 +132,6 @@ export default function WebsiteCinematicEntryTransition() {
     return () => {
       observer.disconnect();
       clearTransition();
-      // Intentionally preserve the cycle lock while IntroGate's trigger remains
-      // active, so a development/StrictMode remount cannot replay the transition.
       if (!body.classList.contains(INTRO_TRIGGER_CLASS)) {
         body.removeAttribute(CYCLE_LOCK_ATTRIBUTE);
       }
