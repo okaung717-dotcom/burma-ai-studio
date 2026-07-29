@@ -21,6 +21,7 @@ import "./website-intro-mm-headline-fix.css";
 import "./website-intro-brand-theme-fix.css";
 import "./website-chat-route-fixes.css";
 import "./website-navbar-utility-controls.css";
+import "./mobile-tablet-theme-audit.css";
 import Navbar from "./Navbar";
 import WebsiteNavbarStaticBridge from "./WebsiteNavbarStaticBridge";
 import WebsitePlansBridge from "./WebsitePlansBridge";
