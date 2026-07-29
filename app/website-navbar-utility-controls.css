@@ -138,3 +138,34 @@
     transform: translate(var(--bas-navbar-utility-shift-x), var(--bas-nav-row-shift, 15px)) !important;
   }
 }
+
+/* Website desktop only: use one measured navigation row so the visible empty
+   space between Home, Services, Portfolio, Chat and Stories is identical.
+   Equal center columns are not sufficient because every label has a different width. */
+@media (min-width: 1024px) {
+  html.bas-website-context body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) {
+    display: grid !important;
+    grid-column: 2 / 7 !important;
+    grid-template-columns: repeat(5, max-content) !important;
+    grid-auto-flow: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    column-gap: clamp(32px, 2.55vw, 46px) !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) > a {
+    grid-column: auto !important;
+    grid-row: 1 !important;
+    justify-self: center !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1260px) {
+  html.bas-website-context body:not(.bas-app-mode) > nav > div > div:nth-of-type(1) {
+    column-gap: clamp(18px, 2vw, 28px) !important;
+  }
+}
