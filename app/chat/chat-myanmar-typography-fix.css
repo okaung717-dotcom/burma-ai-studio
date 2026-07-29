@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700;800;900&display=swap');
+
+/* Website chat only: correct Myanmar shaping, spacing and vertical rhythm. */
+body.bas-chat-mm .bas-chat-page,
+body.bas-chat-mm .bas-chat-page button,
+body.bas-chat-mm .bas-chat-page input,
+body.bas-chat-mm .bas-chat-page textarea,
+body.bas-chat-mm .bas-chat-page select {
+  font-family: "Manrope", "Noto Sans Myanmar", "Myanmar Text", "Padauk", sans-serif;
+  font-feature-settings: normal;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+
+body.bas-chat-mm .bas-chat-sidebar h1,
+body.bas-chat-mm .bas-chat-header h2 {
+  font-family: "Sora", "Noto Sans Myanmar", "Myanmar Text", "Padauk", sans-serif;
+}
+
+body.bas-chat-mm .bas-chat-sidebar h1 {
+  max-width: 100%;
+  margin-top: 1.2rem;
+  font-size: clamp(2rem, 2.8vw, 3.25rem);
+  line-height: 1.34;
+  letter-spacing: 0;
+  font-weight: 800;
+  text-wrap: pretty;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+body.bas-chat-mm .bas-chat-sidebar-copy {
+  margin-top: 0.9rem;
+  line-height: 1.85;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+body.bas-chat-mm .bas-chat-trust-list b,
+body.bas-chat-mm .bas-chat-trust-list small,
+body.bas-chat-mm .bas-chat-profile-card p,
+body.bas-chat-mm .bas-chat-profile-card strong,
+body.bas-chat-mm .bas-chat-profile-card span,
+body.bas-chat-mm .bas-chat-direct > p,
+body.bas-chat-mm .bas-chat-header p,
+body.bas-chat-mm .bas-chat-quick-bar > span,
+body.bas-chat-mm .bas-chat-quick-bar button,
+body.bas-chat-mm .bas-chat-bubble > p,
+body.bas-chat-mm .bas-chat-typing,
+body.bas-chat-mm .bas-chat-input-wrap textarea,
+body.bas-chat-mm .bas-chat-attachment-menu button,
+body.bas-chat-mm .bas-chat-notice {
+  letter-spacing: 0;
+}
+
+body.bas-chat-mm .bas-chat-trust-list b {
+  line-height: 1.65;
+  font-weight: 700;
+}
+
+body.bas-chat-mm .bas-chat-trust-list small {
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+body.bas-chat-mm .bas-chat-header p {
+  line-height: 1.65;
+}
+
+body.bas-chat-mm .bas-chat-bubble > p {
+  line-height: 1.82;
+  font-weight: 500;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+body.bas-chat-mm .bas-chat-input-wrap textarea {
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+@media (max-width: 1180px) {
+  body.bas-chat-mm .bas-chat-sidebar h1 {
+    font-size: clamp(1.8rem, 3.2vw, 2.7rem);
+  }
+}
