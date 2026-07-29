@@ -3,11 +3,18 @@ export const dynamic = "force-dynamic";
 
 type ChatMessage = { role?: "assistant" | "user"; content?: string };
 type ChatRequest = { messages?: unknown; account?: unknown };
-type GeminiData = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+type GeminiData = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; error?: { code?: number; message?: string; status?: string } };
 type GeminiContent = { role: "model" | "user"; parts: Array<{ text: string }> };
-type ReplyLanguage = "English" | "Burmese";
 
-const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.5-flash-lite"];
+type GenerationConfig = {
+  temperature: number;
+  topP: number;
+  maxOutputTokens: number;
+  thinkingConfig?: { thinkingBudget?: number; thinkingLevel?: "low" };
+};
+
+const APP_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.5-flash-lite"];
+const WEBSITE_MODELS = ["gemini-2.5-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite"];
 const CONTACT = "Email: okaung717@gmail.com | Phone: 09671010011 | Telegram/Viber: +95 9 671 010 011";
 
 const SYSTEM_TEXT = `
@@ -57,12 +64,22 @@ Contact:
 ${CONTACT}
 `;
 
+const WEBSITE_HIDDEN_WELCOME_MESSAGES = new Set([
+  "Welcome to Burma AI Studio. Tell me what you want to create, where it will be published, the duration, style, deadline and any references you already have.",
+  "I can help shape the brief immediately, and the studio team can review the conversation from the admin inbox.",
+  "Burma AI Studio မှ ကြိုဆိုပါတယ်။ ဘာဖန်တီးချင်လဲ၊ ဘယ် Platform မှာသုံးမလဲ၊ ကြာချိန်၊ Style၊ Deadline နဲ့ Reference တွေကို ပြောပေးပါ။",
+  "Project brief ကို AI နဲ့ ချက်ချင်းညှိပေးနိုင်ပြီး Studio Admin ကလည်း ဒီ Conversation ကို Inbox မှာကြည့်နိုင်ပါတယ်။",
+]);
+
+const GENERIC_FALLBACK_PREFIXES = [
+  "Welcome to Burma AI Studio. I can help your brand with AI video ads",
+  "မင်္ဂလာပါရှင့်။ Burma AI Studio မှကြိုဆိုပါတယ်။ သင့် brand အတွက် AI video ကြော်ငြာ",
+  "Burma AI Studio can help with AI presenter videos",
+  "Burma AI Studio မှာ AI presenter video",
+];
+
 function hasMyanmar(text: string) {
   return /[\u1000-\u109F]/.test(text);
-}
-
-function countMyanmarCharacters(text: string) {
-  return (text.match(/[\u1000-\u109F]/g) || []).length;
 }
 
 function hasAny(text: string, words: string[]) {
@@ -76,25 +93,16 @@ function isMessage(value: unknown): value is ChatMessage {
   return (message.role === "assistant" || message.role === "user") && typeof message.content === "string";
 }
 
-function getReplyLanguage(text: string): ReplyLanguage {
-  return hasMyanmar(text) ? "Burmese" : "English";
-}
-
-function getWebsiteLanguageDirective(language: ReplyLanguage) {
-  if (language === "Burmese") {
-    return `MANDATORY WEBSITE CHAT LANGUAGE FOR THIS TURN: BURMESE.
-Determine the reply language only from the latest user message, not from the interface language or older conversation messages.
-The latest user message contains Burmese, so answer in natural Burmese. English product names and technical terms may remain in English where useful.`;
-  }
-
-  return `MANDATORY WEBSITE CHAT LANGUAGE FOR THIS TURN: ENGLISH ONLY.
-Determine the reply language only from the latest user message, not from the interface language or older conversation messages.
-The latest user message is English-only, so the entire answer must be in natural English. Do not include Burmese script, even if earlier messages were Burmese.`;
-}
-
-function answerMatchesLanguage(answer: string, language: ReplyLanguage) {
-  const myanmarCount = countMyanmarCharacters(answer);
-  return language === "Burmese" ? myanmarCount > 0 : myanmarCount <= 2;
+function cleanWebsiteHistory(messages: ChatMessage[]) {
+  return messages
+    .filter((message) => {
+      const content = message.content?.trim() || "";
+      if (!content) return false;
+      if (message.role !== "assistant") return true;
+      if (WEBSITE_HIDDEN_WELCOME_MESSAGES.has(content)) return false;
+      return !GENERIC_FALLBACK_PREFIXES.some((prefix) => content.startsWith(prefix));
+    })
+    .slice(-12);
 }
 
 function fallback(text: string) {
@@ -130,19 +138,41 @@ function fallback(text: string) {
       : "For a hotel ad, a 30s cinematic TikTok/Reels video should show the lobby, rooms, guest experience, service highlights, location, and a booking CTA. The first 3 seconds should hook viewers with the hotel vibe.\n\nSend the hotel name, location, room type, key service, and reference video. I’ll suggest a 30s concept/script.";
   }
 
+  if (hasAny(text, ["bar", "pub", "club", "lounge", "restaurant", "cafe", "ဘား", "အရက်ဆိုင်", "စားသောက်ဆိုင်", "ကဖေး"])) {
+    return mm
+      ? "Bar၊ Restaurant ဒါမှမဟုတ် Cafe အတွက်ဆိုရင် 15–30s cinematic short video ကို atmosphere hook၊ drink/food close-up၊ customer mood၊ signature item၊ offer နဲ့ location/contact CTA အစဉ်လိုက်တည်ဆောက်တာ အထိရောက်ဆုံးပါရှင့်။\n\nဆိုင်နာမည်၊ location၊ အဓိကပြချင်တဲ့ drink/food၊ promotion ရှိမရှိနဲ့ တင်မယ့် platform ကိုပို့ပေးပါနော်။ သင့်ဆိုင်နဲ့ကိုက်တဲ့ concept နဲ့ scene flow ကို ဆက်ညှိပေးပါမယ်။"
+      : "For a bar, restaurant, or cafe, a strong 15–30s cinematic short should move from an atmosphere hook to drink/food close-ups, customer mood, a signature item, an offer, and a location/contact CTA.\n\nSend the venue name, location, featured drink or food, any promotion, and the target platform. I’ll shape a suitable concept and scene flow.";
+  }
+
   return mm
     ? "မင်္ဂလာပါရှင့်။ Burma AI Studio မှကြိုဆိုပါတယ်။ သင့် brand အတွက် AI video ကြော်ငြာ၊ cinematic ad၊ product ad၊ Reels/TikTok short video၊ script idea နဲ့ portfolio guidance တွေကို ကူညီပေးနိုင်ပါတယ်ရှင့်။\n\nသင့်လုပ်ငန်းအမျိုးအစား၊ product/service၊ platform၊ duration နဲ့လိုချင်တဲ့ style ကိုပြောပြပါနော်။ အကောင်းဆုံး next step ကိုညှိပေးပါမယ်။"
     : "Welcome to Burma AI Studio. I can help your brand with AI video ads, cinematic ads, product ads, Reels/TikTok shorts, script ideas, and portfolio guidance.\n\nTell me your business type, product/service, platform, duration, and preferred style. I’ll suggest the best next step.";
+}
+
+function generationConfigFor(model: string, isWebsiteChat: boolean): GenerationConfig {
+  const config: GenerationConfig = {
+    temperature: 0.86,
+    topP: 0.95,
+    maxOutputTokens: 900,
+  };
+
+  if (!isWebsiteChat) return config;
+  if (model.startsWith("gemini-2.5")) {
+    config.thinkingConfig = { thinkingBudget: 0 };
+  } else if (model.startsWith("gemini-3")) {
+    config.thinkingConfig = { thinkingLevel: "low" };
+  }
+  return config;
 }
 
 async function callGemini(
   model: string,
   apiKey: string,
   contents: GeminiContent[],
-  systemText: string
+  isWebsiteChat: boolean
 ) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12000);
+  const timeout = setTimeout(() => controller.abort(), isWebsiteChat ? 25000 : 12000);
 
   try {
     const response = await fetch(
@@ -155,13 +185,9 @@ async function callGemini(
         },
         signal: controller.signal,
         body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemText }] },
+          systemInstruction: { parts: [{ text: SYSTEM_TEXT }] },
           contents,
-          generationConfig: {
-            temperature: 0.86,
-            topP: 0.95,
-            maxOutputTokens: 900,
-          },
+          generationConfig: generationConfigFor(model, isWebsiteChat),
         }),
       }
     );
@@ -172,8 +198,22 @@ async function callGemini(
       .join("\n")
       .trim();
 
-    return response.ok && text ? text.replace(/\n{3,}/g, "\n\n").trim() : "";
-  } catch {
+    if (!response.ok || !text) {
+      console.error("[Burma AI Studio chat] Gemini request failed", {
+        model,
+        status: response.status,
+        errorStatus: data?.error?.status,
+        errorMessage: data?.error?.message?.slice(0, 300),
+      });
+      return "";
+    }
+
+    return text.replace(/\n{3,}/g, "\n\n").trim();
+  } catch (error) {
+    console.error("[Burma AI Studio chat] Gemini request exception", {
+      model,
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
     return "";
   } finally {
     clearTimeout(timeout);
@@ -182,50 +222,45 @@ async function callGemini(
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as ChatRequest | null;
-  const messages = Array.isArray(body?.messages)
-    ? body.messages.filter(isMessage).slice(-12)
+  const rawMessages = Array.isArray(body?.messages)
+    ? body.messages.filter(isMessage)
     : [];
 
   const question =
-    [...messages].reverse().find((message) => message.role === "user")?.content?.trim() || "";
+    [...rawMessages].reverse().find((message) => message.role === "user")?.content?.trim() || "";
 
   if (!question) {
     return Response.json({ reply: "Please send a message first." }, { status: 400 });
   }
 
   const isWebsiteChat = Boolean(body && Object.prototype.hasOwnProperty.call(body, "account"));
-  const replyLanguage = getReplyLanguage(question);
-  const languageDirective = isWebsiteChat ? getWebsiteLanguageDirective(replyLanguage) : "";
-  const systemText = languageDirective ? `${SYSTEM_TEXT}\n\n${languageDirective}` : SYSTEM_TEXT;
+  const selectedMessages = isWebsiteChat
+    ? cleanWebsiteHistory(rawMessages)
+    : rawMessages.slice(-12);
+  const safeMessages = selectedMessages.length
+    ? selectedMessages
+    : [{ role: "user" as const, content: question }];
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey =
+    process.env.GEMINI_API_KEY ||
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+    process.env.GOOGLE_API_KEY ||
+    "";
+
   if (!apiKey) {
     return Response.json({ reply: fallback(question), source: "fallback_no_key" });
   }
 
-  const contents: GeminiContent[] = messages.map((message) => ({
+  const contents: GeminiContent[] = safeMessages.map((message) => ({
     role: message.role === "assistant" ? "model" : "user",
     parts: [{ text: message.content || "" }],
   }));
 
-  for (const model of MODELS) {
-    const answer = await callGemini(model, apiKey, contents, systemText);
-    if (answer && (!isWebsiteChat || answerMatchesLanguage(answer, replyLanguage))) {
+  const models = isWebsiteChat ? WEBSITE_MODELS : APP_MODELS;
+  for (const model of models) {
+    const answer = await callGemini(model, apiKey, contents, isWebsiteChat);
+    if (answer) {
       return Response.json({ reply: answer, source: "gemini", model });
-    }
-
-    if (isWebsiteChat) {
-      const correctionText = `${SYSTEM_TEXT}\n\n${languageDirective}\nThis is a language-correction attempt. Answer the latest question directly and obey the mandatory language rule without exception.`;
-      const correctedAnswer = await callGemini(
-        model,
-        apiKey,
-        [{ role: "user", parts: [{ text: question }] }],
-        correctionText
-      );
-
-      if (correctedAnswer && answerMatchesLanguage(correctedAnswer, replyLanguage)) {
-        return Response.json({ reply: correctedAnswer, source: "gemini_language_corrected", model });
-      }
     }
   }
 
