@@ -17,9 +17,13 @@ import {
 } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 import "./website-intro-gate.css";
+import "./website-intro-home-transition.css";
 
 const PROFILE_STORAGE_KEY = "bas_website_profile";
 const INTRO_UI_REVEAL_MS = 2800;
+const ENTRY_TRANSITION_MS = 1480;
+const HOME_REVEAL_START_MS = 650;
+const HOME_REVEAL_CLEANUP_MS = 2300;
 const ACCOUNT_GATE_EXEMPT_PATHS = [
   "/legal",
   "/privacy",
@@ -153,6 +157,7 @@ export default function WebsiteIntroGate() {
 
         if (data.authenticated && data.user) {
           document.documentElement.classList.add("bas-intro-skip");
+          document.body.classList.remove("bas-intro-transitioning", "bas-home-arriving");
           setVisible(false);
           return;
         }
@@ -208,15 +213,32 @@ export default function WebsiteIntroGate() {
   };
 
   const finishAuthenticatedEntry = (user: AccountUser) => {
-    if (!user) return;
+    if (!user || leaving) return;
+
     persistProfile(user);
+
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+    const transitionDuration = reduceMotion ? 180 : ENTRY_TRANSITION_MS;
+    const homeRevealDelay = reduceMotion ? 0 : HOME_REVEAL_START_MS;
+    const cleanupDelay = reduceMotion ? 260 : HOME_REVEAL_CLEANUP_MS;
+
     setLeaving(true);
+    document.body.classList.add("bas-intro-transitioning");
+
+    window.setTimeout(() => {
+      document.body.classList.add("bas-home-arriving");
+    }, homeRevealDelay);
+
     window.setTimeout(() => {
       document.documentElement.classList.add("bas-intro-skip");
       setVisible(false);
       setLeaving(false);
       setAuthMode(null);
-    }, 520);
+    }, transitionDuration);
+
+    window.setTimeout(() => {
+      document.body.classList.remove("bas-intro-transitioning", "bas-home-arriving");
+    }, cleanupDelay);
   };
 
   const openAuth = (mode: Exclude<AuthMode, null>) => {
@@ -308,6 +330,14 @@ export default function WebsiteIntroGate() {
       </div>
       <div className="bas-intro-shade" aria-hidden="true" />
       <div className="bas-intro-grain" aria-hidden="true" />
+
+      <div className="bas-intro-exit-transition" aria-hidden="true">
+        <span className="bas-intro-exit-panel is-left" />
+        <span className="bas-intro-exit-panel is-right" />
+        <span className="bas-intro-exit-beam" />
+        <span className="bas-intro-exit-flare" />
+        <span className="bas-intro-exit-orbit">BA</span>
+      </div>
 
       <header className="bas-intro-header">
         <div className="bas-intro-brand bas-intro-brand-static" aria-label="Burma AI Studio">
