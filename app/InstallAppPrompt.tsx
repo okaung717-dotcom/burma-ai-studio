@@ -9,7 +9,7 @@ type PortalTarget = {
 };
 
 const PHONE_APK_V2_URL =
-  "https://github.com/okaung717-dotcom/burma-ai-studio/releases/download/apk-v2.0.0/Burma-AI-Studio-v2.0.0.apk";
+  "https://github.com/okaung717-dotcom/burma-ai-studio/releases/download/apk-v2.0.1/Burma-AI-Studio-v2.0.1.apk";
 const EXISTING_DESKTOP_APK_URL = "/downloads/burma-ai-studio.apk";
 
 function AppIconMark({ small = false }: { small?: boolean }) {
@@ -77,7 +77,7 @@ export default function InstallAppPrompt() {
       }
       aria-label={
         targetIsMobile
-          ? "Download Burma AI Studio Android APK version 2.0.0"
+          ? "Download Burma AI Studio Android APK version 2.0.1"
           : "Download Burma AI Studio Android APK"
       }
     >
