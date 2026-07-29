@@ -79,7 +79,6 @@ jobs:
           retention-days: 30
 
       - name: Publish stable APK download release
-        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
