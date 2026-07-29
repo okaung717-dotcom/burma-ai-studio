@@ -6,15 +6,16 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "./LanguageContext";
 
-function findDesktopTarget() {
+function findNavbar() {
   if (document.body.classList.contains("bas-app-mode")) return null;
-  return document.querySelector<HTMLElement>("body:not(.bas-app-mode) > nav > div > div:nth-of-type(1)");
+  return document.querySelector<HTMLElement>("body:not(.bas-app-mode) > nav");
 }
 
-function findMobileTarget() {
-  if (document.body.classList.contains("bas-app-mode")) return null;
+function findDesktopTarget(nav: HTMLElement | null) {
+  return nav?.querySelector<HTMLElement>(":scope > div > div:nth-of-type(1)") || null;
+}
 
-  const nav = document.querySelector<HTMLElement>("body:not(.bas-app-mode) > nav");
+function findMobileTarget(nav: HTMLElement | null) {
   if (!nav) return null;
 
   const drawers = Array.from(nav.children).filter((child): child is HTMLElement => child instanceof HTMLElement);
@@ -31,20 +32,23 @@ export default function WebsiteStoriesNav() {
   const active = pathname === "/stories" || pathname.startsWith("/stories/");
 
   useEffect(() => {
+    const nav = findNavbar();
+    if (!nav) return;
+
     const syncTargets = () => {
-      setDesktopTarget(findDesktopTarget());
-      setMobileTarget(findMobileTarget());
+      const nextDesktop = findDesktopTarget(nav);
+      const nextMobile = findMobileTarget(nav);
+      setDesktopTarget((current) => (current === nextDesktop ? current : nextDesktop));
+      setMobileTarget((current) => (current === nextMobile ? current : nextMobile));
     };
 
     syncTargets();
-    const observer = new MutationObserver(syncTargets);
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
-    window.addEventListener("resize", syncTargets);
 
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", syncTargets);
-    };
+    // Only the mobile drawer is added and removed dynamically. Watching the
+    // navbar subtree is sufficient and avoids whole-page attribute callbacks.
+    const observer = new MutationObserver(syncTargets);
+    observer.observe(nav, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, []);
 
   return (
