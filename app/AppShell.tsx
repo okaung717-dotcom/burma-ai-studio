@@ -18,7 +18,7 @@ import "./website-intro-timing-216.css";
 import "./website-intro-video-sanitizer.css";
 import "./website-intro-mm-headline-fix.css";
 import "./website-intro-brand-theme-fix.css";
-import "./website-logo-flight-transition.css";
+import "./website-cinematic-entry-transition.css";
 import Navbar from "./Navbar";
 import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
@@ -34,7 +34,7 @@ import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 import LegalQuickLinks from "./LegalQuickLinks";
 import WebsiteNavbarProfile from "./WebsiteNavbarProfile";
 import WebsiteProfileSingleClickGuard from "./WebsiteProfileSingleClickGuard";
-import WebsiteLogoFlightTransition from "./WebsiteLogoFlightTransition";
+import WebsiteCinematicEntryTransition from "./WebsiteCinematicEntryTransition";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -104,7 +104,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   return (
     <>
       <ConsentAwareAnalytics />
-      {!isAdminArea && <WebsiteLogoFlightTransition />}
+      {!isAdminArea && <WebsiteCinematicEntryTransition />}
       {!isAdminArea && <WebsiteIntroGate />}
       {!isAdminArea && <WebsiteIntroVideoSanitizer />}
       {!isAdminArea && <WebsiteLogoutRedirect />}
