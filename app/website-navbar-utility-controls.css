@@ -4,10 +4,10 @@
    Native/PWA and mobile navigation remain untouched. */
 
 @media (min-width: 1024px) {
-  /* A restrained horizontal nudge keeps Language and Theme visually grouped with
-     the account control without changing the underlying desktop grid. */
+  /* Move the Language + Theme pair as one stable group toward Profile.
+     The previous 12px adjustment was visually negligible at wide desktop sizes. */
   html.bas-website-context body:not(.bas-app-mode) > nav {
-    --bas-navbar-utility-shift-x: 12px;
+    --bas-navbar-utility-shift-x: 48px;
   }
 
   /* The legacy controls wrapper must remain flattened. Making it flex turns the
@@ -117,7 +117,7 @@
 
 @media (min-width: 1024px) and (max-width: 1260px) {
   html.bas-website-context body:not(.bas-app-mode) > nav {
-    --bas-navbar-utility-shift-x: 7px;
+    --bas-navbar-utility-shift-x: 24px;
   }
 
   html.bas-website-context body:not(.bas-app-mode) > nav > div > div:last-child > button.hidden.md\:flex {
