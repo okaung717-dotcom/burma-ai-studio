@@ -1,0 +1,7 @@
+/* Website chat only: keep the conversation canvas clean and ready for the client's first message. */
+.bas-chat-quick-bar,
+.bas-chat-day-chip,
+.bas-chat-messages > .bas-chat-message-row.is-assistant:nth-of-type(1),
+.bas-chat-messages > .bas-chat-message-row.is-assistant:nth-of-type(2) {
+  display: none !important;
+}
