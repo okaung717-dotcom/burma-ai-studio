@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - apk-v2-masterpiece
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -11,6 +14,7 @@ permissions:
 
 jobs:
   build-apk:
+    if: github.ref_name == 'apk-v2-masterpiece' || github.head_ref == 'apk-v2-masterpiece'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
