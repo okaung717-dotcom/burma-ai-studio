@@ -32,6 +32,7 @@ import PrivacyConsent from "./PrivacyConsent";
 import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 import LegalQuickLinks from "./LegalQuickLinks";
 import WebsiteNavbarProfile from "./WebsiteNavbarProfile";
+import WebsiteProfileSingleClickGuard from "./WebsiteProfileSingleClickGuard";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -107,6 +108,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       {!isAdminArea && <Navbar />}
       {!isAdminArea && <WebsiteStoriesNav />}
       {!isAdminArea && <WebsitePlansBridge />}
+      {!isAdminArea && <WebsiteProfileSingleClickGuard />}
       {!isAdminArea && <WebsiteNavbarProfile />}
       <main className={`bas-website-content ${routeClass} w-full flex-grow`}>
         {children}
