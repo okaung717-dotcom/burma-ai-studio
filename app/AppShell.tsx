@@ -143,10 +143,10 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <AppExperience />
           )}
           <AppBottomNav />
+          <AIAssistant />
         </AppOnly>
       )}
       {!isAdminArea && <InstallAppPrompt />}
-      {!isAdminArea && <AIAssistant />}
       {!isAdminArea && <PrivacyConsent />}
     </>
   );
