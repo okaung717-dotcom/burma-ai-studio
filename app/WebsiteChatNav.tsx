@@ -19,7 +19,7 @@ export default function WebsiteChatNav() {
   useEffect(() => {
     if (document.body.classList.contains("bas-app-mode")) return;
 
-    const navLabel = lang === "MM" ? "Chat" : "Chat";
+    const navLabel = lang === "MM" ? "စကားပြောရန်" : "Chat";
     const ctaLabel = lang === "MM" ? "Chat ဖွင့်ရန်" : "Open Chat";
     const active = pathname === CHAT_PATH || pathname.startsWith(`${CHAT_PATH}/`);
 
@@ -28,6 +28,8 @@ export default function WebsiteChatNav() {
       if (!nav) return;
 
       nav.querySelectorAll<HTMLAnchorElement>('a[href="/contact"], a[href="/chat"]').forEach((link) => {
+        if (link.classList.contains("bas-navbar-profile")) return;
+
         const nextLabel = isCallToAction(link) ? ctaLabel : navLabel;
         if (link.getAttribute("href") !== CHAT_PATH) link.setAttribute("href", CHAT_PATH);
         if ((link.textContent || "").trim() !== nextLabel) link.textContent = nextLabel;
@@ -38,7 +40,7 @@ export default function WebsiteChatNav() {
 
     sync();
     const observer = new MutationObserver(sync);
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     return () => observer.disconnect();
   }, [lang, pathname]);
 
