@@ -3,19 +3,9 @@ import type { CapacitorConfig } from "@capacitor/cli";
 const config: CapacitorConfig = {
   appId: "com.burmaaistudio.app",
   appName: "Burma AI Studio",
-  webDir: "public",
-  server: {
-    // APK v2 is intentionally isolated from burmaaistudio.com production.
-    // Desktop, phone and tablet website releases remain on the main branch.
-    url: "https://burma-ai-studio-git-apk-v2-masterpiece-okkar-s-projects.vercel.app/?source=native&apk=v2",
-    cleartext: false,
-    allowNavigation: [
-      "burma-ai-studio-git-apk-v2-masterpiece-okkar-s-projects.vercel.app",
-      "burmaaistudio.com",
-      "*.youtube.com",
-      "*.youtube-nocookie.com",
-    ],
-  },
+  // The APK ships its own interface. It no longer opens a Vercel preview URL,
+  // so app startup cannot be blocked by Vercel deployment authentication.
+  webDir: "apk-web",
   android: {
     allowMixedContent: false,
     captureInput: true,
