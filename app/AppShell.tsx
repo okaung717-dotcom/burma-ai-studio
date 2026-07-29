@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { usePathname } from "next/navigation";
 import "./mobile-website-fixes.css";
+import "./mobile-website-theme-profile.css";
 import "./liquid-glass-navbar.css";
 import "./liquid-glass-navbar-logo-fix.css";
 import "./desktop-navbar-header-band.css";
@@ -34,6 +35,7 @@ import PrivacyConsent from "./PrivacyConsent";
 import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 import LegalQuickLinks from "./LegalQuickLinks";
 import WebsiteNavbarProfile from "./WebsiteNavbarProfile";
+import MobileWebsiteProfileBridge from "./MobileWebsiteProfileBridge";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -118,6 +120,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       {!isAdminArea && <WebsiteNavbarStaticBridge />}
       {!isAdminArea && <WebsitePlansBridge />}
       {!isAdminArea && <WebsiteNavbarProfile />}
+      {!isAdminArea && <MobileWebsiteProfileBridge />}
       <main className={`bas-website-content ${routeClass} w-full flex-grow`}>
         {children}
       </main>
