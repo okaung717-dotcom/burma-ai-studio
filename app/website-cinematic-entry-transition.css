@@ -1,0 +1,343 @@
+/* Website-only authenticated Intro -> Home handoff.
+   A restrained cinematic exposure, light sweep and depth reveal. */
+
+html.bas-website-context body.bas-cinematic-entry-active {
+  overflow: hidden !important;
+}
+
+/* Fully retire the two rejected transition systems. */
+html.bas-website-context .bas-intro-exit-transition,
+html.bas-website-context .bas-logo-flight-stage {
+  display: none !important;
+}
+
+/* Neutralize the older body-class choreography while this transition owns the handoff. */
+html.bas-website-context body.bas-cinematic-entry-active.bas-intro-transitioning > nav,
+html.bas-website-context body.bas-cinematic-entry-active.bas-home-arriving > nav,
+html.bas-website-context body.bas-cinematic-entry-active.bas-intro-transitioning .bas-website-content,
+html.bas-website-context body.bas-cinematic-entry-active.bas-home-arriving .bas-website-content {
+  animation: none !important;
+}
+
+/* Intro exits with depth rather than a generic opacity cut. */
+html.bas-website-context .bas-intro.is-leaving {
+  background: transparent !important;
+  animation: none !important;
+  pointer-events: none !important;
+}
+
+html.bas-website-context .bas-intro.is-leaving .bas-auth-backdrop {
+  opacity: 0 !important;
+  filter: blur(18px) !important;
+  transform: scale(.965) !important;
+  transition: opacity 280ms ease, filter 460ms ease, transform 520ms cubic-bezier(.22,.8,.2,1) !important;
+}
+
+html.bas-website-context .bas-intro.is-leaving .bas-intro-header {
+  opacity: 0 !important;
+  filter: blur(12px) !important;
+  transform: translate3d(0,-26px,-40px) scale(.975) !important;
+  transition: opacity 300ms ease, filter 500ms ease, transform 580ms cubic-bezier(.22,.8,.2,1) !important;
+  transition-delay: 0ms !important;
+}
+
+html.bas-website-context .bas-intro.is-leaving .bas-intro-eyebrow,
+html.bas-website-context .bas-intro.is-leaving .bas-intro-content h1 span,
+html.bas-website-context .bas-intro.is-leaving .bas-intro-content h1 em,
+html.bas-website-context .bas-intro.is-leaving .bas-intro-desc,
+html.bas-website-context .bas-intro.is-leaving .bas-intro-film-chip {
+  opacity: 0 !important;
+  filter: blur(16px) !important;
+  transform: translate3d(0,22px,-70px) scale(.96) !important;
+  transition: opacity 300ms ease, filter 520ms ease, transform 620ms cubic-bezier(.22,.8,.2,1) !important;
+  transition-delay: 0ms !important;
+}
+
+html.bas-website-context .bas-intro.is-leaving .bas-intro-media {
+  opacity: 0 !important;
+  filter: brightness(.42) saturate(.72) blur(9px) !important;
+  transition: opacity 760ms ease 90ms, filter 820ms cubic-bezier(.4,0,.2,1) !important;
+}
+
+html.bas-website-context .bas-intro.is-leaving .bas-intro-media video,
+html.bas-website-context .bas-intro.is-leaving .bas-intro-media iframe {
+  transform: scale(1.085) !important;
+  transition: transform 1150ms cubic-bezier(.16,1,.3,1) !important;
+}
+
+html.bas-website-context .bas-intro.is-leaving .bas-intro-shade,
+html.bas-website-context .bas-intro.is-leaving .bas-intro-grain,
+html.bas-website-context .bas-intro.is-leaving::after {
+  opacity: 0 !important;
+  transition: opacity 520ms ease !important;
+}
+
+/* Independent cinematic stage above both pages. */
+.bas-cinematic-entry-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 23000;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+  perspective: 1400px;
+}
+
+.bas-cinematic-entry-stage > span {
+  position: absolute;
+  pointer-events: none;
+}
+
+.bas-cinematic-entry-veil {
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 47%, rgba(96,30,35,.20), transparent 42%),
+    linear-gradient(135deg, #070304 0%, #120608 48%, #090405 100%);
+  will-change: opacity, filter;
+}
+
+.bas-cinematic-entry-stage.is-running .bas-cinematic-entry-veil {
+  animation: bas-cinematic-veil 2180ms cubic-bezier(.4,0,.2,1) both;
+}
+
+@keyframes bas-cinematic-veil {
+  0% { opacity: 0; filter: brightness(1); }
+  16% { opacity: .90; }
+  30%, 43% { opacity: 1; filter: brightness(.92); }
+  58% { opacity: .68; filter: brightness(1.04); }
+  76% { opacity: .20; }
+  100% { opacity: 0; filter: brightness(1); }
+}
+
+.bas-cinematic-entry-bloom {
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: min(118vw, 1680px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%,-50%) scale(.10);
+  background:
+    radial-gradient(circle, rgba(255,248,220,.94) 0%, rgba(242,211,125,.58) 8%, rgba(190,149,55,.20) 23%, rgba(145,25,35,.11) 43%, transparent 69%);
+  filter: blur(6px);
+  mix-blend-mode: screen;
+  will-change: opacity, transform, filter;
+}
+
+.bas-cinematic-entry-stage.is-running .bas-cinematic-entry-bloom {
+  animation: bas-cinematic-bloom 1680ms cubic-bezier(.16,1,.3,1) 250ms both;
+}
+
+@keyframes bas-cinematic-bloom {
+  0%, 10% { opacity: 0; transform: translate(-50%,-50%) scale(.10); filter: blur(20px); }
+  35% { opacity: .32; transform: translate(-50%,-50%) scale(.42); filter: blur(12px); }
+  58% { opacity: .96; transform: translate(-50%,-50%) scale(1.03); filter: blur(3px); }
+  76% { opacity: .28; transform: translate(-50%,-50%) scale(1.45); filter: blur(16px); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.78); filter: blur(30px); }
+}
+
+.bas-cinematic-entry-sweep {
+  top: -40%;
+  left: -72%;
+  z-index: 4;
+  width: 34%;
+  height: 185%;
+  opacity: 0;
+  transform: rotate(13deg) translate3d(-20vw,0,0);
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.06) 16%, rgba(255,242,191,.86) 49%, rgba(227,188,97,.22) 68%, transparent 100%);
+  filter: blur(12px);
+  box-shadow: 0 0 72px rgba(227,188,97,.28);
+  mix-blend-mode: screen;
+  will-change: opacity, transform;
+}
+
+.bas-cinematic-entry-stage.is-running .bas-cinematic-entry-sweep {
+  animation: bas-cinematic-sweep 1180ms cubic-bezier(.55,0,.22,1) 360ms both;
+}
+
+@keyframes bas-cinematic-sweep {
+  0% { opacity: 0; transform: rotate(13deg) translate3d(-24vw,0,0); }
+  18% { opacity: .42; }
+  48% { opacity: .92; }
+  82% { opacity: .30; }
+  100% { opacity: 0; transform: rotate(13deg) translate3d(460vw,0,0); }
+}
+
+.bas-cinematic-entry-line {
+  top: 50%;
+  left: 50%;
+  z-index: 5;
+  width: min(86vw, 1280px);
+  height: 1px;
+  opacity: 0;
+  transform: translate(-50%,-50%) scaleX(.08);
+  background: linear-gradient(90deg, transparent, rgba(227,188,97,.38), #fff3bd, rgba(227,188,97,.38), transparent);
+  box-shadow: 0 0 14px rgba(255,235,170,.74), 0 0 52px rgba(190,149,55,.42);
+  transform-origin: center;
+}
+
+.bas-cinematic-entry-stage.is-running .bas-cinematic-entry-line {
+  animation: bas-cinematic-line 1050ms cubic-bezier(.16,1,.3,1) 420ms both;
+}
+
+@keyframes bas-cinematic-line {
+  0% { opacity: 0; transform: translate(-50%,-50%) scaleX(.08); }
+  38% { opacity: 1; transform: translate(-50%,-50%) scaleX(1); }
+  72% { opacity: .30; transform: translate(-50%,-50%) scaleX(.72); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scaleX(.18); }
+}
+
+.bas-cinematic-entry-frame {
+  inset: 18px;
+  z-index: 6;
+  border: 1px solid rgba(227,188,97,.22);
+  border-radius: 34px;
+  opacity: 0;
+  transform: scale(.988);
+}
+
+.bas-cinematic-entry-stage.is-running .bas-cinematic-entry-frame {
+  animation: bas-cinematic-frame 1500ms cubic-bezier(.16,1,.3,1) 160ms both;
+}
+
+@keyframes bas-cinematic-frame {
+  0% { opacity: 0; transform: scale(.985); }
+  34%, 58% { opacity: .68; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.012); }
+}
+
+.bas-cinematic-entry-grain {
+  inset: 0;
+  z-index: 7;
+  opacity: 0;
+  background-image: radial-gradient(rgba(255,255,255,.30) .45px, transparent .55px);
+  background-size: 4px 4px;
+  mix-blend-mode: soft-light;
+}
+
+.bas-cinematic-entry-stage.is-running .bas-cinematic-entry-grain {
+  animation: bas-cinematic-grain 2050ms ease both;
+}
+
+@keyframes bas-cinematic-grain {
+  0%, 100% { opacity: 0; }
+  26%, 66% { opacity: .16; }
+}
+
+/* Hold the final layout in place but invisible beneath the exposure. */
+html.bas-website-context body.bas-cinematic-entry-active:not(.bas-cinematic-home-reveal) > nav > div > a[href="/"],
+html.bas-website-context body.bas-cinematic-entry-active:not(.bas-cinematic-home-reveal) > nav > div > div,
+html.bas-website-context body.bas-cinematic-entry-active:not(.bas-cinematic-home-reveal) .bas-website-content {
+  opacity: 0 !important;
+  filter: blur(18px) saturate(.78) !important;
+  transform: translate3d(0,28px,0) scale(.972) !important;
+  pointer-events: none !important;
+}
+
+html.bas-website-context body.bas-cinematic-entry-active:not(.bas-cinematic-home-reveal) > nav::before {
+  opacity: 0 !important;
+}
+
+/* Home resolves in deliberate layers after the light sweep. */
+html.bas-website-context body.bas-cinematic-home-reveal > nav::before {
+  opacity: 1 !important;
+  transition: opacity 720ms ease 90ms !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal > nav > div > a[href="/"] {
+  animation: bas-cinematic-nav-arrive 800ms cubic-bezier(.16,1,.3,1) 70ms both !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal > nav > div > div:nth-of-type(1) {
+  animation: bas-cinematic-nav-arrive 850ms cubic-bezier(.16,1,.3,1) 190ms both !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal > nav > div > div:nth-of-type(2) {
+  animation: bas-cinematic-nav-arrive 850ms cubic-bezier(.16,1,.3,1) 300ms both !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal .bas-website-content {
+  animation: bas-cinematic-surface-arrive 1080ms cubic-bezier(.16,1,.3,1) 220ms both !important;
+  pointer-events: auto !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal .bas-website-content > *:nth-child(1) {
+  animation: bas-cinematic-section-arrive 980ms cubic-bezier(.16,1,.3,1) 310ms both !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal .bas-website-content > *:nth-child(2) {
+  animation: bas-cinematic-section-arrive 980ms cubic-bezier(.16,1,.3,1) 420ms both !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal .bas-website-content > *:nth-child(3) {
+  animation: bas-cinematic-section-arrive 980ms cubic-bezier(.16,1,.3,1) 530ms both !important;
+}
+
+html.bas-website-context body.bas-cinematic-home-reveal .bas-website-content > *:nth-child(n+4) {
+  animation: bas-cinematic-section-arrive 980ms cubic-bezier(.16,1,.3,1) 620ms both !important;
+}
+
+@keyframes bas-cinematic-nav-arrive {
+  0% { opacity: 0; filter: blur(13px); transform: translate3d(0,-20px,0) scale(.975); }
+  58% { opacity: .88; filter: blur(2px); }
+  100% { opacity: 1; filter: blur(0); transform: translate3d(0,0,0) scale(1); }
+}
+
+@keyframes bas-cinematic-surface-arrive {
+  0% { opacity: 0; filter: blur(20px) saturate(.76); transform: translate3d(0,38px,0) scale(.965); }
+  50% { opacity: .74; filter: blur(6px) saturate(.94); }
+  100% { opacity: 1; filter: blur(0) saturate(1); transform: translate3d(0,0,0) scale(1); }
+}
+
+@keyframes bas-cinematic-section-arrive {
+  0% { opacity: 0; filter: blur(12px); transform: translate3d(0,30px,0) scale(.982); }
+  100% { opacity: 1; filter: blur(0); transform: translate3d(0,0,0) scale(1); }
+}
+
+html.bas-website-context body.bas-cinematic-home-settled > nav,
+html.bas-website-context body.bas-cinematic-home-settled .bas-website-content {
+  pointer-events: auto !important;
+}
+
+@media (max-width: 760px) {
+  .bas-cinematic-entry-frame {
+    inset: 10px;
+    border-radius: 25px;
+  }
+
+  .bas-cinematic-entry-sweep {
+    width: 54%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bas-cinematic-entry-stage.is-running .bas-cinematic-entry-veil {
+    animation: bas-cinematic-reduced-fade 220ms ease both !important;
+  }
+
+  .bas-cinematic-entry-bloom,
+  .bas-cinematic-entry-sweep,
+  .bas-cinematic-entry-line,
+  .bas-cinematic-entry-frame,
+  .bas-cinematic-entry-grain {
+    display: none !important;
+  }
+
+  html.bas-website-context body.bas-cinematic-home-reveal > nav > div > a[href="/"],
+  html.bas-website-context body.bas-cinematic-home-reveal > nav > div > div,
+  html.bas-website-context body.bas-cinematic-home-reveal .bas-website-content,
+  html.bas-website-context body.bas-cinematic-home-reveal .bas-website-content > * {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
+
+@keyframes bas-cinematic-reduced-fade {
+  from { opacity: .82; }
+  to { opacity: 0; }
+}
