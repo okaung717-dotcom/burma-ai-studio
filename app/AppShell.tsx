@@ -19,10 +19,10 @@ import "./website-intro-video-sanitizer.css";
 import "./website-intro-mm-headline-fix.css";
 import "./website-intro-brand-theme-fix.css";
 import "./website-chat-route-fixes.css";
+import "./website-navbar-utility-controls.css";
 import Navbar from "./Navbar";
-import WebsiteStoriesNav from "./WebsiteStoriesNav";
+import WebsiteNavbarStaticBridge from "./WebsiteNavbarStaticBridge";
 import WebsitePlansBridge from "./WebsitePlansBridge";
-import WebsiteChatNav from "./WebsiteChatNav";
 import WebsiteIntroGate from "./WebsiteIntroGate";
 import WebsiteIntroVideoSanitizer from "./WebsiteIntroVideoSanitizer";
 import WebsiteLogoutRedirect from "./WebsiteLogoutRedirect";
@@ -34,8 +34,6 @@ import PrivacyConsent from "./PrivacyConsent";
 import ConsentAwareAnalytics from "./ConsentAwareAnalytics";
 import LegalQuickLinks from "./LegalQuickLinks";
 import WebsiteNavbarProfile from "./WebsiteNavbarProfile";
-import WebsiteProfileSingleClickGuard from "./WebsiteProfileSingleClickGuard";
-import WebsiteChatRouteFixes from "./WebsiteChatRouteFixes";
 
 function shouldShowAppOnlyParts() {
   if (typeof window === "undefined") return false;
@@ -62,7 +60,7 @@ function AppOnly({ children }: { children: ReactNode }) {
   useEffect(() => {
     const check = () => setEnabled(shouldShowAppOnlyParts());
     check();
-    window.addEventListener("resize", check);
+    window.addEventListener("resize", check, { passive: true });
     return () => window.removeEventListener("resize", check);
   }, []);
 
@@ -95,12 +93,20 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname() || "/";
   const isAdminArea = pathname.startsWith("/admin6996") || pathname.startsWith("/admin");
   const isLegalArea = LEGAL_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  const isChatArea = pathname === "/chat" || pathname.startsWith("/chat/");
   const routeClass = isAdminArea ? "bas-route-admin" : getWebsiteRouteClass(pathname, isLegalArea);
 
   useEffect(() => {
     document.body.classList.toggle("bas-admin-route", isAdminArea);
-    return () => document.body.classList.remove("bas-admin-route");
-  }, [isAdminArea]);
+    document.body.classList.toggle("bas-chat-viewport-lock", !isAdminArea && isChatArea);
+
+    if (!isAdminArea && isChatArea) window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+    return () => {
+      document.body.classList.remove("bas-admin-route");
+      document.body.classList.remove("bas-chat-viewport-lock");
+    };
+  }, [isAdminArea, isChatArea]);
 
   return (
     <>
@@ -109,11 +115,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
       {!isAdminArea && <WebsiteIntroVideoSanitizer />}
       {!isAdminArea && <WebsiteLogoutRedirect />}
       {!isAdminArea && <Navbar />}
-      {!isAdminArea && <WebsiteChatNav />}
-      {!isAdminArea && <WebsiteStoriesNav />}
+      {!isAdminArea && <WebsiteNavbarStaticBridge />}
       {!isAdminArea && <WebsitePlansBridge />}
-      {!isAdminArea && <WebsiteChatRouteFixes />}
-      {!isAdminArea && <WebsiteProfileSingleClickGuard />}
       {!isAdminArea && <WebsiteNavbarProfile />}
       <main className={`bas-website-content ${routeClass} w-full flex-grow`}>
         {children}
