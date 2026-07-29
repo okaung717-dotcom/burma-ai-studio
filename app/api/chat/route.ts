@@ -2,9 +2,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 type ChatMessage = { role?: "assistant" | "user"; content?: string };
+type ChatRequest = { messages?: unknown; account?: unknown };
 type GeminiData = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
-
 type GeminiContent = { role: "model" | "user"; parts: Array<{ text: string }> };
+type ReplyLanguage = "English" | "Burmese";
 
 const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.5-flash-lite"];
 const CONTACT = "Email: okaung717@gmail.com | Phone: 09671010011 | Telegram/Viber: +95 9 671 010 011";
@@ -60,6 +61,10 @@ function hasMyanmar(text: string) {
   return /[\u1000-\u109F]/.test(text);
 }
 
+function countMyanmarCharacters(text: string) {
+  return (text.match(/[\u1000-\u109F]/g) || []).length;
+}
+
 function hasAny(text: string, words: string[]) {
   const lower = text.toLowerCase();
   return words.some((word) => lower.includes(word));
@@ -69,6 +74,27 @@ function isMessage(value: unknown): value is ChatMessage {
   if (!value || typeof value !== "object") return false;
   const message = value as ChatMessage;
   return (message.role === "assistant" || message.role === "user") && typeof message.content === "string";
+}
+
+function getReplyLanguage(text: string): ReplyLanguage {
+  return hasMyanmar(text) ? "Burmese" : "English";
+}
+
+function getWebsiteLanguageDirective(language: ReplyLanguage) {
+  if (language === "Burmese") {
+    return `MANDATORY WEBSITE CHAT LANGUAGE FOR THIS TURN: BURMESE.
+Determine the reply language only from the latest user message, not from the interface language or older conversation messages.
+The latest user message contains Burmese, so answer in natural Burmese. English product names and technical terms may remain in English where useful.`;
+  }
+
+  return `MANDATORY WEBSITE CHAT LANGUAGE FOR THIS TURN: ENGLISH ONLY.
+Determine the reply language only from the latest user message, not from the interface language or older conversation messages.
+The latest user message is English-only, so the entire answer must be in natural English. Do not include Burmese script, even if earlier messages were Burmese.`;
+}
+
+function answerMatchesLanguage(answer: string, language: ReplyLanguage) {
+  const myanmarCount = countMyanmarCharacters(answer);
+  return language === "Burmese" ? myanmarCount > 0 : myanmarCount <= 2;
 }
 
 function fallback(text: string) {
@@ -112,7 +138,8 @@ function fallback(text: string) {
 async function callGemini(
   model: string,
   apiKey: string,
-  contents: Array<{ role: string; parts: Array<{ text: string }> }>
+  contents: GeminiContent[],
+  systemText: string
 ) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12000);
@@ -128,7 +155,7 @@ async function callGemini(
         },
         signal: controller.signal,
         body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_TEXT }] },
+          systemInstruction: { parts: [{ text: systemText }] },
           contents,
           generationConfig: {
             temperature: 0.86,
@@ -154,7 +181,7 @@ async function callGemini(
 }
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => null)) as { messages?: unknown } | null;
+  const body = (await request.json().catch(() => null)) as ChatRequest | null;
   const messages = Array.isArray(body?.messages)
     ? body.messages.filter(isMessage).slice(-12)
     : [];
@@ -166,20 +193,39 @@ export async function POST(request: Request) {
     return Response.json({ reply: "Please send a message first." }, { status: 400 });
   }
 
+  const isWebsiteChat = Boolean(body && Object.prototype.hasOwnProperty.call(body, "account"));
+  const replyLanguage = getReplyLanguage(question);
+  const languageDirective = isWebsiteChat ? getWebsiteLanguageDirective(replyLanguage) : "";
+  const systemText = languageDirective ? `${SYSTEM_TEXT}\n\n${languageDirective}` : SYSTEM_TEXT;
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return Response.json({ reply: fallback(question), source: "fallback_no_key" });
   }
 
-  const contents = messages.map((message) => ({
+  const contents: GeminiContent[] = messages.map((message) => ({
     role: message.role === "assistant" ? "model" : "user",
     parts: [{ text: message.content || "" }],
   }));
 
   for (const model of MODELS) {
-    const answer = await callGemini(model, apiKey, contents);
-    if (answer) {
+    const answer = await callGemini(model, apiKey, contents, systemText);
+    if (answer && (!isWebsiteChat || answerMatchesLanguage(answer, replyLanguage))) {
       return Response.json({ reply: answer, source: "gemini", model });
+    }
+
+    if (isWebsiteChat) {
+      const correctionText = `${SYSTEM_TEXT}\n\n${languageDirective}\nThis is a language-correction attempt. Answer the latest question directly and obey the mandatory language rule without exception.`;
+      const correctedAnswer = await callGemini(
+        model,
+        apiKey,
+        [{ role: "user", parts: [{ text: question }] }],
+        correctionText
+      );
+
+      if (correctedAnswer && answerMatchesLanguage(correctedAnswer, replyLanguage)) {
+        return Response.json({ reply: correctedAnswer, source: "gemini_language_corrected", model });
+      }
     }
   }
 
