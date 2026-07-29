@@ -1,0 +1,640 @@
+/* Burma AI Studio — phone/tablet website theme correction and profile sheet.
+   Desktop (1024px+) and app/PWA/native surfaces are intentionally excluded. */
+
+@media (max-width: 1023px) {
+  html.bas-website-context body:not(.bas-app-mode) {
+    --bas-mobile-red: #911923;
+    --bas-mobile-red-strong: #b82034;
+    --bas-mobile-gold: #be9537;
+    --bas-mobile-gold-bright: #e3bc61;
+    --bas-mobile-cream: #fff9f0;
+    --bas-mobile-cream-strong: #fffdf8;
+    --bas-mobile-ink: #241317;
+    --bas-mobile-muted: #79695d;
+    --bas-mobile-line: rgba(145, 25, 35, 0.15);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) {
+    --bas-mobile-cream: #0d0708;
+    --bas-mobile-cream-strong: #160b0d;
+    --bas-mobile-ink: #fff7eb;
+    --bas-mobile-muted: #cbb8aa;
+    --bas-mobile-line: rgba(227, 188, 97, 0.16);
+  }
+
+  /* The chat workspace owns the compact viewport. Legal links remain available
+     on their routes and on desktop, but never consume phone/tablet chat space. */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat + footer {
+    display: none !important;
+  }
+
+  /* Navbar and APK control now follow the same red/cream and black/gold system. */
+  html.bas-website-context body:not(.bas-app-mode) > nav {
+    border-bottom: 1px solid var(--bas-mobile-line) !important;
+    background: rgba(255, 253, 248, 0.96) !important;
+    box-shadow: 0 12px 34px rgba(61, 24, 29, 0.08) !important;
+    backdrop-filter: blur(22px) saturate(145%);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav {
+    background: rgba(10, 6, 8, 0.97) !important;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.34) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav .bas-install-button {
+    border-color: rgba(145, 25, 35, 0.24) !important;
+    background: linear-gradient(145deg, #fffdf8, #fff4e8) !important;
+    color: var(--bas-mobile-red) !important;
+    box-shadow: 0 10px 24px rgba(73, 28, 33, 0.10) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav .bas-install-button {
+    border-color: rgba(227, 188, 97, 0.30) !important;
+    background: linear-gradient(145deg, #1b0d10, #100708) !important;
+    color: #fff7eb !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.30) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav button[class*="md:hidden"] {
+    border-color: rgba(145, 25, 35, 0.18) !important;
+    background: rgba(255, 249, 240, 0.92) !important;
+    color: var(--bas-mobile-red) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav button[class*="md:hidden"] {
+    border-color: rgba(227, 188, 97, 0.22) !important;
+    background: rgba(27, 13, 16, 0.92) !important;
+    color: var(--bas-mobile-gold-bright) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] {
+    border-color: var(--bas-mobile-line) !important;
+    background:
+      radial-gradient(circle at 88% 0%, rgba(190, 149, 55, 0.10), transparent 18rem),
+      rgba(255, 253, 248, 0.985) !important;
+    color: var(--bas-mobile-ink) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] {
+    background:
+      radial-gradient(circle at 88% 0%, rgba(145, 25, 35, 0.20), transparent 19rem),
+      rgba(13, 7, 8, 0.985) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:first-child a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    border-radius: 14px;
+    padding: 0 0.65rem;
+    color: var(--bas-mobile-ink) !important;
+    letter-spacing: 0 !important;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:first-child a:hover,
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:first-child a:focus-visible,
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:first-child a[aria-current="page"] {
+    background: rgba(145, 25, 35, 0.075);
+    color: var(--bas-mobile-red) !important;
+    transform: translateX(2px);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:first-child a:hover,
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:first-child a:focus-visible,
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:first-child a[aria-current="page"] {
+    background: rgba(227, 188, 97, 0.085);
+    color: var(--bas-mobile-gold-bright) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:last-child {
+    border-color: var(--bas-mobile-line) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:last-child > button {
+    border-radius: 14px;
+    padding: 0 0.65rem;
+    color: var(--bas-mobile-ink) !important;
+    letter-spacing: 0 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:last-child > button svg {
+    color: var(--bas-mobile-red) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] > div:last-child > button svg {
+    color: var(--bas-mobile-gold-bright) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav .bas-mobile-profile-trigger {
+    display: inline-flex !important;
+    width: 100%;
+    min-height: 54px !important;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 17px !important;
+    background: linear-gradient(135deg, #bd293b 0%, #a51d2e 46%, #911923 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 15px 34px rgba(145, 25, 35, 0.25) !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0 !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav .bas-mobile-profile-trigger {
+    border-color: rgba(255, 255, 255, 0.10) !important;
+    background: linear-gradient(135deg, #e3bc61 0%, #c99a37 100%) !important;
+    color: #180b0e !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28) !important;
+  }
+
+  /* Compact chat colors are explicitly synchronized with the website theme. */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-page {
+    color: var(--bas-mobile-ink) !important;
+    background:
+      radial-gradient(circle at 13% 6%, rgba(190, 149, 55, 0.09), transparent 24rem),
+      radial-gradient(circle at 92% 11%, rgba(145, 25, 35, 0.07), transparent 25rem),
+      linear-gradient(180deg, #fff9f0 0%, #f8eee4 100%) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-page {
+    background:
+      radial-gradient(circle at 13% 6%, rgba(227, 188, 97, 0.07), transparent 24rem),
+      radial-gradient(circle at 92% 11%, rgba(145, 25, 35, 0.17), transparent 25rem),
+      linear-gradient(180deg, #0d0708 0%, #070405 100%) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-shell,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-workspace,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-header,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-composer-area {
+    border-color: rgba(145, 25, 35, 0.14) !important;
+    background-color: rgba(255, 253, 248, 0.97) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-shell,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-workspace,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-header,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-composer-area {
+    border-color: rgba(227, 188, 97, 0.14) !important;
+    background-color: rgba(22, 11, 13, 0.97) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-messages {
+    background-color: #f8efe6 !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-messages {
+    background-color: #0f0709 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-input-wrap,
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-round-button {
+    border-color: rgba(145, 25, 35, 0.18) !important;
+    background: #fffaf2 !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-input-wrap,
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-round-button {
+    border-color: rgba(227, 188, 97, 0.20) !important;
+    background: #100708 !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-input-wrap:focus-within {
+    border-color: rgba(227, 188, 97, 0.55) !important;
+    box-shadow: 0 0 0 4px rgba(227, 188, 97, 0.08) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-send-button {
+    background: linear-gradient(145deg, #b82034, #861521) !important;
+    color: #fff !important;
+    box-shadow: 0 9px 23px rgba(145, 25, 35, 0.25) !important;
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) .bas-route-chat .bas-chat-send-button:not(:disabled) {
+    background: linear-gradient(145deg, #e3bc61, #bd8f30) !important;
+    color: #180b0e !important;
+    box-shadow: 0 9px 24px rgba(0, 0, 0, 0.28) !important;
+  }
+
+  body.bas-mobile-profile-open {
+    overflow: hidden !important;
+  }
+
+  .bas-mobile-profile-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 21000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: clamp(10px, 2vw, 18px);
+  }
+
+  .bas-mobile-profile-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(12, 5, 7, 0.60);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    animation: bas-mobile-profile-fade 180ms ease both;
+  }
+
+  .bas-mobile-profile-panel {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 680px);
+    max-height: min(88dvh, 780px);
+    overflow: hidden;
+    border: 1px solid rgba(145, 25, 35, 0.20);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(190, 149, 55, 0.11), transparent 18rem),
+      #fffaf2;
+    color: #241317;
+    box-shadow: 0 30px 100px rgba(24, 8, 12, 0.38);
+    animation: bas-mobile-profile-rise 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  html.dark .bas-mobile-profile-panel {
+    border-color: rgba(227, 188, 97, 0.20);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(145, 25, 35, 0.20), transparent 19rem),
+      #14090b;
+    color: #fff7eb;
+  }
+
+  .bas-mobile-profile-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 78px;
+    border-bottom: 1px solid rgba(145, 25, 35, 0.13);
+    padding: 14px 16px;
+    background: rgba(255, 253, 248, 0.74);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  html.dark .bas-mobile-profile-header {
+    border-color: rgba(227, 188, 97, 0.13);
+    background: rgba(20, 9, 11, 0.78);
+  }
+
+  .bas-mobile-profile-avatar {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #e3bc61, #be9537);
+    color: #241317;
+    box-shadow: 0 9px 24px rgba(190, 149, 55, 0.25);
+    font-size: 13px;
+    font-weight: 950;
+  }
+
+  .bas-mobile-profile-header p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 950;
+    letter-spacing: -0.025em;
+  }
+
+  .bas-mobile-profile-header span {
+    display: block;
+    margin-top: 3px;
+    color: #806e61;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  html.dark .bas-mobile-profile-header span {
+    color: #c9b5a5;
+  }
+
+  .bas-mobile-profile-header > button {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(145, 25, 35, 0.13);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.58);
+    color: #911923;
+  }
+
+  html.dark .bas-mobile-profile-header > button {
+    border-color: rgba(227, 188, 97, 0.15);
+    background: rgba(255, 255, 255, 0.045);
+    color: #e3bc61;
+  }
+
+  .bas-mobile-profile-scroll {
+    max-height: calc(min(88dvh, 780px) - 78px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 16px 16px calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .bas-mobile-profile-toast {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(145, 25, 35, 0.14);
+    border-radius: 13px;
+    padding: 10px 12px;
+    background: rgba(145, 25, 35, 0.07);
+    color: #8c1824;
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  html.dark .bas-mobile-profile-toast {
+    border-color: rgba(227, 188, 97, 0.16);
+    background: rgba(227, 188, 97, 0.08);
+    color: #f0d17e;
+  }
+
+  .bas-mobile-profile-form {
+    display: grid;
+    gap: 12px;
+  }
+
+  .bas-mobile-profile-form label > span,
+  .bas-mobile-profile-section > p {
+    display: block;
+    margin: 0 0 7px;
+    color: #7d6555;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  html.dark .bas-mobile-profile-form label > span,
+  html.dark .bas-mobile-profile-section > p {
+    color: #d6bd98;
+  }
+
+  .bas-mobile-profile-form label > div {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid rgba(145, 25, 35, 0.15);
+    border-radius: 15px;
+    padding: 0 13px;
+    background: rgba(255, 255, 255, 0.68);
+    color: #a37935;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  }
+
+  html.dark .bas-mobile-profile-form label > div {
+    border-color: rgba(227, 188, 97, 0.15);
+    background: rgba(255, 255, 255, 0.045);
+    color: #e3bc61;
+  }
+
+  .bas-mobile-profile-form label > div:focus-within {
+    border-color: rgba(145, 25, 35, 0.48);
+    box-shadow: 0 0 0 4px rgba(145, 25, 35, 0.07);
+    background: #fff;
+  }
+
+  html.dark .bas-mobile-profile-form label > div:focus-within {
+    border-color: rgba(227, 188, 97, 0.48);
+    box-shadow: 0 0 0 4px rgba(227, 188, 97, 0.07);
+    background: rgba(255, 255, 255, 0.065);
+  }
+
+  .bas-mobile-profile-form input {
+    min-width: 0;
+    flex: 1 1 auto;
+    border: 0;
+    background: transparent;
+    color: #241317;
+    outline: 0;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  html.dark .bas-mobile-profile-form input {
+    color: #fff7eb;
+  }
+
+  .bas-mobile-profile-save {
+    display: inline-flex;
+    min-height: 50px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 15px;
+    background: linear-gradient(135deg, #b82034, #911923);
+    color: #fff;
+    box-shadow: 0 14px 32px rgba(145, 25, 35, 0.23);
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  html.dark .bas-mobile-profile-save {
+    border-color: rgba(255, 255, 255, 0.09);
+    background: linear-gradient(135deg, #e3bc61, #bd8f30);
+    color: #180b0e;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  .bas-mobile-profile-save:disabled {
+    opacity: 0.62;
+  }
+
+  .bas-mobile-profile-section {
+    margin-top: 18px;
+    border-top: 1px solid rgba(145, 25, 35, 0.12);
+    padding-top: 16px;
+  }
+
+  html.dark .bas-mobile-profile-section {
+    border-color: rgba(227, 188, 97, 0.12);
+  }
+
+  .bas-mobile-profile-two-column {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .bas-mobile-profile-two-column > button {
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(145, 25, 35, 0.13);
+    border-radius: 16px;
+    padding: 0 13px;
+    background: rgba(255, 255, 255, 0.58);
+    color: #911923;
+    text-align: left;
+  }
+
+  .bas-mobile-profile-two-column > button span {
+    color: #342124;
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  html.dark .bas-mobile-profile-two-column > button {
+    border-color: rgba(227, 188, 97, 0.14);
+    background: rgba(255, 255, 255, 0.045);
+    color: #e3bc61;
+  }
+
+  html.dark .bas-mobile-profile-two-column > button span {
+    color: #fff7eb;
+  }
+
+  .bas-mobile-profile-links {
+    display: grid;
+    gap: 9px;
+  }
+
+  .bas-mobile-profile-links > button {
+    display: flex;
+    width: 100%;
+    min-height: 68px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid rgba(145, 25, 35, 0.13);
+    border-radius: 17px;
+    padding: 11px 13px;
+    background: rgba(255, 255, 255, 0.55);
+    color: #911923;
+    text-align: left;
+  }
+
+  html.dark .bas-mobile-profile-links > button {
+    border-color: rgba(227, 188, 97, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: #e3bc61;
+  }
+
+  .bas-mobile-profile-links > button > span {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 10px;
+    align-items: center;
+  }
+
+  .bas-mobile-profile-links > button > span svg {
+    grid-row: 1 / 3;
+  }
+
+  .bas-mobile-profile-links b,
+  .bas-mobile-profile-links small {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bas-mobile-profile-links b {
+    color: #2f1c20;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .bas-mobile-profile-links small {
+    margin-top: 3px;
+    color: #806d60;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  html.dark .bas-mobile-profile-links b {
+    color: #fff7eb;
+  }
+
+  html.dark .bas-mobile-profile-links small {
+    color: #c9b5a5;
+  }
+
+  .bas-mobile-profile-logout {
+    display: inline-flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 16px;
+    border: 1px solid rgba(145, 25, 35, 0.16);
+    border-radius: 15px;
+    background: rgba(145, 25, 35, 0.055);
+    color: #a31c2a;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  html.dark .bas-mobile-profile-logout {
+    border-color: rgba(255, 130, 130, 0.18);
+    background: rgba(145, 25, 35, 0.12);
+    color: #ffc3c3;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bas-mobile-profile-layer {
+    align-items: center;
+    padding: 28px;
+  }
+
+  .bas-mobile-profile-panel {
+    max-height: min(84dvh, 760px);
+    border-radius: 32px;
+  }
+}
+
+@media (max-width: 420px) {
+  .bas-mobile-profile-layer {
+    padding: 8px;
+  }
+
+  .bas-mobile-profile-panel {
+    border-radius: 24px;
+  }
+
+  .bas-mobile-profile-scroll {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+
+  .bas-mobile-profile-two-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@keyframes bas-mobile-profile-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bas-mobile-profile-rise {
+  from { opacity: 0; transform: translateY(28px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bas-mobile-profile-backdrop,
+  .bas-mobile-profile-panel {
+    animation: none !important;
+  }
+}
