@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 
-const ACTIVE_CLASS = "bas-cinematic-entry-active";
-const REVEAL_CLASS = "bas-cinematic-home-reveal";
-const SETTLED_CLASS = "bas-cinematic-home-settled";
+const ACTIVE_CLASS = "bas-depth-portal-active";
+const REVEAL_CLASS = "bas-depth-portal-reveal";
+const SETTLED_CLASS = "bas-depth-portal-settled";
 
 export default function WebsiteCinematicEntryTransition() {
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function WebsiteCinematicEntryTransition() {
       stage = null;
       running = false;
       body.classList.remove(ACTIVE_CLASS, REVEAL_CLASS, SETTLED_CLASS);
-      document.querySelectorAll("[data-bas-cinematic-entry-stage]").forEach((node) => node.remove());
+      document.querySelectorAll("[data-bas-depth-portal-stage]").forEach((node) => node.remove());
     };
 
     const later = (callback: () => void, delay: number) => {
@@ -42,32 +42,39 @@ export default function WebsiteCinematicEntryTransition() {
       }
 
       running = true;
-      document.querySelectorAll("[data-bas-cinematic-entry-stage]").forEach((node) => node.remove());
+      document.querySelectorAll("[data-bas-depth-portal-stage]").forEach((node) => node.remove());
+
+      // Remove state from every retired transition so only the current choreography can own the handoff.
       body.classList.remove(
         "bas-logo-flight-active",
         "bas-logo-flight-arrived",
-        "bas-home-elements-reveal"
+        "bas-home-elements-reveal",
+        "bas-cinematic-entry-active",
+        "bas-cinematic-home-reveal",
+        "bas-cinematic-home-settled"
       );
       body.classList.add(ACTIVE_CLASS);
 
       stage = document.createElement("div");
-      stage.className = "bas-cinematic-entry-stage";
-      stage.dataset.basCinematicEntryStage = "true";
+      stage.className = "bas-depth-portal-stage";
+      stage.dataset.basDepthPortalStage = "true";
       stage.setAttribute("aria-hidden", "true");
       stage.innerHTML = `
-        <span class="bas-cinematic-entry-veil"></span>
-        <span class="bas-cinematic-entry-bloom"></span>
-        <span class="bas-cinematic-entry-sweep"></span>
-        <span class="bas-cinematic-entry-line"></span>
-        <span class="bas-cinematic-entry-frame"></span>
-        <span class="bas-cinematic-entry-grain"></span>
+        <span class="bas-depth-portal-field"></span>
+        <span class="bas-depth-portal-rays"></span>
+        <span class="bas-depth-portal-aperture"></span>
+        <span class="bas-depth-portal-ring is-outer"></span>
+        <span class="bas-depth-portal-ring is-inner"></span>
+        <span class="bas-depth-portal-core"></span>
+        <span class="bas-depth-portal-vignette"></span>
+        <span class="bas-depth-portal-grain"></span>
       `;
       body.appendChild(stage);
 
       const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
 
       window.requestAnimationFrame(() => {
-        stage?.classList.add("is-running");
+        window.requestAnimationFrame(() => stage?.classList.add("is-running"));
       });
 
       if (reducedMotion) {
@@ -77,16 +84,14 @@ export default function WebsiteCinematicEntryTransition() {
         return;
       }
 
-      later(() => body.classList.add(REVEAL_CLASS), 710);
-      later(() => body.classList.add(SETTLED_CLASS), 1760);
-      later(() => stage?.remove(), 2180);
-      later(clearTransition, 2280);
+      later(() => body.classList.add(REVEAL_CLASS), 590);
+      later(() => body.classList.add(SETTLED_CLASS), 1570);
+      later(() => stage?.remove(), 2080);
+      later(clearTransition, 2240);
     };
 
     const observer = new MutationObserver(() => {
-      if (body.classList.contains("bas-intro-transitioning")) {
-        launch();
-      }
+      if (body.classList.contains("bas-intro-transitioning")) launch();
     });
 
     observer.observe(body, { attributes: true, attributeFilter: ["class"] });
