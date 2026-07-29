@@ -5,7 +5,7 @@ type ChatMessage = { role?: "assistant" | "user"; content?: string };
 type ChatRequest = { messages?: unknown; account?: unknown };
 type GeminiData = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
 type GeminiContent = { role: "model" | "user"; parts: Array<{ text: string }> };
-type ReplyLanguage = "English" | "Burmese";
+type GenerationOptions = { temperature?: number; maxOutputTokens?: number };
 
 const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.5-flash-lite"];
 const CONTACT = "Email: okaung717@gmail.com | Phone: 09671010011 | Telegram/Viber: +95 9 671 010 011";
@@ -14,11 +14,6 @@ const SYSTEM_TEXT = `
 You are Burma AI Studio's official AI assistant.
 Act like a warm, polite, smart human customer-service consultant.
 Do not behave like a fixed FAQ bot. Think about the user's exact message and answer naturally.
-
-Language rules:
-- English-only input means English reply.
-- Burmese input means Burmese reply.
-- Mixed Burmese-English input means Burmese reply.
 
 Conversation behavior:
 - If the user greets you, warmly welcome them to Burma AI Studio. Do not say “ask only website-related questions” during greeting.
@@ -38,7 +33,7 @@ Website and service knowledge:
 - Home: Burma AI Studio is an AI video creation service for brands and businesses. The promise is high-quality and affordable promotional videos powered by advanced AI, with cinematic narratives that help a brand stand out.
 - Get Started: guide users to share their project details or contact the team.
 - Watch Examples: guide users to the Portfolio page.
-- Navigation: Home explains the brand promise, Services explains what can be created, Portfolio shows example videos, Contact gives direct ways to message the team.
+- Navigation: Home explains the brand promise, Services explains what can be created, Portfolio shows example videos, and Chat lets users discuss a project directly.
 - Services: AI presenter videos, cinematic brand commercials, product ads, music promos, hotel ads, restaurant/bar/cafe ads, Reels/TikTok short videos, YouTube Shorts, script ideas, concept direction, voice/dialogue planning, and creative video direction.
 - Portfolio: users can review sample videos and choose a reference style. Ask which sample style they like.
 - Contact: Email, Telegram, Viber, or phone. Use the contact details below.
@@ -46,23 +41,29 @@ Website and service knowledge:
 - Delivery: delivery time depends on project complexity, duration, revisions, and asset readiness. Ask for deadline and scope.
 - Revisions: revisions depend on the agreed package and project scope. Ask what they want to adjust.
 - Project intake: business type, product/service, platform, duration, target audience, reference style, deadline, and whether they need voice/script.
-- Hotel projects: 15-30s cinematic TikTok/Reels video with lobby, room, guest experience, service highlights, location, and booking CTA.
+- Hotel projects: 15–30s cinematic TikTok/Reels video with lobby, room, guest experience, service highlights, location, and booking CTA.
 - Restaurant/bar/cafe projects: night ambience, food/drink close-ups, customer mood, offer, and location/contact CTA.
 - Product/online shop projects: product close-ups, benefit, trust point, offer/price, and order CTA.
 - Music projects: song teaser, artist promo, lyric-style short, or cinematic mood video.
 - Admin monitored: the chatbot is monitored by admin, and manual replies may be sent by the team.
-- Burmese tone: sound like a polite female customer-service assistant. Use Burmese polite endings such as “ရှင့်”, “နော်”, and “ပါ”.
+- When replying in Burmese, sound like a polite female customer-service assistant and use natural polite endings such as “ရှင့်”, “နော်”, and “ပါ”.
 
 Contact:
 ${CONTACT}
 `;
 
+const WEBSITE_LANGUAGE_POLICY = `
+MANDATORY WEBSITE CHAT LANGUAGE POLICY — APPLY ON EVERY TURN:
+- Detect the language of the latest user message itself and reply entirely in that same language.
+- This applies to every natural language and writing system, including English, Burmese, Thai, Chinese, Japanese, Korean, Arabic, Hindi, Spanish, French, German, Russian, and all others.
+- Never choose the reply language from the website interface, account settings, browser locale, or older conversation messages.
+- If the latest message mixes languages, use the dominant language used for the actual request. Keep brand names, product names, URLs, numbers, and necessary technical terms unchanged.
+- Do not translate the user's message into English or Burmese unless the user explicitly asks for a translation.
+- Preserve the user's script and natural regional tone. The answer must feel native and readable in that language.
+`;
+
 function hasMyanmar(text: string) {
   return /[\u1000-\u109F]/.test(text);
-}
-
-function countMyanmarCharacters(text: string) {
-  return (text.match(/[\u1000-\u109F]/g) || []).length;
 }
 
 function hasAny(text: string, words: string[]) {
@@ -76,73 +77,35 @@ function isMessage(value: unknown): value is ChatMessage {
   return (message.role === "assistant" || message.role === "user") && typeof message.content === "string";
 }
 
-function getReplyLanguage(text: string): ReplyLanguage {
-  return hasMyanmar(text) ? "Burmese" : "English";
-}
-
-function getWebsiteLanguageDirective(language: ReplyLanguage) {
-  if (language === "Burmese") {
-    return `MANDATORY WEBSITE CHAT LANGUAGE FOR THIS TURN: BURMESE.
-Determine the reply language only from the latest user message, not from the interface language or older conversation messages.
-The latest user message contains Burmese, so answer in natural Burmese. English product names and technical terms may remain in English where useful.`;
-  }
-
-  return `MANDATORY WEBSITE CHAT LANGUAGE FOR THIS TURN: ENGLISH ONLY.
-Determine the reply language only from the latest user message, not from the interface language or older conversation messages.
-The latest user message is English-only, so the entire answer must be in natural English. Do not include Burmese script, even if earlier messages were Burmese.`;
-}
-
-function answerMatchesLanguage(answer: string, language: ReplyLanguage) {
-  const myanmarCount = countMyanmarCharacters(answer);
-  return language === "Burmese" ? myanmarCount > 0 : myanmarCount <= 2;
-}
-
 function fallback(text: string) {
   const mm = hasMyanmar(text);
 
-  if (hasAny(text, ["what can", "what do", "ဘာလုပ်", "ဘာတွေ", "ကူညီ", "ဘယ်လိုလုပ်", "service"])) {
-    return mm
-      ? "Burma AI Studio မှာ AI presenter video, cinematic ad, product ad, music promo, hotel/restaurant ads, Reels/TikTok short video, script idea, portfolio guidance, quotation နဲ့ delivery/revision အကြောင်းတွေကို ကူညီပေးနိုင်ပါတယ်ရှင့်။\n\nသင့်လုပ်ငန်းအမျိုးအစား၊ တင်မယ့် platform၊ video ကြာချိန်နဲ့လိုချင်တဲ့ style ကိုပြောပြပါနော်။ အကောင်းဆုံး video direction ကိုညှိပေးပါမယ်။"
-      : "Burma AI Studio can help with AI presenter videos, cinematic ads, product ads, music promos, hotel/restaurant ads, Reels/TikTok shorts, script ideas, portfolio guidance, quotation, delivery, and revisions.\n\nTell me your business type, target platform, video duration, and preferred style. I’ll suggest the best direction.";
-  }
-
   if (hasAny(text, ["price", "cost", "how much", "budget", "ဈေး", "စျေး", "ဘယ်လောက်", "quote"])) {
     return mm
-      ? "ဈေးနှုန်းက video ကြာချိန်၊ scene အရေအတွက်၊ voice/dialogue၊ presenter/character၊ realism level၊ deadline နဲ့ revision ပေါ်မူတည်ပါတယ်ရှင့်။ Fixed price မပြောခင် project detail သိရင် ပိုမှန်တဲ့ quote ပေးနိုင်ပါတယ်။\n\nProduct/service, platform, duration, reference style နဲ့ deadline ကိုပို့ပေးပါနော်။ သင့် budget နဲ့ကိုက်အောင် option ညှိပေးပါမယ်။"
-      : "Pricing depends on duration, scene count, voice/dialogue, presenter or character, realism level, deadline, and revisions. A proper quote is more accurate after seeing the project details.\n\nSend your product/service, platform, duration, reference style, and deadline. I’ll suggest an option that fits your budget.";
-  }
-
-  if (hasAny(text, ["portfolio", "sample", "example", "နမူနာ", "လက်ရာ", "ပြခန်း", "watch"])) {
-    return mm
-      ? "နမူနာ video တွေကို Portfolio page မှာကြည့်နိုင်ပါတယ်ရှင့်။ ကြိုက်တဲ့ style တစ်ခုကို reference အဖြစ်ရွေးပေးရင် သင့် project နဲ့ကိုက်အောင် concept ပြန်ညှိပေးနိုင်ပါတယ်။\n\nAI presenter style ကြိုက်လား၊ cinematic product ad style ကြိုက်လား ပြောပြပါနော်။"
-      : "You can check sample videos on the Portfolio page. If you pick a style you like, I can adapt the concept for your project.\n\nDo you prefer AI presenter style or cinematic product-ad style?";
+      ? "ဈေးနှုန်းက video ကြာချိန်၊ scene အရေအတွက်၊ voice/dialogue၊ presenter/character၊ realism level၊ deadline နဲ့ revision ပေါ်မူတည်ပါတယ်ရှင့်။ Product/service, platform, duration, reference style နဲ့ deadline ကိုပို့ပေးပါနော်။"
+      : "Pricing depends on duration, scene count, voice/dialogue, presenter or character, realism level, deadline, and revisions. Send your product/service, platform, duration, reference style, and deadline for an accurate quote.";
   }
 
   if (hasAny(text, ["contact", "phone", "telegram", "viber", "email", "ဆက်သွယ်", "ဖုန်း", "တယ်လီဂရမ်"])) {
     return mm
-      ? `တိုက်ရိုက်ဆက်သွယ်နိုင်ပါတယ်ရှင့် — ${CONTACT}။\n\nProject idea, reference video, duration နဲ့ platform ပို့ပေးရင် video direction နဲ့ quote ကိုပြန်ညှိပေးပါမယ်။`
-      : `You can contact Burma AI Studio directly — ${CONTACT}.\n\nSend your project idea, reference video, duration, and platform, and we’ll suggest the video direction and quote.`;
-  }
-
-  if (hasAny(text, ["hotel", "room", "booking", "resort", "ဟိုတယ်", "အခန်း", "ဧည့်"])) {
-    return mm
-      ? "Hotel ကြော်ငြာအတွက် TikTok/Reels 30s cinematic video ဆိုရင် lobby, room, guest experience, service highlight, location နဲ့ booking CTA ပါတဲ့ structure ကအထိရောက်ဆုံးပါရှင့်။ ပထမ ၃ စက္ကန့်မှာ hotel vibe ကိုဖမ်းနိုင်တဲ့ hook ထည့်သင့်ပါတယ်။\n\nHotel name, location, room type, highlight service နဲ့ reference video ပို့ပေးပါနော်။ 30s concept/script ကိုညှိပေးပါမယ်။"
-      : "For a hotel ad, a 30s cinematic TikTok/Reels video should show the lobby, rooms, guest experience, service highlights, location, and a booking CTA. The first 3 seconds should hook viewers with the hotel vibe.\n\nSend the hotel name, location, room type, key service, and reference video. I’ll suggest a 30s concept/script.";
+      ? `တိုက်ရိုက်ဆက်သွယ်နိုင်ပါတယ်ရှင့် — ${CONTACT}။ Project idea, reference video, duration နဲ့ platform ပို့ပေးရင် ဆက်လက်ညှိပေးပါမယ်။`
+      : `You can contact Burma AI Studio directly — ${CONTACT}. Send your project idea, reference video, duration, and platform, and we’ll guide you from there.`;
   }
 
   return mm
-    ? "မင်္ဂလာပါရှင့်။ Burma AI Studio မှကြိုဆိုပါတယ်။ သင့် brand အတွက် AI video ကြော်ငြာ၊ cinematic ad၊ product ad၊ Reels/TikTok short video၊ script idea နဲ့ portfolio guidance တွေကို ကူညီပေးနိုင်ပါတယ်ရှင့်။\n\nသင့်လုပ်ငန်းအမျိုးအစား၊ product/service၊ platform၊ duration နဲ့လိုချင်တဲ့ style ကိုပြောပြပါနော်။ အကောင်းဆုံး next step ကိုညှိပေးပါမယ်။"
-    : "Welcome to Burma AI Studio. I can help your brand with AI video ads, cinematic ads, product ads, Reels/TikTok shorts, script ideas, and portfolio guidance.\n\nTell me your business type, product/service, platform, duration, and preferred style. I’ll suggest the best next step.";
+    ? "Burma AI Studio မှာ AI presenter video, cinematic ad, product ad, Reels/TikTok short video, script idea နဲ့ creative direction တွေကို ကူညီပေးနိုင်ပါတယ်ရှင့်။ သင့်လုပ်ငန်း၊ platform၊ duration နဲ့လိုချင်တဲ့ style ကိုပြောပြပါနော်။"
+    : "Burma AI Studio can help with AI presenter videos, cinematic ads, product ads, Reels/TikTok shorts, script ideas, and creative direction. Tell me your business, platform, duration, and preferred style.";
 }
 
 async function callGemini(
   model: string,
   apiKey: string,
   contents: GeminiContent[],
-  systemText: string
+  systemText: string,
+  options: GenerationOptions = {}
 ) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12000);
+  const timeout = setTimeout(() => controller.abort(), 14000);
 
   try {
     const response = await fetch(
@@ -158,9 +121,9 @@ async function callGemini(
           systemInstruction: { parts: [{ text: systemText }] },
           contents,
           generationConfig: {
-            temperature: 0.86,
+            temperature: options.temperature ?? 0.82,
             topP: 0.95,
-            maxOutputTokens: 900,
+            maxOutputTokens: options.maxOutputTokens ?? 900,
           },
         }),
       }
@@ -180,6 +143,48 @@ async function callGemini(
   }
 }
 
+function sanitizeLanguageName(value: string) {
+  return value
+    .replace(/[^A-Za-z0-9 ()/.,'’\-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+}
+
+async function detectMessageLanguage(model: string, apiKey: string, question: string) {
+  const detectorSystem = `You are a precise language-identification engine. Identify the dominant natural language used for the actual request in the user's latest message. Return only the language name in English, for example: Thai, Burmese, English, Spanish, Japanese, Arabic, Chinese (Traditional). Do not answer the user's question and do not add punctuation or explanation.`;
+  const detected = await callGemini(
+    model,
+    apiKey,
+    [{ role: "user", parts: [{ text: question }] }],
+    detectorSystem,
+    { temperature: 0, maxOutputTokens: 24 }
+  );
+  return sanitizeLanguageName(detected);
+}
+
+async function verifyLanguageMatch(
+  model: string,
+  apiKey: string,
+  question: string,
+  answer: string
+) {
+  const verifierSystem = `You are a strict language-match validator. Compare the user's message and the assistant answer. The answer passes only when it is written primarily in the same natural language as the user's actual request. Ignore brand names, URLs, numbers, contact details, and unavoidable technical terms. For a mixed-language request, accept the dominant language of the request. Reply with exactly PASS or FAIL.`;
+  const result = await callGemini(
+    model,
+    apiKey,
+    [
+      {
+        role: "user",
+        parts: [{ text: `USER MESSAGE:\n${question}\n\nASSISTANT ANSWER:\n${answer}` }],
+      },
+    ],
+    verifierSystem,
+    { temperature: 0, maxOutputTokens: 8 }
+  );
+  return result.trim().toUpperCase().startsWith("PASS");
+}
+
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as ChatRequest | null;
   const messages = Array.isArray(body?.messages)
@@ -194,11 +199,8 @@ export async function POST(request: Request) {
   }
 
   const isWebsiteChat = Boolean(body && Object.prototype.hasOwnProperty.call(body, "account"));
-  const replyLanguage = getReplyLanguage(question);
-  const languageDirective = isWebsiteChat ? getWebsiteLanguageDirective(replyLanguage) : "";
-  const systemText = languageDirective ? `${SYSTEM_TEXT}\n\n${languageDirective}` : SYSTEM_TEXT;
-
   const apiKey = process.env.GEMINI_API_KEY;
+
   if (!apiKey) {
     return Response.json({ reply: fallback(question), source: "fallback_no_key" });
   }
@@ -209,23 +211,49 @@ export async function POST(request: Request) {
   }));
 
   for (const model of MODELS) {
+    const detectedLanguage = isWebsiteChat
+      ? await detectMessageLanguage(model, apiKey, question)
+      : "";
+
+    const languageDirective = isWebsiteChat
+      ? `${WEBSITE_LANGUAGE_POLICY}\nThe detected language of the latest user request is: ${detectedLanguage || "the same language used in the latest user message"}. Reply only in that language.`
+      : "";
+
+    const systemText = languageDirective
+      ? `${SYSTEM_TEXT}\n\n${languageDirective}`
+      : SYSTEM_TEXT;
+
     const answer = await callGemini(model, apiKey, contents, systemText);
-    if (answer && (!isWebsiteChat || answerMatchesLanguage(answer, replyLanguage))) {
-      return Response.json({ reply: answer, source: "gemini", model });
+    if (!answer) continue;
+
+    if (!isWebsiteChat || (await verifyLanguageMatch(model, apiKey, question, answer))) {
+      return Response.json({
+        reply: answer,
+        source: "gemini",
+        model,
+        detectedLanguage: detectedLanguage || undefined,
+      });
     }
 
-    if (isWebsiteChat) {
-      const correctionText = `${SYSTEM_TEXT}\n\n${languageDirective}\nThis is a language-correction attempt. Answer the latest question directly and obey the mandatory language rule without exception.`;
-      const correctedAnswer = await callGemini(
-        model,
-        apiKey,
-        [{ role: "user", parts: [{ text: question }] }],
-        correctionText
-      );
+    const correctionSystem = `${SYSTEM_TEXT}\n\n${languageDirective}\n\nLANGUAGE CORRECTION: The previous answer used the wrong language. Answer the latest user message again, entirely in the detected language, without mentioning this correction.`;
+    const correctedAnswer = await callGemini(
+      model,
+      apiKey,
+      [{ role: "user", parts: [{ text: question }] }],
+      correctionSystem,
+      { temperature: 0.55, maxOutputTokens: 900 }
+    );
 
-      if (correctedAnswer && answerMatchesLanguage(correctedAnswer, replyLanguage)) {
-        return Response.json({ reply: correctedAnswer, source: "gemini_language_corrected", model });
-      }
+    if (
+      correctedAnswer &&
+      (await verifyLanguageMatch(model, apiKey, question, correctedAnswer))
+    ) {
+      return Response.json({
+        reply: correctedAnswer,
+        source: "gemini_language_corrected",
+        model,
+        detectedLanguage: detectedLanguage || undefined,
+      });
     }
   }
 
