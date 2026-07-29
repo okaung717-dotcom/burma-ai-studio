@@ -1,53 +1,609 @@
-@media (max-width: 767px) {
-  body:not(.bas-app-mode) {
+/* Burma AI Studio — responsive website parity layer.
+   Phone and tablet website only. Desktop (1024px and wider) and app/PWA surfaces are untouched. */
+
+@media (max-width: 1023px) {
+  html.bas-website-context body:not(.bas-app-mode) {
     overflow-x: hidden !important;
+    -webkit-text-size-adjust: 100%;
   }
 
-  body:not(.bas-app-mode) > nav {
-    padding-left: 1.1rem !important;
-    padding-right: 1.1rem !important;
+  html.bas-website-context body:not(.bas-app-mode) .bas-website-content {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: clip !important;
   }
 
-  body:not(.bas-app-mode) > nav > div {
+  html.bas-website-context body:not(.bas-app-mode) .bas-website-content :where(img, video, iframe, svg) {
+    max-width: 100%;
+  }
+
+  /* Tablet navigation uses the spacious mobile drawer instead of squeezing the desktop controls. */
+  html.bas-website-context body:not(.bas-app-mode) > nav {
+    padding: 0.9rem clamp(1.1rem, 3vw, 2rem) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav > div:first-child {
+    min-width: 0;
+    gap: 1rem !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav a:first-child {
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav a:first-child svg {
+    height: clamp(3.65rem, 7vw, 4.7rem) !important;
+    width: auto !important;
+    max-width: min(13.5rem, 48vw) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:flex"][class*="uppercase"] {
+    display: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav > div:first-child > div:last-child > button[class*="md:flex"],
+  html.bas-website-context body:not(.bas-app-mode) > nav > div:first-child > div:last-child > button[class*="md:block"],
+  html.bas-website-context body:not(.bas-app-mode) > nav > div:first-child > div:last-child > a[class*="md:inline-flex"] {
+    display: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav button[class*="md:hidden"] {
+    display: grid !important;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    place-items: center;
+    border: 1px solid rgba(145, 25, 35, 0.16);
+    border-radius: 15px;
+    background: rgba(255, 250, 242, 0.82);
+    color: #911923 !important;
+    box-shadow: 0 10px 28px rgba(60, 25, 29, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav button[class*="md:hidden"] {
+    border-color: rgba(227, 188, 97, 0.18);
+    background: rgba(25, 11, 14, 0.82);
+    color: #e3bc61 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] {
+    display: flex !important;
+    max-height: calc(100dvh - 78px);
+    overflow-y: auto;
+    padding: 1.25rem clamp(1.1rem, 4vw, 2rem) calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    border-top: 1px solid rgba(145, 25, 35, 0.11) !important;
+    border-bottom: 1px solid rgba(145, 25, 35, 0.13);
+    border-radius: 0 0 24px 24px;
+    background: rgba(255, 250, 242, 0.97) !important;
+    box-shadow: 0 28px 70px rgba(42, 16, 21, 0.18) !important;
+    backdrop-filter: blur(24px) saturate(145%);
+    -webkit-backdrop-filter: blur(24px) saturate(145%);
+  }
+
+  html.dark.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] {
+    border-color: rgba(227, 188, 97, 0.14) !important;
+    background: rgba(15, 7, 8, 0.975) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] a,
+  html.bas-website-context body:not(.bas-app-mode) > nav div[class*="md:hidden"][class*="absolute"][class*="top-full"] button {
+    min-height: 46px;
+  }
+
+  /* Intro account gate — retain all desktop actions and make them fit touch screens. */
+  html.bas-website-context .bas-intro {
+    min-height: 100svh;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-media video {
+    object-position: center center;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-header {
+    top: 0;
+    min-height: 92px !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding:
+      calc(16px + env(safe-area-inset-top, 0px))
+      clamp(20px, 3.4vw, 34px)
+      16px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand > span:last-child {
+    min-width: 0;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-header-actions {
+    flex: 0 0 auto;
+    gap: 7px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-signin {
+    display: inline-flex !important;
+    min-height: 42px !important;
+    padding: 0 15px !important;
+    white-space: nowrap;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-signup {
+    min-height: 42px !important;
+    padding: 0 16px !important;
+    white-space: nowrap;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-content {
+    left: clamp(30px, 5vw, 58px) !important;
+    right: clamp(30px, 5vw, 58px) !important;
+    bottom: max(62px, calc(42px + env(safe-area-inset-bottom, 0px))) !important;
+    width: auto !important;
+    max-width: 760px;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-content h1 {
+    max-width: 720px;
+    font-size: clamp(48px, 8.8vw, 76px) !important;
+  }
+
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content h1 {
+    font-size: clamp(38px, 6.8vw, 58px) !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-desc {
+    max-width: 660px;
+    font-size: clamp(14px, 2vw, 17px) !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-auth-backdrop {
+    padding:
+      calc(16px + env(safe-area-inset-top, 0px))
+      16px
+      calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-auth-card {
+    width: min(520px, 100%) !important;
+    max-height: calc(100dvh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Home page tablet composition mirrors the current desktop system without the narrow side rail. */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home > .bas-home-v2 {
+    width: calc(100% - 32px) !important;
+    max-width: 1500px !important;
+    padding: 22px 0 38px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-hero {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-rail {
+    display: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-stage {
+    min-height: 720px !important;
+    grid-template-columns: minmax(0, 1fr) 176px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-copy {
+    width: min(66%, 650px) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-copy h1 {
+    font-size: clamp(44px, 6.2vw, 62px) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-services,
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-flow {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  /* Shared route spacing: same content and capabilities, tuned for tablet reading width. */
+  html.bas-website-context body:not(.bas-app-mode) :is(
+    .bas-route-services,
+    .bas-route-portfolio,
+    .bas-route-stories,
+    .bas-route-plans,
+    .bas-route-public,
+    .bas-route-legal
+  ) > div > :is(header, main, section) {
+    padding-left: clamp(1.5rem, 4vw, 3rem) !important;
+    padding-right: clamp(1.5rem, 4vw, 3rem) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) :where(button, a, input, textarea, select) {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (max-width: 767px) {
+  html.bas-website-context body:not(.bas-app-mode) > nav {
+    padding: 0.72rem 1rem !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) > nav > div:first-child {
     gap: 0.7rem !important;
   }
 
-  body:not(.bas-app-mode) > nav a:first-child svg {
-    height: 3.6rem !important;
-    max-width: 12.8rem !important;
+  html.bas-website-context body:not(.bas-app-mode) > nav a:first-child svg {
+    height: 3.55rem !important;
+    max-width: min(11.4rem, 58vw) !important;
   }
 
-  body:not(.bas-app-mode) > nav .bas-install-button {
-    display: inline-flex !important;
+  html.bas-website-context body:not(.bas-app-mode) > nav button[class*="md:hidden"] {
+    width: 43px;
+    height: 43px;
+    flex-basis: 43px;
+    border-radius: 14px;
   }
 
-  body:not(.bas-app-mode) .bas-website-content {
+  html.bas-website-context body:not(.bas-app-mode) .bas-website-content main:not(.bas-home-v2) {
     max-width: 100vw !important;
-    overflow-x: hidden !important;
+    overflow-x: clip !important;
   }
 
-  body:not(.bas-app-mode) .bas-website-content main {
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-
-  body:not(.bas-app-mode) .bas-website-content main section,
-  body:not(.bas-app-mode) .bas-website-content main section > div {
+  html.bas-website-context body:not(.bas-app-mode) .bas-website-content main:not(.bas-home-v2) section,
+  html.bas-website-context body:not(.bas-app-mode) .bas-website-content main:not(.bas-home-v2) section > div {
     min-width: 0 !important;
     max-width: 100% !important;
   }
 
-  body:not(.bas-app-mode) .bas-website-content main h1 {
-    max-width: 100% !important;
-    overflow-wrap: break-word !important;
-    word-break: normal !important;
-    font-size: clamp(2.3rem, 10.4vw, 3.15rem) !important;
-    line-height: 1.18 !important;
+  html.bas-website-context body:not(.bas-app-mode) :is(
+    .bas-route-services,
+    .bas-route-portfolio,
+    .bas-route-stories,
+    .bas-route-plans,
+    .bas-route-public,
+    .bas-route-legal
+  ) > div > :is(header, main, section) {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
 
-  body:not(.bas-app-mode) .bas-website-content main h1 span {
-    white-space: normal !important;
+  /* Phone Intro header: logo, language, Sign in and Create account remain visible together. */
+  html.bas-website-context .bas-intro .bas-intro-header {
+    min-height: 84px !important;
+    gap: 8px !important;
+    padding:
+      calc(13px + env(safe-area-inset-top, 0px))
+      14px
+      13px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand {
+    gap: 8px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand-mark {
+    width: 40px !important;
+    height: 40px !important;
+    flex-basis: 40px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand > span:last-child {
+    width: 84px;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand b {
+    font-size: 12.5px !important;
+    line-height: 1.24;
+    white-space: normal;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand small {
+    display: none !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-header-actions {
+    gap: 5px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-icon-button {
+    width: 39px !important;
+    min-width: 39px;
+    min-height: 39px !important;
+    padding: 0 !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-icon-button span {
+    display: none !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-signin {
+    min-height: 39px !important;
+    padding: 0 10px !important;
+    font-size: 10.5px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-signup {
+    min-height: 39px !important;
+    max-width: 112px;
+    padding: 0 11px !important;
+    font-size: 10.5px !important;
+    line-height: 1.14;
+    text-align: center;
+    white-space: normal;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-content {
+    left: 22px !important;
+    right: 22px !important;
+    bottom: max(38px, calc(26px + env(safe-area-inset-bottom, 0px))) !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-eyebrow {
+    max-width: 100%;
+    font-size: 9px !important;
+    line-height: 1.5;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-content h1 {
+    margin: 14px 0 15px !important;
+    font-size: clamp(42px, 12.8vw, 61px) !important;
+    line-height: 0.95 !important;
+  }
+
+  html.bas-website-context .bas-intro.is-mm .bas-intro-content h1 {
+    font-size: clamp(32px, 9.5vw, 46px) !important;
+    line-height: 1.4 !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-desc {
+    font-size: 13.5px !important;
+    line-height: 1.68 !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-auth-card {
+    padding: 28px 20px 22px !important;
+    border-radius: 24px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-auth-card h2 {
+    font-size: clamp(25px, 8vw, 30px) !important;
+  }
+
+  /* Phone Home keeps the cinematic hierarchy but changes every multi-column deck into a clean vertical flow. */
+  html.bas-website-context body:not(.bas-app-mode) .bas-route-home > .bas-home-v2 {
+    width: calc(100% - 20px) !important;
+    padding: 14px 0 28px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-hero {
+    min-height: 0 !important;
+    border-radius: 25px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-stage {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 10px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-stage-top {
+    padding: 6px 0 10px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-stage-badge {
+    display: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-pills {
+    gap: 6px !important;
+    padding-bottom: 2px;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-pills span {
+    padding: 8px 11px !important;
+    font-size: 9px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-media {
+    height: clamp(565px, 76svh, 680px) !important;
+    min-height: 565px !important;
+    margin: 0 !important;
+    border-radius: 20px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-media-shade {
+    background:
+      linear-gradient(0deg, rgba(7, 5, 6, 0.94) 0%, rgba(7, 5, 6, 0.72) 42%, rgba(7, 5, 6, 0.18) 78%),
+      linear-gradient(90deg, rgba(7, 5, 6, 0.36), transparent 70%) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-copy {
+    left: 18px !important;
+    right: 18px !important;
+    bottom: 116px !important;
+    width: auto !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-copy h1 {
+    max-width: 100% !important;
+    overflow-wrap: normal !important;
+    font-size: clamp(39px, 11.7vw, 50px) !important;
+    line-height: 0.98 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-copy h1.is-mm {
+    font-size: clamp(30px, 8.9vw, 39px) !important;
+    line-height: 1.32 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-description {
+    font-size: 12.5px !important;
+    line-height: 1.62 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-hero-actions {
+    gap: 8px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-hero-actions a {
+    min-height: 44px;
+    padding: 0 13px !important;
+    font-size: 10.5px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-video-label {
+    left: 15px !important;
+    right: 15px !important;
+    bottom: 15px !important;
+    width: auto !important;
+    padding: 13px 14px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-sidecards {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+    padding: 10px 0 0 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-quote {
+    display: none !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-metric {
+    min-height: 82px !important;
+    padding: 12px !important;
+    border-radius: 17px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-metric span {
+    font-size: 19px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-metric p {
+    font-size: 7.5px !important;
+    letter-spacing: 0.055em !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-dock {
+    margin: 10px 0 0 !important;
+    padding: 13px !important;
+    border-radius: 18px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-services,
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-flow {
+    margin-top: 14px !important;
+    padding: 18px !important;
+    border-radius: 23px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-service-list,
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-flow-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-flow-grid article {
+    min-height: 0 !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-footer > div {
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: calc(100% - 32px) !important;
+    padding: 24px 0 !important;
+    text-align: center;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-footer strong {
+    justify-content: center;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-home-v2-footer > div > span {
+    justify-self: center !important;
+  }
+}
+
+@media (max-width: 430px) {
+  html.bas-website-context .bas-intro .bas-intro-header {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand > span:last-child {
+    width: 72px;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-brand b {
+    font-size: 11.5px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-icon-button {
+    width: 37px !important;
+    min-width: 37px;
+    min-height: 37px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-signin {
+    min-height: 37px !important;
+    padding: 0 8px !important;
+    font-size: 10px !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-signup {
+    min-height: 37px !important;
+    max-width: 102px;
+    padding: 0 9px !important;
+    font-size: 10px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-dock {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-dock-action {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 350px) {
+  html.bas-website-context .bas-intro .bas-intro-brand > span:last-child {
+    display: none !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-header-actions {
+    gap: 4px !important;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 680px) {
+  html.bas-website-context .bas-intro .bas-intro-content {
+    bottom: max(22px, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-content h1 {
+    margin: 10px 0 10px !important;
+    font-size: clamp(36px, 10vw, 48px) !important;
+  }
+
+  html.bas-website-context .bas-intro .bas-intro-desc {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.bas-website-context body:not(.bas-app-mode) > nav,
+  html.bas-website-context .bas-intro .bas-intro-header-actions > *,
+  html.bas-website-context body:not(.bas-app-mode) .bas-command-hero-actions a {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
