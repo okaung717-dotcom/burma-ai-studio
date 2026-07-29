@@ -17,13 +17,9 @@ import {
 } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 import "./website-intro-gate.css";
-import "./website-intro-home-transition.css";
 
 const PROFILE_STORAGE_KEY = "bas_website_profile";
 const INTRO_UI_REVEAL_MS = 2800;
-const ENTRY_TRANSITION_MS = 1480;
-const HOME_REVEAL_START_MS = 650;
-const HOME_REVEAL_CLEANUP_MS = 2300;
 const ACCOUNT_GATE_EXEMPT_PATHS = [
   "/legal",
   "/privacy",
@@ -35,6 +31,20 @@ const ACCOUNT_GATE_EXEMPT_PATHS = [
   "/privacy-choices",
   "/admin",
   "/admin6996",
+];
+
+const RETIRED_TRANSITION_CLASSES = [
+  "bas-intro-transitioning",
+  "bas-home-arriving",
+  "bas-logo-flight-active",
+  "bas-logo-flight-arrived",
+  "bas-home-elements-reveal",
+  "bas-cinematic-entry-active",
+  "bas-cinematic-home-reveal",
+  "bas-cinematic-home-settled",
+  "bas-depth-portal-active",
+  "bas-depth-portal-reveal",
+  "bas-depth-portal-settled",
 ];
 
 type AuthMode = "signin" | "signup" | null;
@@ -122,6 +132,16 @@ function isAccountGateExempt(pathname: string) {
   );
 }
 
+function clearRetiredTransitionState() {
+  document.body.classList.remove(...RETIRED_TRANSITION_CLASSES);
+  document.body.removeAttribute("data-bas-depth-portal-cycle");
+  document
+    .querySelectorAll(
+      "[data-bas-depth-portal-stage], [data-bas-cinematic-entry-stage], [data-bas-logo-flight-stage]"
+    )
+    .forEach((node) => node.remove());
+}
+
 export default function WebsiteIntroGate() {
   const pathname = usePathname() || "/";
   const { lang, toggleLang } = useLanguage();
@@ -129,7 +149,6 @@ export default function WebsiteIntroGate() {
 
   const [visible, setVisible] = useState(true);
   const [uiReady, setUiReady] = useState(false);
-  const [leaving, setLeaving] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -156,13 +175,12 @@ export default function WebsiteIntroGate() {
         if (cancelled) return;
 
         if (data.authenticated && data.user) {
+          clearRetiredTransitionState();
           document.documentElement.classList.add("bas-intro-skip");
-          document.body.classList.remove("bas-intro-transitioning", "bas-home-arriving");
           setVisible(false);
           return;
         }
 
-        // Fail closed: every unauthenticated public-site visitor stays behind the account gate.
         document.documentElement.classList.remove("bas-intro-skip");
         setVisible(true);
       })
@@ -213,32 +231,13 @@ export default function WebsiteIntroGate() {
   };
 
   const finishAuthenticatedEntry = (user: AccountUser) => {
-    if (!user || leaving) return;
+    if (!user) return;
 
     persistProfile(user);
-
-    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
-    const transitionDuration = reduceMotion ? 180 : ENTRY_TRANSITION_MS;
-    const homeRevealDelay = reduceMotion ? 0 : HOME_REVEAL_START_MS;
-    const cleanupDelay = reduceMotion ? 260 : HOME_REVEAL_CLEANUP_MS;
-
-    setLeaving(true);
-    document.body.classList.add("bas-intro-transitioning");
-
-    window.setTimeout(() => {
-      document.body.classList.add("bas-home-arriving");
-    }, homeRevealDelay);
-
-    window.setTimeout(() => {
-      document.documentElement.classList.add("bas-intro-skip");
-      setVisible(false);
-      setLeaving(false);
-      setAuthMode(null);
-    }, transitionDuration);
-
-    window.setTimeout(() => {
-      document.body.classList.remove("bas-intro-transitioning", "bas-home-arriving");
-    }, cleanupDelay);
+    clearRetiredTransitionState();
+    document.documentElement.classList.add("bas-intro-skip");
+    setAuthMode(null);
+    setVisible(false);
   };
 
   const openAuth = (mode: Exclude<AuthMode, null>) => {
@@ -280,8 +279,7 @@ export default function WebsiteIntroGate() {
 
       const authenticated = submittingMode === "signin" || data.authenticated === true;
       if (authenticated && data.user) {
-        setMessage(t.accountReady);
-        window.setTimeout(() => finishAuthenticatedEntry(data.user || null), 420);
+        finishAuthenticatedEntry(data.user);
         return;
       }
 
@@ -297,7 +295,7 @@ export default function WebsiteIntroGate() {
 
   return (
     <section
-      className={`bas-intro${uiReady ? " is-ui-ready" : ""}${leaving ? " is-leaving" : ""}${isMyanmar ? " is-mm" : ""}`}
+      className={`bas-intro${uiReady ? " is-ui-ready" : ""}${isMyanmar ? " is-mm" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label="Burma AI Studio account introduction"
@@ -330,14 +328,6 @@ export default function WebsiteIntroGate() {
       </div>
       <div className="bas-intro-shade" aria-hidden="true" />
       <div className="bas-intro-grain" aria-hidden="true" />
-
-      <div className="bas-intro-exit-transition" aria-hidden="true">
-        <span className="bas-intro-exit-panel is-left" />
-        <span className="bas-intro-exit-panel is-right" />
-        <span className="bas-intro-exit-beam" />
-        <span className="bas-intro-exit-flare" />
-        <span className="bas-intro-exit-orbit">BA</span>
-      </div>
 
       <header className="bas-intro-header">
         <div className="bas-intro-brand bas-intro-brand-static" aria-label="Burma AI Studio">
