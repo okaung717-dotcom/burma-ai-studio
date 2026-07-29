@@ -21,6 +21,7 @@ import "./website-intro-brand-theme-fix.css";
 import Navbar from "./Navbar";
 import WebsiteStoriesNav from "./WebsiteStoriesNav";
 import WebsitePlansBridge from "./WebsitePlansBridge";
+import WebsiteChatNav from "./WebsiteChatNav";
 import WebsiteIntroGate from "./WebsiteIntroGate";
 import WebsiteIntroVideoSanitizer from "./WebsiteIntroVideoSanitizer";
 import WebsiteLogoutRedirect from "./WebsiteLogoutRedirect";
@@ -83,7 +84,7 @@ function getWebsiteRouteClass(pathname: string, isLegalArea: boolean) {
   if (pathname.startsWith("/portfolio")) return "bas-route-portfolio";
   if (pathname.startsWith("/stories")) return "bas-route-stories";
   if (pathname.startsWith("/plans")) return "bas-route-plans";
-  if (pathname.startsWith("/contact")) return "bas-route-contact";
+  if (pathname.startsWith("/chat") || pathname.startsWith("/contact")) return "bas-route-chat";
   if (isLegalArea) return "bas-route-legal";
   return "bas-route-public";
 }
@@ -106,6 +107,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       {!isAdminArea && <WebsiteIntroVideoSanitizer />}
       {!isAdminArea && <WebsiteLogoutRedirect />}
       {!isAdminArea && <Navbar />}
+      {!isAdminArea && <WebsiteChatNav />}
       {!isAdminArea && <WebsiteStoriesNav />}
       {!isAdminArea && <WebsitePlansBridge />}
       {!isAdminArea && <WebsiteProfileSingleClickGuard />}
