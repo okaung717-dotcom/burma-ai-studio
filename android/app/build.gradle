@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-// CI artifact verification build for Burma AI Studio v3.0.0.
+// CI artifact verification build for Burma AI Studio v3.0.0 (verified dependency install).
 android {
     namespace = "com.burmaaistudio.app"
     compileSdk = rootProject.ext.compileSdkVersion
