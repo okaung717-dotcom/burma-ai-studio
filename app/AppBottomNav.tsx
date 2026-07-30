@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Grid2X2, PlaySquare, MessageCircle, Sparkles, ShieldCheck } from "lucide-react";
+import { Bot, BriefcaseBusiness, Home, MessageCircle, PlaySquare } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
 type NavItem =
   | { type: "link"; href: string; label: string; Icon: typeof Home }
-  | { type: "ai"; label: string; Icon: typeof Sparkles };
+  | { type: "ai"; label: string; Icon: typeof Bot };
 
 export default function AppBottomNav() {
   const pathname = usePathname() || "/";
@@ -16,10 +16,10 @@ export default function AppBottomNav() {
 
   const items: NavItem[] = [
     { type: "link", href: "/", label: isMm ? "ပင်မ" : "Home", Icon: Home },
-    { type: "link", href: "/services", label: isMm ? "ဝန်ဆောင်မှု" : "Services", Icon: Grid2X2 },
-    { type: "ai", label: "AI", Icon: Sparkles },
+    { type: "link", href: "/services", label: isMm ? "ဝန်ဆောင်မှု" : "Services", Icon: BriefcaseBusiness },
+    { type: "ai", label: "AI", Icon: Bot },
     { type: "link", href: "/portfolio", label: isMm ? "လက်ရာ" : "Work", Icon: PlaySquare },
-    { type: "link", href: "/contact", label: isMm ? "ဆက်သွယ်" : "Contact", Icon: MessageCircle },
+    { type: "link", href: "/contact", label: isMm ? "ဆက်သွယ်" : "Chat", Icon: MessageCircle },
   ];
 
   const openAssistant = () => {
@@ -27,37 +27,49 @@ export default function AppBottomNav() {
     document.getElementById("burma-ai-open-button")?.click();
   };
 
-  const isLegal = ["/legal", "/privacy", "/terms", "/project-policy", "/ai-ip-policy", "/acceptable-use", "/copyright", "/privacy-choices"].some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  const isLegal = ["/legal", "/privacy", "/terms", "/project-policy", "/ai-ip-policy", "/acceptable-use", "/copyright", "/privacy-choices"].some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+
+  if (isLegal) return null;
 
   return (
-    <div className="bas-app-bottom-nav fixed inset-x-0 bottom-0 z-[9998] px-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.65rem)] md:hidden">
-      {!isLegal && (
-        <div className="mx-auto mb-2 flex max-w-[430px] justify-end px-2">
-          <Link href="/legal" className="inline-flex items-center gap-1.5 rounded-full border border-[#e7d4ad] bg-[#fffaf1] px-3 py-1.5 text-[10px] font-black text-[#911923] shadow-sm dark:border-[#e7d4ad] dark:bg-[#fffaf1] dark:text-[#911923]">
-            <ShieldCheck className="h-3.5 w-3.5" /> {isMm ? "Legal" : "Legal & Privacy"}
-          </Link>
-        </div>
-      )}
-      <nav className="isolate mx-auto grid max-w-[430px] grid-cols-5 items-center justify-items-center rounded-[2rem] border border-[#e7d4ad] bg-[#fffaf1] px-2 py-2 shadow-[0_18px_55px_rgba(26,11,14,0.24)] ring-1 ring-white/90 dark:border-[#e7d4ad] dark:bg-[#fffaf1] dark:shadow-[0_18px_60px_rgba(0,0,0,0.45)]">
+    <div className="bas-app-bottom-nav fixed inset-x-0 bottom-0 z-[10010] px-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.55rem)] md:hidden">
+      <nav className="isolate mx-auto grid max-w-[430px] grid-cols-5 items-end rounded-[1.75rem] border border-[#e4c993]/70 bg-[#fffaf1]/96 px-2 pb-2 pt-2 shadow-[0_20px_65px_rgba(26,11,14,0.28)] ring-1 ring-white/80 backdrop-blur-2xl dark:border-[#6b4b2a] dark:bg-[#1a0b0e]/96 dark:ring-white/5">
         {items.map((item) => {
           const Icon = item.Icon;
 
           if (item.type === "ai") {
             return (
-              <button key="ai" type="button" onClick={openAssistant} className="flex h-[4.25rem] w-[4.25rem] -translate-y-2 flex-col items-center justify-center rounded-[1.7rem] bg-[#be9537] text-[10px] font-extrabold text-[#100708] shadow-[0_16px_34px_rgba(190,149,55,0.36)] ring-4 ring-[#fffaf1] transition-transform active:scale-95" aria-label="Open Burma AI assistant">
-                <Icon className="mb-1 h-[20px] w-[20px] shrink-0" strokeWidth={2.55} />
-                <span className="max-w-full text-center leading-none text-[#100708]">{item.label}</span>
+              <button
+                key="ai"
+                type="button"
+                onClick={openAssistant}
+                className="relative mx-auto flex h-[4.15rem] w-[4.15rem] -translate-y-3 flex-col items-center justify-center rounded-[1.55rem] bg-[#a51624] text-[9px] font-black text-white shadow-[0_18px_38px_rgba(165,22,36,0.38)] ring-4 ring-[#fffaf1] transition active:scale-95 dark:bg-[#e3bc61] dark:text-[#100708] dark:ring-[#1a0b0e]"
+                aria-label="Open Burma AI assistant"
+              >
+                <span className="absolute inset-1 rounded-[1.25rem] border border-white/15 dark:border-[#100708]/10" />
+                <Icon className="relative mb-1 h-[21px] w-[21px]" strokeWidth={2.45} />
+                <span className="relative leading-none">{item.label}</span>
               </button>
             );
           }
 
           const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-          const colorClass = active ? "text-[#a51624]" : "text-[#2b1914]";
 
           return (
-            <Link key={item.href} href={item.href} className={`flex h-[3.7rem] w-[4rem] flex-col items-center justify-center rounded-none bg-transparent px-1 text-center text-[9px] font-black leading-[1.05] shadow-none transition-colors ${colorClass} hover:text-[#a51624]`} aria-current={active ? "page" : undefined}>
-              <Icon className={`mb-1 h-[20px] w-[20px] shrink-0 transition-colors ${colorClass}`} strokeWidth={active ? 2.8 : 2.45} />
-              <span className={`block max-w-full overflow-visible text-ellipsis leading-[1.08] [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] ${colorClass}`}>{item.label}</span>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`mx-auto flex h-[3.65rem] w-[4rem] flex-col items-center justify-center rounded-[1.15rem] px-1 text-center text-[9px] font-black leading-none transition active:scale-95 ${
+                active
+                  ? "bg-[#f4e4c8] text-[#a51624] dark:bg-[#32171a] dark:text-[#e3bc61]"
+                  : "text-[#63534a] dark:text-[#d8c4a3]"
+              }`}
+              aria-current={active ? "page" : undefined}
+            >
+              <Icon className="mb-1.5 h-[20px] w-[20px]" strokeWidth={active ? 2.8 : 2.3} />
+              <span className="max-w-full truncate">{item.label}</span>
             </Link>
           );
         })}
