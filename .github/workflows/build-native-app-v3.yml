@@ -7,6 +7,7 @@ on:
     paths:
       - "native-app/**"
       - "scripts/build-native-app-v3.1.2.mjs"
+      - "scripts/finalize-native-app-v3.1.2.mjs"
       - "scripts/smoke-native-app-v3.1.2.mjs"
       - "android/**"
       - "capacitor.config.ts"
@@ -16,6 +17,7 @@ on:
     paths:
       - "native-app/**"
       - "scripts/build-native-app-v3.1.2.mjs"
+      - "scripts/finalize-native-app-v3.1.2.mjs"
       - "scripts/smoke-native-app-v3.1.2.mjs"
       - "android/**"
       - "capacitor.config.ts"
@@ -45,12 +47,18 @@ jobs:
       - name: Build resilient bundled native app
         run: node scripts/build-native-app-v3.1.2.mjs
 
+      - name: Finalize unique native controls
+        run: node scripts/finalize-native-app-v3.1.2.mjs
+
       - name: Verify bundled native app entry
         run: |
           test -s native-app/index.html
           grep -q "Burma AI Studio v3.1.2" native-app/index.html
           grep -q 'class="page chatpage"' native-app/index.html
           grep -q 'class="ch"' native-app/index.html
+          grep -q 'id="playFilm"' native-app/index.html
+          grep -q 'id="emojiToggle"' native-app/index.html
+          grep -q 'id="sendMessage"' native-app/index.html
           grep -q "window.__basHideSplash" native-app/index.html
           grep -q "@keyframes basSplashFailsafe" native-app/index.html
           grep -q "const safeGet=" native-app/index.html
@@ -72,6 +80,9 @@ jobs:
           const html = fs.readFileSync('native-app/index.html', 'utf8');
           const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]);
           if (scripts.length < 2) throw new Error('Startup guard or main app script is missing');
+          const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+          const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
+          if (duplicateIds.length) throw new Error(`Duplicate native IDs: ${duplicateIds.join(', ')}`);
           fs.writeFileSync('/tmp/native-app-inline.js', scripts.join('\n'));
           NODE
           node --check /tmp/native-app-inline.js
