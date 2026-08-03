@@ -45,14 +45,20 @@ if (!activeChat || !main?.classList.contains("chatmode")) {
 }
 
 const input = document.getElementById("input");
-const send = document.getElementById("send");
-if (!input || input.tagName !== "TEXTAREA" || !send || send.tagName !== "BUTTON") {
-  throw new Error(`Chat composer is not available: input=${input?.tagName || "missing"}, send=${send?.tagName || "missing"}`);
+const send = document.getElementById("sendMessage");
+const emojiToggle = document.getElementById("emojiToggle");
+if (!input || input.tagName !== "TEXTAREA" || !send || send.tagName !== "BUTTON" || !emojiToggle) {
+  throw new Error(`Chat composer is not available: input=${input?.tagName || "missing"}, send=${send?.tagName || "missing"}, emoji=${emojiToggle?.tagName || "missing"}`);
 }
 input.value = "Native startup smoke test";
 send.click();
 await wait(50);
 if (!document.querySelector(".msg.user")) throw new Error("Chat message interaction failed");
+
+emojiToggle.click();
+if (!document.getElementById("emoji")?.classList.contains("show")) {
+  throw new Error("Chat emoji control failed");
+}
 
 if (errors.length) {
   throw new AggregateError(errors, "Native app emitted runtime errors");
