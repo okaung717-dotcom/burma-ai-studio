@@ -34,14 +34,14 @@ if (!html.includes('class="page chatpage"')) {
 
 const originalState = "const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],state={page:localStorage.basPage||'home',lang:localStorage.basLang==='MM'?'MM':'EN',theme:localStorage.basTheme||'light',files:[],messages:[]};";
 const resilientState = "const safeGet=(k,f)=>{try{return localStorage.getItem(k)||f}catch{return f}},safeSet=(k,v)=>{try{localStorage.setItem(k,v)}catch{}},$=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],savedPage=safeGet('basPage','home'),state={page:['home','services','stories','work','chat'].includes(savedPage)?savedPage:'home',lang:safeGet('basLang','EN')==='MM'?'MM':'EN',theme:safeGet('basTheme','light'),files:[],messages:[]};";
-if (html.includes(originalState)) html = html.replace(originalState, resilientState);
+if (html.includes(originalState)) html = html.replace(originalState, () => resilientState);
 if (!html.includes("const safeGet=")) throw new Error("Resilient storage bootstrap was not installed");
 
 const oldGo = "function go(p){state.page=p;localStorage.basPage=p;$$('.page').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.nav===p));$('#title').textContent=title[p][state.lang==='MM'?1:0];$('#main').scrollTop=0}";
 const previousGo = "function go(p){state.page=p;localStorage.basPage=p;$$('.page').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.nav===p));$('#title').textContent=title[p][state.lang==='MM'?1:0];$('#main').classList.toggle('chatmode',p==='chat');if(p!=='chat')$('#main').scrollTop=0;else requestAnimationFrame(()=>$('#msgs').scrollTop=$('#msgs').scrollHeight)}";
 const resilientGo = "function go(p){if(!title[p])p='home';state.page=p;safeSet('basPage',p);$$('.page').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.nav===p));const pageTitle=$('#title'),main=$('#main'),messageList=$('#msgs');if(pageTitle)pageTitle.textContent=title[p][state.lang==='MM'?1:0];if(main){main.classList.toggle('chatmode',p==='chat');if(p!=='chat')main.scrollTop=0}if(p==='chat'&&messageList)requestAnimationFrame(()=>messageList.scrollTop=messageList.scrollHeight)}";
-if (html.includes(oldGo)) html = html.replace(oldGo, resilientGo);
-else if (html.includes(previousGo)) html = html.replace(previousGo, resilientGo);
+if (html.includes(oldGo)) html = html.replace(oldGo, () => resilientGo);
+else if (html.includes(previousGo)) html = html.replace(previousGo, () => resilientGo);
 if (!html.includes("if(!title[p])p='home'")) throw new Error("Resilient navigation was not installed");
 
 html = html
@@ -97,6 +97,7 @@ for (const required of [
   "window.__basHideSplash",
   "@keyframes basSplashFailsafe",
   "const safeGet=",
+  "$$=(s,r=document)=>[...r.querySelectorAll(s)]",
 ]) {
   if (!html.includes(required)) throw new Error(`Missing required native marker: ${required}`);
 }
