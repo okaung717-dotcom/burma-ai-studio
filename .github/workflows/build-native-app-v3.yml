@@ -1,4 +1,4 @@
-name: Build Native APK v3.0.1
+name: Build Native APK v3.1.0
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ on:
       - "capacitor.config.ts"
       - ".github/workflows/build-native-app-v3.yml"
   push:
-    branches: [fix-apk-offline-shell-v3-0-1, main]
+    branches: [native-app-v3-1-stories-chat, main]
     paths:
       - "native-app/**"
       - "android/**"
@@ -41,11 +41,25 @@ jobs:
       - name: Verify bundled native app entry
         run: |
           test -s native-app/index.html
-          grep -q "Burma AI Studio v3.0.1" native-app/index.html
+          grep -q "Burma AI Studio v3.1.0" native-app/index.html
+          grep -q 'data-nav="stories"' native-app/index.html
+          grep -q 'data-nav="chat"' native-app/index.html
+          if grep -q 'data-nav="ai"' native-app/index.html; then
+            echo "The retired center AI navigation item is still present"
+            exit 1
+          fi
           if grep -q "server:" capacitor.config.ts; then
             echo "Remote Capacitor server dependency is not allowed for this APK"
             exit 1
           fi
+          node - <<'NODE'
+          const fs = require('fs');
+          const html = fs.readFileSync('native-app/index.html', 'utf8');
+          const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]);
+          if (!scripts.length) throw new Error('No inline app script found');
+          fs.writeFileSync('/tmp/native-app-inline.js', scripts.join('\n'));
+          NODE
+          node --check /tmp/native-app-inline.js
 
       - name: Sync Capacitor Android project
         run: npx cap sync android
@@ -66,13 +80,13 @@ jobs:
       - name: Prepare APK artifact
         run: |
           mkdir -p dist
-          cp android/app/build/outputs/apk/debug/app-debug.apk dist/Burma-AI-Studio-v3.0.1.apk
-          sha256sum dist/Burma-AI-Studio-v3.0.1.apk > dist/Burma-AI-Studio-v3.0.1.sha256
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/Burma-AI-Studio-v3.1.0.apk
+          sha256sum dist/Burma-AI-Studio-v3.1.0.apk > dist/Burma-AI-Studio-v3.1.0.sha256
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Burma-AI-Studio-v3.0.1
+          name: Burma-AI-Studio-v3.1.0
           path: dist/*
           if-no-files-found: error
           retention-days: 30
