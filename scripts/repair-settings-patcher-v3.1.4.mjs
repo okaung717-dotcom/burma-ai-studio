@@ -23,5 +23,9 @@ const profileReplacement = `if (html.includes(oldProfile)) {
 if (!source.includes(profileCall)) throw new Error("Profile logic patch call was not found");
 source = source.replace(profileCall, profileReplacement);
 
+source = source
+  .replace('<symbol id="logout" viewBox="0 0 24 24">', '<symbol id="logoutIcon" viewBox="0 0 24 24">')
+  .replace('<use href="#logout"/>', '<use href="#logoutIcon"/>');
+
 fs.writeFileSync(path, source);
-console.log("Repaired v3.1.4 settings patcher anchors");
+console.log("Repaired v3.1.4 settings patcher anchors and icon IDs");
