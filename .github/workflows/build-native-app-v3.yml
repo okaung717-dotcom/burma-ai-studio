@@ -10,6 +10,7 @@ on:
       - "scripts/finalize-native-app-v3.1.2.mjs"
       - "scripts/fit-native-keyboard-v3.1.3.mjs"
       - "scripts/patch-native-settings-v3.1.4.mjs"
+      - "scripts/repair-settings-patcher-v3.1.4.mjs"
       - "scripts/smoke-native-app-v3.1.4.mjs"
       - "android/**"
       - "capacitor.config.ts"
@@ -22,6 +23,7 @@ on:
       - "scripts/finalize-native-app-v3.1.2.mjs"
       - "scripts/fit-native-keyboard-v3.1.3.mjs"
       - "scripts/patch-native-settings-v3.1.4.mjs"
+      - "scripts/repair-settings-patcher-v3.1.4.mjs"
       - "scripts/smoke-native-app-v3.1.4.mjs"
       - "android/**"
       - "capacitor.config.ts"
@@ -56,6 +58,9 @@ jobs:
 
       - name: Fit Chat to Android keyboard
         run: node scripts/fit-native-keyboard-v3.1.3.mjs
+
+      - name: Repair settings patch anchors
+        run: node scripts/repair-settings-patcher-v3.1.4.mjs
 
       - name: Add app icon header and complete settings
         run: node scripts/patch-native-settings-v3.1.4.mjs
