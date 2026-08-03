@@ -1,4 +1,4 @@
-name: Build Native APK v3.1.0
+name: Build Native APK v3.1.1
 
 on:
   workflow_dispatch:
@@ -6,13 +6,15 @@ on:
     branches: [main]
     paths:
       - "native-app/**"
+      - "scripts/patch-native-chat-v3.1.1.mjs"
       - "android/**"
       - "capacitor.config.ts"
       - ".github/workflows/build-native-app-v3.yml"
   push:
-    branches: [native-app-v3-1-stories-chat, main]
+    branches: [native-app-v3-1-1-chat-fit, main]
     paths:
       - "native-app/**"
+      - "scripts/patch-native-chat-v3.1.1.mjs"
       - "android/**"
       - "capacitor.config.ts"
       - ".github/workflows/build-native-app-v3.yml"
@@ -38,14 +40,22 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Apply app-only Chat screen fit
+        run: node scripts/patch-native-chat-v3.1.1.mjs
+
       - name: Verify bundled native app entry
         run: |
           test -s native-app/index.html
-          grep -q "Burma AI Studio v3.1.0" native-app/index.html
-          grep -q 'data-nav="stories"' native-app/index.html
-          grep -q 'data-nav="chat"' native-app/index.html
-          if grep -q 'data-nav="ai"' native-app/index.html; then
-            echo "The retired center AI navigation item is still present"
+          grep -q "Burma AI Studio v3.1.1" native-app/index.html
+          grep -q 'class="page chat-page"' native-app/index.html
+          grep -q 'class="chat-shell-head"' native-app/index.html
+          grep -q 'classList.toggle("chat-mode"' native-app/index.html
+          if grep -q 'class="chat-intro"' native-app/index.html; then
+            echo "The retired standalone Chat intro remains"
+            exit 1
+          fi
+          if grep -q 'class="direct-grid"' native-app/index.html; then
+            echo "The retired external Chat contact grid remains"
             exit 1
           fi
           if grep -q "server:" capacitor.config.ts; then
@@ -80,13 +90,13 @@ jobs:
       - name: Prepare APK artifact
         run: |
           mkdir -p dist
-          cp android/app/build/outputs/apk/debug/app-debug.apk dist/Burma-AI-Studio-v3.1.0.apk
-          sha256sum dist/Burma-AI-Studio-v3.1.0.apk > dist/Burma-AI-Studio-v3.1.0.sha256
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/Burma-AI-Studio-v3.1.1.apk
+          sha256sum dist/Burma-AI-Studio-v3.1.1.apk > dist/Burma-AI-Studio-v3.1.1.sha256
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Burma-AI-Studio-v3.1.0
+          name: Burma-AI-Studio-v3.1.1
           path: dist/*
           if-no-files-found: error
           retention-days: 30
