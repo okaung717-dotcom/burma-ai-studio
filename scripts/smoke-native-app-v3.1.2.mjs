@@ -46,8 +46,8 @@ if (!activeChat || !main?.classList.contains("chatmode")) {
 
 const input = document.getElementById("input");
 const send = document.getElementById("send");
-if (!(input instanceof dom.window.HTMLTextAreaElement) || !(send instanceof dom.window.HTMLButtonElement)) {
-  throw new Error("Chat composer is not available");
+if (!input || input.tagName !== "TEXTAREA" || !send || send.tagName !== "BUTTON") {
+  throw new Error(`Chat composer is not available: input=${input?.tagName || "missing"}, send=${send?.tagName || "missing"}`);
 }
 input.value = "Native startup smoke test";
 send.click();
