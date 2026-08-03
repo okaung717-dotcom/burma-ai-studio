@@ -47,14 +47,14 @@ jobs:
         run: |
           test -s native-app/index.html
           grep -q "Burma AI Studio v3.1.1" native-app/index.html
-          grep -q 'class="page chat-page"' native-app/index.html
-          grep -q 'class="chat-shell-head"' native-app/index.html
-          grep -q 'classList.toggle("chat-mode"' native-app/index.html
-          if grep -q 'class="chat-intro"' native-app/index.html; then
+          grep -q 'class="page chatpage"' native-app/index.html
+          grep -q 'class="ch"' native-app/index.html
+          grep -q "classList.toggle('chatmode'" native-app/index.html
+          if grep -q 'class="chatintro"' native-app/index.html; then
             echo "The retired standalone Chat intro remains"
             exit 1
           fi
-          if grep -q 'class="direct-grid"' native-app/index.html; then
+          if grep -q 'class="direct"' native-app/index.html; then
             echo "The retired external Chat contact grid remains"
             exit 1
           fi
