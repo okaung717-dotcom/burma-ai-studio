@@ -1,5 +1,6 @@
 import fs from "node:fs";
 
+// APK-only build helper. It rewrites the generated native-app bundle during CI and never edits website source files.
 const path = "scripts/patch-native-settings-v3.1.4.mjs";
 let source = fs.readFileSync(path, "utf8");
 
