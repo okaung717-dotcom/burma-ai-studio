@@ -1,4 +1,4 @@
-name: Build Native APK v3.1.1
+name: Build Native APK v3.1.2
 
 on:
   workflow_dispatch:
@@ -6,15 +6,19 @@ on:
     branches: [main]
     paths:
       - "native-app/**"
-      - "scripts/patch-native-chat-v3.1.1.mjs"
+      - "scripts/build-native-app-v3.1.2.mjs"
+      - "scripts/finalize-native-app-v3.1.2.mjs"
+      - "scripts/smoke-native-app-v3.1.2.mjs"
       - "android/**"
       - "capacitor.config.ts"
       - ".github/workflows/build-native-app-v3.yml"
   push:
-    branches: [native-app-v3-1-1-chat-fit, main]
+    branches: [native-app-v3-1-2-startup-fix, main]
     paths:
       - "native-app/**"
-      - "scripts/patch-native-chat-v3.1.1.mjs"
+      - "scripts/build-native-app-v3.1.2.mjs"
+      - "scripts/finalize-native-app-v3.1.2.mjs"
+      - "scripts/smoke-native-app-v3.1.2.mjs"
       - "android/**"
       - "capacitor.config.ts"
       - ".github/workflows/build-native-app-v3.yml"
@@ -37,19 +41,28 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies
+      - name: Install project dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Apply app-only Chat screen fit
-        run: node scripts/patch-native-chat-v3.1.1.mjs
+      - name: Build resilient bundled native app
+        run: node scripts/build-native-app-v3.1.2.mjs
+
+      - name: Finalize unique native controls
+        run: node scripts/finalize-native-app-v3.1.2.mjs
 
       - name: Verify bundled native app entry
         run: |
           test -s native-app/index.html
-          grep -q "Burma AI Studio v3.1.1" native-app/index.html
+          grep -q "Burma AI Studio v3.1.2" native-app/index.html
           grep -q 'class="page chatpage"' native-app/index.html
           grep -q 'class="ch"' native-app/index.html
-          grep -q "classList.toggle('chatmode'" native-app/index.html
+          grep -q 'id="playFilm"' native-app/index.html
+          grep -q 'id="emojiToggle"' native-app/index.html
+          grep -q 'id="sendMessage"' native-app/index.html
+          grep -q "window.__basHideSplash" native-app/index.html
+          grep -q "@keyframes basSplashFailsafe" native-app/index.html
+          grep -q "const safeGet=" native-app/index.html
+          grep -q "if(!title\[p\])p='home'" native-app/index.html
           if grep -q 'class="chatintro"' native-app/index.html; then
             echo "The retired standalone Chat intro remains"
             exit 1
@@ -66,10 +79,19 @@ jobs:
           const fs = require('fs');
           const html = fs.readFileSync('native-app/index.html', 'utf8');
           const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]);
-          if (!scripts.length) throw new Error('No inline app script found');
+          if (scripts.length < 2) throw new Error('Startup guard or main app script is missing');
+          const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+          const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
+          if (duplicateIds.length) throw new Error(`Duplicate native IDs: ${duplicateIds.join(', ')}`);
           fs.writeFileSync('/tmp/native-app-inline.js', scripts.join('\n'));
           NODE
           node --check /tmp/native-app-inline.js
+
+      - name: Install native runtime smoke-test dependency
+        run: npm install --no-save --package-lock=false --no-audit --no-fund jsdom
+
+      - name: Run native startup and Chat smoke test
+        run: node scripts/smoke-native-app-v3.1.2.mjs
 
       - name: Sync Capacitor Android project
         run: npx cap sync android
@@ -90,13 +112,13 @@ jobs:
       - name: Prepare APK artifact
         run: |
           mkdir -p dist
-          cp android/app/build/outputs/apk/debug/app-debug.apk dist/Burma-AI-Studio-v3.1.1.apk
-          sha256sum dist/Burma-AI-Studio-v3.1.1.apk > dist/Burma-AI-Studio-v3.1.1.sha256
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/Burma-AI-Studio-v3.1.2.apk
+          sha256sum dist/Burma-AI-Studio-v3.1.2.apk > dist/Burma-AI-Studio-v3.1.2.sha256
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Burma-AI-Studio-v3.1.1
+          name: Burma-AI-Studio-v3.1.2
           path: dist/*
           if-no-files-found: error
           retention-days: 30
