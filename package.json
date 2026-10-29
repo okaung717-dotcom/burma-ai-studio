@@ -4,24 +4,30 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:spaces": "playwright test tests/spaces-demo.spec.ts",
+    "auth:setup": "node scripts/setup-local-admin.mjs",
+    "native:auth:configure": "node scripts/configure-android-auth.mjs",
+    "native:auth:patch": "node scripts/patch-native-android-auth.mjs",
+    "native:auth:test": "node scripts/smoke-native-android-auth.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",
     "@capacitor/cli": "^8.4.1",
     "@capacitor/core": "^8.4.1",
     "@capacitor/ios": "^8.4.1",
-    "@vercel/analytics": "^1.5.0",
-    "@vercel/speed-insights": "^1.2.0",
+    "@xyflow/react": "^12.12.0",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -29,6 +35,7 @@
     "autoprefixer": "^10.5.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "jsdom": "^27.4.0",
     "postcss": "^8.5.15",
     "sharp": "^0.35.2",
     "tailwindcss": "^3.4.19",

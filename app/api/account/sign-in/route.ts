@@ -1,59 +1,56 @@
 import { NextResponse } from "next/server";
-import { basicLimit } from "../../../lib/guard";
-import { attachSessionCookies, authErrorMessage, authRequest, type AuthPayload } from "../_auth";
+import { ADMIN_USERNAME, attachAdminSession, verifyAdminPassword } from "../../../lib/local-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type SignInBody = {
-  email?: string;
-  password?: string;
-};
+type Attempt = { count: number; resetAt: number };
+const attempts = new Map<string, Attempt>();
+const MAX_ATTEMPTS = 5;
+const WINDOW_MS = 15 * 60 * 1000;
 
-function validEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+function clientKey(request: Request) {
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "local";
+}
+
+function rateLimit(request: Request) {
+  const key = clientKey(request);
+  const now = Date.now();
+  const current = attempts.get(key);
+  if (!current || current.resetAt <= now) {
+    attempts.set(key, { count: 1, resetAt: now + WINDOW_MS });
+    return { allowed: true, retryAfter: 0 };
+  }
+  current.count += 1;
+  return { allowed: current.count <= MAX_ATTEMPTS, retryAfter: Math.ceil((current.resetAt - now) / 1000) };
 }
 
 export async function POST(request: Request) {
+  const limit = rateLimit(request);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many sign-in attempts. Please wait 15 minutes and try again." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
+
+  const body = (await request.json().catch(() => null)) as { username?: string; password?: string } | null;
+  const username = String(body?.username || "").trim().toLowerCase().slice(0, 64);
+  const password = String(body?.password || "");
+  if (!username || password.length < 4 || password.length > 128) {
+    return NextResponse.json({ ok: false, error: "Enter a valid username and password." }, { status: 400 });
+  }
+
   try {
-    const allowed = await basicLimit(request, "website-sign-in", 12, 600);
-    if (!allowed) {
-      return NextResponse.json({ ok: false, error: "Too many attempts. Please wait and try again." }, { status: 429 });
-    }
-
-    const body = (await request.json().catch(() => null)) as SignInBody | null;
-    const email = String(body?.email || "").trim().toLowerCase().slice(0, 254);
-    const password = String(body?.password || "");
-
-    if (!validEmail(email) || password.length < 8 || password.length > 128) {
-      return NextResponse.json({ ok: false, error: "Enter a valid email and password." }, { status: 400 });
-    }
-
-    const upstream = await authRequest("/token?grant_type=password", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-    const payload = (await upstream.json().catch(() => null)) as AuthPayload | null;
-
-    if (!upstream.ok || !payload?.access_token) {
-      return NextResponse.json(
-        { ok: false, error: authErrorMessage(payload, upstream.status) },
-        { status: upstream.status === 429 ? 429 : 401 }
-      );
-    }
-
-    const response = NextResponse.json({
-      ok: true,
-      user: {
-        id: payload.user?.id || "",
-        email: payload.user?.email || email,
-        displayName: String(payload.user?.user_metadata?.display_name || ""),
-      },
-    });
-
-    return attachSessionCookies(response, payload);
+    const valid = username === ADMIN_USERNAME && verifyAdminPassword(password);
+    if (!valid) return NextResponse.json({ ok: false, error: "Username or password is incorrect." }, { status: 401 });
+    attempts.delete(clientKey(request));
+    return attachAdminSession(NextResponse.json({ ok: true }));
   } catch (error) {
-    console.error("Website sign-in error:", error);
-    return NextResponse.json({ ok: false, error: "Sign in is temporarily unavailable." }, { status: 503 });
+    console.error("Local administrator authentication configuration error:", error);
+    return NextResponse.json(
+      { ok: false, error: "Administrator login is not configured. Run the secure local setup command." },
+      { status: 503 }
+    );
   }
 }

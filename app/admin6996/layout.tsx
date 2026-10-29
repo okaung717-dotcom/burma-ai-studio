@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
@@ -95,7 +96,7 @@ export default function Admin6996Layout({ children }: { children: ReactNode }) {
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <a href="/admin6996/logout" className="rounded-2xl border border-red-300/40 bg-red-50 px-3 py-3 text-center text-xs font-black text-red-700">Logout</a>
-              <a href="/" className="rounded-2xl border border-[#be9537]/35 bg-[#fff9f0] px-3 py-3 text-center text-xs font-black text-[#911923]">View Site</a>
+              <Link href="/studio/spaces" className="rounded-2xl border border-[#be9537]/35 bg-[#fff9f0] px-3 py-3 text-center text-xs font-black text-[#911923]">Open Studio</Link>
             </div>
           </aside>
           <section className="min-w-0 flex-1 rounded-[2rem] border border-[#be9537]/20 bg-white/70 shadow-2xl shadow-[#100708]/5 backdrop-blur dark:bg-[#1a0b0e]/70 dark:shadow-black/20">
@@ -110,7 +111,7 @@ export default function Admin6996Layout({ children }: { children: ReactNode }) {
                     {darkMode ? "Light Mode" : "Dark Mode"}
                   </button>
                   <a href="/admin6996/chat" className="rounded-full bg-[#be9537] px-4 py-2 text-xs font-black text-[#100708]">Open Chat</a>
-                  <a href="/portfolio?adminPreview=1" className="rounded-full border border-[#be9537]/30 bg-white px-4 py-2 text-xs font-black text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">Preview Portfolio</a>
+                  <Link href="/studio/assets" className="rounded-full border border-[#be9537]/30 bg-white px-4 py-2 text-xs font-black text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">Assets Library</Link>
                 </div>
               </div>
             </header>
