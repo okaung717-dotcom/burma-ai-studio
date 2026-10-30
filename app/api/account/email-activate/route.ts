@@ -54,8 +54,20 @@ export async function POST(request: Request) {
 
     const member = await getMemberForToken(accessToken);
     if (!member) return NextResponse.json({ error: "Member account is not active." }, { status: 403 });
-    const payload: AuthPayload = { access_token: accessToken, refresh_token: refreshToken, expires_in: 3600 };
-    return attachSessionCookies(NextResponse.json({ ok: true }), payload);
+
+    // Exchange and validate the refresh token before issuing an HttpOnly session.
+    // Never accept unrelated access/refresh token pairs from the browser.
+    const refreshed = await authRequest("/token?grant_type=refresh_token", {
+      method: "POST", body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+    if (!refreshed.ok) return NextResponse.json({ error: "Invitation session expired. Request a new invitation." }, { status: 403 });
+    const newTokens = await refreshed.json() as AuthPayload;
+    if (!newTokens.access_token || !newTokens.refresh_token) throw new Error("Missing refreshed tokens");
+    const refreshedIdentity = await verifyEmailAuthToken(newTokens.access_token);
+    if (refreshedIdentity?.id !== member.id) {
+      return NextResponse.json({ error: "Invitation session mismatch." }, { status: 403 });
+    }
+    return attachSessionCookies(NextResponse.json({ ok: true }), newTokens);
   } catch (error) {
     console.error("Member invitation activation unavailable:", error);
     return NextResponse.json({ error: "Activation is temporarily unavailable." }, { status: 503 });
