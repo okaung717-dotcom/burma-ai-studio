@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { insertRows, selectRows, updateRows } from "./supabase";
 
-export const ADMIN_USERNAME = "okkar";
+export const ADMIN_USERNAME = "burmaaistudio";
 export const ADMIN_SESSION_COOKIE = "bas_admin_session";
 const SESSION_SECONDS = 60 * 60 * 12;
 const DEVELOPMENT_USER_ID = "00000000-0000-4000-8000-000000000001";
