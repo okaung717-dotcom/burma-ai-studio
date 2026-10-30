@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { authAdminRequest } from "../../account/_auth";
-import { getMemberSession, emailAuthEnabled } from "../../../lib/member-auth";
+import { getMemberSession, emailAuthEnabled, ownerOnlyBetaEnabled } from "../../../lib/member-auth";
 import { validRequestOrigin } from "../../../lib/email-auth-security";
 import { basicLimit } from "../../../lib/guard";
 import { selectRows, supabaseRequest } from "../../../lib/supabase";
@@ -40,6 +40,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   if (!emailAuthEnabled()) return NextResponse.json({ error: "Not found." }, { status: 404 });
+  if (ownerOnlyBetaEnabled()) return NextResponse.json({ error: "Member invitations are unavailable during the owner-only beta." }, { status: 403 });
   if (!validRequestOrigin(request)) return NextResponse.json({ error: "Invalid origin." }, { status: 403 });
   const admin = await owner();
   if (!admin) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
