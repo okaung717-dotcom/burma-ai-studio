@@ -27,6 +27,7 @@ function cleanUrl(value: string) {
 function cleanKey(value: string) {
   return value
     .trim()
+    .replace(/^BAS_STAGING_SUPABASE_SERVER_KEY\s*=\s*/i, "")
     .replace(/^SUPABASE_SERVER_KEY\s*=\s*/i, "")
     .replace(/^SUPABASE_SECRET_KEY\s*=\s*/i, "")
     .replace(/^SUPABASE_SERVICE_ROLE_KEY\s*=\s*/i, "")
@@ -39,7 +40,8 @@ function cleanKey(value: string) {
 export function getSupabaseConfig(): SupabaseConfig {
   const url = cleanUrl(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "");
   const key = cleanKey(
-    process.env.SUPABASE_SERVER_KEY ||
+    process.env.BAS_STAGING_SUPABASE_SERVER_KEY ||
+      process.env.SUPABASE_SERVER_KEY ||
       process.env.SUPABASE_SECRET_KEY ||
       process.env.SUPABASE_SERVICE_ROLE_KEY ||
       process.env.SUPABASE_ANON_KEY ||

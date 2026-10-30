@@ -2,10 +2,15 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { ADMIN_USERNAME, getAdminSession } from "./local-auth";
+import { emailAuthEnabled, getMemberSession } from "./member-auth";
 
 export type SpacesUser = { id: string; email: string; displayName: string; role: "admin" | "member" };
 
 export async function getSpacesUser(): Promise<SpacesUser | null> {
+  if (emailAuthEnabled()) {
+    const member = await getMemberSession();
+    return member ? { id: member.id, email: member.email, displayName: member.displayName, role: member.role } : null;
+  }
   const testSecret = process.env.BAS_SPACES_TEST_TOKEN || "";
   const testHeader = (await headers()).get("x-bas-spaces-test") || "";
   if (process.env.NODE_ENV !== "production" && testSecret.length >= 24 && testHeader === testSecret) {
@@ -25,6 +30,7 @@ export async function getSpacesUser(): Promise<SpacesUser | null> {
 }
 
 export function spacesConfigured() {
+  if (emailAuthEnabled()) return Boolean(process.env.SUPABASE_URL && (process.env.BAS_STAGING_SUPABASE_SERVER_KEY || process.env.SUPABASE_SERVER_KEY));
   const principalConfigured = process.env.NODE_ENV !== "production" || Boolean(process.env.BAS_ADMIN_USER_ID);
   return Boolean(process.env.BAS_ADMIN_PASSWORD_HASH && process.env.BAS_SESSION_SECRET && principalConfigured);
 }
