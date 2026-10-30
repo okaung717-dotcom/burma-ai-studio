@@ -30,7 +30,7 @@ export async function getSpacesUser(): Promise<SpacesUser | null> {
 }
 
 export function spacesConfigured() {
-  if (emailAuthEnabled()) return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVER_KEY);
+  if (emailAuthEnabled()) return Boolean(process.env.SUPABASE_URL && (process.env.BAS_STAGING_SUPABASE_SERVER_KEY || process.env.SUPABASE_SERVER_KEY));
   const principalConfigured = process.env.NODE_ENV !== "production" || Boolean(process.env.BAS_ADMIN_USER_ID);
   return Boolean(process.env.BAS_ADMIN_PASSWORD_HASH && process.env.BAS_SESSION_SECRET && principalConfigured);
 }
