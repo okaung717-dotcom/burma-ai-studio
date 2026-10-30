@@ -86,6 +86,7 @@ create policy studio_member_ledger_self on public.studio_member_credit_ledger
 -- No client policy permits modifying membership, wallet balances, audit or billing.
 
 create or replace function public.studio_provision_invited_member(
+  p_actor_id uuid,
   p_user_id uuid,
   p_email text,
   p_plan_code text default 'starter'
@@ -95,7 +96,38 @@ as $$
 declare
   v_email text := lower(trim(p_email));
 begin
-  if p_user_id is null or v_email !~ '^[^[:space:]@]+@[^[:space:]@]+\\.[^[:space:]@]+$' then
+  if p_user_id is null or v_email !~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+
+    raise exception 'invalid_invitation_account';
+  end if;
+  if not exists (select 1 from public.studio_memberships where user_id = p_actor_id and role = 'admin') then
+    raise exception 'unauthorized_invitation_actor';
+  end if;
+  if not exists (select 1 from public.studio_member_plans where code = p_plan_code and active) then
+    raise exception 'invalid_plan';
+  end if;
+  insert into public.studio_memberships(user_id, role)
+  values (p_user_id, 'member')
+  on conflict (user_id) do nothing;
+  insert into public.studio_member_accounts(user_id, email, plan_code)
+  values (p_user_id, v_email, p_plan_code)
+  on conflict (user_id) do nothing;
+  insert into public.studio_member_wallets(user_id) values (p_user_id)
+  on conflict (user_id) do nothing;
+  insert into public.studio_member_audit(actor_id, subject_id, action, details)
+  values (p_actor_id, p_user_id, 'member_invited', jsonb_build_object('plan', p_plan_code));
+end;
+$$;
+revoke all on function public.studio_provision_invited_member(uuid,uuid,text,text) from public, anon, authenticated;
+grant execute on function public.studio_provision_invited_member(uuid,uuid,text,text) to service_role;
+
+-- Provision the owner manually after verifying their Supabase Auth user ID:
+--   INSERT INTO public.studio_memberships(user_id, role) VALUES ('OWNER-UUID', 'admin')
+--     ON CONFLICT (user_id) DO UPDATE SET role='admin';
+--   INSERT INTO public.studio_member_accounts(user_id,email,status,plan_code)
+--     VALUES ('OWNER-UUID','owner@example.com','active','starter')
+--     ON CONFLICT (user_id) DO UPDATE SET status='active';
+-- Never bootstrap admin access using an email alone or a browser-supplied role.
+ then
     raise exception 'invalid_invitation_account';
   end if;
   if not exists (select 1 from public.studio_member_plans where code = p_plan_code and active) then
@@ -113,8 +145,8 @@ begin
   values (p_user_id, 'member_invited', jsonb_build_object('plan', p_plan_code));
 end;
 $$;
-revoke all on function public.studio_provision_invited_member(uuid,text,text) from public, anon, authenticated;
-grant execute on function public.studio_provision_invited_member(uuid,text,text) to service_role;
+revoke all on function public.studio_provision_invited_member(uuid,uuid,text,text) from public, anon, authenticated;
+grant execute on function public.studio_provision_invited_member(uuid,uuid,text,text) to service_role;
 
 -- Provision the owner manually after verifying their Supabase Auth user ID:
 --   INSERT INTO public.studio_memberships(user_id, role) VALUES ('OWNER-UUID', 'admin')
