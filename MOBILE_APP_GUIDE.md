@@ -5,13 +5,14 @@ This project can become a mobile app in three stages.
 ## Stage 1 — PWA install-ready website
 Already added:
 - `app/manifest.ts`
-- `public/mobile-icon.svg`
+- `public/burma-ai-icon.svg`
 - mobile app metadata in `app/layout.tsx`
 
 This lets modern browsers understand the site as an installable app-style experience.
 
 ## Stage 2 — Android Play Store app
-Recommended path: Android Trusted Web Activity or Capacitor wrapper.
+The existing Android wrapper in `native-app` is preserved. Its authentication
+bridge and build workflow remain the compatibility baseline for future releases.
 
 Required owner accounts/tools:
 - Google Play Console developer account
@@ -23,7 +24,7 @@ Package suggestion:
 - App name: Burma AI Studio
 - Package ID: `com.burmaaistudio.app`
 - Start URL: `https://burmaaistudio.com/`
-- Theme color: `#911923`
+- Theme color: `#08090c`
 
 Play Store output:
 - Android App Bundle `.aab`
@@ -43,14 +44,17 @@ Bundle ID suggestion:
 - `com.burmaaistudio.app`
 
 ## Important App Store note
-A simple website-only WebView can be rejected, especially on iOS. The app should provide clear app value: fast mobile UX, contact actions, portfolio viewing, saved project inquiry flow, push/contact handoff, or admin-monitored chat.
+A simple website-only WebView can be rejected, especially on iOS. The app should
+provide clear app value through its node canvas, saved creative workflows, private
+asset library, and secure generation-job experience.
 
 ## Store content draft
 Short description:
-Burma AI Studio helps businesses create AI promotional videos, cinematic ads, product ads, and Reels/TikTok short videos.
+Burma AI Studio is a private AI image and video creative workspace.
 
 Full description:
-Burma AI Studio is an AI video creation service for brands and businesses. Use the app to explore example videos, request project guidance, contact the team, and plan AI presenter videos, cinematic ads, product ads, music promos, hotel or restaurant ads, and social media short videos.
+Burma AI Studio brings image generation, video generation, AI direction, reusable
+assets, and connected node-based workflows into one private creative workspace.
 
 Privacy policy URL:
 https://burmaaistudio.com/privacy-policy

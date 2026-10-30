@@ -5,7 +5,6 @@ import { useState } from "react";
 const states = ["Open", "Replied", "Closed", "Unread"];
 
 export default function StatePanel() {
-  const [code, setCode] = useState("");
   const [visitorId, setVisitorId] = useState("");
   const [state, setState] = useState("Open");
   const [note, setNote] = useState("Set conversation state here.");
@@ -15,7 +14,7 @@ export default function StatePanel() {
     const res = await fetch("/api/chat-state", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, visitorId, state }),
+      body: JSON.stringify({ visitorId, state }),
     });
     const data = await res.json().catch(() => null);
     setNote(data?.ok ? "Chat state saved." : data?.message || "State save failed.");
@@ -33,13 +32,12 @@ export default function StatePanel() {
       </div>
 
       <div className="rounded-[2rem] border border-[#be9537]/20 bg-white p-6 shadow-sm dark:bg-[#1a0b0e]">
-        <div className="grid gap-3 lg:grid-cols-[1fr_1fr_auto_auto]">
-          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="ADMIN_CONTROL code" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+        <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
           <input value={visitorId} onChange={(e) => setVisitorId(e.target.value)} placeholder="Visitor ID" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
           <select value={state} onChange={(e) => setState(e.target.value)} className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]">
             {states.map((item) => <option key={item}>{item}</option>)}
           </select>
-          <button disabled={!code || !visitorId} onClick={() => void save()} className="rounded-2xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Save</button>
+          <button disabled={!visitorId} onClick={() => void save()} className="rounded-2xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Save</button>
         </div>
         <p className="mt-4 rounded-2xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">{note}</p>
       </div>

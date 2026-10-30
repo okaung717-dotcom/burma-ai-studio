@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type PortfolioItem = {
   id: string;
@@ -34,7 +35,6 @@ function cleanYoutube(value: string) {
 }
 
 export default function PortfolioManagerPage() {
-  const [code, setCode] = useState("");
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [status, setStatus] = useState("Load portfolio videos before editing.");
   const [loading, setLoading] = useState(false);
@@ -59,7 +59,7 @@ export default function PortfolioManagerPage() {
   }
 
   useEffect(() => {
-    void loadPortfolio();
+    queueMicrotask(() => { void loadPortfolio(); });
   }, []);
 
   function updateItem(index: number, field: keyof PortfolioItem, value: string | boolean) {
@@ -79,11 +79,6 @@ export default function PortfolioManagerPage() {
   }
 
   async function savePortfolio() {
-    if (!code) {
-      setStatus("Enter ADMIN_CONTROL code first.");
-      return;
-    }
-
     const prepared = items
       .map((item, index) => ({
         ...item,
@@ -107,7 +102,7 @@ export default function PortfolioManagerPage() {
       const res = await fetch("/api/portfolio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin: code, items: prepared }),
+        body: JSON.stringify({ items: prepared }),
       });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.ok) {
@@ -130,13 +125,13 @@ export default function PortfolioManagerPage() {
           <div>
             <p className="text-xs font-black uppercase tracking-[0.25em] text-[#911923] dark:text-[#e3bc61]">Burma AI Studio</p>
             <h1 className="mt-3 text-3xl font-black md:text-5xl">Portfolio Video Manager</h1>
-            <p className="mt-3 max-w-2xl text-sm text-gray-500 dark:text-[#d8c4a3]">Add, edit, reorder, preview, and publish YouTube portfolio videos. Public portfolio page reads these saved videos from the backend.</p>
+            <p className="mt-3 max-w-2xl text-sm text-gray-500 dark:text-[#d8c4a3]">Legacy portfolio records are preserved for archive and migration into the private Assets Library.</p>
           </div>
-          <a href="/portfolio?adminPreview=1" className="rounded-xl border border-[#be9537]/35 px-4 py-3 text-sm font-black text-[#911923] transition hover:bg-[#fff3e3] dark:text-[#e3bc61]">Preview Public Portfolio</a>
+          <Link href="/studio/assets" className="rounded-xl border border-[#be9537]/35 px-4 py-3 text-sm font-black text-[#911923] transition hover:bg-[#fff3e3] dark:text-[#e3bc61]">Open Assets Library</Link>
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-[1fr_auto_auto_auto]">
-          <input value={code} onChange={(event) => setCode(event.target.value)} type="password" placeholder="ADMIN_CONTROL code" className="rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <p className="rounded-xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">Protected by your signed administrator session.</p>
           <button disabled={loading} onClick={() => void loadPortfolio()} className="rounded-xl border border-[#be9537]/35 px-5 py-3 font-extrabold text-[#911923] disabled:opacity-50 dark:text-[#e3bc61]">Load</button>
           <button onClick={() => setItems((current) => [...current, emptyItem()])} className="rounded-xl border border-[#be9537]/35 px-5 py-3 font-extrabold text-[#911923] dark:text-[#e3bc61]">Add Video</button>
           <button disabled={saving || !items.length} onClick={() => void savePortfolio()} className="rounded-xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Save</button>

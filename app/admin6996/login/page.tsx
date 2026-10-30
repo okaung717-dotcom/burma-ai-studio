@@ -12,7 +12,7 @@ export default function AdminLoginPage() {
     setLoading(true);
     setStatus("Checking login...");
     try {
-      const response = await fetch("/api/admin/session", {
+      const response = await fetch("/api/account/sign-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

@@ -1,4 +1,5 @@
 import { LEADS_KEY, withRedis } from "../../lib/redis";
+import { requireAdminSession } from "../../lib/admin-api-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,10 +35,9 @@ function normalizeLead(lead: Record<string, unknown>) {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json().catch(() => null)) as { code?: string } | null;
-    const code = process.env.ADMIN_CONTROL || process.env.ADMIN_Control || process.env.ADMIN_PIN || "";
-    if (!code) return Response.json({ ok: false, message: "ADMIN_CONTROL is not configured." }, { status: 503 });
-    if (!body?.code || body.code !== code) return Response.json({ ok: false, message: "Invalid code." }, { status: 401 });
+    await request.json().catch(() => null);
+    const unauthorized = await requireAdminSession();
+    if (unauthorized) return unauthorized;
 
     const { raw, statuses } = await withRedis(async (client) => ({
       raw: await client.lRange(LEADS_KEY, 0, 199),

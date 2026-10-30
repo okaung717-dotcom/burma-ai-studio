@@ -1,4 +1,5 @@
-import { isAdminPin, withRedis } from "../../../lib/redis";
+import { requireAdminSession } from "../../../lib/admin-api-auth";
+import { withRedis } from "../../../lib/redis";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,11 +27,6 @@ function clean(value: unknown, fallback = "", max = 3000) {
   return typeof value === "string" && value.trim() ? value.trim().slice(0, max) : fallback;
 }
 
-function isLoggedIn(request: Request, code?: string) {
-  const cookie = request.headers.get("cookie") || "";
-  return cookie.includes("bas_admin_ok=1") || isAdminPin(code);
-}
-
 function parseLogs(items: string[]) {
   return items
     .map((item) => { try { return JSON.parse(item) as ChatLog; } catch { return null; } })
@@ -56,7 +52,8 @@ function buildThreads(logs: ChatLog[]) {
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as Body | null;
-    if (!isLoggedIn(request, body?.code)) return Response.json({ ok: false, message: "Admin login required." }, { status: 401 });
+    const unauthorized = await requireAdminSession();
+    if (unauthorized) return unauthorized;
 
     if (body?.action === "reply") {
       const visitorId = clean(body.visitorId, "", 160);
