@@ -13,7 +13,7 @@ type MemberRow = {
   created_at: string;
 };
 
-export default function MemberManager({ ownerEmail }: { ownerEmail: string }) {
+export default function MemberManager({ ownerEmail, ownerOnlyBeta = false }: { ownerEmail: string; ownerOnlyBeta?: boolean }) {
   const router = useRouter();
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [email, setEmail] = useState("");
@@ -84,7 +84,7 @@ export default function MemberManager({ ownerEmail }: { ownerEmail: string }) {
       <section className="mt-7 rounded-2xl border border-white/10 bg-[#1d1928] p-6">
         <h2 className="text-xl font-semibold">Invite member</h2>
         <p className="mt-1 text-sm text-[#aaa4b8]">Your member will set their own password. New accounts receive zero credits.</p>
-        <form className="mt-5 grid gap-3 sm:grid-cols-[1fr_180px_auto]" onSubmit={invite}>
+        {ownerOnlyBeta ? <p className="mt-5 rounded-xl border border-violet-400/20 bg-violet-400/10 p-4 text-sm text-violet-200">Owner-only beta is active. Member invitations will become available after email delivery and access controls are verified.</p> : <form className="mt-5 grid gap-3 sm:grid-cols-[1fr_180px_auto]" onSubmit={invite}>
           <input aria-label="Member email" type="email" placeholder="member@example.com" value={email}
             onChange={e=>setEmail(e.target.value)} required maxLength={254}
             className="min-w-0 rounded-xl border border-white/15 bg-[#14111e] px-4 py-3"/>
@@ -93,7 +93,7 @@ export default function MemberManager({ ownerEmail }: { ownerEmail: string }) {
             <option value="starter">Starter</option><option value="pro">Pro</option><option value="premium">Premium</option>
           </select>
           <button disabled={sending} className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold disabled:opacity-60"><Send size={16}/>{sending?"Sending...":"Send invite"}</button>
-        </form>
+        </form>}
         {error && <p role="alert" className="mt-4 text-sm text-rose-300">{error}</p>}
         {message && <p role="status" className="mt-4 text-sm text-emerald-300">{message}</p>}
       </section>
