@@ -6,7 +6,7 @@ import { ArrowRight, Eye, EyeOff, Loader2, LockKeyhole, Sparkles } from "lucide-
 
 export default function LoginForm() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("Burmaaistudio");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
