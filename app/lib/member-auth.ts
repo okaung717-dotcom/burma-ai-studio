@@ -20,6 +20,11 @@ export function emailAuthEnabled() {
   return process.env.BAS_EMAIL_AUTH_ENABLED === "true";
 }
 
+/** Closed to non-owner accounts during the first official beta release. */
+export function ownerOnlyBetaEnabled() {
+  return process.env.BAS_OWNER_ONLY_BETA === "true";
+}
+
 /** Always verify tokens with the Supabase Auth server; never trust a decoded JWT alone. */
 export async function verifyEmailAuthToken(token: string): Promise<SupabaseIdentity | null> {
   if (!token || token.length > 8192) return null;
@@ -46,6 +51,11 @@ export async function getMemberForToken(token: string): Promise<MemberPrincipal 
   const member = memberships[0];
   const account = accounts[0];
   if (!member || !account || !["admin", "member"].includes(member.role)) return null;
+  if (ownerOnlyBetaEnabled()) {
+    const ownerId = process.env.BAS_ADMIN_USER_ID || "";
+    if (!/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(ownerId) ||
+        identity.id !== ownerId || member.role !== "admin") return null;
+  }
   if (account.status !== "active" || account.email.toLowerCase() !== identity.email.toLowerCase()) return null;
   if (account.expires_at && new Date(account.expires_at).getTime() <= Date.now()) return null;
 
