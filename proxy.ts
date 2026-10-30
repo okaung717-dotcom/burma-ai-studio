@@ -10,6 +10,10 @@ export function proxy(request: NextRequest) {
     return new NextResponse("Not Found", { status: 404 });
   }
 
+  if (process.env.BAS_OWNER_ONLY_BETA === "true" && pathname.startsWith(hiddenAdminPrefix)) {
+    return new NextResponse("Not Found", { status: 404 });
+  }
+
   if (pathname.startsWith(hiddenAdminPrefix)) {
     const response = NextResponse.next();
     response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
