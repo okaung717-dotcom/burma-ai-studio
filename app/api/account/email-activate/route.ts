@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { attachSessionCookies, authRequest, type AuthPayload } from "../_auth";
-import { emailAuthEnabled, getMemberForToken, verifyEmailAuthToken } from "../../../lib/member-auth";
+import { emailAuthEnabled, ownerOnlyBetaEnabled, getMemberForToken, verifyEmailAuthToken } from "../../../lib/member-auth";
 import { validRequestOrigin } from "../../../lib/email-auth-security";
 import { selectRows, updateRows } from "../../../lib/supabase";
 
@@ -11,6 +11,7 @@ type Account = { email: string; status: string };
 
 export async function POST(request: Request) {
   if (!emailAuthEnabled()) return NextResponse.json({ error: "Not found." }, { status: 404 });
+  if (ownerOnlyBetaEnabled()) return NextResponse.json({ error: "Invitations are disabled during the owner-only beta." }, { status: 403 });
   if (!validRequestOrigin(request)) return NextResponse.json({ error: "Invalid request." }, { status: 403 });
   const body = await request.json().catch(() => null) as {
     accessToken?: unknown; refreshToken?: unknown; password?: unknown
