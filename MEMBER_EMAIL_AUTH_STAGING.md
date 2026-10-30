@@ -26,7 +26,7 @@ The existing username-based login remains unchanged unless `BAS_EMAIL_AUTH_ENABL
 5. Supabase Dashboard → Authentication → URL Configuration: allow the exact preview `https://...vercel.app/activate` redirect. Check invite email template supports `{{ .RedirectTo }}`. Configure reliable SMTP before inviting paying customers.
 6. In Vercel **Preview scope only** set:
    - `SUPABASE_URL` = staging project URL
-   - `SUPABASE_SERVER_KEY` = staging secret key (server only; NEVER `NEXT_PUBLIC_`)
+   - `BAS_STAGING_SUPABASE_SERVER_KEY` = staging secret key (server only, branch-scoped; NEVER `NEXT_PUBLIC_`). This unique name avoids Vercel duplicate-key conflict with shared Preview `SUPABASE_SERVER_KEY`. Never modify the shared Preview key.
    - `SUPABASE_PUBLISHABLE_KEY` = staging publishable client key
    - `BAS_SESSION_SECRET` = long random secret
    - `BAS_INVITE_REDIRECT_URL` = exact HTTPS preview URL ending in `/activate`
