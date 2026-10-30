@@ -68,9 +68,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invitation limit reached. Try later." }, { status: 429 });
     }
 
-    const invited = await authAdminRequest("/invite", {
+    const invited = await authAdminRequest(`/invite?redirect_to=${encodeURIComponent(redirect)}`, {
       method: "POST",
-      body: JSON.stringify({ email, data: { invited_via: "burma_ai_studio" }, redirect_to: redirect }),
+      body: JSON.stringify({ email, data: { invited_via: "burma_ai_studio" } }),
     });
     const body = await invited.json().catch(() => ({})) as {
       id?: string; user?: { id?: string }; message?: string;
