@@ -1,15 +1,12 @@
 import {
   deleteRows,
   insertRows,
-  isAdminPin,
   isRecord,
   selectRows,
   text,
   upsertRows,
   updateRows,
 } from "./supabase";
-
-export { getAdminControlCode, isAdminPin } from "./supabase";
 
 export const LEADS_KEY = "burma-ai-studio:leads";
 export const PORTFOLIO_KEY = "burma-ai-studio:portfolio";

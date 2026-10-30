@@ -134,7 +134,7 @@ export default function TermsOfService() {
             Terms of <span className="text-[#00C2FF]">Service</span>
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-gray-500 dark:text-gray-400">
-            These Terms of Service explain the rules for using Burma AI Studio's website and AI video creation services.
+            These Terms of Service explain the rules for using Burma AI Studio&apos;s website and AI video creation services.
           </p>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-gray-500 dark:text-gray-400">
             ဤ Terms of Service သည် Burma AI Studio website နှင့် AI video creation service များကို အသုံးပြုရာတွင် လိုက်နာရမည့် စည်းမျဉ်းများကို ရှင်းပြထားခြင်းဖြစ်ပါသည်။

@@ -1,4 +1,5 @@
-import { isAdminPin, withRedis } from "../../lib/redis";
+import { requireAdminSession } from "../../lib/admin-api-auth";
+import { withRedis } from "../../lib/redis";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,7 +31,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as Body | null;
-  if (!isAdminPin(body?.code)) return Response.json({ ok: false, message: "Invalid code." }, { status: 401 });
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
   const content = {
     homeTitle: text(body?.homeTitle, defaults.homeTitle),
     homeSubtitle: text(body?.homeSubtitle, defaults.homeSubtitle),

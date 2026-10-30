@@ -39,14 +39,18 @@ function setVariable(source, name, value) {
 }
 
 try {
-  const password = await hiddenPrompt("Enter the owner's four-digit password: ");
-  if (!/^\d{4}$/.test(password)) throw new Error("Password must contain exactly four digits.");
+  const password = await hiddenPrompt("Enter a new administrator password (14-128 characters): ");
+  if (password.length < 14 || password.length > 128) throw new Error("Password must contain between 14 and 128 characters.");
+  if (password.toLowerCase().includes("okkar")) throw new Error("Password must not contain the administrator username.");
+  const categories = [/[a-z]/.test(password), /[A-Z]/.test(password), /\d/.test(password), /[^A-Za-z0-9]/.test(password)].filter(Boolean).length;
+  if (categories < 3) throw new Error("Password must use at least three of: lowercase, uppercase, numbers, and symbols.");
+  if (/^(password|administrator|burmaaistudio|123456)/i.test(password)) throw new Error("Choose a less predictable password.");
   const confirmation = await hiddenPrompt("Confirm the password: ");
   if (password !== confirmation) throw new Error("Passwords do not match.");
 
   const salt = randomBytes(16);
-  const hash = scryptSync(password, salt, 32, { N: 32768, r: 8, p: 1, maxmem: 64 * 1024 * 1024 });
-  const encodedHash = `scrypt$N=32768,r=8,p=1$${salt.toString("base64url")}$${hash.toString("base64url")}`;
+  const hash = scryptSync(password, salt, 32, { N: 65536, r: 8, p: 1, maxmem: 128 * 1024 * 1024 });
+  const encodedHash = `scrypt$N=65536,r=8,p=1$${salt.toString("base64url")}$${hash.toString("base64url")}`;
   const dotenvSafeHash = encodedHash.replaceAll("$", "\\$");
   let source = fs.existsSync(envPath) ? fs.readFileSync(envPath, "utf8") : "";
   source = setVariable(source, "BAS_ADMIN_PASSWORD_HASH", dotenvSafeHash);

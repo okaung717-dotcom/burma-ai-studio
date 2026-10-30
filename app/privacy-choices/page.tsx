@@ -19,9 +19,9 @@ export default function PrivacyChoicesPage() {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(PRIVACY_CONSENT_KEY);
-      setChoice(stored === "analytics" || stored === "essential" ? stored : "unset");
+      queueMicrotask(() => setChoice(stored === "analytics" || stored === "essential" ? stored : "unset"));
     } catch {
-      setChoice("unset");
+      queueMicrotask(() => setChoice("unset"));
     }
   }, []);
 

@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookOpen, ChevronDown, FileImage, Grid2X2, Heart, ImageIcon, LayoutList, ListFilter, Minus, Plus, Search, Settings2, Sparkles, Star, UserRound, X } from "lucide-react";
 
-type Reference = { id: string; name: string; role: "Style" | "Character" | "Reference"; preview: string };
+type Reference = { id: string; name: string; role: "Style" | "Character" | "Reference"; preview: string; assetId?: string };
 type Creation = { id: string; prompt: string; aspect: string; quality: string; createdAt: string; preview?: string; favorite?: boolean };
 
 const STORAGE_KEY = "bas-image-studio-demo-v1";
@@ -27,22 +27,46 @@ export default function ImageStudio() {
   const uploadRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null") as { creations?: Creation[]; references?: Reference[] } | null;
-      queueMicrotask(() => { setCreations(stored?.creations || []); setReferences(stored?.references || []); });
-    } catch {}
+    let cancelled = false;
+    const load = async () => {
+      let stored: { creations?: Creation[]; references?: Reference[] } | null = null;
+      try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null") as { creations?: Creation[]; references?: Reference[] } | null; } catch {}
+      if (!cancelled) { setCreations(stored?.creations || []); setReferences(stored?.references || []); }
+      try {
+        const response = await fetch("/api/studio/persistence?kind=image", { cache: "no-store" });
+        const result = await response.json();
+        if (response.ok && Array.isArray(result.creations) && result.creations.length && !cancelled) setCreations(result.creations);
+        else if (response.ok && stored?.creations?.length) await fetch("/api/studio/persistence", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "image", creations: stored.creations }) });
+      } catch {}
+    };
+    void load();
+    return () => { cancelled = true; };
   }, []);
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ creations, references }));
+    const timer = window.setTimeout(() => { void fetch("/api/studio/persistence", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "image", creations }) }); }, 500);
+    return () => window.clearTimeout(timer);
   }, [creations, references]);
 
   const visible = useMemo(() => creations.filter(item => (!favoritesOnly || item.favorite) && item.prompt.toLowerCase().includes(query.toLowerCase())), [creations, favoritesOnly, query]);
   const chooseReference = (role: Reference["role"]) => { uploadRole.current = role; uploadRef.current?.click(); };
-  const addReference = (file?: File) => {
+  const addReference = async (file?: File) => {
     if (!file) return;
     if (!file.type.startsWith("image/") || file.size > 15_000_000) { setMessage("Choose an image smaller than 15 MB."); return; }
+    let uploaded: { id: string; url: string } | null = null;
+    try {
+      const form = new FormData(); form.set("file", file);
+      const response = await fetch("/api/studio/media", { method: "POST", body: form });
+      const result = await response.json();
+      if (response.ok) uploaded = result;
+    } catch {}
+    if (uploaded) {
+      setReferences(items => [...items, { id: crypto.randomUUID(), name: file.name, role: uploadRole.current, preview: uploaded!.url, assetId: uploaded!.id }].slice(-14));
+      setMessage("Reference stored in private media storage. Demo Mode remains enabled.");
+      return;
+    }
     const reader = new FileReader();
-    reader.onload = () => setReferences(items => [...items, { id: crypto.randomUUID(), name: file.name, role: uploadRole.current, preview: String(reader.result) }].slice(-14));
+    reader.onload = () => { setReferences(items => [...items, { id: crypto.randomUUID(), name: file.name, role: uploadRole.current, preview: String(reader.result) }].slice(-14)); setMessage("Reference kept in this browser because private media storage is unavailable."); };
     reader.readAsDataURL(file);
   };
   const generate = async () => {

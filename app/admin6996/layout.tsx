@@ -23,7 +23,7 @@ export default function Admin6996Layout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.body.classList.add("bas-admin-route");
-    setDarkMode(document.documentElement.classList.contains("dark"));
+    queueMicrotask(() => setDarkMode(document.documentElement.classList.contains("dark")));
     return () => document.body.classList.remove("bas-admin-route");
   }, []);
 
@@ -36,7 +36,7 @@ export default function Admin6996Layout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isAuthPage) {
-      setAllowed(true);
+      queueMicrotask(() => setAllowed(true));
       return;
     }
     fetch("/api/admin/session", { cache: "no-store" })

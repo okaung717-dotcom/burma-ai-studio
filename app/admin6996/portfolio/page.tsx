@@ -35,7 +35,6 @@ function cleanYoutube(value: string) {
 }
 
 export default function PortfolioManagerPage() {
-  const [code, setCode] = useState("");
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [status, setStatus] = useState("Load portfolio videos before editing.");
   const [loading, setLoading] = useState(false);
@@ -60,7 +59,7 @@ export default function PortfolioManagerPage() {
   }
 
   useEffect(() => {
-    void loadPortfolio();
+    queueMicrotask(() => { void loadPortfolio(); });
   }, []);
 
   function updateItem(index: number, field: keyof PortfolioItem, value: string | boolean) {
@@ -80,11 +79,6 @@ export default function PortfolioManagerPage() {
   }
 
   async function savePortfolio() {
-    if (!code) {
-      setStatus("Enter ADMIN_CONTROL code first.");
-      return;
-    }
-
     const prepared = items
       .map((item, index) => ({
         ...item,
@@ -108,7 +102,7 @@ export default function PortfolioManagerPage() {
       const res = await fetch("/api/portfolio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin: code, items: prepared }),
+        body: JSON.stringify({ items: prepared }),
       });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.ok) {
@@ -137,7 +131,7 @@ export default function PortfolioManagerPage() {
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-[1fr_auto_auto_auto]">
-          <input value={code} onChange={(event) => setCode(event.target.value)} type="password" placeholder="ADMIN_CONTROL code" className="rounded-xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <p className="rounded-xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">Protected by your signed administrator session.</p>
           <button disabled={loading} onClick={() => void loadPortfolio()} className="rounded-xl border border-[#be9537]/35 px-5 py-3 font-extrabold text-[#911923] disabled:opacity-50 dark:text-[#e3bc61]">Load</button>
           <button onClick={() => setItems((current) => [...current, emptyItem()])} className="rounded-xl border border-[#be9537]/35 px-5 py-3 font-extrabold text-[#911923] dark:text-[#e3bc61]">Add Video</button>
           <button disabled={saving || !items.length} onClick={() => void savePortfolio()} className="rounded-xl bg-[#911923] px-5 py-3 font-extrabold text-white disabled:opacity-50">Save</button>

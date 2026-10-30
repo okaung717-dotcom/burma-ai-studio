@@ -12,10 +12,12 @@ export async function getSpacesUser(): Promise<SpacesUser | null> {
     return { id: "00000000-0000-4000-8000-000000000001", email: "spaces-test@local.invalid", displayName: "Spaces Test", role: "admin" };
   }
 
-  const session = await getAdminSession();
+  let session;
+  try { session = await getAdminSession(); }
+  catch (error) { console.error("Shared administrator session validation failed:", error); return null; }
   if (!session) return null;
   return {
-    id: session.sid,
+    id: session.uid,
     email: "",
     displayName: ADMIN_USERNAME,
     role: "admin",
@@ -23,5 +25,6 @@ export async function getSpacesUser(): Promise<SpacesUser | null> {
 }
 
 export function spacesConfigured() {
-  return Boolean(process.env.BAS_ADMIN_PASSWORD_HASH && process.env.BAS_SESSION_SECRET);
+  const principalConfigured = process.env.NODE_ENV !== "production" || Boolean(process.env.BAS_ADMIN_USER_ID);
+  return Boolean(process.env.BAS_ADMIN_PASSWORD_HASH && process.env.BAS_SESSION_SECRET && principalConfigured);
 }

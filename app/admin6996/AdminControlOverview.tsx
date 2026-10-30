@@ -135,7 +135,7 @@ export default function AdminControlOverview() {
   }
 
   useEffect(() => {
-    void load();
+    queueMicrotask(() => { void load(); });
   }, []);
 
   const maxPageCount = useMemo(() => Math.max(1, ...(data?.analytics?.topPages || []).map((item) => item.count)), [data]);

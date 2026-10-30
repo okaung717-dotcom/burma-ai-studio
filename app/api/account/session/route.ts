@@ -5,9 +5,11 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const session = await getAdminSession();
+  let session;
+  try { session = await getAdminSession(); }
+  catch { return NextResponse.json({ authenticated: false, user: null }, { status: 503 }); }
   return NextResponse.json({
     authenticated: Boolean(session),
-    user: session ? { id: session.sid, username: ADMIN_USERNAME, displayName: ADMIN_USERNAME } : null,
+    user: session ? { id: session.uid, username: ADMIN_USERNAME, displayName: ADMIN_USERNAME } : null,
   });
 }

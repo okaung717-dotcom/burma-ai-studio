@@ -148,6 +148,14 @@ alter table public.studio_audit_logs enable row level security;
 alter table public.studio_provider_models enable row level security;
 alter table public.studio_usage_ledger enable row level security;
 
+drop policy if exists "members read self" on public.studio_memberships;
+drop policy if exists "owners manage projects" on public.studio_projects;
+drop policy if exists "owners manage spaces" on public.studio_spaces;
+drop policy if exists "owners manage nodes" on public.studio_nodes;
+drop policy if exists "owners manage connections" on public.studio_connections;
+drop policy if exists "owners read assets" on public.studio_assets;
+drop policy if exists "owners read jobs" on public.studio_generation_jobs;
+drop policy if exists "owners read usage" on public.studio_usage_ledger;
 create policy "members read self" on public.studio_memberships for select using (user_id = auth.uid());
 create policy "owners manage projects" on public.studio_projects for all using (owner_id = auth.uid()) with check (owner_id = auth.uid());
 create policy "owners manage spaces" on public.studio_spaces for all using (owner_id = auth.uid()) with check (owner_id = auth.uid());
@@ -284,6 +292,7 @@ insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_typ
 values ('studio-media', 'studio-media', false, 52428800, array['image/png','image/jpeg','image/webp','video/mp4','video/webm'])
 on conflict (id) do nothing;
 
+drop policy if exists "members read own studio media" on storage.objects;
 create policy "members read own studio media" on storage.objects for select to authenticated
   using (bucket_id = 'studio-media' and (storage.foldername(name))[1] = auth.uid()::text);
 

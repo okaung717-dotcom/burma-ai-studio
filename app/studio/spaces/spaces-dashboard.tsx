@@ -11,17 +11,48 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
   const [projects, setProjects] = useState<StudioProject[]>([]);
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
+  const [storageLabel, setStorageLabel] = useState("Local backup");
 
   useEffect(() => {
-    const stored = localStorage.getItem(PROJECTS_KEY);
-    queueMicrotask(() => {
-      setProjects(stored ? JSON.parse(stored) : starterProjects());
-      setReady(true);
-    });
+    let cancelled = false;
+    const load = async () => {
+      let local = starterProjects();
+      try {
+        const stored = localStorage.getItem(PROJECTS_KEY);
+        if (stored) local = JSON.parse(stored) as StudioProject[];
+      } catch {}
+      if (cancelled) return;
+      setProjects(local);
+      try {
+        const response = await fetch("/api/studio/persistence?kind=projects", { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error);
+        if (Array.isArray(result.projects) && result.projects.length) {
+          setProjects(result.projects);
+        } else {
+          const imported = await fetch("/api/studio/persistence", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "projects", projects: local }) });
+          if (!imported.ok) throw new Error("Local project import failed.");
+        }
+        setStorageLabel("Securely synced");
+      } catch {
+        setStorageLabel("Local backup · sync unavailable");
+      }
+      if (!cancelled) setReady(true);
+    };
+    void load();
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {
-    if (ready) localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+    if (!ready) return;
+    localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+    const timer = window.setTimeout(async () => {
+      try {
+        const response = await fetch("/api/studio/persistence", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "projects", projects }) });
+        setStorageLabel(response.ok ? "Securely synced" : "Local backup · sync unavailable");
+      } catch { setStorageLabel("Local backup · sync unavailable"); }
+    }, 500);
+    return () => window.clearTimeout(timer);
   }, [projects, ready]);
 
   const visible = useMemo(() => projects.filter((project) => project.name.toLowerCase().includes(query.toLowerCase())), [projects, query]);
@@ -37,7 +68,10 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
     setProjects((items) => items.map((project) => project.id === projectId ? { ...project, spaces: [...project.spaces, { id: crypto.randomUUID(), name, updatedAt: new Date().toISOString(), nodeCount: 0 }] } : project));
   };
   const removeProject = (id: string) => {
-    if (window.confirm("Delete this local demo project and all of its spaces?")) setProjects((items) => items.filter((item) => item.id !== id));
+    if (window.confirm("Delete this project and all of its spaces?")) {
+      setProjects((items) => items.filter((item) => item.id !== id));
+      void fetch(`/api/studio/persistence?kind=project&id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    }
   };
   const duplicateProject = (source: StudioProject) => setProjects((items) => [{ ...source, id: crypto.randomUUID(), name: `${source.name} copy`, spaces: source.spaces.map((space) => ({ ...space, id: crypto.randomUUID() })) }, ...items]);
   const renameSpace = (projectId: string, spaceId: string, currentName: string) => {
@@ -47,8 +81,9 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
   };
   const duplicateSpace = (projectId: string, spaceId: string) => setProjects((items) => items.map((project) => project.id === projectId ? { ...project, spaces: [...project.spaces, ...project.spaces.filter((space) => space.id === spaceId).map((space) => ({ ...space, id: crypto.randomUUID(), name: `${space.name} copy`, updatedAt: new Date().toISOString() }))] } : project));
   const removeSpace = (projectId: string, spaceId: string) => {
-    if (!window.confirm("Delete this local demo space?")) return;
+    if (!window.confirm("Delete this space?")) return;
     setProjects((items) => items.map((project) => project.id === projectId ? { ...project, spaces: project.spaces.filter((space) => space.id !== spaceId) } : project));
+    void fetch(`/api/studio/persistence?kind=space&id=${encodeURIComponent(spaceId)}`, { method: "DELETE" });
   };
   const spaceCards = visible.flatMap((project) => project.spaces.map((space) => ({ project, space })));
 
@@ -62,7 +97,7 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
         <div className="spaces-heading"><div><p>BURMA AI STUDIO</p><h1>Spaces</h1><span>Build node-based generative workflows and bring your ideas to life.</span></div></div>
         <div className="spaces-browser-bar"><div className="spaces-tabs"><button className="active"><Boxes/>My spaces</button><button disabled><Users/>Shared</button><button disabled><LayoutGrid/>Templates</button><button disabled><Workflow/>Flows</button></div><div className="spaces-view-actions"><button className="spaces-new" onClick={() => visible[0] ? addSpace(visible[0].id) : createProject()}><Plus/>New space</button><button title="Favorites"><Heart/></button><button><Grid2X2/>Layout</button><button><ListFilter/>Filters</button><label className="spaces-search"><Search/><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search spaces"/></label></div></div>
         {!ready ? <div className="spaces-empty">Loading your local demo workspace…</div> : visible.length === 0 ? <button className="spaces-empty" onClick={createProject}><Plus/>Create your first project</button> : <div className="spaces-project-grid">
-          {spaceCards.map(({ project, space }, index) => <article key={space.id} className="spaces-project-card"><Link className="spaces-card-link" href={`/studio/spaces/${space.id}?project=${project.id}`}><div className="spaces-card-cover"><div className="spaces-preview-flow"><i/><i/><i/><span/><span/></div><em>{index % 3 === 0 ? "Creative flow" : index % 3 === 1 ? "Image sequence" : "Motion study"}</em></div><div className="spaces-card-status"><Sparkles/>Demo ready</div><div className="spaces-card-title"><div><h2>{space.name}</h2><p>{project.name} · Updated locally</p></div></div></Link><details className="spaces-card-menu"><summary aria-label={`Manage ${space.name}`}><MoreHorizontal/></summary><div><button onClick={() => renameSpace(project.id, space.id, space.name)}>Rename</button><button onClick={() => duplicateSpace(project.id, space.id)}>Duplicate</button><button onClick={() => removeSpace(project.id, space.id)}>Delete</button></div></details></article>)}
+          {spaceCards.map(({ project, space }, index) => <article key={space.id} className="spaces-project-card"><Link className="spaces-card-link" href={`/studio/spaces/${space.id}?project=${project.id}`}><div className="spaces-card-cover"><div className="spaces-preview-flow"><i/><i/><i/><span/><span/></div><em>{index % 3 === 0 ? "Creative flow" : index % 3 === 1 ? "Image sequence" : "Motion study"}</em></div><div className="spaces-card-status"><Sparkles/>Demo ready</div><div className="spaces-card-title"><div><h2>{space.name}</h2><p>{project.name} · {storageLabel}</p></div></div></Link><details className="spaces-card-menu"><summary aria-label={`Manage ${space.name}`}><MoreHorizontal/></summary><div><button onClick={() => renameSpace(project.id, space.id, space.name)}>Rename</button><button onClick={() => duplicateSpace(project.id, space.id)}>Duplicate</button><button onClick={() => removeSpace(project.id, space.id)}>Delete</button></div></details></article>)}
           {visible.map((project) => project.spaces.length === 0 && <article key={project.id} className="spaces-project-card spaces-new-project"><button onClick={() => addSpace(project.id)}><FolderPlus/><b>{project.name}</b><span>Create space</span></button><details className="spaces-card-menu"><summary aria-label="Project actions"><MoreHorizontal/></summary><div><button onClick={() => duplicateProject(project)}><Copy/>Duplicate project</button><button onClick={() => removeProject(project.id)}><Trash2/>Delete project</button></div></details></article>)}
           <button className="spaces-create-card" onClick={() => visible[0] ? addSpace(visible[0].id) : createProject()}><Plus/><b>New space</b><span>Start with a blank infinite canvas</span></button>
         </div>}

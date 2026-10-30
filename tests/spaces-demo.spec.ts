@@ -12,11 +12,16 @@ test("unauthenticated root opens the private-beta login and logout endpoint clea
   const logout = await context.request.post("/api/account/sign-out");
   expect(logout.status()).toBe(200);
   expect(await logout.json()).toEqual({ ok: true });
+  await context.addCookies([{ name: "bas_admin_ok", value: "1", domain: "127.0.0.1", path: "/" }]);
+  const legacySession = await context.request.get("/api/admin/session");
+  expect((await legacySession.json()).ok).toBe(false);
+  expect((await context.request.get("/api/admin/overview")).status()).toBe(401);
+  expect((await context.request.post("/api/content", { data: { homeTitle: "unauthorized" } })).status()).toBe(401);
   await context.close();
 });
 
 test("local administrator authentication is secure and persists until logout", async ({ browser }) => {
-  expect(testAdminPassword).toMatch(/^\d{4}$/);
+  expect(testAdminPassword.length).toBeGreaterThanOrEqual(14);
   const context = await browser.newContext({
     baseURL: "http://127.0.0.1:3117",
     extraHTTPHeaders: { "x-bas-spaces-test": "" },
@@ -25,7 +30,7 @@ test("local administrator authentication is secure and persists until logout", a
   await page.goto("/login");
   await page.getByLabel("Username").fill("okkar");
   const passwordInput = page.locator('input[autocomplete="current-password"]');
-  await passwordInput.fill("0000");
+  await passwordInput.fill("Incorrect!Password9");
   await page.getByRole("button", { name: "Sign In" }).click();
   await expect(page.locator(".login-error")).toContainText("incorrect");
 
@@ -66,7 +71,9 @@ test("Image Studio uses the light shell and persists safe Demo Mode creations", 
   await expect(page.locator(".image-controls")).toBeVisible();
   await expect(page.locator(".image-creations")).toBeVisible();
   await expect(page.getByText("Your creation feed starts here")).toBeVisible();
+  await page.waitForTimeout(500);
   await page.getByLabel("PROMPT").fill("Elegant rainy Yangon street, cinematic practical light");
+  await expect(page.getByLabel("PROMPT")).toHaveValue("Elegant rainy Yangon street, cinematic practical light");
   await page.getByRole("button", { name: "Increase quantity" }).click();
   await page.getByRole("button", { name: "Generate in Demo Mode" }).click();
   await expect(page.getByRole("status")).toContainText("No provider was contacted");

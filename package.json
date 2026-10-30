@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:spaces": "playwright test tests/spaces-demo.spec.ts",
+    "security:audit-config": "node scripts/audit-production-config.mjs",
+    "security:validate-migrations": "node scripts/validate-studio-migrations.mjs",
     "auth:setup": "node scripts/setup-local-admin.mjs",
     "native:auth:configure": "node scripts/configure-android-auth.mjs",
     "native:auth:patch": "node scripts/patch-native-android-auth.mjs",

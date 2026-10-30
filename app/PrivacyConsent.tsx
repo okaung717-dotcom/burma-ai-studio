@@ -19,9 +19,9 @@ export default function PrivacyConsent() {
 
   useEffect(() => {
     try {
-      setVisible(!localStorage.getItem(PRIVACY_CONSENT_KEY));
+      queueMicrotask(() => setVisible(!localStorage.getItem(PRIVACY_CONSENT_KEY)));
     } catch {
-      setVisible(true);
+      queueMicrotask(() => setVisible(true));
     }
   }, []);
 
