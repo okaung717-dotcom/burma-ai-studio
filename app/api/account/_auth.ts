@@ -74,6 +74,7 @@ export function getSupabaseAuthConfig() {
 export function getSupabaseAdminAuthConfig() {
   const url = cleanBaseUrl(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL);
   const candidates = [
+    process.env.BAS_STAGING_SUPABASE_SERVER_KEY,
     process.env.SUPABASE_SECRET_KEY,
     process.env.SUPABASE_SERVICE_ROLE_KEY,
     process.env.SUPABASE_SERVER_KEY,
