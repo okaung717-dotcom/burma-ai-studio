@@ -23,10 +23,6 @@ export function validRequestOrigin(request: Request) {
   const origin = request.headers.get("origin");
   if (!origin) return false;
   try {
-    return new URL(origin).host === new URL(request.url).host &&
-      new URL(origin).protocol === "https:" || (
-        process.env.NODE_ENV !== "production" &&
-        new URL(origin).origin === new URL(request.url).origin
-      );
+    return new URL(origin).origin === new URL(request.url).origin;
   } catch { return false; }
 }
