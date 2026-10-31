@@ -287,10 +287,12 @@ test("Studio canvas selects only the clicked node and Backspace deletes without 
   await page.goto("/studio/spaces");
   await expect(page.getByRole("heading", { name: "Studio" })).toBeVisible();
   page.once("dialog", dialog => dialog.accept("Keyboard regression studio"));
-  await page.getByRole("button", { name: "New studio" }).first().click();
+  await page.getByRole("button", { name: "New project" }).click();
   const project = page.locator(".spaces-project-card").filter({ hasText: "Keyboard regression studio" });
   await expect(project).toBeVisible();
-  await project.getByRole("link", { name: "Keyboard regression studio" }).click();
+  page.once("dialog", dialog => dialog.accept("Keyboard studio"));
+  await project.getByRole("button", { name: "Create studio" }).click();
+  await project.getByRole("link", { name: "Keyboard studio" }).click();
   await expect(page.locator(".react-flow")).toBeVisible();
   await expect(page.locator(".studio-node")).toHaveCount(0);
   await page.getByRole("button", { name: "Image Generator", exact: true }).first().click();
