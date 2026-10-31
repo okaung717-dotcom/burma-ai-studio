@@ -6,12 +6,14 @@ import {
   ArrowRight, BookOpen, Check, ChevronDown, Clapperboard, Folder,
   Grid2X2, Heart, ImageIcon, Info, Layers3, LayoutGrid, LayoutList, Library,
   ListFilter, LockKeyhole, Search, ShieldCheck, SlidersHorizontal, Sparkles,
-  Video, X,
+  Video, X, Plus, UserRound, Palette, MapPin, Shapes, Paintbrush,
+  PanelsTopLeft, Workflow, Bot, Network, Sticker,
   type LucideIcon,
 } from "lucide-react";
 import "./assets-studio.css";
 
-type AssetCategory = "all" | "images" | "videos" | "favorites";
+type AssetCategory = "all" | "images" | "videos" | "favorites" | "characters" | "elements" | "styles" | "color" | "locations" | "brand-kit" | "templates" | "flows" | "agents" | "contexts";
+type AssetScope = "all" | "private" | "shared";
 type AssetsView = "library" | "collections" | "guide";
 type AssetsLayout = "grid" | "list";
 type AssetSort = "newest" | "oldest" | "name";
@@ -21,6 +23,21 @@ const categories: { id: AssetCategory; label: string; Icon: LucideIcon }[] = [
   { id: "videos", label: "Videos", Icon: Clapperboard },
   { id: "favorites", label: "Favorites", Icon: Heart },
 ];
+const referenceCategories: { id: AssetCategory; label: string; Icon: LucideIcon }[] = [
+  { id: "characters", label: "Characters", Icon: UserRound },
+  { id: "elements", label: "Elements", Icon: Shapes },
+  { id: "styles", label: "Styles", Icon: Sticker },
+  { id: "color", label: "Color", Icon: Palette },
+  { id: "locations", label: "Locations", Icon: MapPin },
+  { id: "brand-kit", label: "Brand kit", Icon: Paintbrush },
+];
+const customCategories: { id: AssetCategory; label: string; Icon: LucideIcon }[] = [
+  { id: "templates", label: "Templates", Icon: PanelsTopLeft },
+  { id: "flows", label: "Flows", Icon: Workflow },
+  { id: "agents", label: "Agents", Icon: Bot },
+  { id: "contexts", label: "Contexts", Icon: Network },
+];
+const allCategories = [...referenceCategories, ...customCategories, ...categories];
 const categoryCopy: Record<AssetCategory, { heading: string; text: string }> = {
   all: {
     heading: "Your creative library starts here",
@@ -38,6 +55,16 @@ const categoryCopy: Record<AssetCategory, { heading: string; text: string }> = {
     heading: "Keep your best work close",
     text: "Starred media will be easy to find when library data is connected. Favorites are not yet synced or stored by this page.",
   },
+  characters: { heading: "Build a consistent cast", text: "Organize character reference portraits, expressions and outfit continuity here. No characters are linked to this design-only preview." },
+  elements: { heading: "Every detail in one place", text: "A reference home for objects, props and scene elements. Your existing media and storage remain unchanged." },
+  styles: { heading: "Define your visual language", text: "Collect visual aesthetics, cinematic treatments and art direction references when the library is connected." },
+  color: { heading: "Create a signature palette", text: "Curate color directions for cohesive scenes and visual identities. No palettes are saved by this UI." },
+  locations: { heading: "Keep your worlds consistent", text: "Organize environments, sets and location references for scene continuity. No locations have been created." },
+  "brand-kit": { heading: "One home for your identity", text: "A space for future logo, typography and brand reference assets. No brand files are stored here." },
+  templates: { heading: "Start from a creative template", text: "Browse reusable project starters when the reference library is enabled. Your existing Studio templates remain untouched." },
+  flows: { heading: "Build reusable creative flows", text: "A future home for organized production workflows. Current Studio Canvas flows have not been moved." },
+  agents: { heading: "Organize intelligent assistants", text: "A future library of creative agent presets. No agents are connected or launched by this page." },
+  contexts: { heading: "Keep creative context together", text: "Collect project knowledge, references and constraints when supported. No new context data is stored." },
 };
 
 export default function AssetsStudio() {
@@ -48,20 +75,29 @@ export default function AssetsStudio() {
   const [sort, setSort] = useState<AssetSort>("newest");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
-  const hasFilters = !!query.trim() || sort !== "newest";
+  const [scope, setScope] = useState<AssetScope>("all");
+  const [projectScope, setProjectScope] = useState("personal");
+  const [createMenuOpen, setCreateMenuOpen] = useState(false);
+  const selectedCategory = allCategories.find(item => item.id === category)!;
+  const isMediaCategory = categories.some(item => item.id === category);
+  const hasFilters = !!query.trim() || sort !== "newest" || scope !== "all";
   const emptyTitle = useMemo(() => {
     if (query.trim()) return "No matching media";
+    if (scope === "shared") return "Shared library is not connected yet";
+    if (scope === "private") return "Private library is not connected yet";
     return categoryCopy[category].heading;
-  }, [query, category]);
+  }, [query, category, scope]);
 
   function selectCategory(next: AssetCategory) {
     setCategory(next);
     setView("library");
     setFiltersOpen(false);
+    setCreateMenuOpen(false);
   }
   function clearFilters() {
     setQuery("");
     setSort("newest");
+    setScope("all");
     setFiltersOpen(false);
   }
 
@@ -82,8 +118,28 @@ export default function AssetsStudio() {
         {infoOpen && <div className="assets-info-banner" role="note"><Info /> This is a presentation-only library. No new upload, delete, synchronization or database operations are enabled.</div>}
 
         <div className="assets-side-scroll">
+          <section className="assets-side-group assets-reference-group" aria-label="Reference categories">
+            <div className="assets-group-heading"><span>REFERENCES</span><span>LIBRARY</span></div>
+            <div className="assets-category-list assets-reference-list">
+              {referenceCategories.map(({ id, label, Icon }) => (
+                <button key={id} type="button" className={category === id && view === "library" ? "active" : ""} aria-pressed={category === id && view === "library"} onClick={() => selectCategory(id)}>
+                  <Icon aria-hidden="true" /><span>{label}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+          <section className="assets-side-group assets-custom-group" aria-label="Custom categories">
+            <div className="assets-group-heading"><span>CUSTOM</span><span>WORKSPACE</span></div>
+            <div className="assets-category-list assets-reference-list">
+              {customCategories.map(({ id, label, Icon }) => (
+                <button key={id} type="button" className={category === id && view === "library" ? "active" : ""} aria-pressed={category === id && view === "library"} onClick={() => selectCategory(id)}>
+                  <Icon aria-hidden="true" /><span>{label}</span>
+                </button>
+              ))}
+            </div>
+          </section>
           <section className="assets-side-group" aria-label="Browse media">
-            <div className="assets-group-heading"><span>BROWSE</span><span>YOUR MEDIA</span></div>
+            <div className="assets-group-heading"><span>MEDIA</span><span>YOUR ASSETS</span></div>
             <div className="assets-category-list">
               {categories.map(({ id, label, Icon }) => (
                 <button key={id} type="button" className={category === id && view === "library" ? "active" : ""} aria-pressed={category === id && view === "library"} onClick={() => selectCategory(id)}>
@@ -160,25 +216,41 @@ export default function AssetsStudio() {
         </header>
 
         <div className="assets-workspace-scroll">
-          <div className="assets-content-heading">
-            <div><span>BURMA AI STUDIO / PRIVATE MEDIA</span><h2>{view === "library" ? "Creative assets" : view === "collections" ? "Collections" : "Library guide"}</h2><p>{view === "library" ? "A home for images, videos and everything you create." : view === "collections" ? "Keep your creative work organized by project." : "Your creative assets, organized clearly and securely."}</p></div>
-            <div className="assets-summary"><Grid2X2 /><strong>0</strong><span>Assets</span></div>
+          <div className="assets-content-heading assets-reference-heading">
+            <div><span>LIBRARY <ArrowRight aria-hidden="true" /> {view === "library" ? selectedCategory.label.toUpperCase() : view === "collections" ? "COLLECTIONS" : "GUIDE"}</span><h2>{view === "library" ? selectedCategory.label : view === "collections" ? "Collections" : "Library guide"}</h2><p>{view === "library" ? "References and media, arranged for your next creative project." : view === "collections" ? "Keep your creative work organized by project." : "Your creative assets, organized clearly and securely."}</p></div>
+            <div className="assets-reference-actions">
+              <div className="assets-create-wrap">
+                <button type="button" className="assets-create-button" aria-expanded={createMenuOpen} aria-label="Create asset workflow" onClick={() => setCreateMenuOpen(open => !open)}><Plus /> Create</button>
+                {createMenuOpen && <div className="assets-create-menu" aria-label="Creation destinations">
+                  <span>START FROM A WORKSPACE</span>
+                  <Link href="/studio/image"><ImageIcon /> Image Studio <ArrowRight /></Link>
+                  <Link href="/studio/video"><Clapperboard /> Video Studio <ArrowRight /></Link>
+                  <Link href="/studio/spaces"><Sparkles /> Studio Canvas <ArrowRight /></Link>
+                  <small>Creation opens an existing Studio tool. It does not create an asset in this library.</small>
+                </div>}
+              </div>
+              <div className="assets-scope-switch" role="group" aria-label="Asset visibility">
+                {(["all","private","shared"] as const).map(value => <button key={value} type="button" className={scope === value ? "active" : ""} aria-pressed={scope === value} onClick={() => setScope(value)}>{value === "all" ? "All" : value === "private" ? "Private" : "Shared"}</button>)}
+              </div>
+              <label className="assets-project-selector"><span className="sr-only">Project filter</span><select aria-label="Project filter" value={projectScope} onChange={event => setProjectScope(event.target.value)}><option value="personal">Personal project</option><option value="all">All projects</option></select><ChevronDown /></label>
+            </div>
           </div>
 
           {view === "library" && (
             <>
               <div className="assets-media-tabs" role="group" aria-label="Filter assets by type">
-                {categories.map(({ id, label }) => <button key={id} type="button" className={category === id ? "active" : ""} aria-pressed={category === id} onClick={() => selectCategory(id)}>{label}</button>)}
+                {isMediaCategory ? categories.map(({ id, label }) => <button key={id} type="button" className={category === id ? "active" : ""} aria-pressed={category === id} onClick={() => selectCategory(id)}>{label}</button>) : <span className="assets-reference-kind"><selectedCategory.Icon aria-hidden="true" /> {selectedCategory.label} · Reference library</span>}
+                <span className="assets-data-disclaimer"><Info /> UI preview · Catalog not connected</span>
                 <span className="assets-gallery-layout">{layout === "grid" ? "Grid view" : "List view"} <Grid2X2 /></span>
               </div>
               <div className={"assets-empty " + (layout === "list" ? "assets-empty-list" : "")}>
                 <div className="assets-empty-art"><div className="assets-art-grid" /><div className="assets-art-card card-one"><ImageIcon /></div><div className="assets-art-card card-two"><Clapperboard /></div><div className="assets-art-spark"><Sparkles /></div></div>
                 <span>{query.trim() ? "NO SEARCH RESULTS" : "YOUR CREATIVE SPACE"}</span>
                 <h3>{emptyTitle}</h3>
-                <p>{query.trim() ? "No assets match your search in this UI-only library view. Try another query or clear your filters." : categoryCopy[category].text}</p>
+                <p>{query.trim() ? "No assets match your search in this UI-only library view. Try another query or clear your filters." : scope !== "all" ? "The private and shared scopes are a visual preview only. Connected media, permissions and ownership remain unchanged." : categoryCopy[category].text}</p>
                 <div className="assets-empty-actions">
                   {hasFilters ? <button type="button" className="assets-primary" onClick={clearFilters}><X /> Clear search & filters</button> : <Link href="/studio/spaces" className="assets-primary"><Sparkles /> Open Studio Canvas <ArrowRight /></Link>}
-                  <Link href={category === "videos" ? "/studio/video" : "/studio/image"} className="assets-secondary">{category === "videos" ? "Video" : "Image"} Studio <ArrowRight /></Link>
+                  <Link href={category === "videos" || category === "flows" ? "/studio/video" : "/studio/image"} className="assets-secondary">{category === "videos" || category === "flows" ? "Video" : "Image"} Studio <ArrowRight /></Link>
                 </div>
               </div>
             </>
