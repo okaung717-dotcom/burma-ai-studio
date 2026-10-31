@@ -447,3 +447,33 @@ test("AI Director provides the Video Studio design language with a UI-only scene
   await page.reload();
   await expect(page.getByText("Every scene starts with a vision")).toBeVisible();
 });
+
+
+test("Assets Library matches Video Studio visual language without changing stored media", async ({ page }) => {
+  await page.goto("/studio/assets");
+  await expect(page.getByRole("heading", { name: "Assets Library" })).toBeVisible();
+  await expect(page.locator(".assets-controls")).toBeVisible();
+  await expect(page.locator(".assets-workspace")).toBeVisible();
+  await expect(page.getByText("Your creative library starts here")).toBeVisible();
+  await expect(page.getByText("No assets were uploaded, edited or deleted by this page.")).toBeVisible();
+
+  await page.getByRole("group", { name: "Filter assets by type" }).getByRole("button", { name: "Images" }).click();
+  await expect(page.getByText("Your images will live here")).toBeVisible();
+  await page.getByRole("button", { name: "Show favorite assets" }).click();
+  await expect(page.getByText("Keep your best work close")).toBeVisible();
+
+  await page.getByRole("navigation", { name: "Assets Library views" }).getByRole("button", { name: "Collections" }).click();
+  await expect(page.getByText("Keep every project in its place")).toBeVisible();
+  await page.getByRole("navigation", { name: "Assets Library views" }).getByRole("button", { name: "Library guide" }).click();
+  await expect(page.getByText("Keep your media organized.")).toBeVisible();
+
+  await page.getByRole("navigation", { name: "Assets Library views" }).getByRole("button", { name: "My assets" }).click();
+  await page.getByLabel("Search assets").fill("sample-search");
+  await expect(page.getByText("No matching media")).toBeVisible();
+  await page.getByRole("button", { name: "Clear search & filters" }).click();
+  await expect(page.getByText("Keep your best work close")).toBeVisible();
+  await page.getByRole("button", { name: "Toggle library layout" }).click();
+  await expect(page.getByText("List view")).toBeVisible();
+  await page.getByRole("button", { name: "Library information" }).click();
+  await expect(page.getByRole("note")).toContainText("No new upload, delete, synchronization");
+});
