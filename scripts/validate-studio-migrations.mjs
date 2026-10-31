@@ -3,6 +3,7 @@ import fs from "node:fs";
 const files = [
   "supabase/migrations/20261029_spaces_private_beta.sql",
   "supabase/migrations/20261029_studio_durability.sql",
+  "supabase/migrations/20261031_member_access_foundation.sql",
 ];
 const required = [
   "enable row level security",
@@ -17,6 +18,8 @@ const required = [
   "consume_studio_login_attempt",
   "studio-media",
   "emergency_stop",
+  "studio_member_accounts",
+  "studio_provision_invited_member",
 ];
 
 const sql = files.map((file) => fs.readFileSync(file, "utf8")).join("\n").toLowerCase();
