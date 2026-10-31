@@ -507,3 +507,34 @@ test("Assets Library reference categories and scope controls are visual-only", a
   await expect(page.getByLabel("Project filter")).toHaveValue("all");
   await expect(page.getByText("UI preview · Catalog not connected")).toBeVisible();
 });
+
+
+test("Settings Studio uses signed-in session details and keeps billing data unavailable", async ({ page }) => {
+  await page.goto("/studio/settings");
+  await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Account overview" })).toBeVisible();
+  await expect(page.locator(".settings-sidebar")).toBeVisible();
+  await expect(page.locator(".settings-workspace")).toBeVisible();
+  await expect(page.getByText("Personal information")).toBeVisible();
+  await expect(page.getByText("Your existing access, billing and media data are unchanged.")).toBeVisible();
+
+  await page.getByRole("button", { name: "Plan & billing", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Membership & billing" })).toBeVisible();
+  await expect(page.getByText("No paid tier is inferred from your sign-in status.")).toBeVisible();
+  await page.getByRole("button", { name: "Credit usage", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Generation credits" })).toBeVisible();
+  await expect(page.getByText("No usage or balance is fabricated here.")).toBeVisible();
+
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await page.getByLabel("Display language").selectOption("my");
+  await expect(page.getByLabel("Display language")).toHaveValue("my");
+  await page.getByRole("group", { name: "Appearance preview" }).getByRole("button", { name: /Dark/ }).click();
+  await expect(page.getByRole("group", { name: "Appearance preview" }).getByRole("button", { name: /Dark/ })).toHaveAttribute("aria-pressed", "true");
+
+  await page.getByRole("button", { name: "Security", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Your session is active" })).toBeVisible();
+  await page.getByRole("button", { name: "Creator profile", exact: true }).click();
+  await expect(page.getByText("No creator profile is published or shared by this interface.")).toBeVisible();
+  await page.getByRole("button", { name: "My collections", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Open Assets Library" })).toHaveAttribute("href", "/studio/assets");
+});
