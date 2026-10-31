@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight, BookOpen, Check, ChevronDown, Clapperboard, Folder,
-  Grid2X2, Heart, ImageIcon, Info, LayoutGrid, LayoutList, Library,
+  Grid2X2, Heart, ImageIcon, Info, Layers3, LayoutGrid, LayoutList, Library,
   ListFilter, LockKeyhole, Search, ShieldCheck, SlidersHorizontal, Sparkles,
   Video, X,
   type LucideIcon,
