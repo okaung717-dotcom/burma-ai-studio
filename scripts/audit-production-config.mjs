@@ -3,7 +3,14 @@ import fs from "node:fs";
 
 if (fs.existsSync(".env.local") && typeof process.loadEnvFile === "function") process.loadEnvFile(".env.local");
 
-const required = [
+const ownerOnly = process.env.BAS_OWNER_ONLY_BETA === "true";
+const required = ownerOnly ? [
+  "SUPABASE_URL",
+  "SUPABASE_SERVER_KEY",
+  "SUPABASE_PUBLISHABLE_KEY",
+  "BAS_SESSION_SECRET",
+  "BAS_ADMIN_USER_ID",
+] : [
   "SUPABASE_URL",
   "SUPABASE_SERVER_KEY",
   "SUPABASE_PUBLISHABLE_KEY",
@@ -22,10 +29,25 @@ for (const name of required) {
   if (!present) failed = true;
 }
 
+console.log(`BAS_OWNER_ONLY_BETA: ${ownerOnly ? "enabled" : "disabled"}`);
+if (ownerOnly && process.env.BAS_EMAIL_AUTH_ENABLED !== "true") {
+  console.error("BAS_EMAIL_AUTH_ENABLED must be true for owner-only release.");
+  failed = true;
+}
+const ownerUuid = process.env.BAS_ADMIN_USER_ID || "";
+if (ownerOnly && !/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(ownerUuid)) {
+  console.error("BAS_ADMIN_USER_ID must be a valid UUID.");
+  failed = true;
+}
+const prodUrl = process.env.SUPABASE_URL || "";
+if (ownerOnly && (prodUrl.includes("dpgmceweazamjheupoaz") || !/^https:\/\/[^\s]+\.supabase\.co\/?$/.test(prodUrl))) {
+  console.error("Owner-only release must point to the correct production Supabase project (not staging).");
+  failed = true;
+}
 const hash = process.env.BAS_ADMIN_PASSWORD_HASH || "";
 const strongScrypt = /^scrypt\$N=65536,r=8,p=1\$[^$]+\$[^$]+$/.test(hash.replaceAll("\\$", "$"));
 console.log(`BAS_ADMIN_PASSWORD_HASH_STRENGTH: ${strongScrypt ? "current" : "upgrade-required"}`);
-if (!strongScrypt) failed = true;
+if (!ownerOnly && !strongScrypt) failed = true;
 
 const sessionSecretStrong = (process.env.BAS_SESSION_SECRET || "").length >= 32;
 console.log(`BAS_SESSION_SECRET_STRENGTH: ${sessionSecretStrong ? "valid" : "invalid-or-missing"}`);
@@ -33,7 +55,7 @@ if (!sessionSecretStrong) failed = true;
 
 const durable = process.env.BAS_AUTH_STORE_MODE === "supabase";
 console.log(`BAS_AUTH_STORE_MODE: ${durable ? "supabase" : "missing-or-invalid"}`);
-if (!durable) failed = true;
+if (!ownerOnly && !durable) failed = true;
 
 const paidDisabled = process.env.BAS_ENABLE_PAID_GENERATION !== "true";
 console.log(`BAS_ENABLE_PAID_GENERATION: ${paidDisabled ? "disabled" : "enabled-blocker"}`);
