@@ -85,15 +85,15 @@ test("Image Studio uses the light shell and persists safe Demo Mode creations", 
   await expect(page.getByText("Templates are coming to private beta")).toBeVisible();
 });
 
-test("complete Spaces demo workflow persists nodes, connections and results", async ({ page }) => {
+test("complete Studio demo workflow persists nodes, connections and results", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/\/studio\/spaces$/);
-  for (const label of ["Spaces", "Image Studio", "Video Studio", "AI Director", "Assets Library", "Settings"]) {
+  for (const label of ["Studio", "Image Studio", "Video Studio", "AI Director", "Assets Library", "Settings"]) {
     await expect(page.getByRole("link", { name: label, exact: true })).toBeVisible();
   }
   await page.evaluate(() => localStorage.clear());
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Spaces" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Studio" })).toBeVisible();
 
   page.once("dialog", (dialog) => dialog.accept("Demo campaign"));
   await page.getByRole("button", { name: "New project" }).click();
@@ -101,7 +101,7 @@ test("complete Spaces demo workflow persists nodes, connections and results", as
   await expect(project).toBeVisible();
 
   page.once("dialog", (dialog) => dialog.accept("Launch film"));
-  await project.getByRole("button", { name: "Create space" }).click();
+  await project.getByRole("button", { name: "Create studio" }).click();
   await project.getByRole("link", { name: /Launch film/ }).click();
   await expect(page.locator(".react-flow")).toBeVisible();
   // A fresh Space is blank, and each library click inserts only its selected kind.
@@ -281,4 +281,32 @@ test("complete Spaces demo workflow persists nodes, connections and results", as
 
   await page.getByRole("button", { name: "Clear" }).click();
   await expect(page.getByText("Demo history")).toBeHidden();
+});
+
+test("Studio canvas selects only the clicked node and Backspace deletes without affecting text editing", async ({ page }) => {
+  await page.goto("/studio/spaces");
+  await expect(page.getByRole("heading", { name: "Studio" })).toBeVisible();
+  page.once("dialog", dialog => dialog.accept("Keyboard regression studio"));
+  await page.getByRole("button", { name: "New studio" }).first().click();
+  const project = page.locator(".spaces-project-card").filter({ hasText: "Keyboard regression studio" });
+  await expect(project).toBeVisible();
+  await project.getByRole("link", { name: "Keyboard regression studio" }).click();
+  await expect(page.locator(".react-flow")).toBeVisible();
+  await expect(page.locator(".studio-node")).toHaveCount(0);
+  await page.getByRole("button", { name: "Image Generator", exact: true }).first().click();
+  await page.getByRole("button", { name: "Text", exact: true }).first().click();
+  await expect(page.locator(".studio-node")).toHaveCount(2);
+  await page.locator(".studio-node-image").click();
+  await expect(page.getByRole("button", { name: "Delete selected" })).toBeVisible();
+  await page.keyboard.press("Backspace");
+  await expect(page.locator(".studio-node-image")).toHaveCount(0);
+  await expect(page.locator(".studio-node-text")).toHaveCount(1);
+  const content = page.getByRole("textbox", { name: "Text content" });
+  await content.fill("Typing is safe");
+  await content.press("Backspace");
+  await expect(content).toHaveValue("Typing is saf");
+  await expect(page.locator(".studio-node-text")).toHaveCount(1);
+  await page.locator(".studio-node-title").click();
+  await page.keyboard.press("Delete");
+  await expect(page.locator(".studio-node")).toHaveCount(0);
 });
