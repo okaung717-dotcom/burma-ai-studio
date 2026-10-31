@@ -169,3 +169,84 @@
 @media(max-width:760px){.assets-studio{height:auto;min-height:100vh;grid-template-columns:1fr;overflow:visible;gap:9px;padding:9px}.assets-controls,.assets-workspace{height:auto;min-height:0;overflow:visible}.assets-side-scroll{overflow:visible}.assets-toolbar{flex-wrap:wrap}.assets-toolbar nav{width:100%;flex-wrap:wrap}.assets-toolbar-actions{width:100%;justify-content:flex-end}.assets-workspace-scroll{overflow:visible}.assets-empty{min-height:370px}.assets-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.assets-workspace-footer{flex-direction:column}}
 @media(max-width:480px){.assets-guide-grid{grid-template-columns:1fr}.assets-content-heading{align-items:flex-start;flex-direction:column}.assets-media-tabs{gap:1px;flex-wrap:wrap}.assets-media-tabs button{padding:0 9px}.assets-empty h3{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.assets-search{transition:none}}
+
+
+/* Reference-library layout inspired by familiar media management patterns.
+ * Keep existing purple-white Burma AI Studio theme and asset-free UI behavior.
+ * Scoped overrides only; no service logic or persisted asset data is changed.
+ */
+.assets-studio .assets-heading {min-height:74px;padding:11px 16px}
+.assets-studio .assets-heading h1 {font-size:16px}
+.assets-studio .assets-side-group{padding:11px 0}
+.assets-studio .assets-side-group.assets-reference-group {padding-top:13px}
+.assets-studio .assets-side-group.assets-custom-group{padding-top:11px}
+.assets-studio .assets-group-heading{margin-bottom:7px}
+.assets-studio .assets-reference-list{gap:2px}
+.assets-studio .assets-reference-list button{height:32px;border-radius:8px;font-size:11px;font-weight:720;gap:10px;padding:0 10px}
+.assets-studio .assets-reference-list button svg{width:15px;height:15px}
+.assets-studio .assets-reference-list button.active{background:#eee7fb;color:#7147cf;border-color:transparent}
+.assets-studio .assets-reference-list button.active svg{color:#8e65e2}
+.assets-studio .assets-category-list:not(.assets-reference-list) button{height:34px}
+.assets-studio .assets-content-heading.assets-reference-heading {display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 22px 14px}
+.assets-studio .assets-reference-heading>div:first-child>span{display:flex;align-items:center;gap:6px;color:#9b7bce;font-size:9px;font-weight:800;letter-spacing:.1em}
+.assets-studio .assets-reference-heading>div:first-child>span svg{width:12px;height:12px}
+.assets-studio .assets-reference-heading h2{font-size:23px;line-height:1.25;letter-spacing:-.04em}
+.assets-studio .assets-reference-heading p{color:#938b99;font-size:10px}
+.assets-studio .assets-reference-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}
+.assets-studio .assets-create-wrap{position:relative}
+.assets-studio .assets-create-button{height:35px;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 14px;background:#7b55d4;border:0;border-radius:9px;color:white;font-size:11px;font-weight:750;box-shadow:0 5px 12px rgba(115,73,183,.09)}
+.assets-studio .assets-create-button:hover,.assets-studio .assets-create-button[aria-expanded=true]{background:#6641bd}
+.assets-studio .assets-create-button svg{width:14px;height:14px}
+.assets-studio .assets-create-menu{position:absolute;top:42px;right:0;z-index:40;min-width:225px;display:grid;gap:5px;padding:12px;background:white;border:1px solid #e6ddeb;border-radius:12px;box-shadow:0 18px 34px rgba(41,28,58,.16)}
+.assets-studio .assets-create-menu>span{color:#9b81b7;font-weight:800;font-size:9px;letter-spacing:.085em;margin:2px 5px 5px}
+.assets-studio .assets-create-menu a{display:flex;align-items:center;gap:9px;min-height:36px;padding:0 8px;border-radius:8px;text-decoration:none;color:#5e516d;font-weight:750;font-size:11px}
+.assets-studio .assets-create-menu a:hover{background:#f3eefa;color:#7650ca}
+.assets-studio .assets-create-menu a svg{width:15px;height:15px;color:#9976d3}
+.assets-studio .assets-create-menu a svg:last-child{width:12px;height:12px;margin-left:auto}
+.assets-studio .assets-create-menu small{color:#91859b;font-size:9px;line-height:1.5;padding:8px 5px 3px;border-top:1px solid #f0ecf2}
+.assets-studio .assets-scope-switch{height:35px;padding:3px;display:flex;align-items:center;gap:3px;border:1px solid #eae6ef;border-radius:9px;background:#f4f2f5}
+.assets-studio .assets-scope-switch button{min-width:52px;height:27px;padding:0 8px;border:0;border-radius:7px;background:transparent;color:#7e7487;font-size:10px;font-weight:720}
+.assets-studio .assets-scope-switch button:hover{color:#7143d0}
+.assets-studio .assets-scope-switch button.active{background:#fff;color:#764ed2;box-shadow:0 1px 4px rgba(37,28,52,.09)}
+.assets-studio .assets-project-selector{height:35px;min-width:125px;max-width:150px;padding:0 8px;display:flex;align-items:center;gap:5px;background:#f9f8fb;border:1px solid #eae6ee;border-radius:9px}
+.assets-studio .assets-project-selector select{min-width:0;width:100%;appearance:none;border:0;outline:none;background:transparent;color:#6b5f74;font-weight:700;font-size:10px;cursor:pointer}
+.assets-studio .assets-project-selector svg{width:13px;height:13px;color:#9c90a6;flex:none}
+.assets-studio .assets-media-tabs{min-height:39px;padding-bottom:9px;gap:5px}
+.assets-studio .assets-media-tabs button{font-weight:700}
+.assets-studio .assets-reference-kind{display:flex;align-items:center;gap:8px;min-height:29px;color:#7553bd;font-size:11px;font-weight:750}
+.assets-studio .assets-reference-kind svg{height:15px;width:15px}
+.assets-studio .assets-data-disclaimer{display:flex;align-items:center;gap:5px;color:#a59aad;font-size:9px;margin-left:8px}
+.assets-studio .assets-data-disclaimer svg{width:12px;height:12px}
+.assets-studio .assets-gallery-layout{display:flex}
+.assets-studio .assets-empty{min-height:370px;padding-top:16px}
+.assets-studio .assets-empty-art{width:152px;height:127px}
+.assets-studio .assets-art-card{height:75px;width:80px;border-radius:16px}
+.assets-studio .assets-art-card.card-one{left:3px;top:21px}
+.assets-studio .assets-art-card.card-two{right:3px;top:29px}
+.assets-studio .assets-empty h3{font-size:23px}
+.assets-studio .assets-empty>span{margin-top:14px}
+.assets-studio .assets-empty p{max-width:455px;font-size:11px}
+.assets-studio .assets-side-scroll{scrollbar-width:thin}
+.assets-studio .assets-workspace-footer{padding:10px 20px}
+@media(max-width:1350px) and (min-width:761px){
+  .assets-studio .assets-reference-heading{flex-wrap:wrap}
+  .assets-studio .assets-reference-actions{width:100%;justify-content:flex-start}
+  .assets-studio .assets-data-disclaimer{display:none}
+}
+@media(max-width:1100px) and (min-width:761px){
+  .assets-studio .assets-reference-actions{gap:6px}
+  .assets-studio .assets-scope-switch button{min-width:45px;padding:0 5px}
+  .assets-studio .assets-project-selector{min-width:110px}
+}
+@media(max-width:760px){
+  .assets-studio .assets-reference-heading{align-items:flex-start;flex-direction:column;gap:11px}
+  .assets-studio .assets-reference-actions{width:100%;justify-content:flex-start}
+  .assets-studio .assets-data-disclaimer{display:none}
+  .assets-studio .assets-side-scroll{max-height:420px;overflow:auto}
+}
+@media(max-width:470px){
+  .assets-studio .assets-scope-switch button{min-width:44px}
+  .assets-studio .assets-project-selector{max-width:130px;min-width:116px}
+  .assets-studio .assets-media-tabs{flex-wrap:wrap;gap:3px}
+  .assets-studio .assets-reference-heading h2{font-size:21px}
+}
