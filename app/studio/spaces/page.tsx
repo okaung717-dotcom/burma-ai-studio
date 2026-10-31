@@ -4,7 +4,7 @@ import { getSpacesUser, spacesConfigured } from "../../lib/spaces-auth";
 import SpacesDashboard from "./spaces-dashboard";
 import "./spaces.css";
 
-export const metadata: Metadata = { title: "Spaces", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Studio", robots: { index: false, follow: false } };
 
 export default async function SpacesPage() {
   const user = await getSpacesUser();
