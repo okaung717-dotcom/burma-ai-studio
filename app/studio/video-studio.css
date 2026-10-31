@@ -88,3 +88,105 @@
 @media(max-width:1070px){.video-studio{grid-template-columns:295px minmax(0,1fr);gap:9px;padding:9px}.video-controls,.video-creations{height:calc(100vh - 18px)}.video-control-scroll{padding:0 17px}.video-tool-heading{padding:19px 17px}.video-feed-toolbar{padding:11px}.video-feed-toolbar nav button{padding:0 8px}.video-feed-tools>button span,.video-filter-wrap>button span{display:none}.video-search{width:120px}.video-feed{grid-template-columns:1fr}}
 @media(max-width:760px){.video-studio{height:auto;min-height:100vh;grid-template-columns:1fr;overflow:visible}.video-controls,.video-creations{height:auto;min-height:0;overflow:visible}.video-control-scroll{overflow:visible}.video-feed-toolbar{position:relative}.video-search{width:118px}.video-feed{padding:14px;grid-template-columns:1fr}.video-gallery-heading{padding:22px 15px 5px}.video-history-count span{display:none}.video-empty-state{min-height:380px}.video-gallery-footnote{margin:10px 15px 24px}}
 @media(prefers-reduced-motion:reduce){.video-creation-card,.video-generate-button{transition:none}.video-creation-card:hover{transform:none}}
+
+
+/* Compact 2026 Video Studio controls — own branding, screenshot-inspired grouping. */
+.video-studio{grid-template-columns:minmax(300px,342px) minmax(0,1fr);gap:8px;padding:8px;background:#f8f7f9}
+.video-controls,.video-creations{height:calc(100vh - 16px);border-radius:15px}
+.video-controls{border-radius:14px}
+.video-tool-heading{padding:13px 16px 12px;min-height:78px;background:#fff}
+.video-tool-heading>div>span{font-size:9px;letter-spacing:.03em;color:#958a9e}
+.video-tool-heading h1{font-size:16px;margin:3px 0 1px;letter-spacing:-.028em}
+.video-tool-heading p{font-size:10px}
+.video-tool-heading button{width:32px;height:32px;border-radius:9px}
+.video-control-scroll{padding:0 16px}
+.video-control-block{padding:13px 0;border-color:#f0edf2}
+.video-control-block>label,.video-control-label label,.video-model-grid>label{font-size:9px;font-weight:800;letter-spacing:.09em;color:#736b7a}
+.video-model-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:8px;align-items:end}
+.video-model-grid>label{display:block}
+.video-model-grid .video-model-select{margin-top:8px}
+.video-model-select{height:36px;padding:0 9px;gap:6px;background:#f8f7f9;border-color:#f0edf2;border-radius:9px}
+.video-model-select>svg{width:14px;height:14px}
+.video-model-select select{font-size:10px}
+.video-mode-select{padding:0 8px}
+.video-inline-disclaimer{display:flex;align-items:center;gap:6px;margin:8px 1px 0;color:#938b97;font-size:9px}
+.video-inline-disclaimer svg{width:12px;height:12px}
+.video-reference-block{padding:14px 0 12px}
+.video-control-label{margin-bottom:9px}
+.video-reference-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.video-reference-grid .video-frame-slot{aspect-ratio:1.07;border-radius:10px}
+.video-reference-grid .video-frame-slot>button{padding:5px;gap:4px}
+.video-reference-grid .video-frame-slot>button svg{width:17px;height:17px}
+.video-reference-grid .video-frame-slot>button b,.video-motion-transfer-inner b{font-size:10px;text-align:center;line-height:1.22}
+.video-reference-grid .video-frame-slot>button small,.video-motion-transfer-inner small{font-size:8px;text-align:center}
+.video-motion-transfer{display:grid;place-items:center;border-color:#ded8e3;background:#faf9fb}
+.video-motion-transfer-inner{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;padding:5px;color:#9c94a4}
+.video-motion-transfer-inner svg{width:19px;height:19px}
+.video-motion-transfer-inner small{color:#b08bd7}
+.video-add-media{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;min-height:43px;padding:6px 8px 6px 10px;background:#faf9fb;border:1px dashed #ded8e5;border-radius:10px}
+.video-add-media-icons{display:flex;gap:5px;color:#99909e}
+.video-add-media-icons svg{width:15px;height:15px}
+.video-add-media>button{display:flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid #ece7f1;border-radius:7px;background:white;color:#5c5264;font-size:10px;font-weight:750}
+.video-add-media>button:hover{border-color:#b19be5;color:#7653ce}
+.video-add-media>button:disabled{opacity:.55}
+.video-add-media>button svg{width:13px;height:13px}
+.video-add-media>button span{font-weight:500;color:#a49aaa;font-size:9px}
+.video-prompt-block{padding:13px 0 12px}
+.video-shot-heading label{display:flex;align-items:center;gap:8px}
+.video-shot-heading label button{display:grid;place-items:center;width:22px;height:22px;border:1px solid #dfd8e7;border-radius:50%;background:#fff;color:#54485d}
+.video-shot-heading label button:hover{background:#f3edf9}
+.video-shot-heading label button svg{width:13px;height:13px}
+.video-shot-heading>span{display:flex;align-items:center;gap:5px;color:#7d7582;font-size:10px;font-weight:700}
+.video-shot-heading>span svg{width:13px;height:13px}
+.video-prompt-block textarea{height:147px;min-height:120px;padding:11px 12px;font-size:12px;line-height:1.65;border-color:#eae6ed;background:white}
+.video-prompt-tips{margin-top:6px;font-size:9px}
+.video-camera-block{padding:9px 0 12px}
+.video-camera-block>label{margin-bottom:7px}
+.video-camera-block .video-model-select{height:36px}
+.video-generate-footer{padding:10px 12px 11px}
+.video-quick-settings{display:grid;grid-template-columns:65px repeat(3,minmax(0,1fr));gap:5px}
+.video-quick-settings>label{display:block;min-width:0}
+.video-quick-settings select,.video-quantity-control{height:33px;width:100%;border:1px solid #ece9ee;border-radius:8px;background:#f8f7f9;color:#4e4658;font-size:10px;font-weight:750}
+.video-quick-settings select{padding:0 4px}
+.video-quantity-control{display:flex;align-items:center;justify-content:space-between}
+.video-quantity-control button{display:grid;place-items:center;width:20px;height:30px;border:0;background:transparent;color:#665d6d}
+.video-quantity-control button:disabled{opacity:.3;cursor:default}
+.video-quantity-control svg{width:11px;height:11px}
+.video-quantity-control strong{font-size:11px}
+.video-secondary-settings{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0 8px}
+.video-secondary-settings>button,.video-secondary-settings>label{height:28px;display:inline-flex;align-items:center;gap:6px;padding:0 8px;border:1px solid #ece9f0;border-radius:7px;background:#f9f8fa;color:#695f73;font-size:10px;font-weight:750}
+.video-secondary-settings>button.audio-on{background:#f0ebfa;color:#7852cf}
+.video-secondary-settings svg{width:14px;height:14px}
+.video-secondary-settings select{border:0;background:transparent;font-size:10px;font-weight:750;color:#4f445b;outline:0}
+.video-secondary-settings .video-mode-chip{margin-left:auto;padding:4px 6px}
+.video-generate-button{height:40px;border-radius:8px;font-size:12px;box-shadow:none}
+.video-generation-message{margin:6px 1px 2px;min-height:0;font-size:9px;line-height:1.35;max-height:33px;overflow:auto}
+.video-provider-status{margin-top:3px;font-size:9px}
+.video-feed-toolbar{min-height:60px;padding:8px 17px}
+.video-gallery-heading{padding:15px 21px 4px}
+.video-gallery-heading>div:first-child>span{display:none}
+.video-gallery-heading h2{font-size:17px;margin:4px 0 2px}
+.video-gallery-heading p{font-size:10px}
+.video-history-count{padding:6px 10px;font-size:9px}
+.video-feed{padding:12px 20px;gap:12px}
+.video-empty-state{min-height:calc(100vh - 225px);padding:28px 18px}
+.video-empty-icon{width:58px;height:58px;border-radius:17px}
+.video-empty-icon svg{width:25px;height:25px}
+.video-empty-state>span{margin-top:16px;font-size:9px}
+.video-empty-state h3{font-size:21px}
+.video-empty-state p{font-size:11px;max-width:340px}
+.video-empty-state>button{padding:10px 14px}
+@media(max-width:1100px){
+.video-studio{grid-template-columns:minmax(290px,320px) minmax(0,1fr)}
+.video-controls,.video-creations{height:calc(100vh - 16px)}
+.video-feed-toolbar{gap:4px}
+.video-feed-toolbar button{padding:0 8px}
+}
+@media(max-width:760px){
+.video-studio{height:auto;grid-template-columns:1fr;overflow:visible}
+.video-controls,.video-creations{height:auto;max-height:none}
+.video-control-scroll{overflow:visible}
+.video-generate-footer{position:relative}
+.video-feed-toolbar{position:relative}
+.video-empty-state{min-height:370px}
+}
