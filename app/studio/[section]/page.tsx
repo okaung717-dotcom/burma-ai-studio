@@ -6,6 +6,7 @@ import StudioNav from "../_components/StudioNav";
 import ImageStudio from "../image-studio";
 import VideoStudio from "../video-studio";
 import DirectorStudio from "../director-studio";
+import AssetsStudio from "../assets-studio";
 import "../spaces/spaces.css";
 import "../studio-system.css";
 
@@ -24,5 +25,5 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
   const config = sections[section as keyof typeof sections];
   if (!config) notFound();
   const Icon = config.icon;
-  return <main className="studio-section-shell"><StudioNav/>{section === "image" ? <ImageStudio/> : section === "video" ? <VideoStudio/> : section === "director" ? <DirectorStudio/> : <section className="studio-section"><header><p>{config.eyebrow}</p><h1>{config.title}</h1><span>{config.description}</span></header><div className="studio-section-stage"><div className="section-glow"><Icon/></div><article><Sparkles/><h2>{section === "settings" ? `Signed in as ${user.displayName}` : `${config.title} is canvas-powered`}</h2><p>{section === "settings" ? user.email : "Start from Studio and add the specialized nodes you need. Demo Mode never contacts a paid provider."}</p><Link href="/studio/spaces">{config.action}</Link></article>{section === "settings" && <aside><ShieldCheck/><div><b>Security status</b><span>Invite-only · Server sessions · Paid generation off</span></div></aside>}</div></section>}</main>;
+  return <main className="studio-section-shell"><StudioNav/>{section === "image" ? <ImageStudio/> : section === "video" ? <VideoStudio/> : section === "director" ? <DirectorStudio/> : section === "assets" ? <AssetsStudio/> : <section className="studio-section"><header><p>{config.eyebrow}</p><h1>{config.title}</h1><span>{config.description}</span></header><div className="studio-section-stage"><div className="section-glow"><Icon/></div><article><Sparkles/><h2>{section === "settings" ? `Signed in as ${user.displayName}` : `${config.title} is canvas-powered`}</h2><p>{section === "settings" ? user.email : "Start from Studio and add the specialized nodes you need. Demo Mode never contacts a paid provider."}</p><Link href="/studio/spaces">{config.action}</Link></article>{section === "settings" && <aside><ShieldCheck/><div><b>Security status</b><span>Invite-only · Server sessions · Paid generation off</span></div></aside>}</div></section>}</main>;
 }
