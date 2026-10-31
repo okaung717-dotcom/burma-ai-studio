@@ -312,3 +312,48 @@ test("Studio canvas selects only the clicked node and Backspace deletes without 
   await page.keyboard.press("Delete");
   await expect(page.locator(".studio-node")).toHaveCount(0);
 });
+
+test("Studio canvas uses arrow selection and temporary Space hand panning", async ({ page }) => {
+  await page.goto("/studio/spaces");
+  await expect(page.getByRole("heading", { name: "Studio" })).toBeVisible();
+  page.once("dialog", dialog => dialog.accept("Pointer behavior project"));
+  await page.getByRole("button", { name: "New project" }).click();
+  const project = page.locator(".spaces-project-card").filter({ hasText: "Pointer behavior project" });
+  page.once("dialog", dialog => dialog.accept("Pointer studio"));
+  await project.getByRole("button", { name: "Create studio" }).click();
+  await project.getByRole("link", { name: "Pointer studio" }).click();
+  await expect(page.locator(".react-flow")).toBeVisible();
+
+  const canvas = page.locator(".studio-canvas");
+  const pane = page.locator(".react-flow__pane");
+  const arrow = page.getByRole("button", { name: "Select tool" });
+  const hand = page.getByRole("button", { name: "Hand tool" });
+  await expect(arrow).toHaveAttribute("aria-pressed", "true");
+  await expect(hand).toHaveAttribute("aria-pressed", "false");
+  await expect(canvas).toHaveClass(/studio-mode-select/);
+  await expect(pane).toHaveCSS("cursor", "default");
+
+  await page.getByRole("button", { name: "Image Generator", exact: true }).first().click();
+  await page.getByRole("button", { name: "Text", exact: true }).first().click();
+  await page.locator(".studio-node-image .studio-node-title").click();
+  await expect(page.locator(".studio-node-image").first()).toHaveClass(/selected/);
+
+  await hand.click();
+  await expect(canvas).toHaveClass(/studio-mode-pan/);
+  await expect(pane).toHaveCSS("cursor", "grab");
+  await arrow.click();
+  await expect(pane).toHaveCSS("cursor", "default");
+
+  // Holding Space temporarily switches to the hand without changing the selected tool.
+  await pane.click({ position: { x: 20, y: 30 } });
+  await page.keyboard.down("Space");
+  await expect(hand).toHaveAttribute("aria-pressed", "true");
+  await expect(pane).toHaveCSS("cursor", "grab");
+  await page.keyboard.up("Space");
+  await expect(arrow).toHaveAttribute("aria-pressed", "true");
+  await expect(pane).toHaveCSS("cursor", "default");
+  await page.locator(".studio-node-image .studio-node-title").click();
+  await page.keyboard.press("Backspace");
+  await expect(page.locator(".studio-node-image")).toHaveCount(0);
+  await expect(page.locator(".studio-node-text")).toHaveCount(1);
+});
