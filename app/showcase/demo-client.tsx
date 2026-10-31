@@ -64,7 +64,7 @@ export default function PublicShowcaseContent({view}:{view:ShowcaseView}) {
  function newProject(){
   const name=window.prompt("New demo studio name","Untitled Studio")?.trim().slice(0,80);
   if(!name)return;
-  setProjects(xs=>[{id:crypto.randomUUID(),name,type:"director",favorite:false},...xs].slice(0,25));
+  setProjects(xs=>[{id:crypto.randomUUID(),name,type:"director" as const,favorite:false},...xs].slice(0,25));
   setMsg("Demo studio created in this browser only. Your private workspace is unchanged.");
  }
  function createRecord(kind:"image"|"video"){
