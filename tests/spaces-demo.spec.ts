@@ -357,3 +357,37 @@ test("Studio canvas uses arrow selection and temporary Space hand panning", asyn
   await expect(page.locator(".studio-node-image")).toHaveCount(0);
   await expect(page.locator(".studio-node-text")).toHaveCount(1);
 });
+
+test("Video Studio shows professional controls and persists safe Demo Mode workflow history", async ({ page }) => {
+  await page.goto("/studio/video");
+  await expect(page.getByRole("heading", { name: "Video Generator" })).toBeVisible();
+  await expect(page.locator(".video-controls")).toBeVisible();
+  await expect(page.locator(".video-creations")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Add first frame" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Add last frame" })).toBeVisible();
+  await expect(page.getByText("Turn your next idea into motion")).toBeVisible();
+
+  await page.getByLabel("Motion prompt").fill("A camera slowly pushes toward the rainy Yangon street, natural lighting, 24 frames per second");
+  await page.getByLabel("Video aspect ratio").selectOption("9:16");
+  await page.getByLabel("Video duration").selectOption("8");
+  await page.getByLabel("Video frame rate").selectOption("30");
+  await page.getByLabel("CAMERA MOVEMENT").selectOption("Slow orbit");
+  await page.getByRole("button", { name: "Create demo workflow" }).click();
+  await expect(page.getByRole("status")).toContainText("No actual video was generated");
+  await expect(page.locator(".video-creation-card")).toHaveCount(1);
+  await expect(page.getByText("DEMO · NO VIDEO RENDERED")).toBeVisible();
+
+  await page.reload();
+  await expect(page.locator(".video-creation-card")).toHaveCount(1);
+  await expect(page.getByLabel("Motion prompt")).toHaveValue(/camera slowly pushes/);
+  await expect(page.getByLabel("Video aspect ratio")).toHaveValue("9:16");
+  await page.getByRole("button", { name: "Favorite video" }).click();
+  await page.getByRole("button", { name: "Show favorite videos" }).click();
+  await expect(page.locator(".video-creation-card")).toHaveCount(1);
+  await page.getByRole("button", { name: "Reuse video settings" }).click();
+  await expect(page.getByLabel("Video duration")).toHaveValue("8");
+  await page.getByRole("button", { name: "My templates" }).click();
+  await expect(page.getByText("Your video templates are coming")).toBeVisible();
+  await page.getByRole("button", { name: "Back to creations" }).click();
+  await expect(page.locator(".video-creation-card")).toHaveCount(1);
+});
