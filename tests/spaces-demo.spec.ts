@@ -365,6 +365,18 @@ test("Video Studio shows professional controls and persists safe Demo Mode workf
   await expect(page.locator(".video-creations")).toBeVisible();
   await expect(page.getByRole("button", { name: "Add first frame" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Add last frame" })).toBeVisible();
+  await expect(page.getByText("Motion transfer", { exact: true })).toBeVisible();
+  await expect(page.getByText("Coming soon")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Add media/ })).toBeVisible();
+  await expect(page.getByLabel("MODE")).toHaveValue("Standard");
+  await page.getByLabel("MODE").selectOption("Creative");
+  await page.getByRole("button", { name: "Increase video quantity" }).click();
+  await expect(page.getByLabel("Video resolution")).toHaveValue("720p");
+  await page.getByLabel("Video resolution").selectOption("1080p");
+  await page.getByRole("button", { name: "Toggle audio preference" }).click();
+  await expect(page.getByRole("button", { name: "Toggle audio preference" })).toHaveAttribute("aria-pressed", "false");
+  await page.getByRole("button", { name: "Add another shot" }).click();
+  await expect(page.getByLabel("Motion prompt")).toHaveValue(/Shot 2:/);
   await expect(page.getByText("Turn your next idea into motion")).toBeVisible();
 
   await page.getByLabel("Motion prompt").fill("A camera slowly pushes toward the rainy Yangon street, natural lighting, 24 frames per second");
@@ -381,6 +393,8 @@ test("Video Studio shows professional controls and persists safe Demo Mode workf
   await expect(page.locator(".video-creation-card")).toHaveCount(1);
   await expect(page.getByLabel("Motion prompt")).toHaveValue(/camera slowly pushes/);
   await expect(page.getByLabel("Video aspect ratio")).toHaveValue("9:16");
+  await expect(page.getByLabel("Video resolution")).toHaveValue("1080p");
+  await expect(page.getByRole("button", { name: "Toggle audio preference" })).toHaveAttribute("aria-pressed", "false");
   await page.getByRole("button", { name: "Favorite video" }).click();
   await page.getByRole("button", { name: "Show favorite videos" }).click();
   await expect(page.locator(".video-creation-card")).toHaveCount(1);
