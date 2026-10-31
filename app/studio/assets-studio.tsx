@@ -3,10 +3,11 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  ArrowRight, BookOpen, Check, ChevronDown, Clapperboard, Clock3, Folder,
-  Grid2X2, Heart, ImageIcon, Info, Layers3, LayoutGrid, LayoutList, Library,
+  ArrowRight, BookOpen, Check, ChevronDown, Clapperboard, Folder,
+  Grid2X2, Heart, ImageIcon, Info, LayoutGrid, LayoutList, Library,
   ListFilter, LockKeyhole, Search, ShieldCheck, SlidersHorizontal, Sparkles,
-  Video, WandSparkles, X,
+  Video, X,
+  type LucideIcon,
 } from "lucide-react";
 import "./assets-studio.css";
 
@@ -14,7 +15,7 @@ type AssetCategory = "all" | "images" | "videos" | "favorites";
 type AssetsView = "library" | "collections" | "guide";
 type AssetsLayout = "grid" | "list";
 type AssetSort = "newest" | "oldest" | "name";
-const categories: { id: AssetCategory; label: string; Icon: typeof Library }[] = [
+const categories: { id: AssetCategory; label: string; Icon: LucideIcon }[] = [
   { id: "all", label: "All assets", Icon: Library },
   { id: "images", label: "Images", Icon: ImageIcon },
   { id: "videos", label: "Videos", Icon: Clapperboard },
@@ -47,7 +48,6 @@ export default function AssetsStudio() {
   const [sort, setSort] = useState<AssetSort>("newest");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
-  const active = categories.find(item => item.id === category)!;
   const hasFilters = !!query.trim() || sort !== "newest";
   const emptyTitle = useMemo(() => {
     if (query.trim()) return "No matching media";
