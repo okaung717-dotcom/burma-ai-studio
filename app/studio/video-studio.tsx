@@ -5,9 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight, BookOpen, Check, ChevronDown, Clapperboard, Clock3, Copy, Film, Grid2X2,
   Heart, ImagePlus, Info, LayoutList, ListFilter, Play, Search, Settings2, SlidersHorizontal,
-  Sparkles, Trash2, UploadCloud, Video, WandSparkles, X
+  Sparkles, Trash2, Video, WandSparkles, X
 } from "lucide-react";
-import Link from "next/link";
 import "./video-studio.css";
 
 type FrameSlot = "first" | "last";
