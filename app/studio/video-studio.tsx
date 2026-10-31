@@ -186,51 +186,61 @@ export default function VideoStudio() {
   return <section className="video-studio" aria-labelledby="video-studio-title">
     <aside className="video-controls">
       <header className="video-tool-heading">
-        <div><span>TOOLS <ArrowRight aria-hidden="true"/> VIDEO</span><h1 id="video-studio-title">Video Generator</h1><p>Frame-to-video · Motion direction</p></div>
+        <div><span>PERSONAL PROJECT <ArrowRight aria-hidden="true"/> VIDEO STUDIO</span><h1 id="video-studio-title">Video Generator</h1><p>Image-to-video · Cinematic motion workflows</p></div>
         <button type="button" aria-label="Video settings" aria-expanded={settingsOpen} title="Video settings" onClick={() => setSettingsOpen(open => !open)}><Settings2/></button>
       </header>
-      {settingsOpen && <div className="video-settings-note" role="note"><Info/> Provider execution and video downloads remain disabled in this private beta. Files are stored privately when media storage is available.</div>}
+      {settingsOpen && <div className="video-settings-note" role="note"><Info/> This private beta offers video workflow planning only. Actual generation, motion transfer, audio rendering and downloads are not enabled.</div>}
       <div className="video-control-scroll">
-        <div className="video-control-block">
-          <label htmlFor="video-model">MODEL <span className="video-mode-chip">DEMO ONLY</span></label>
-          <div className="video-model-select"><Sparkles/><select id="video-model" value={model} onChange={() => {}}><option value="Burma Video · Demo">Burma Video · Demo</option><option disabled>Seedance · Coming later</option><option disabled>Veo · Coming later</option><option disabled>Kling · Coming later</option></select><ChevronDown/></div>
-          <p className="video-control-caption">Real provider models are not connected yet.</p>
+        <div className="video-control-block video-compact-model">
+          <div className="video-model-grid">
+            <label htmlFor="video-model">MODEL<div className="video-model-select"><Sparkles/><select id="video-model" value={model} onChange={() => {}}><option value="Burma Video · Demo">Burma Video · Demo</option><option disabled>Seedance · Not connected</option><option disabled>Veo · Not connected</option><option disabled>Kling · Not connected</option></select><ChevronDown/></div></label>
+            <label htmlFor="video-generation-mode">MODE<div className="video-model-select video-mode-select"><select id="video-generation-mode" value={generationMode} onChange={event => setGenerationMode(event.target.value)}><option>Standard</option><option>Creative</option></select><ChevronDown/></div></label>
+          </div>
+          <span className="video-inline-disclaimer"><Info/> Demo only · Provider execution is disabled</span>
         </div>
-        <div className="video-control-block">
-          <div className="video-control-label"><label>KEYFRAMES</label><span>{Number(!!firstFrame) + Number(!!lastFrame)}/2</span></div>
-          <div className="video-keyframes">
-            {([["first", firstFrame, "First frame"], ["last", lastFrame, "Last frame"]] as const).map(([slot, frame, label]) =>
+        <div className="video-control-block video-reference-block">
+          <div className="video-control-label"><label>REFERENCES</label><span>{Number(!!firstFrame) + Number(!!lastFrame)}/2</span></div>
+          <div className="video-keyframes video-reference-grid">
+            {([["first", firstFrame, "Start image"], ["last", lastFrame, "End image"]] as const).map(([slot, frame, label]) =>
               <div key={slot} className={`video-frame-slot ${frame ? "has-frame" : ""}`}>
                 {frame ? <>
                   <img src={frame.url} alt={`${label} preview`}/>
-                  <div className="video-frame-overlays"><span>{label}</span><button type="button" aria-label={`Remove ${label.toLowerCase()}`} onClick={() => slot === "first" ? setFirstFrame(null) : setLastFrame(null)}><X/></button></div>
-                </> : <button type="button" onClick={() => chooseFrame(slot)} disabled={uploading !== null} aria-label={`Add ${label.toLowerCase()}`}><ImagePlus/><b>{uploading === slot ? "Uploading…" : label}</b><small>{slot === "first" ? "Upload start image" : "Optional end image"}</small></button>}
+                  <div className="video-frame-overlays"><span>{label}</span><button type="button" aria-label={`Remove ${slot} frame`} onClick={() => slot === "first" ? setFirstFrame(null) : setLastFrame(null)}><X/></button></div>
+                </> : <button type="button" onClick={() => chooseFrame(slot)} disabled={uploading !== null} aria-label={`Add ${slot} frame`}><ImagePlus/><b>{uploading === slot ? "Uploading…" : label}</b><small>Choose image</small></button>}
               </div>
             )}
+            <div className="video-frame-slot video-motion-transfer">
+              <div className="video-motion-transfer-inner"><Film/><b>Motion transfer</b><small>Coming soon</small></div>
+            </div>
+          </div>
+          <div className="video-add-media">
+            <div className="video-add-media-icons"><ImagePlus/><Film/><Video/><Sparkles/></div>
+            <button type="button" onClick={() => chooseFrame(!firstFrame ? "first" : "last")} disabled={uploading !== null}><Plus/> Add media <span>Image</span></button>
           </div>
           <input ref={frameInput} type="file" hidden accept="image/jpeg,image/png,image/webp" onChange={event => void onFrameSelected(event.target.files?.[0])}/>
-          <p className="video-control-caption">JPG, PNG or WebP · Max 15 MB per frame</p>
         </div>
         <div className="video-control-block video-prompt-block">
-          <div className="video-control-label"><label htmlFor="video-prompt">MOTION PROMPT</label><span>{prompt.length}/4000</span></div>
-          <textarea ref={promptRef} id="video-prompt" aria-label="Motion prompt" placeholder="Describe the subject's motion, camera movement, lighting, mood and scene continuity…" value={prompt} onChange={event => setPrompt(event.target.value)} maxLength={4000}/>
-          <div className="video-prompt-tips"><WandSparkles/><span>Be specific about camera movement and timing.</span></div>
+          <div className="video-control-label video-shot-heading"><label htmlFor="video-prompt">SHOT <button type="button" aria-label="Add another shot" title="Insert shot prompt" onClick={addShot}><Plus/></button></label><span>Manual <ChevronDown/></span></div>
+          <textarea ref={promptRef} id="video-prompt" aria-label="Motion prompt" placeholder="Describe your video — add camera motion, characters, timing and references…" value={prompt} onChange={event => setPrompt(event.target.value)} maxLength={4000}/>
+          <div className="video-prompt-tips"><WandSparkles/><span>{prompt.length}/4000 · Tip: describe motion and camera direction.</span></div>
         </div>
-        <div className="video-control-block">
+        <div className="video-control-block video-camera-block">
           <label htmlFor="video-camera">CAMERA MOVEMENT</label>
           <div className="video-model-select video-movement"><Film/><select id="video-camera" value={movement} onChange={event => setMovement(event.target.value)}><option>Cinematic push-in</option><option>Static tripod</option><option>Smooth tracking shot</option><option>Slow orbit</option><option>Handheld realism</option><option>Drone reveal</option></select><ChevronDown/></div>
         </div>
-        <div className="video-control-block video-output-options">
-          <div className="video-control-label"><label>OUTPUT SETTINGS</label><span>Target only</span></div>
-          <div className="video-option-grid">
-            <label>Aspect ratio<select aria-label="Video aspect ratio" value={aspect} onChange={event => setAspect(event.target.value)}><option>16:9</option><option>9:16</option><option>1:1</option><option>4:5</option></select></label>
-            <label>Duration<select aria-label="Video duration" value={duration} onChange={event => setDuration(Number(event.target.value))}><option value={5}>5 seconds</option><option value={8}>8 seconds</option><option value={10}>10 seconds</option></select></label>
-            <label>Frame rate<select aria-label="Video frame rate" value={fps} onChange={event => setFps(event.target.value)}><option value="24">24 FPS</option><option value="30">30 FPS</option></select></label>
-            <div className="video-output-static"><span>Mode</span><b>Demo preview</b></div>
-          </div>
-        </div>
       </div>
       <footer className="video-generate-footer">
+        <div className="video-quick-settings" aria-label="Video output settings">
+          <div className="video-quantity-control"><button type="button" aria-label="Decrease video quantity" disabled={quantity<=1} onClick={() => setQuantity(q => Math.max(1,q-1))}><Minus/></button><strong>{quantity}</strong><button type="button" aria-label="Increase video quantity" disabled={quantity>=4} onClick={() => setQuantity(q => Math.min(4,q+1))}><Plus/></button></div>
+          <label><span className="sr-only">Video resolution</span><select aria-label="Video resolution" value={resolution} onChange={event=>setResolution(event.target.value)}><option>720p</option><option>1080p</option></select></label>
+          <label><span className="sr-only">Video duration</span><select aria-label="Video duration" value={duration} onChange={event=>setDuration(Number(event.target.value))}><option value={5}>5s</option><option value={8}>8s</option><option value={10}>10s</option></select></label>
+          <label><span className="sr-only">Video aspect ratio</span><select aria-label="Video aspect ratio" value={aspect} onChange={event=>setAspect(event.target.value)}><option>16:9</option><option>9:16</option><option>1:1</option><option>4:5</option></select></label>
+        </div>
+        <div className="video-secondary-settings">
+          <button type="button" className={audioEnabled ? "audio-on" : ""} aria-label="Toggle audio preference" aria-pressed={audioEnabled} onClick={()=>setAudioEnabled(v=>!v)}>{audioEnabled?<Volume2/>:<VolumeX/>}<span>Audio {audioEnabled?"ON":"OFF"}</span></button>
+          <label htmlFor="video-fps">FPS <select id="video-fps" aria-label="Video frame rate" value={fps} onChange={event=>setFps(event.target.value)}><option value="24">24</option><option value="30">30</option></select></label>
+          <span className="video-mode-chip">DEMO ONLY</span>
+        </div>
         <button type="button" className="video-generate-button" onClick={() => void generate()} disabled={running}><Sparkles/>{running ? "Preparing demo…" : "Create demo workflow"}<ArrowRight/></button>
         <p className="video-generation-message" role="status">{message}</p>
         <div className="video-provider-status"><Check/><span>No paid generation · No video rendered</span></div>
