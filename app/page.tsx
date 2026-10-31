@@ -1,9 +1,9 @@
-import { redirect } from "next/navigation";
-import { getSpacesUser } from "./lib/spaces-auth";
+import Showcase, { metadata as showcaseMetadata } from "./showcase/page";
 
-export const dynamic = "force-dynamic";
+export const metadata = showcaseMetadata;
 
-export default async function Home() {
-  const user = await getSpacesUser();
-  redirect(user ? "/studio/spaces" : "/showcase");
+// The canonical public website must always show the public Studio experience,
+// including for visitors with an existing private Studio session.
+export default function Home({ searchParams }: { searchParams: Promise<{ view?: string }> }) {
+  return <Showcase searchParams={searchParams} />;
 }
