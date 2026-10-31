@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
  ArrowRight, BookOpen, Boxes, Check, Clapperboard, Film, Folder,
  Grid2X2, Heart, ImageIcon, Layers3, Library, LockKeyhole, Plus,
@@ -21,6 +22,7 @@ const KEY="bas-public-showcase-data-v2";
 const iconFor=(kind:DemoProject["type"])=>kind==="image"?<ImageIcon/>:kind==="video"?<Clapperboard/>:<WandSparkles/>;
 
 export default function PublicShowcaseContent({view}:{view:ShowcaseView}) {
+ const router=useRouter();
  const [ready,setReady]=useState(false);
  const [projects,setProjects]=useState<DemoProject[]>(initialProjects);
  const [records,setRecords]=useState<DemoRecord[]>([]);
@@ -64,8 +66,11 @@ export default function PublicShowcaseContent({view}:{view:ShowcaseView}) {
  function newProject(){
   const name=window.prompt("New demo studio name","Untitled Studio")?.trim().slice(0,80);
   if(!name)return;
-  setProjects(xs=>[{id:crypto.randomUUID(),name,type:"director" as const,favorite:false},...xs].slice(0,25));
-  setMsg("Demo studio created in this browser only. Your private workspace is unchanged.");
+  const id=crypto.randomUUID();
+  const nextProjects:DemoProject[]=[{id,name,type:"director",favorite:false},...projects].slice(0,25);
+  try{localStorage.setItem(KEY,JSON.stringify({projects:nextProjects,records}));}catch{setMsg("Browser storage unavailable; this studio may not persist after refresh.");}
+  setProjects(nextProjects);
+  router.push(`/showcase/studio/${id}`);
  }
  function createRecord(kind:"image"|"video"){
   if(prompt.trim().length<3){setKindStatus("Enter at least three characters in the prompt first.");return;}
@@ -79,20 +84,20 @@ export default function PublicShowcaseContent({view}:{view:ShowcaseView}) {
  }
  if(view==="studio")return <section className="public-content">
   <div className="public-breadcrumb">WORKSPACE / PROJECTS</div>
-  <div className="public-heading"><div><h2>My Studios</h2><p>Explore example projects or create your own browser-only demo studio.</p></div><button className="public-faux-button" onClick={newProject}><Plus size={16}/> New Demo Studio</button></div>
+  <div className="public-heading"><div><h2>My Studios</h2><p>Explore example projects or create your own browser-only demo studio.</p></div><button className="public-faux-button" onClick={newProject} disabled={!ready}><Plus size={16}/> New Demo Studio</button></div>
   <div className="public-mini-tabs">
    {(["all","recent","favorites"] as const).map(key=><button key={key} className={projectFilter===key?"active":""} onClick={()=>setProjectFilter(key)}>{key==="all"?"All Studios":key==="recent"?"Recent":"Favorites"}</button>)}
   </div>
   {msg&&<p className="public-live-note" role="status">{msg}</p>}
   <div className="public-card-grid">
    {filteredProjects.map((item,i)=><article className="public-project-card" key={item.id}>
-    <Link href={`/showcase?view=${item.type}`} className={`public-project-art public-art-${i%3}`}><span className="public-art-pill">INTERACTIVE DEMO</span><div className="public-art-mark">{iconFor(item.type)}</div></Link>
-    <div className="public-project-info public-project-actions"><Link href={`/showcase?view=${item.type}`}><b>{item.name}</b><p>Open {item.type} demo</p></Link><button aria-label={`${item.favorite?"Unfavorite":"Favorite"} ${item.name}`} onClick={()=>setProjects(xs=>xs.map(p=>p.id===item.id?{...p,favorite:!p.favorite}:p))}><Heart size={17} fill={item.favorite?"currentColor":"none"}/></button>
+    <Link href={`/showcase/studio/${item.id}`} className={`public-project-art public-art-${i%3}`}><span className="public-art-pill">INTERACTIVE DEMO</span><div className="public-art-mark">{iconFor(item.type)}</div></Link>
+    <div className="public-project-info public-project-actions"><Link href={`/showcase/studio/${item.id}`}><b>{item.name}</b><p>Open full Studio canvas</p></Link><button aria-label={`${item.favorite?"Unfavorite":"Favorite"} ${item.name}`} onClick={()=>setProjects(xs=>xs.map(p=>p.id===item.id?{...p,favorite:!p.favorite}:p))}><Heart size={17} fill={item.favorite?"currentColor":"none"}/></button>
     {!item.id.startsWith("sample-")&&<button aria-label={`Delete demo ${item.name}`} onClick={()=>setProjects(xs=>xs.filter(p=>p.id!==item.id))}><Trash2 size={16}/></button>}</div>
    </article>)}
   </div>
   {!filteredProjects.length&&<p className="public-live-note">No demo studios here yet. Choose All Studios or create a new one.</p>}
-  <div className="public-workflow-panel"><b>Connected production workflow</b><p>Click a node to explore its demo controls.</p>
+  <div className="public-workflow-panel"><b>Connected production workflow</b><p>Click the nodes below to open the corresponding demo tools. New Demo Studio opens the full node canvas.</p>
    <div className="public-flow">{(["image","director","video"] as const).map((kind,i)=><div key={kind} className="public-flow-link"><Link href={`/showcase?view=${kind}`} className="public-node"><span className="public-node-icon">{iconFor(kind)}</span><small>STEP {i+1}</small><b>{kind==="image"?"Reference image":kind==="director"?"Creative direction":"Video preview"}</b><i>Open demo</i></Link>{i<2&&<div className="public-connector"/>}</div>)}</div>
   </div>
  </section>;
