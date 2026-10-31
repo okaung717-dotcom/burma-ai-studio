@@ -77,8 +77,9 @@ export default function DirectorStudio() {
   const [message, setMessage] = useState("UI-only directing board · Not connected to AI generation or persistent storage.");
   const directionRef = useRef<HTMLTextAreaElement>(null);
 
-  const update = <K extends keyof ShotDraft>(key: K, value: ShotDraft[K]) =>
+  function update<K extends keyof ShotDraft>(key: K, value: ShotDraft[K]) {
     setDraft(current => ({ ...current, [key]: value }));
+  }
 
   const visible = useMemo(() => shots.filter(item =>
     (!favoritesOnly || item.favorite) &&
