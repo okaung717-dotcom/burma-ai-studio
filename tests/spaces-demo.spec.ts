@@ -104,11 +104,19 @@ test("complete Spaces demo workflow persists nodes, connections and results", as
   await project.getByRole("button", { name: "Create space" }).click();
   await project.getByRole("link", { name: /Launch film/ }).click();
   await expect(page.locator(".react-flow")).toBeVisible();
+  // A fresh Space is blank, and each library click inserts only its selected kind.
+  await expect(page.locator(".studio-node")).toHaveCount(0);
+  await page.getByRole("button", { name: "Add nodes" }).click();
+  await page.getByRole("menu", { name: "Add nodes" }).getByRole("menuitem", { name: "Media / Creation" }).click();
+  await expect(page.locator(".studio-node")).toHaveCount(1);
+  await expect(page.locator(".studio-node-creation")).toHaveCount(1);
+  await page.getByRole("button", { name: "Delete selected" }).click();
+  await expect(page.locator(".studio-node")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Image Generator", exact: true }).first().click();
   await page.getByRole("button", { name: "Video Generator", exact: true }).first().click();
   await page.getByRole("button", { name: "AI Director", exact: true }).first().click();
-  await expect(page.locator(".studio-node")).toHaveCount(6);
+  await expect(page.locator(".studio-node")).toHaveCount(3);
 
   const addNodes = page.getByRole("button", { name: "Add nodes" });
   const addMenu = page.getByRole("menu", { name: "Add nodes" });
@@ -127,11 +135,11 @@ test("complete Spaces demo workflow persists nodes, connections and results", as
 
   await addNodes.click();
   await addMenu.getByRole("menuitem", { name: "Image Generator" }).click();
-  await expect(page.locator(".studio-node-image")).toHaveCount(3);
+  await expect(page.locator(".studio-node-image")).toHaveCount(2);
   await page.getByRole("button", { name: "Delete selected" }).click();
   await addNodes.click();
   await addMenu.getByRole("menuitem", { name: "Video Generator" }).click();
-  await expect(page.locator(".studio-node-video")).toHaveCount(3);
+  await expect(page.locator(".studio-node-video")).toHaveCount(2);
   await page.getByRole("button", { name: "Delete selected" }).click();
 
   await addNodes.click();
@@ -247,7 +255,7 @@ test("complete Spaces demo workflow persists nodes, connections and results", as
   await expect(page.getByText("Saved locally")).toBeVisible();
 
   await page.reload();
-  await expect(page.locator(".studio-node")).toHaveCount(6);
+  await expect(page.locator(".studio-node")).toHaveCount(3);
   await expect(page.locator(".react-flow__edge")).toHaveCount(1);
   await expect(page.getByText("Demo history")).toBeVisible();
   await page.locator(".studio-node-image").last().dispatchEvent("click");
@@ -267,7 +275,7 @@ test("complete Spaces demo workflow persists nodes, connections and results", as
   await expect(page.getByRole("option", { name: /Video Generator/ })).toBeVisible();
   await page.getByLabel("Search compatible nodes").fill("video");
   await page.getByLabel("Search compatible nodes").press("Enter");
-  await expect(page.locator(".studio-node")).toHaveCount(7);
+  await expect(page.locator(".studio-node")).toHaveCount(4);
   await expect(page.locator(".react-flow__edge")).toHaveCount(2);
   await expect(page.getByRole("dialog", { name: "Insert connected node" })).toBeHidden();
 
