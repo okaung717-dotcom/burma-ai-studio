@@ -477,3 +477,33 @@ test("Assets Library matches Video Studio visual language without changing store
   await page.getByRole("button", { name: "Library information" }).click();
   await expect(page.getByRole("note")).toContainText("No new upload, delete, synchronization");
 });
+
+
+test("Assets Library reference categories and scope controls are visual-only", async ({ page }) => {
+  await page.goto("/studio/assets");
+  await expect(page.getByRole("region", { name: "Reference categories" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Custom categories" })).toBeVisible();
+
+  await page.getByRole("region", { name: "Reference categories" }).getByRole("button", { name: "Characters" }).click();
+  await expect(page.getByRole("heading", { name: "Characters", exact: true })).toBeVisible();
+  await expect(page.getByText("Build a consistent cast")).toBeVisible();
+  await page.getByRole("region", { name: "Reference categories" }).getByRole("button", { name: "Styles" }).click();
+  await expect(page.getByText("Define your visual language")).toBeVisible();
+  await page.getByRole("region", { name: "Custom categories" }).getByRole("button", { name: "Flows" }).click();
+  await expect(page.getByText("Build reusable creative flows")).toBeVisible();
+
+  await page.getByRole("group", { name: "Asset visibility" }).getByRole("button", { name: "Private" }).click();
+  await expect(page.getByText("Private library is not connected yet")).toBeVisible();
+  await page.getByRole("group", { name: "Asset visibility" }).getByRole("button", { name: "Shared" }).click();
+  await expect(page.getByText("Shared library is not connected yet")).toBeVisible();
+  await page.getByRole("group", { name: "Asset visibility" }).getByRole("button", { name: "All", exact: true }).click();
+
+  await page.getByRole("button", { name: "Create asset workflow" }).click();
+  await expect(page.getByRole("link", { name: "Image Studio" }).last()).toBeVisible();
+  await expect(page.getByText("It does not create an asset in this library.")).toBeVisible();
+  await page.getByRole("button", { name: "Create asset workflow" }).click();
+  await expect(page.getByLabel("Project filter")).toHaveValue("personal");
+  await page.getByLabel("Project filter").selectOption("all");
+  await expect(page.getByLabel("Project filter")).toHaveValue("all");
+  await expect(page.getByText("UI preview · Catalog not connected")).toBeVisible();
+});
