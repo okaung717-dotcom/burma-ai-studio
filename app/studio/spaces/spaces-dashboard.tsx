@@ -75,7 +75,7 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
   };
   const duplicateProject = (source: StudioProject) => setProjects((items) => [{ ...source, id: crypto.randomUUID(), name: `${source.name} copy`, spaces: source.spaces.map((space) => ({ ...space, id: crypto.randomUUID() })) }, ...items]);
   const renameSpace = (projectId: string, spaceId: string, currentName: string) => {
-    const name = window.prompt("Rename space", currentName)?.trim();
+    const name = window.prompt("Rename studio", currentName)?.trim();
     if (!name) return;
     setProjects((items) => items.map((project) => project.id === projectId ? { ...project, spaces: project.spaces.map((space) => space.id === spaceId ? { ...space, name, updatedAt: new Date().toISOString() } : space) } : project));
   };
@@ -87,7 +87,7 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
   };
   const spaceCards = visible.flatMap((project) => project.spaces.map((space) => ({ project, space })));
 
-  if (!user) return <main className="spaces-access"><div className="spaces-access-card"><Sparkles/><span>PRIVATE BETA</span><h1>Spaces is ready for invited creators.</h1><p>{accessConfigured ? "Sign in with an invited account to continue." : "Set BAS_BETA_EMAILS in the server environment to invite up to five trusted users. Development access remains available after signing in."}</p><Link href="/">Return to Burma AI Studio</Link></div></main>;
+  if (!user) return <main className="spaces-access"><div className="spaces-access-card"><Sparkles/><span>PRIVATE BETA</span><h1>Studio is ready for invited creators.</h1><p>{accessConfigured ? "Sign in with an invited account to continue." : "Set BAS_BETA_EMAILS in the server environment to invite up to five trusted users. Development access remains available after signing in."}</p><Link href="/">Return to Burma AI Studio</Link></div></main>;
 
   return <main className="spaces-dashboard">
     <div className="spaces-dashboard-body">
