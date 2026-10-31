@@ -5,5 +5,5 @@ export const PROJECTS_KEY = "bas-spaces-projects-v1";
 
 export function starterProjects(): StudioProject[] {
   const now = new Date().toISOString();
-  return [{ id: crypto.randomUUID(), name: "My first production", createdAt: now, spaces: [{ id: crypto.randomUUID(), name: "Main space", updatedAt: now, nodeCount: 0 }] }];
+  return [{ id: crypto.randomUUID(), name: "My first production", createdAt: now, spaces: [{ id: crypto.randomUUID(), name: "Main studio", updatedAt: now, nodeCount: 0 }] }];
 }
