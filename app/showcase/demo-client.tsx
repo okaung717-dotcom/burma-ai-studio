@@ -67,7 +67,7 @@ export default function PublicShowcaseContent({view}:{view:ShowcaseView}) {
   const name=window.prompt("New demo studio name","Untitled Studio")?.trim().slice(0,80);
   if(!name)return;
   const id=crypto.randomUUID();
-  const nextProjects:DemoProject[]=[{id,name,type:"director",favorite:false},...projects].slice(0,25);
+  const nextProjects:DemoProject[]=[{id,name,type:"director" as const,favorite:false},...projects].slice(0,25);
   try{localStorage.setItem(KEY,JSON.stringify({projects:nextProjects,records}));}catch{setMsg("Browser storage unavailable; this studio may not persist after refresh.");}
   setProjects(nextProjects);
   router.push(`/showcase/studio/${id}`);
