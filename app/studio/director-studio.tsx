@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   Aperture, ArrowRight, BookOpen, Camera, Check, ChevronDown, Clapperboard,
   Clock3, Copy, Film, Focus, Grid2X2, Heart, Info, Layers3, LayoutList,
-  Lightbulb, ListFilter, Minus, MoreHorizontal, Plus, Search, Settings2,
+  Lightbulb, ListFilter, Minus, Plus, Search, Settings2,
   SlidersHorizontal, Sparkles, Trash2, WandSparkles, X,
 } from "lucide-react";
 import "./director-studio.css";
@@ -196,7 +196,7 @@ export default function DirectorStudio() {
           <div className="director-safety"><Check /> Design preview · No AI generated · Not saved to server</div>
         </footer>
       </aside>
-      <main className="director-board">
+      <div className="director-board">
         <header className="director-board-toolbar">
           <nav aria-label="Director workspace views">
             <button type="button" className={tab === "storyboard" ? "active" : ""} onClick={() => setTab("storyboard")}><Clapperboard /> Storyboard</button>
@@ -251,7 +251,7 @@ export default function DirectorStudio() {
             <div><button type="button" onClick={copyBoard} disabled={!shots.length}><Copy /> Copy storyboard</button><Link href="/studio/spaces">Open Studio Canvas <ArrowRight /></Link></div>
           </footer>
         </div>
-      </main>
+      </div>
     </section>
   );
 }
