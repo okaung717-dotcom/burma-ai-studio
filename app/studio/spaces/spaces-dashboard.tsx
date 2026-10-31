@@ -63,12 +63,12 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
     setProjects((items) => [{ id: crypto.randomUUID(), name, createdAt: now, spaces: [] }, ...items]);
   };
   const addSpace = (projectId: string) => {
-    const name = window.prompt("Space name", "New space")?.trim();
+    const name = window.prompt("Studio name", "New studio")?.trim();
     if (!name) return;
     setProjects((items) => items.map((project) => project.id === projectId ? { ...project, spaces: [...project.spaces, { id: crypto.randomUUID(), name, updatedAt: new Date().toISOString(), nodeCount: 0 }] } : project));
   };
   const removeProject = (id: string) => {
-    if (window.confirm("Delete this project and all of its spaces?")) {
+    if (window.confirm("Delete this project and all of its studios?")) {
       setProjects((items) => items.filter((item) => item.id !== id));
       void fetch(`/api/studio/persistence?kind=project&id=${encodeURIComponent(id)}`, { method: "DELETE" });
     }
@@ -81,7 +81,7 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
   };
   const duplicateSpace = (projectId: string, spaceId: string) => setProjects((items) => items.map((project) => project.id === projectId ? { ...project, spaces: [...project.spaces, ...project.spaces.filter((space) => space.id === spaceId).map((space) => ({ ...space, id: crypto.randomUUID(), name: `${space.name} copy`, updatedAt: new Date().toISOString() }))] } : project));
   const removeSpace = (projectId: string, spaceId: string) => {
-    if (!window.confirm("Delete this space?")) return;
+    if (!window.confirm("Delete this studio?")) return;
     setProjects((items) => items.map((project) => project.id === projectId ? { ...project, spaces: project.spaces.filter((space) => space.id !== spaceId) } : project));
     void fetch(`/api/studio/persistence?kind=space&id=${encodeURIComponent(spaceId)}`, { method: "DELETE" });
   };
@@ -94,12 +94,12 @@ export default function SpacesDashboard({ user, accessConfigured }: { user: Spac
       <StudioNav/>
       <section className="spaces-projects">
         <div className="spaces-context"><span/><b>{visible[0]?.name || "Personal project"}</b><small>Private workspace</small><button onClick={createProject}><FolderPlus/>New project</button></div>
-        <div className="spaces-heading"><div><p>BURMA AI STUDIO</p><h1>Spaces</h1><span>Build node-based generative workflows and bring your ideas to life.</span></div></div>
-        <div className="spaces-browser-bar"><div className="spaces-tabs"><button className="active"><Boxes/>My spaces</button><button disabled><Users/>Shared</button><button disabled><LayoutGrid/>Templates</button><button disabled><Workflow/>Flows</button></div><div className="spaces-view-actions"><button className="spaces-new" onClick={() => visible[0] ? addSpace(visible[0].id) : createProject()}><Plus/>New space</button><button title="Favorites"><Heart/></button><button><Grid2X2/>Layout</button><button><ListFilter/>Filters</button><label className="spaces-search"><Search/><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search spaces"/></label></div></div>
+        <div className="spaces-heading"><div><p>BURMA AI STUDIO</p><h1>Studio</h1><span>Build node-based generative workflows and bring your ideas to life.</span></div></div>
+        <div className="spaces-browser-bar"><div className="spaces-tabs"><button className="active"><Boxes/>My studios</button><button disabled><Users/>Shared</button><button disabled><LayoutGrid/>Templates</button><button disabled><Workflow/>Flows</button></div><div className="spaces-view-actions"><button className="spaces-new" onClick={() => visible[0] ? addSpace(visible[0].id) : createProject()}><Plus/>New studio</button><button title="Favorites"><Heart/></button><button><Grid2X2/>Layout</button><button><ListFilter/>Filters</button><label className="spaces-search"><Search/><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search studios"/></label></div></div>
         {!ready ? <div className="spaces-empty">Loading your local demo workspace…</div> : visible.length === 0 ? <button className="spaces-empty" onClick={createProject}><Plus/>Create your first project</button> : <div className="spaces-project-grid">
           {spaceCards.map(({ project, space }, index) => <article key={space.id} className="spaces-project-card"><Link className="spaces-card-link" href={`/studio/spaces/${space.id}?project=${project.id}`}><div className="spaces-card-cover"><div className="spaces-preview-flow"><i/><i/><i/><span/><span/></div><em>{index % 3 === 0 ? "Creative flow" : index % 3 === 1 ? "Image sequence" : "Motion study"}</em></div><div className="spaces-card-status"><Sparkles/>Demo ready</div><div className="spaces-card-title"><div><h2>{space.name}</h2><p>{project.name} · {storageLabel}</p></div></div></Link><details className="spaces-card-menu"><summary aria-label={`Manage ${space.name}`}><MoreHorizontal/></summary><div><button onClick={() => renameSpace(project.id, space.id, space.name)}>Rename</button><button onClick={() => duplicateSpace(project.id, space.id)}>Duplicate</button><button onClick={() => removeSpace(project.id, space.id)}>Delete</button></div></details></article>)}
-          {visible.map((project) => project.spaces.length === 0 && <article key={project.id} className="spaces-project-card spaces-new-project"><button onClick={() => addSpace(project.id)}><FolderPlus/><b>{project.name}</b><span>Create space</span></button><details className="spaces-card-menu"><summary aria-label="Project actions"><MoreHorizontal/></summary><div><button onClick={() => duplicateProject(project)}><Copy/>Duplicate project</button><button onClick={() => removeProject(project.id)}><Trash2/>Delete project</button></div></details></article>)}
-          <button className="spaces-create-card" onClick={() => visible[0] ? addSpace(visible[0].id) : createProject()}><Plus/><b>New space</b><span>Start with a blank infinite canvas</span></button>
+          {visible.map((project) => project.spaces.length === 0 && <article key={project.id} className="spaces-project-card spaces-new-project"><button onClick={() => addSpace(project.id)}><FolderPlus/><b>{project.name}</b><span>Create studio</span></button><details className="spaces-card-menu"><summary aria-label="Project actions"><MoreHorizontal/></summary><div><button onClick={() => duplicateProject(project)}><Copy/>Duplicate project</button><button onClick={() => removeProject(project.id)}><Trash2/>Delete project</button></div></details></article>)}
+          <button className="spaces-create-card" onClick={() => visible[0] ? addSpace(visible[0].id) : createProject()}><Plus/><b>New studio</b><span>Start with a blank infinite canvas</span></button>
         </div>}
       </section>
     </div>
