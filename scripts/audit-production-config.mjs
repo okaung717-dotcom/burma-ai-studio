@@ -40,13 +40,13 @@ if (ownerOnly && !/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(ownerUui
   failed = true;
 }
 const prodUrl = process.env.SUPABASE_URL || "";
-if (ownerOnly && (prodUrl.includes("dpgmceweazamjheupoaz") || !/^https:\/\/[^\s]+\.supabase\.co\/?$/.test(prodUrl))) {
+if (ownerOnly && prodUrl.replace(/\/+$/, "") !== "https://lfucxtlbbzanybvdxdkr.supabase.co") {
   console.error("Owner-only release must point to the correct production Supabase project (not staging).");
   failed = true;
 }
 const hash = process.env.BAS_ADMIN_PASSWORD_HASH || "";
 const strongScrypt = /^scrypt\$N=65536,r=8,p=1\$[^$]+\$[^$]+$/.test(hash.replaceAll("\\$", "$"));
-console.log(`BAS_ADMIN_PASSWORD_HASH_STRENGTH: ${strongScrypt ? "current" : "upgrade-required"}`);
+console.log(`BAS_ADMIN_PASSWORD_HASH_STRENGTH: ${ownerOnly ? "not-required-owner-only" : strongScrypt ? "current" : "upgrade-required"}`);
 if (!ownerOnly && !strongScrypt) failed = true;
 
 const sessionSecretStrong = (process.env.BAS_SESSION_SECRET || "").length >= 32;
@@ -54,7 +54,7 @@ console.log(`BAS_SESSION_SECRET_STRENGTH: ${sessionSecretStrong ? "valid" : "inv
 if (!sessionSecretStrong) failed = true;
 
 const durable = process.env.BAS_AUTH_STORE_MODE === "supabase";
-console.log(`BAS_AUTH_STORE_MODE: ${durable ? "supabase" : "missing-or-invalid"}`);
+console.log(`BAS_AUTH_STORE_MODE: ${ownerOnly ? "not-required-owner-only" : durable ? "supabase" : "missing-or-invalid"}`);
 if (!ownerOnly && !durable) failed = true;
 
 const paidDisabled = process.env.BAS_ENABLE_PAID_GENERATION !== "true";
