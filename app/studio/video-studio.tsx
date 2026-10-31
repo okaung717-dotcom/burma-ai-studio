@@ -167,7 +167,7 @@ export default function VideoStudio() {
     }
   };
 
-  const addShot = () => { setPrompt(value => `${value.trimEnd()}${value.trim() ? "\\n\\n" : ""}Shot ${Math.max(2, (value.match(/\\bShot\\s+\\d+/gi) || []).length + 1)}: `); promptRef.current?.focus(); };
+  const addShot = () => { setPrompt(value => value.trimEnd() + (value.trim() ? "\n\n" : "") + "Shot " + Math.max(2, (value.match(/\bShot\s+\d+/gi) || []).length + 1) + ": "); promptRef.current?.focus(); };
 
   const reuse = (item: VideoRecord) => {
     setPrompt(item.prompt);
