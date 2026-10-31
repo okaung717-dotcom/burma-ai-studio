@@ -405,3 +405,45 @@ test("Video Studio shows professional controls and persists safe Demo Mode workf
   await page.getByRole("button", { name: "Back to creations" }).click();
   await expect(page.locator(".video-creation-card")).toHaveCount(1);
 });
+
+test("AI Director provides the Video Studio design language with a UI-only scene board", async ({ page }) => {
+  await page.goto("/studio/director");
+  await expect(page.getByRole("heading", { name: "AI Director", exact: true })).toBeVisible();
+  await expect(page.locator(".director-controls")).toBeVisible();
+  await expect(page.locator(".director-board")).toBeVisible();
+  await expect(page.getByText("Every scene starts with a vision")).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("UI-only");
+
+  await page.getByLabel("SUBJECT / ACTION").fill("A Burmese actress enters the courtyard");
+  await page.getByLabel("Shot type").selectOption("Close-up");
+  await page.getByLabel("Lens").selectOption("85mm");
+  await page.getByLabel("Camera movement").selectOption("Slow orbit");
+  await page.getByLabel("DIRECTOR'S NOTES").fill("Maintain the same natural light and eyeline across the shot.");
+  await page.getByRole("button", { name: "Add shot to storyboard" }).click();
+
+  await expect(page.locator(".director-shot-card")).toHaveCount(1);
+  await expect(page.getByText("Scene 01 · Opening")).toBeVisible();
+  await expect(page.getByText("A Burmese actress enters the courtyard")).toBeVisible();
+
+  await page.getByRole("button", { name: "Favorite shot 1" }).click();
+  await page.getByRole("button", { name: "Show favorite shots" }).click();
+  await expect(page.locator(".director-shot-card")).toHaveCount(1);
+  await page.getByRole("button", { name: "Show favorite shots" }).click();
+
+  await page.getByRole("button", { name: "Edit shot" }).click();
+  await page.getByLabel("SCENE").fill("Scene 01 · First look");
+  await page.getByRole("button", { name: "Save shot changes" }).click();
+  await expect(page.getByText("Scene 01 · First look")).toBeVisible();
+
+  await page.getByRole("button", { name: "Shot library" }).click();
+  await expect(page.getByText("Establishing scene")).toBeVisible();
+  await page.getByRole("button", { name: "Use direction" }).first().click();
+  await expect(page.getByLabel("Shot type")).toHaveValue("Wide establishing");
+
+  await page.getByRole("button", { name: "Director guide" }).click();
+  await expect(page.getByText("Story, camera, continuity.")).toBeVisible();
+  await page.getByRole("button", { name: "Storyboard" }).click();
+  await expect(page.locator(".director-shot-card")).toHaveCount(1);
+  await page.reload();
+  await expect(page.getByText("Every scene starts with a vision")).toBeVisible();
+});
