@@ -4,8 +4,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight, BookOpen, Check, ChevronDown, Clapperboard, Clock3, Copy, Film, Grid2X2,
-  Heart, ImagePlus, Info, LayoutList, ListFilter, Play, Search, Settings2, SlidersHorizontal,
-  Sparkles, Trash2, Video, WandSparkles, X
+  Heart, ImagePlus, Info, LayoutList, ListFilter, Minus, Plus, Play, Search, Settings2, SlidersHorizontal,
+  Sparkles, Trash2, Video, Volume2, VolumeX, WandSparkles, X
 } from "lucide-react";
 import "./video-studio.css";
 
@@ -14,9 +14,10 @@ type Frame = { assetId?: string; url: string; name: string; transient?: boolean 
 type VideoRecord = {
   id: string; prompt: string; model: string; aspect: string; duration: number; fps: string;
   movement: string; createdAt: string; firstFrame?: string; lastFrame?: string;
+  resolution?: string; audio?: boolean; quantity?: number; generationMode?: string;
   favorite?: boolean; status: "demo";
 };
-type Draft = { prompt: string; aspect: string; duration: number; fps: string; movement: string };
+type Draft = { prompt: string; aspect: string; duration: number; fps: string; movement: string; resolution: string; audio: boolean; quantity: number; generationMode: string };
 
 const STORAGE_KEY = "bas-video-studio-demo-v1";
 const DEFAULT_MESSAGE = "Demo Mode is active. Submitting a workflow does not render a video or contact a paid provider.";
@@ -39,6 +40,10 @@ export default function VideoStudio() {
   const [duration, setDuration] = useState(5);
   const [fps, setFps] = useState("24");
   const [movement, setMovement] = useState("Cinematic push-in");
+  const [resolution, setResolution] = useState("720p");
+  const [generationMode, setGenerationMode] = useState("Standard");
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [quantity, setQuantity] = useState(1);
   const [firstFrame, setFirstFrame] = useState<Frame | null>(null);
   const [lastFrame, setLastFrame] = useState<Frame | null>(null);
   const [creations, setCreations] = useState<VideoRecord[]>([]);
@@ -68,6 +73,10 @@ export default function VideoStudio() {
         if ([5, 8, 10].includes(draft.duration || 0)) setDuration(draft.duration!);
         if (["24", "30"].includes(draft.fps || "")) setFps(draft.fps!);
         if (typeof draft.movement === "string") setMovement(draft.movement);
+        if (["720p", "1080p"].includes(draft.resolution || "")) setResolution(draft.resolution!);
+        if (["Standard", "Creative"].includes(draft.generationMode || "")) setGenerationMode(draft.generationMode!);
+        if (typeof draft.audio === "boolean") setAudioEnabled(draft.audio);
+        if (typeof draft.quantity === "number" && draft.quantity >= 1 && draft.quantity <= 4) setQuantity(draft.quantity);
       }
       if (saved?.frames?.first && !saved.frames.first.transient) setFirstFrame(saved.frames.first);
       if (saved?.frames?.last && !saved.frames.last.transient) setLastFrame(saved.frames.last);
@@ -80,11 +89,11 @@ export default function VideoStudio() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         creations: creations.slice(0, 80),
-        draft: { prompt, aspect, duration, fps, movement },
+        draft: { prompt, aspect, duration, fps, movement, resolution, audio: audioEnabled, quantity, generationMode },
         frames: { first: firstFrame?.transient ? null : firstFrame, last: lastFrame?.transient ? null : lastFrame }
       }));
     } catch { setMessage("Browser storage is full or unavailable. Your current draft is still open."); }
-  }, [loaded, creations, prompt, aspect, duration, fps, movement, firstFrame, lastFrame]);
+  }, [loaded, creations, prompt, aspect, duration, fps, movement, resolution, audioEnabled, quantity, generationMode, firstFrame, lastFrame]);
 
   const visible = useMemo(() => creations.filter(item =>
     (!favoritesOnly || item.favorite) &&
@@ -139,6 +148,7 @@ export default function VideoStudio() {
       if (!response.ok || !result.demo) throw new Error(result.error || "The demo request was not completed.");
       const record: VideoRecord = {
         id: crypto.randomUUID(), prompt: clean, model, aspect, duration, fps, movement,
+        resolution, audio: audioEnabled, quantity, generationMode,
         createdAt: typeof result.createdAt === "string" ? result.createdAt : new Date().toISOString(),
         firstFrame: firstFrame?.transient ? undefined : firstFrame?.url,
         lastFrame: lastFrame?.transient ? undefined : lastFrame?.url,
@@ -157,12 +167,18 @@ export default function VideoStudio() {
     }
   };
 
+  const addShot = () => { setPrompt(value => `${value.trimEnd()}${value.trim() ? "\\n\\n" : ""}Shot ${Math.max(2, (value.match(/\\bShot\\s+\\d+/gi) || []).length + 1)}: `); promptRef.current?.focus(); };
+
   const reuse = (item: VideoRecord) => {
     setPrompt(item.prompt);
     setAspect(item.aspect);
     setDuration(item.duration);
     setFps(item.fps);
     setMovement(item.movement);
+    if (item.resolution) setResolution(item.resolution);
+    if (typeof item.audio === "boolean") setAudioEnabled(item.audio);
+    if (item.quantity) setQuantity(item.quantity);
+    if (item.generationMode) setGenerationMode(item.generationMode);
     setMessage("Settings copied into the editor. The reference frames must be selected again.");
     promptRef.current?.focus();
   };
