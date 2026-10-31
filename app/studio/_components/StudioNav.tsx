@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Boxes, Clapperboard, ImageIcon, Library, LogOut, Settings, WandSparkles } from "lucide-react";
 
 const items = [
-  { href: "/studio/spaces", label: "Spaces", icon: Boxes },
+  { href: "/studio/spaces", label: "Studio", icon: Boxes },
   { href: "/studio/image", label: "Image Studio", icon: ImageIcon },
   { href: "/studio/video", label: "Video Studio", icon: Clapperboard },
   { href: "/studio/director", label: "AI Director", icon: WandSparkles },
