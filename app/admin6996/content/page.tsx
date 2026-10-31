@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 export default function ContentControlPage() {
-  const [code, setCode] = useState("");
   const [form, setForm] = useState({ homeTitle: "", homeSubtitle: "", servicesTitle: "", contactEmail: "", contactPhone: "" });
   const [note, setNote] = useState("Loading content...");
 
@@ -26,7 +25,7 @@ export default function ContentControlPage() {
     const res = await fetch("/api/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, ...form }),
+      body: JSON.stringify(form),
     });
     const data = await res.json().catch(() => null);
     setNote(data?.ok ? "Content saved." : data?.message || "Content save failed.");
@@ -45,8 +44,7 @@ export default function ContentControlPage() {
           </div>
         </div>
         <div className="rounded-[2rem] border border-[#be9537]/20 bg-white p-6 shadow-sm dark:bg-[#1a0b0e]">
-          <label className="text-xs font-black uppercase tracking-[0.2em] text-[#911923] dark:text-[#e3bc61]">Control Code</label>
-          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="ADMIN_CONTROL" className="mt-2 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#911923] dark:text-[#e3bc61]">Protected administrator session</p>
           <div className="mt-5 grid gap-3 md:grid-cols-2">
             <input value={form.homeTitle} onChange={(e) => update("homeTitle", e.target.value)} placeholder="Home title" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
             <input value={form.servicesTitle} onChange={(e) => update("servicesTitle", e.target.value)} placeholder="Services title" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
@@ -54,7 +52,7 @@ export default function ContentControlPage() {
             <input value={form.contactPhone} onChange={(e) => update("contactPhone", e.target.value)} placeholder="Contact phone" className="rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
             <textarea value={form.homeSubtitle} onChange={(e) => update("homeSubtitle", e.target.value)} placeholder="Home subtitle" className="h-32 resize-none rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708] md:col-span-2" />
           </div>
-          <button disabled={!code} onClick={() => void save()} className="mt-5 w-full rounded-2xl bg-[#911923] px-5 py-4 font-extrabold text-white disabled:opacity-50">Save Content</button>
+          <button onClick={() => void save()} className="mt-5 w-full rounded-2xl bg-[#911923] px-5 py-4 font-extrabold text-white">Save Content</button>
           <p className="mt-4 rounded-2xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">{note}</p>
         </div>
       </section>

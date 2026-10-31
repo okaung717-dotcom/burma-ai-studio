@@ -1,4 +1,5 @@
-import { isAdminPin, PORTFOLIO_KEY, withRedis } from "../../lib/redis";
+import { requireAdminSession } from "../../lib/admin-api-auth";
+import { PORTFOLIO_KEY, withRedis } from "../../lib/redis";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -72,7 +73,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as { pin?: string; items?: unknown } | null;
-    if (!isAdminPin(body?.pin)) return Response.json({ ok: false, message: "Invalid admin code." }, { status: 401 });
+    const unauthorized = await requireAdminSession();
+    if (unauthorized) return unauthorized;
 
     const items = cleanItems(body?.items);
     if (!items.length) return Response.json({ ok: false, message: "Add at least one portfolio item." }, { status: 400 });

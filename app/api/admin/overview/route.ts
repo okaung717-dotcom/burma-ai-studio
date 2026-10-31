@@ -1,10 +1,9 @@
-import { cookies } from "next/headers";
+import { requireAdminSession } from "../../../lib/admin-api-auth";
 import { CHAT_LOG_KEY, LEADS_KEY, PORTFOLIO_KEY, withRedis } from "../../../lib/redis";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const COOKIE_NAME = "bas_admin_ok";
 const LEAD_STATUS_KEY = "burma-ai-studio:lead-status";
 const CHAT_STATE_KEY = "burma-ai-studio:chat-state";
 const EVENTS_KEY = "burma-ai-studio:analytics-events";
@@ -113,10 +112,8 @@ function buildChatThreads(logs: ChatLog[], states: Record<string, string>) {
 }
 
 export async function GET() {
-  const cookieStore = await cookies();
-  if (cookieStore.get(COOKIE_NAME)?.value !== "1") {
-    return Response.json({ ok: false, message: "Admin session required." }, { status: 401 });
-  }
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
 
   try {
     const data = await withRedis(async (client) => {

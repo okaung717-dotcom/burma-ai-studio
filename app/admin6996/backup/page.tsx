@@ -3,16 +3,15 @@
 import { useState } from "react";
 
 export default function BackupPage() {
-  const [code, setCode] = useState("");
   const [note, setNote] = useState("Ready to create backup.");
 
   async function createBackup() {
     setNote("Collecting data...");
     const [inbox, chat, portfolio, analytics] = await Promise.all([
-      fetch("/api/inbox", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code }) }).then((r) => r.json()).catch(() => null),
-      fetch("/api/admin/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code, action: "list" }) }).then((r) => r.json()).catch(() => null),
+      fetch("/api/inbox", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).then((r) => r.json()).catch(() => null),
+      fetch("/api/admin/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "list" }) }).then((r) => r.json()).catch(() => null),
       fetch("/api/portfolio", { cache: "no-store" }).then((r) => r.json()).catch(() => null),
-      fetch("/api/analytics/summary", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin: code }) }).then((r) => r.json()).catch(() => null),
+      fetch("/api/analytics/summary", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).then((r) => r.json()).catch(() => null),
     ]);
 
     const payload = { createdAt: new Date().toISOString(), inbox, chat, portfolio, analytics };
@@ -40,8 +39,8 @@ export default function BackupPage() {
         <div className="rounded-[2rem] border border-[#be9537]/20 bg-white p-6 shadow-sm dark:bg-[#1a0b0e]">
           <p className="text-xs font-black uppercase tracking-[0.2em] text-[#911923] dark:text-[#e3bc61]">Secure Download</p>
           <h3 className="mt-3 text-2xl font-black">Create backup file</h3>
-          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="ADMIN_CONTROL code" className="mt-6 w-full rounded-2xl border border-[#be9537]/30 bg-[#fff9f0] px-4 py-3 outline-none dark:bg-[#100708]" />
-          <button disabled={!code} onClick={() => void createBackup()} className="mt-4 w-full rounded-2xl bg-[#911923] px-5 py-4 font-extrabold text-white disabled:opacity-50">Download Backup JSON</button>
+          <p className="mt-6 text-sm text-gray-500">Protected by your signed administrator session.</p>
+          <button onClick={() => void createBackup()} className="mt-4 w-full rounded-2xl bg-[#911923] px-5 py-4 font-extrabold text-white">Download Backup JSON</button>
           <p className="mt-4 rounded-2xl bg-[#fff3e3] px-4 py-3 text-sm font-bold text-[#911923] dark:bg-[#100708] dark:text-[#e3bc61]">{note}</p>
         </div>
       </section>

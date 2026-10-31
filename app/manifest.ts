@@ -6,14 +6,14 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Burma AI Studio",
     short_name: "Burma AI",
-    description: "AI video creation service for brands and businesses.",
-    start_url: "/?source=pwa",
+    description: "Private AI image and video production workspace.",
+    start_url: "/studio/spaces",
     scope: "/",
     display: "standalone",
-    background_color: "#fffdf8",
-    theme_color: "#911923",
-    orientation: "portrait-primary",
-    categories: ["business", "productivity", "photo", "video"],
+    background_color: "#0b0b10",
+    theme_color: "#0b0b10",
+    orientation: "any",
+    categories: ["productivity", "photo", "video"],
     icons: [
       {
         src: iconUrl,

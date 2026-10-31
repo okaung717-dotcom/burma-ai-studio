@@ -1,20 +1,20 @@
-import { withRedis } from "./redis";
+import { createHash } from "node:crypto";
+import { supabaseRequest } from "./supabase";
 
 function getClientKey(request: Request) {
   return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "local";
 }
 
 export async function basicLimit(request: Request, name: string, max = 12, windowSeconds = 60) {
-  const key = `burma-ai-studio:limit:${name}:${getClientKey(request)}`;
+  const key = createHash("sha256").update(`burma-ai-studio:limit:${name}:${getClientKey(request)}`).digest("hex");
   try {
-    const count = await withRedis(async (client) => {
-      const next = await client.incr(key);
-      if (next === 1) await client.expire(key, windowSeconds);
-      return next;
+    const rows = await supabaseRequest<Array<{ allowed: boolean }>>("rpc/consume_studio_login_attempt", {
+      method: "POST",
+      body: JSON.stringify({ p_key: key, p_limit: max, p_window_seconds: windowSeconds }),
     });
-    return count <= max;
+    return Boolean(rows[0]?.allowed);
   } catch {
-    return true;
+    return process.env.NODE_ENV !== "production";
   }
 }
 

@@ -12,6 +12,12 @@ on:
       - "scripts/patch-native-settings-v3.1.4.mjs"
       - "scripts/repair-settings-patcher-v3.1.4.mjs"
       - "scripts/smoke-native-app-v3.1.4.mjs"
+      - "scripts/configure-android-auth.mjs"
+      - "scripts/patch-native-android-auth.mjs"
+      - "scripts/smoke-native-android-auth.mjs"
+      - "native-app/android-auth.css"
+      - "native-app/android-auth.js"
+      - "native-app/android-auth-config.js"
       - "android/**"
       - "capacitor.config.ts"
       - ".github/workflows/build-native-app-v3.yml"
@@ -25,6 +31,12 @@ on:
       - "scripts/patch-native-settings-v3.1.4.mjs"
       - "scripts/repair-settings-patcher-v3.1.4.mjs"
       - "scripts/smoke-native-app-v3.1.4.mjs"
+      - "scripts/configure-android-auth.mjs"
+      - "scripts/patch-native-android-auth.mjs"
+      - "scripts/smoke-native-android-auth.mjs"
+      - "native-app/android-auth.css"
+      - "native-app/android-auth.js"
+      - "native-app/android-auth-config.js"
       - "android/**"
       - "capacitor.config.ts"
       - ".github/workflows/build-native-app-v3.yml"
@@ -65,6 +77,18 @@ jobs:
       - name: Add app icon header and complete settings
         run: node scripts/patch-native-settings-v3.1.4.mjs
 
+      - name: Configure client-safe Android authentication
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$SUPABASE_URL" || { echo "Missing GitHub Actions secret: SUPABASE_URL"; exit 1; }
+          test -n "$SUPABASE_PUBLISHABLE_KEY" || { echo "Missing GitHub Actions secret: SUPABASE_PUBLISHABLE_KEY"; exit 1; }
+          node scripts/configure-android-auth.mjs
+
+      - name: Add Android-only authentication gate
+        run: node scripts/patch-native-android-auth.mjs
+
       - name: Verify bundled native app entry
         run: |
           test -s native-app/index.html
@@ -80,6 +104,12 @@ jobs:
           grep -q 'data-settings-view="support"' native-app/index.html
           grep -q 'data-settings-view="privacy"' native-app/index.html
           grep -q 'id="logout"' native-app/index.html
+          grep -q 'id="basAndroidAuth"' native-app/index.html
+          grep -q 'src="android-auth.js"' native-app/index.html
+          grep -q 'href="android-auth.css"' native-app/index.html
+          grep -q 'id="basAuthEmail"' native-app/index.html
+          grep -q 'id="basAuthPassword"' native-app/index.html
+          grep -q 'id="basAuthConfirm"' native-app/index.html
           grep -q 'class="composeField"' native-app/index.html
           grep -q 'id="sendMessage"' native-app/index.html
           grep -q "window.__basSyncKeyboardLayout" native-app/index.html
@@ -96,6 +126,14 @@ jobs:
           fi
           if grep -q "server:" capacitor.config.ts; then
             echo "Remote Capacitor server dependency is not allowed for this APK"
+            exit 1
+          fi
+          if grep -Eq 'sb_secret_|service_role' native-app/android-auth-config.js native-app/android-auth.js; then
+            echo "A server-side Supabase secret marker reached Android auth assets"
+            exit 1
+          fi
+          if grep -Eqi 'data-auth-google|Continue with Google|code_challenge|provider.?google|data-auth-name-field' native-app/index.html native-app/android-auth.js native-app/android-auth.css; then
+            echo "Retired Android Google or Display Name authentication UI remains"
             exit 1
           fi
           node - <<'NODE'
@@ -115,6 +153,9 @@ jobs:
 
       - name: Run native startup, settings and keyboard smoke test
         run: node scripts/smoke-native-app-v3.1.4.mjs
+
+      - name: Run Android authentication smoke test
+        run: node scripts/smoke-native-android-auth.mjs
 
       - name: Sync Capacitor Android project
         run: npx cap sync android

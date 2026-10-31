@@ -6,10 +6,8 @@ export default function AdminLogoutPage() {
   const [status, setStatus] = useState("Logging out...");
 
   useEffect(() => {
-    fetch("/api/admin/session", {
+    fetch("/api/account/sign-out", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "logout" }),
     })
       .then(() => {
         setStatus("Logged out. Redirecting...");

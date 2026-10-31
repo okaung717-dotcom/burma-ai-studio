@@ -74,6 +74,7 @@ export function getSupabaseAuthConfig() {
 export function getSupabaseAdminAuthConfig() {
   const url = cleanBaseUrl(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL);
   const candidates = [
+    process.env.BAS_STAGING_SUPABASE_SERVER_KEY,
     process.env.SUPABASE_SECRET_KEY,
     process.env.SUPABASE_SERVICE_ROLE_KEY,
     process.env.SUPABASE_SERVER_KEY,
@@ -101,6 +102,7 @@ export async function authRequest(path: string, init: RequestInit = {}) {
   return fetch(`${url}/auth/v1${path}`, {
     ...init,
     cache: "no-store",
+    signal: init.signal || AbortSignal.timeout(10_000),
     headers: {
       apikey: apiKey,
       "Content-Type": "application/json",
@@ -119,6 +121,7 @@ export async function authAdminRequest(path: string, init: RequestInit = {}) {
   return fetch(`${url}/auth/v1${path}`, {
     ...init,
     cache: "no-store",
+    signal: init.signal || AbortSignal.timeout(10_000),
     headers,
   });
 }

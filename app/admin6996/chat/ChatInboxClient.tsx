@@ -58,7 +58,7 @@ export default function ChatInboxClient() {
   }
 
   useEffect(() => {
-    void loadChats();
+    queueMicrotask(() => { void loadChats(); });
     const timer = window.setInterval(() => void loadChats(), 10000);
     return () => window.clearInterval(timer);
   }, []);

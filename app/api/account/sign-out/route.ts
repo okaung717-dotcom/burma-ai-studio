@@ -1,27 +1,30 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { clearAdminSession, revokeAdminSession } from "../../../lib/local-auth";
 import { ACCESS_COOKIE, REFRESH_COOKIE, authRequest } from "../_auth";
+import { cookies } from "next/headers";
+import { emailAuthEnabled } from "../../../lib/member-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST() {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE)?.value || "";
-
-  if (accessToken) {
-    try {
-      await authRequest("/logout", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-    } catch {
-      // Clearing the local secure cookies still signs this browser out.
+  if (emailAuthEnabled()) {
+    const token = (await cookies()).get(ACCESS_COOKIE)?.value || "";
+    if (token) {
+      try { await authRequest("/logout", { method: "POST", headers: { Authorization: `Bearer ${token}` } }); }
+      catch (error) { console.error("Member token revocation unavailable:", error); }
     }
+    const response = NextResponse.json({ ok: true });
+    for (const name of [ACCESS_COOKIE, REFRESH_COOKIE]) {
+      response.cookies.set(name, "", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 0 });
+    }
+    return response;
   }
-
-  const response = NextResponse.json({ ok: true });
-  response.cookies.delete(ACCESS_COOKIE);
-  response.cookies.delete(REFRESH_COOKIE);
-  return response;
+  try {
+    await revokeAdminSession();
+    return clearAdminSession(NextResponse.json({ ok: true }));
+  } catch (error) {
+    console.error("Shared session revocation failed:", error);
+    return clearAdminSession(NextResponse.json({ ok: false, error: "Session revocation is temporarily unavailable." }, { status: 503 }));
+  }
 }

@@ -27,6 +27,7 @@ function cleanUrl(value: string) {
 function cleanKey(value: string) {
   return value
     .trim()
+    .replace(/^BAS_STAGING_SUPABASE_SERVER_KEY\s*=\s*/i, "")
     .replace(/^SUPABASE_SERVER_KEY\s*=\s*/i, "")
     .replace(/^SUPABASE_SECRET_KEY\s*=\s*/i, "")
     .replace(/^SUPABASE_SERVICE_ROLE_KEY\s*=\s*/i, "")
@@ -36,10 +37,11 @@ function cleanKey(value: string) {
     .trim();
 }
 
-function getSupabaseConfig(): SupabaseConfig {
+export function getSupabaseConfig(): SupabaseConfig {
   const url = cleanUrl(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "");
   const key = cleanKey(
-    process.env.SUPABASE_SERVER_KEY ||
+    process.env.BAS_STAGING_SUPABASE_SERVER_KEY ||
+      process.env.SUPABASE_SERVER_KEY ||
       process.env.SUPABASE_SECRET_KEY ||
       process.env.SUPABASE_SERVICE_ROLE_KEY ||
       process.env.SUPABASE_ANON_KEY ||
@@ -52,6 +54,18 @@ function getSupabaseConfig(): SupabaseConfig {
   }
 
   return { url, key };
+}
+
+export async function supabaseStorageRequest(path: string, init: RequestInit = {}) {
+  const { url, key } = getSupabaseConfig();
+  const headers = new Headers(init.headers);
+  headers.set("apikey", key);
+  if (!isNewSupabaseKey(key)) {
+    headers.set("Authorization", `Bearer ${key}`);
+  } else {
+    headers.delete("Authorization");
+  }
+  return fetch(`${url}/storage/v1/${path.replace(/^\/+/, "")}`, { ...init, headers, cache: "no-store" });
 }
 
 function errorMessage(data: unknown) {
@@ -138,13 +152,4 @@ export async function deleteRows(table: string, query: string) {
     method: "DELETE",
     headers: { Prefer: "return=minimal" },
   });
-}
-
-export function getAdminControlCode() {
-  return process.env.ADMIN_CONTROL || process.env["ADMIN_Control"] || process.env.ADMIN_PIN || "";
-}
-
-export function isAdminPin(pin: unknown) {
-  const adminCode = getAdminControlCode();
-  return typeof pin === "string" && Boolean(adminCode) && pin === adminCode;
 }
