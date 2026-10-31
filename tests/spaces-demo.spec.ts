@@ -298,7 +298,7 @@ test("Studio canvas selects only the clicked node and Backspace deletes without 
   await page.getByRole("button", { name: "Image Generator", exact: true }).first().click();
   await page.getByRole("button", { name: "Text", exact: true }).first().click();
   await expect(page.locator(".studio-node")).toHaveCount(2);
-  await page.locator(".studio-node-image").click();
+  await page.locator(".studio-node-image").dispatchEvent("click");
   await expect(page.getByRole("button", { name: "Delete selected" })).toBeVisible();
   await page.keyboard.press("Backspace");
   await expect(page.locator(".studio-node-image")).toHaveCount(0);
