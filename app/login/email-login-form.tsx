@@ -23,7 +23,7 @@ export default function EmailLoginForm() {
       });
       const result = await response.json().catch(() => null);
       if (!response.ok) { setError(result?.error || "Sign in failed."); return; }
-      router.replace("/studio/spaces");
+      router.replace("/");
       router.refresh();
     } catch { setError("Unable to reach the sign-in service."); }
     finally { setLoading(false); }
