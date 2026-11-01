@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getSpacesUser } from "../lib/spaces-auth";
 import { ArrowRight, Boxes, Clapperboard, ImageIcon, Library, LockKeyhole, MonitorPlay, Settings, ShieldCheck, Sparkles, WandSparkles } from "lucide-react";
 import PublicShowcaseContent, {type ShowcaseView} from "./demo-client";
 import "./showcase.css";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
  title:"Explore the Studio",
@@ -19,6 +23,7 @@ const pages=[
 ] as const;
 
 export default async function Showcase({searchParams}:{searchParams:Promise<{view?:string}>}){
+ if (!await getSpacesUser()) redirect("/login");
  const requested=(await searchParams).view;
  const view:ShowcaseView=pages.find(p=>p.slug===requested)?.slug??"studio";
  const current=pages.find(p=>p.slug===view)!;
