@@ -1,9 +1,13 @@
+import { redirect } from "next/navigation";
+import { getSpacesUser } from "./lib/spaces-auth";
 import Showcase, { metadata as showcaseMetadata } from "./showcase/page";
 
 export const metadata = showcaseMetadata;
+export const dynamic = "force-dynamic";
 
-// The canonical public website must always show the public Studio experience,
-// including for visitors with an existing private Studio session.
-export default function Home({ searchParams }: { searchParams: Promise<{ view?: string }> }) {
+// Always authenticate at the canonical domain, independent of the visitor's
+// location, VPN, or whether the public Studio URL was bookmarked.
+export default async function Home({ searchParams }: { searchParams: Promise<{ view?: string }> }) {
+  if (!await getSpacesUser()) redirect("/login");
   return <Showcase searchParams={searchParams} />;
 }
