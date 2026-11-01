@@ -17,7 +17,7 @@ export default function LoginForm() {
     const response = await fetch("/api/account/sign-in", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username, password }) });
     const result = await response.json().catch(() => null);
     if (!response.ok) { setError(result?.error || "Unable to sign in."); setLoading(false); return; }
-    router.replace("/studio/spaces"); router.refresh();
+    router.replace("/"); router.refresh();
   }
 
   return <main className="studio-login">
